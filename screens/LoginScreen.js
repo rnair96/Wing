@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { Component, useLayoutEffect } from 'react'
-import { Button, StyleSheet, ImageBackground, Text, View } from 'react-native'
+import { Button, StyleSheet, ImageBackground, Text, View, TouchableOpacity } from 'react-native'
 // import tw from 'tailwind-rn/dist';
 import useAuth from '../hooks/useAuth';
 
 const LoginScreen = () => {
-    const { user } = useAuth();
+    const { user, raj } = useAuth();
     const navigation = useNavigation();
     const loading = false;
 
@@ -20,9 +20,13 @@ const LoginScreen = () => {
     return (
     <View style={[styles.container]}>
         <ImageBackground
-        resizeMode='cover' 
+        resizeMode='cover'
+        style = {[styles.container]} 
         source={{ uri: "https://tinder.com/static/tinder.png"}}>
-            <Text>Sign in & Get Swiping</Text>
+        <TouchableOpacity style={styles.opacitycontainer} onPress={raj}>
+            {/*add onPress = {signInWithGoogle}*/}
+            <Text style = {styles.textcontainer}>Sign in & Get Swiping</Text>
+        </TouchableOpacity>
         </ImageBackground>
     </View>
     )
@@ -38,9 +42,22 @@ const LoginScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1    
+    container: { 
+      flex: 1, 
     },
-  });
+    opacitycontainer: {
+        marginTop: 500,
+        width: 180,
+        marginHorizontal: "25%",
+        backgroundColor: "white",
+        padding: 5,
+        borderRadius: 10,
+        alignItems: 'center'
+    },
+    textcontainer: {
+        alignItems: 'center',
+        fontWeight: 'bold',
+    }
+});
 
 export default LoginScreen
