@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { Component, useLayoutEffect } from 'react'
-import { Button, StyleSheet, ImageBackground, Text, View, TouchableOpacity } from 'react-native'
-// import tw from 'tailwind-rn/dist';
+import React, { useLayoutEffect} from 'react'
+import {StyleSheet, ImageBackground, Text, View, TouchableOpacity } from 'react-native'
 import useAuth from '../hooks/useAuth';
 
+
 const LoginScreen = () => {
-    const { user, raj } = useAuth();
+    const { accessToken, promptAsync, getUserData } = useAuth();
     const navigation = useNavigation();
-    const loading = false;
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -15,7 +14,15 @@ const LoginScreen = () => {
         });
     }, []);
 
-    console.log(user);
+
+    const signInWithGoogle = () => {
+        if (accessToken){
+            console.log("gettomg data at Login")
+            getUserData();
+        } else{
+            promptAsync({ useProxy: true, showInRecents: true, scopes: ['profile', 'email']});
+        } 
+    }
 
     return (
     <View style={[styles.container]}>
@@ -23,22 +30,13 @@ const LoginScreen = () => {
         resizeMode='cover'
         style = {[styles.container]} 
         source={{ uri: "https://tinder.com/static/tinder.png"}}>
-        <TouchableOpacity style={styles.opacitycontainer} onPress={raj}>
-            {/*add onPress = {signInWithGoogle}*/}
+
+        <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
             <Text style = {styles.textcontainer}>Sign in & Get Swiping</Text>
         </TouchableOpacity>
         </ImageBackground>
     </View>
     )
-
-    // this is the view for basic authentication
-    // return (
-    //   <View>
-    //     <Text> {loading ? "loading ..." : "Login to the app" }</Text>
-    //     <Button title='login' onPress = {signInWithGoogle}/>
-    //   </View>
-    // )
-
 }
 
 const styles = StyleSheet.create({
