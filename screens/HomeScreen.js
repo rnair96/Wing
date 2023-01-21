@@ -9,25 +9,13 @@ const HomeScreen = () => {
     const { user, logout } = useAuth();
     console.log("HomeScreen user ", user);
 
-    // const showUserData = () => {
-    //     if (user) {
-    //       return (
-    //         <View style = {styles.userInfo}>
-    //           <Image source={{ uri: user.picture }} style={styles.profilePic} />
-    //           <Text> Welcome {userInfo.name}</Text>
-    //           <Text>{user.email}</Text>
-    //         </View>
-    //       )
-    //     }
-      
-    //   };
 
   return (
    <SafeAreaView>
     {/* Header */}
     <View>
         <TouchableOpacity>
-            <Image style = {styles.imagecontainer} source={{ uri: user.picture }}/>
+            <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/>
         </TouchableOpacity>
     </View>
     {/* End of Header */}
@@ -42,27 +30,11 @@ const styles = StyleSheet.create({
    imagecontainer: {
         width: 50,
         height: 50,
-        alignItems: 'center',
-       justifyContent: 'center'
+        borderRadius: 50,
+        left: 10,
+        top: 5,
     }
 });
-
-// const styles = StyleSheet.create({
-//     container: {
-//       flex: 1,
-//       backgroundColor: 'white',
-//       alignItems: 'center',
-//       justifyContent: 'center'
-//     },
-//     profilePic: {
-//       width: 50,
-//       height: 50
-//     },
-//     userInfo: {
-//       alignItems: 'center'
-//     }
-  
-//   })
 
 
 export default HomeScreen

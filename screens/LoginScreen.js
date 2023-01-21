@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 
 
 const LoginScreen = () => {
-    const { accessToken, promptAsync, getUserData } = useAuth();
+    const { signInWithGoogle } = useAuth();
     const navigation = useNavigation();
 
     useLayoutEffect(() => {
@@ -14,15 +14,6 @@ const LoginScreen = () => {
         });
     }, []);
 
-
-    const signInWithGoogle = () => {
-        if (accessToken){
-            console.log("gettomg data at Login")
-            getUserData();
-        } else{
-            promptAsync({ useProxy: true, showInRecents: true, scopes: ['profile', 'email']});
-        } 
-    }
 
     return (
     <View style={[styles.container]}>
