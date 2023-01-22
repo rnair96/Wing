@@ -19,11 +19,11 @@ const AuthContext = createContext({});
 
 
 export const AuthProvider = ({children}) => {
-  const [error, setError] = useState(null);
-  const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
-  const [idToken, setIdToken] = useState(null);
-  const [loadingInitial, setLoadingInitial] = useState(true);
+  // const [error, setError] = useState(null);
+  const [user, setUser] = useState();
+  const [accessToken, setAccessToken] = useState();
+  const [idToken, setIdToken] = useState();
+   //const [loadingInitial, setLoadingInitial] = useState(true);
   // const [loading, setLoading] = useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -33,12 +33,12 @@ export const AuthProvider = ({children}) => {
     });
     
     
-      useEffect(() => {
-        if (response?.type === "success"){
-          setAccessToken(response.authentication.accessToken);
-          setIdToken(response.authentication.idToken);
-          getUserData();
-        }
+    useEffect(() => {
+      if (response?.type === "success"){
+        setAccessToken(response.authentication.accessToken);
+        setIdToken(response.authentication.idToken);
+        getUserData();
+      }
         // return Promise.reject();
         //catch((err=> setError(error));
         //.finally(()=>setLoading(false));
@@ -55,34 +55,35 @@ export const AuthProvider = ({children}) => {
             setUser(null);
           }
 
-          setLoadingInitial(false);
+          // setLoadingInitial(false);
         });
       },[]);
 
 
-      const getUserData = async () => {
-        let userInfoResponse = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-          headers: { Authorization: `Bearer ${accessToken}`}
-        });
+  const getUserData = async () => {
+    let userInfoResponse = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+        headers: { Authorization: `Bearer ${accessToken}`}
+    });
       
-        userInfoResponse.json().then(data => {
-          setUser(data);
-          console.log("get User Data", data)
-        });
-        const credential = GoogleAuthProvider.credential(idToken ,accessToken)
-        await signInWithCredential(auth, credential);
-      };
+    userInfoResponse.json().then(data => {
+      setUser(data);
+      console.log("get User Data", data)
+    });
+    const credential = GoogleAuthProvider.credential(idToken ,accessToken)
+    await signInWithCredential(auth, credential);
+  };
 
-      const signInWithGoogle = async () => {
+  const signInWithGoogle = async () => {
         promptAsync({ useProxy: true, showInRecents: true});
-    }
+  }
       
 
   const logout = () => {
+    console.log("hello?")
     setUser(null);
     setAccessToken(null);
     // setLoading(true);
-    // signOut(auth).catch((error) => setError(error)).finally(()=> setLoading(false))
+    signOut(auth).catch((error) => setError(error))
 }
 
 // const memoedValue = useMemo(
@@ -100,10 +101,11 @@ export const AuthProvider = ({children}) => {
     value={{
       user,
       logout,
-      signInWithGoogle//pass error and loading too
+      signInWithGoogle,
        }}
        >
-       {!loadingInitial && children}
+       {children}
+       {/* !loadinginitial && */}
     </AuthContext.Provider>
   )
 }
