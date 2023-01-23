@@ -16,7 +16,7 @@ const HomeScreen = () => {
             firstName: "Rajesh",
             lastName: "Nair",
             occupation: "Entrepreneur",
-            photoURL: "../images/dummy_users/4.png",
+            photoURL: require("../images/dummy_users/4.png"),
             age: 26,
             id: 1,
         },
@@ -24,15 +24,15 @@ const HomeScreen = () => {
             firstName: "Johnny",
             lastName:"Sins",
             occupation: "Police Officer",
-            photoURL: "../images/dummy_users/download.jpeg",
-            age: 50,
+            photoURL: require("../images/dummy_users/sins.jpeg"),
+            age: 37,
             id: 2,
         },
         {
             firstName: "Mia",
             lastName: "Khalifa",
             occupation: "Doctor",
-            photoURL: "../images/dummy_users/mia.jpg",
+            photoURL: require("../images/dummy_users/mia.jpg"),
             age: 27,
             id: 3,
         },
@@ -40,14 +40,14 @@ const HomeScreen = () => {
             firstName: "Riley",
             lastName: "Reid",
             occupation: "Lawyer",
-            photoURL: "../images/dummy_users/riley.jpg",
+            photoURL: require("../images/dummy_users/riley.jpg"),
             id: 4,
         },
         {
             firstName: "Lana",
             lastName: "Rhodes",
             occupation: "Engineer",
-            photoURL: "../images/dummy_users/lana.jpeg",
+            photoURL: require("../images/dummy_users/lana.jpeg"),
             age: 29,
             id: 5,
         }
@@ -74,14 +74,27 @@ const HomeScreen = () => {
     {/* Cards */}
     <View style={styles.cardscontainer}>
         <Swiper cards={DUMMY_DATA} 
+            stackSize={5}
+            animateCardOpacity={true}
+            verticalSwipe={false}
             containerStyle={{backgroundColor:"transparent"}}
             renderCard={(card)=>(
                 <View key={card.id} style={styles.cardcontainer}>
-                    <Text>{card.firstName}</Text>
-                    <Image source={require("../images/dummy_users/lana.jpeg")}/>
+                    <Image style={{height:500 ,width:335, borderRadius:20}} source={card.photoURL}/>
+                    <View>
+                        <View>
+                            <Text>
+                                {card.firstName}
+                            </Text>
+                            <Text>
+                            {card.occupation}
+                            </Text>
+                        </View>
+                        <Text>{card.age}</Text>
+                    </View>
                 </View>
-  )}
-    />
+            )}
+        />
     </View>
    </SafeAreaView>
   )
@@ -103,10 +116,10 @@ const styles = StyleSheet.create({
     },
     cardscontainer: {
         flex: 1,
-        marginTop:-70,
+        marginTop:-80,
     },
     cardcontainer: {
-        backgroundColor: "#FF5864",
+        backgroundColor: "white",
         height:500,
         borderRadius: 20
         
