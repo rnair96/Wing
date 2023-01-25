@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useLayoutEffect} from 'react'
-import {StyleSheet, ImageBackground, Text, View, TouchableOpacity } from 'react-native'
+import {StyleSheet, ImageBackground, Text, View, TouchableOpacity, Image } from 'react-native'
 import useAuth from '../hooks/useAuth';
 
 
@@ -20,8 +20,10 @@ const LoginScreen = () => {
         <ImageBackground
         resizeMode='cover'
         style = {[styles.container]} 
-        source={{ uri: "https://tinder.com/static/tinder.png"}}>
-
+        source={require("../images/pilots2.jpeg")}>
+        {/* <Image source={require("../images/wing.png")}/> */}
+        <Text style={{left:160, top:80, fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman"}}>Wing</Text>
+        <Text style={{left:85, top:100, fontWeight:"bold", fontSize:20}}>Find Your Mission Partner</Text>
         <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
             <Text style = {styles.textcontainer}>Sign in & Get Swiping</Text>
         </TouchableOpacity>
@@ -32,7 +34,7 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
     container: { 
-      flex: 1, 
+      flex: 1,
     },
     opacitycontainer: {
         marginTop: 500,

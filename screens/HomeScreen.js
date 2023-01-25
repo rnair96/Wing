@@ -67,10 +67,10 @@ const HomeScreen = () => {
             <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/>
         </TouchableOpacity>
         <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Modal")}>
-            <Image style={styles.iconcontainer} source={require("../images/tinder.png")}/>
+            <Image style={styles.iconcontainer} source={require("../images/wing.png")}/>
         </TouchableOpacity>
         <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Chat")}>
-            <Ionicons name="chatbubbles-sharp" size={30} color = "#FF5864"/>
+            <Ionicons name="chatbubbles-sharp" size={30} color = "#00BFFF"/>
         </TouchableOpacity>
     </View>
     {/* End of Header */}
@@ -108,7 +108,7 @@ const HomeScreen = () => {
                 }
             }}
             containerStyle={{backgroundColor:"transparent"}}
-            renderCard={(card)=>(
+            renderCard={(card)=> card ? (
                 <View key={card.id} style={styles.cardcontainer}>
                     <Image style={{height:500 ,width:335, borderRadius:20}} source={card.photoURL}/>
                     <View style={styles.infocontainer}>
@@ -123,6 +123,11 @@ const HomeScreen = () => {
                         <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
                     </View>
                 </View>
+            ):(
+            <View style={[styles.cardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
+                <Text style={{fontWeight:"bold", fontSize:15}}>No more Wings... Try Again Later</Text>
+                <Image style={{height:300 ,width:335}} source={{uri:"https://img.atlasobscura.com/eeEvT-_nW7UF3uI4qqFlSaDwNwib1jH618G8KVVSTi4/rt:fit/w:1280/q:81/sm:1/scp:1/ar:1/aHR0cHM6Ly9hdGxh/cy1kZXYuczMuYW1h/em9uYXdzLmNvbS91/cGxvYWRzL2Fzc2V0/cy9lMjMwZDA2MS0z/MDI5LTQ4ZjEtOGJh/Ni1iNzYzZTY1MWZm/MDhjZTMxZGZmMzg2/Mzk5ZGQ0NmVfRUI0/Q0ZYLmpwZw.jpg"}}/>
+            </View>
             )}
         />
     </View>
