@@ -1,16 +1,28 @@
-import React, {useRef} from 'react'
+import React, {useLayoutEffect, useRef, useState} from 'react'
 import { Button, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
+import { onSnapshot, doc } from "firebase/firestore";
+import { db } from '../firebase';
+
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const { user, logout } = useAuth();
     const swipeRef = useRef(null);
+    const { profiles,setProfiles } = useState([])
     console.log("HomeScreen user ", user);
+
+    useLayoutEffect(()=>{
+        onSnapshot(doc(db, "users", user.uid), (snapshot) => {
+            if (!snapshot.exists()){
+                navigation.navigate("Modal");
+            }
+        }
+    )},[]);
 
     const DUMMY_DATA = [
         {
@@ -59,8 +71,6 @@ const HomeScreen = () => {
   return (
    <SafeAreaView style={{flex:1}}>
     {/* Header */}
-    {/* <Button title= "Logout" onPress= {logout}/>
-    <Button title="Chat" onPress={() => navigation.navigate("Chat")}/> */}
     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
     {/* <Button title= "Logout" onPress= {logout}/> */}
         <TouchableOpacity  onPress= {logout} style={{left: 20, top:10}}>
