@@ -11,6 +11,9 @@ const  ModalScreen = () => {
     const [ image, setImage ]= useState(null);
     const [ job, setJob ] = useState(null);
     const [ age, setAge ] = useState(null);
+    const [ mission, setMission ] = useState(null);
+    // const [ gender, setGender ] = useState(null); & location
+
     const navigation = useNavigation();
 
 
@@ -24,6 +27,8 @@ const  ModalScreen = () => {
             photoURL: image,
             job: job,
             age: age,
+            // gender: gender,
+            mission: mission,
             timestamp: serverTimestamp()
         }).then(()=> {
             navigation.navigate("Home")
@@ -35,27 +40,39 @@ const  ModalScreen = () => {
 
   return (
     <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Image style={{height:100, width:200}} source={require("../images/tinder-title.png")}/>
+        <Image style={{height:100, width:200, borderRadius:50}} source={require("../images/logo.jpg")}/>
 
         <Text style={{fontSize:20, fontWeight: "bold"}}>Welcome {user.displayName}</Text>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#FF5864"}}>Step 1: The Profile Pic</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 1: The Profile Pic</Text>
         <TextInput
         value = {image}
         onChangeText = {setImage}
         placeholder='Enter Your Profile Pic URL'/>
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#FF5864"}}>Step 2: The Job</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 2: The Job</Text>
         <TextInput
         value = {job}
         onChangeText = {setJob} 
         placeholder='Enter Your Job'/>
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#FF5864"}}>Step 3: The Age</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 3: The Age</Text>
         <TextInput
         value = {age}
         onChangeText = {setAge} 
         placeholder='Enter Your Age'
         maxLength={2}/>
+
+        {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 2: The Job</Text>
+        <TextInput
+        value = {gender}
+        onChangeText = {setGender} 
+        placeholder='Enter Your Gender'/> */}
+
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 4: The Mission</Text>
+        <TextInput
+        value = {mission}
+        onChangeText = {setMission} 
+        placeholder='Enter Your Mission'/>
 
         <TouchableOpacity 
             disabled = {incompleteform}

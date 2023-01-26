@@ -1,11 +1,11 @@
-import React, {useLayoutEffect, useRef, useState} from 'react'
+import React, {useLayoutEffect, useRef, useState, useEffect} from 'react'
 import { Button, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { onSnapshot, doc } from "firebase/firestore";
+import { collection, onSnapshot, doc } from "firebase/firestore";
 import { db } from '../firebase';
 
 
@@ -13,8 +13,7 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const { user, logout } = useAuth();
     const swipeRef = useRef(null);
-    const { profiles,setProfiles } = useState([])
-    console.log("HomeScreen user ", user);
+    const [ profiles,setProfiles ] = useState([]);
 
     useLayoutEffect(()=>{
         onSnapshot(doc(db, "users", user.uid), (snapshot) => {
@@ -24,52 +23,75 @@ const HomeScreen = () => {
         }
     )},[]);
 
+    useEffect(()=>{
+        let unsub;
+        const fetchCards = async() => {
+            unsub = onSnapshot(collection(db,"users"), (snapshot) =>{
+                setProfiles(
+                    snapshot.docs.map((doc) => (
+                        {
+                        id: doc.id,
+                        ...doc.data()
+                    }
+                    ))
+                    
+                )
+            })
+        }
+        fetchCards();
+        return unsub;
+
+    },[]);
+
+    console.log("Profiles",profiles)
+
     const DUMMY_DATA = [
         {
-            firstName: "Rajesh",
-            lastName: "Nair",
-            occupation: "Entrepreneur",
-            photoURL: require("../images/dummy_users/4.png"),
+            displayName: "Darren",
+            job: "Entrepreneur",
+            photoURL: "https://i.pinimg.com/236x/a3/d4/6c/a3d46c39fe2060d4df2678f145570571.jpg",
             age: 26,
             id: 1,
+            mission: "Create a 10k coaching business"
         },
         {
-            firstName: "Johnny",
-            lastName:"Sins",
-            occupation: "Police Officer",
-            photoURL: require("../images/dummy_users/sins.jpeg"),
+            displayName: "Johnny",
+            job: "Police Officer",
+            photoURL: "https://www.portseattle.org/sites/default/files/styles/detailpageimagesize/public/2022-08/22_08_26_Officer%20Cody-Berry%20Portrait-2.jpg?itok=vv5pjGJu",
             age: 37,
             id: 2,
+            mission: "Create a safer city for children"
         },
         {
-            firstName: "Mia",
-            lastName: "Khalifa",
-            occupation: "Doctor",
-            photoURL: require("../images/dummy_users/mia.jpg"),
+            displayName: "Mia",
+            job: "Doctor",
+            photoURL: "https://t3.ftcdn.net/jpg/02/74/03/26/360_F_274032618_OhzkPv4gkPC7pIumPDQYlILKH6eB28WH.jpg",
             age: 27,
             id: 3,
+            mission: "Help people recover from COVID vaccine injuries"
         },
         {
-            firstName: "Riley",
-            lastName: "Reid",
-            occupation: "Lawyer",
-            photoURL: require("../images/dummy_users/riley.jpg"),
+            displayName: "Riley",
+            job: "Lawyer",
+            photoURL: "https://a9p9n2x2.stackpathcdn.com/wp-content/blogs.dir/1/files/2016/09/iStock-183996292-e1548441545549.jpg",
+            age: 23,
             id: 4,
+            mission: "Ensure freedom of speech in social media spaces"
         },
         {
-            firstName: "Lana",
-            lastName: "Rhodes",
-            occupation: "Engineer",
-            photoURL: require("../images/dummy_users/lana.jpeg"),
+            displayName: "Lana",
+            job: "Engineer",
+            photoURL: "https://t4.ftcdn.net/jpg/03/39/53/13/360_F_339531358_ydG0IxRqQj6iGG0ddAnRExu9lLpGhUdV.jpg",
             age: 29,
             id: 5,
+            mission: "Advance A.I towards solving world problems"
         }
 
     ]
 
 
   return (
-   <SafeAreaView style={{flex:1}}>
+   <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
     {/* Header */}
     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
     {/* <Button title= "Logout" onPress= {logout}/> */}
@@ -77,7 +99,7 @@ const HomeScreen = () => {
             <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/>
         </TouchableOpacity>
         <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Modal")}>
-            <Image style={styles.iconcontainer} source={require("../images/wing.png")}/>
+            <Image style={styles.iconcontainer} source={require("../images/logo.jpg")}/>
         </TouchableOpacity>
         <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Chat")}>
             <Ionicons name="chatbubbles-sharp" size={30} color = "#00BFFF"/>
@@ -120,14 +142,15 @@ const HomeScreen = () => {
             containerStyle={{backgroundColor:"transparent"}}
             renderCard={(card)=> card ? (
                 <View key={card.id} style={styles.cardcontainer}>
-                    <Image style={{height:500 ,width:335, borderRadius:20}} source={card.photoURL}/>
+                    <Text style={{fontWeight:"bold", fontSize:15, justifyContent:"center", padding: 5}}>{card.mission}</Text>
+                    <Image style={{height:450 ,width:335}} source={{uri: card.photoURL}}/>
                     <View style={styles.infocontainer}>
                         <View>
                             <Text style={{fontWeight:"bold", fontSize:20}}>
-                                {card.firstName}
+                                {card.displayName}
                             </Text>
                             <Text>
-                            {card.occupation}
+                            {card.job}
                             </Text>
                         </View>
                         <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
@@ -161,10 +184,12 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     iconcontainer: {
-        height: 50,
-        width: 50,
+        height: 60,
+        width: 60,
         borderRadius: 50,
         bottom: 25,
+        borderColor:"#00BFFF",
+        borderWidth: 2
     },
     cardscontainer: {
         flex: 1,
@@ -187,7 +212,6 @@ const styles = StyleSheet.create({
         bottom:70 ,
         backgroundColor:"white", 
         paddingVertical: 15, 
-        borderBottomEndRadius:20,
         flexDirection:"row",
         justifyContent: "space-between",
         paddingHorizontal: 30
