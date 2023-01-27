@@ -40,22 +40,21 @@ const  ModalScreen = () => {
 
   return (
     <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Image style={{height:100, width:200, borderRadius:50}} source={require("../images/logo.jpg")}/>
-
+        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
         <Text style={{fontSize:20, fontWeight: "bold"}}>Welcome {user.displayName}</Text>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 1: The Profile Pic</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 1: The Profile Pic</Text>
         <TextInput
         value = {image}
         onChangeText = {setImage}
         placeholder='Enter Your Profile Pic URL'/>
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 2: The Job</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 2: The Job</Text>
         <TextInput
         value = {job}
         onChangeText = {setJob} 
         placeholder='Enter Your Job'/>
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 3: The Age</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 3: The Age</Text>
         <TextInput
         value = {age}
         onChangeText = {setAge} 
@@ -68,7 +67,7 @@ const  ModalScreen = () => {
         onChangeText = {setGender} 
         placeholder='Enter Your Gender'/> */}
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 4: The Mission</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 4: The Mission</Text>
         <TextInput
         value = {mission}
         onChangeText = {setMission} 
@@ -76,7 +75,7 @@ const  ModalScreen = () => {
 
         <TouchableOpacity 
             disabled = {incompleteform}
-            style={[{width:200, height:50, paddingTop:15, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#FF5864"}]}
+            style={[{width:200, height:50, paddingTop:15, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
             onPress = {updateUserProfile}>
             <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Profile</Text>
         </TouchableOpacity>

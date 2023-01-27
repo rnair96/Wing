@@ -15,13 +15,16 @@ const HomeScreen = () => {
     const swipeRef = useRef(null);
     const [ profiles,setProfiles ] = useState([]);
 
+    console.log("user HOME", user);
+
     useLayoutEffect(()=>{
-        onSnapshot(doc(db, "users", user.uid), (snapshot) => {
-            if (!snapshot.exists()){
-                navigation.navigate("Modal");
+            onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
+                if (!snapshot.exists()){
+                    navigation.navigate("Modal");
+                }
             }
-        }
-    )},[]);
+        )
+        });
 
     useEffect(()=>{
         let unsub;
@@ -43,7 +46,7 @@ const HomeScreen = () => {
 
     },[]);
 
-    console.log("Profiles",profiles)
+    // console.log("Profiles",profiles)
 
     const DUMMY_DATA = [
         {
@@ -94,12 +97,11 @@ const HomeScreen = () => {
    <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
     {/* Header */}
     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
-    {/* <Button title= "Logout" onPress= {logout}/> */}
         <TouchableOpacity  onPress= {logout} style={{left: 20, top:10}}>
             <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/>
         </TouchableOpacity>
         <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Modal")}>
-            <Image style={styles.iconcontainer} source={require("../images/logo.jpg")}/>
+            <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
         </TouchableOpacity>
         <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Chat")}>
             <Ionicons name="chatbubbles-sharp" size={30} color = "#00BFFF"/>

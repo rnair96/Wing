@@ -21,9 +21,9 @@ const LoginScreen = () => {
         resizeMode='cover'
         style = {[styles.container]} 
         source={require("../images/pilots2.jpeg")}>
-        {/* <Image source={require("../images/wing.png")}/> */}
-        <Text style={{left:160, top:80, fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman"}}>Wing</Text>
-        <Text style={{left:85, top:100, fontWeight:"bold", fontSize:20}}>Find Your Mission Partner</Text>
+        <Text style={{left:140, top:80, fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman", color:"#00308F"}}>Wing</Text>
+        <Text style={{left:85, top:100, fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"#00308F"}}>Find Your Mission Partner</Text>
+        <Image style = {styles.iconcontainer} source={require("../images/logo2.jpg")}/>
         <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
             <Text style = {styles.textcontainer}>Sign in & Get Swiping</Text>
         </TouchableOpacity>
@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     opacitycontainer: {
-        marginTop: 500,
+        marginTop: 400,
         width: 180,
-        marginHorizontal: "25%",
+        marginHorizontal: "30%",
         backgroundColor: "white",
         padding: 5,
         borderRadius: 10,
@@ -48,6 +48,15 @@ const styles = StyleSheet.create({
     textcontainer: {
         alignItems: 'center',
         fontWeight: 'bold',
+    },
+    iconcontainer: {
+        height:40, 
+        width:40, 
+        left:235, 
+        top:15, 
+        borderRadius:50, 
+        borderColor:"#00308F", 
+        borderWidth:2
     }
 });
 
