@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { collection, onSnapshot, doc } from "firebase/firestore";
+import { setDoc, collection, onSnapshot, doc } from "firebase/firestore";
 import { db } from '../firebase';
 
 
@@ -31,7 +31,7 @@ const HomeScreen = () => {
         const fetchCards = async() => {
             unsub = onSnapshot(collection(db,"users"), (snapshot) =>{
                 setProfiles(
-                    snapshot.docs.map((doc) => (
+                    snapshot.docs.filter((doc) => doc.id !== user.uid).map((doc) => (
                         {
                         id: doc.id,
                         ...doc.data()
@@ -45,6 +45,20 @@ const HomeScreen = () => {
         return unsub;
 
     },[]);
+
+    const swipeLeft = (cardIndex) => {
+        if (!profiles[cardIndex]){ return;}
+
+        console.log("you swiped left on", profiles[cardIndex].displayName);
+        setDoc(doc(db, 'users', user.uid, "passes", profiles[cardIndex].id), profiles[cardIndex]);
+    }
+
+    const swipeRight = (cardIndex) => {
+        if (!profiles[cardIndex]){ return;}
+
+        console.log("you swiped right on", profiles[cardIndex].displayName);
+        setDoc(doc(db, 'users', user.uid, "matches", profiles[cardIndex].id), profiles[cardIndex]);
+    }
 
     // console.log("Profiles",profiles)
 
@@ -110,16 +124,19 @@ const HomeScreen = () => {
     {/* End of Header */}
     {/* Cards */}
     <View style={styles.cardscontainer}>
-        <Swiper cards={DUMMY_DATA}
+        <Swiper cards={profiles}
             ref={swipeRef} 
             stackSize={5}
+            cardIndex={0}
             animateCardOpacity={true}
             verticalSwipe={false}
-            onSwipedLeft={() => {
-                console.log("Swipe PASS")
+            onSwipedLeft={(cardIndex) => {
+                swipeLeft(cardIndex);
+                // console.log("Swipe PASS")
             }}
-            onSwipedRight={() => {
-                console.log("Swipe MATCH")
+            onSwipedRight={(cardIndex) => {
+                swipeRight(cardIndex);
+                // console.log("Swipe MATCH")
             }}
             overlayLabels={{
                 left: {
