@@ -22,7 +22,7 @@ const LoginScreen = () => {
         style = {[styles.container]} 
         source={require("../images/pilots2.jpeg")}>
         <Text style={{left:140, top:80, fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman", color:"#00308F"}}>Wing</Text>
-        <Text style={{left:85, top:100, fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman"}}>Find Your Mission Partner</Text>
+        <Text style={{left:25, top:100, fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman"}}>Explore Missions with Your Wingman</Text>
         <Image style = {styles.iconcontainer} source={require("../images/logo2.jpg")}/>
         <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
             <Text style = {styles.textcontainer}>Sign in & Get Swiping</Text>

@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { setDoc, collection, onSnapshot, doc } from "firebase/firestore";
+import { getDocs, setDoc, collection, onSnapshot, doc, query, where } from "firebase/firestore";
 import { db } from '../firebase';
 
 
@@ -15,7 +15,7 @@ const HomeScreen = () => {
     const swipeRef = useRef(null);
     const [ profiles,setProfiles ] = useState([]);
 
-    console.log("user HOME", user);
+    // console.log("user HOME", user);
 
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
@@ -28,8 +28,27 @@ const HomeScreen = () => {
 
     useEffect(()=>{
         let unsub;
+
         const fetchCards = async() => {
-            unsub = onSnapshot(collection(db,"users"), (snapshot) =>{
+
+
+            const passedIds = [];
+            await getDocs(collection(db,"users",user.uid,"passes")).then((snapshot) => {
+                snapshot.docs.map((doc) => passedIds.push(doc.id))
+            });
+
+    
+            const swipedIds = [];
+            await getDocs(collection(db,"users",user.uid,"swipes")).then((snapshot) => {
+                snapshot.docs.map((doc) => swipedIds.push(doc.id))
+            });
+ 
+
+            const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
+            const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
+
+            unsub = onSnapshot(query(collection(db,"users"), where("id","not-in", [...passedUIds, ...swipedUIds]) )
+            ,(snapshot) =>{
                 setProfiles(
                     snapshot.docs.filter((doc) => doc.id !== user.uid).map((doc) => (
                         {
@@ -40,11 +59,13 @@ const HomeScreen = () => {
                     
                 )
             })
+
         }
+
         fetchCards();
         return unsub;
 
-    },[]);
+    },[db]);
 
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]){ return;}
@@ -57,10 +78,9 @@ const HomeScreen = () => {
         if (!profiles[cardIndex]){ return;}
 
         console.log("you swiped right on", profiles[cardIndex].displayName);
-        setDoc(doc(db, 'users', user.uid, "matches", profiles[cardIndex].id), profiles[cardIndex]);
+        setDoc(doc(db, 'users', user.uid, "swipes", profiles[cardIndex].id), profiles[cardIndex]);
     }
 
-    // console.log("Profiles",profiles)
 
     const DUMMY_DATA = [
         {
