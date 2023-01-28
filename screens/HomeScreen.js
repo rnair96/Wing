@@ -5,8 +5,9 @@ import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { getDocs, setDoc, collection, onSnapshot, doc, query, where } from "firebase/firestore";
+import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp } from "firebase/firestore";
 import { db } from '../firebase';
+import generateId from '../lib/generateId'
 
 
 const HomeScreen = () => {
@@ -74,57 +75,86 @@ const HomeScreen = () => {
         setDoc(doc(db, 'users', user.uid, "passes", profiles[cardIndex].id), profiles[cardIndex]);
     }
 
-    const swipeRight = (cardIndex) => {
+    const swipeRight = async (cardIndex) => {
         if (!profiles[cardIndex]){ return;}
 
-        console.log("you swiped right on", profiles[cardIndex].displayName);
-        setDoc(doc(db, 'users', user.uid, "swipes", profiles[cardIndex].id), profiles[cardIndex]);
+        const userSwiped = profiles[cardIndex]
+
+        const loggedProfile = await (await getDoc(doc(db, 'users', user.uid))).data();
+
+        getDoc(doc(db, 'users', userSwiped.id, "swipes", user.uid)).then(
+            documentSnapshot => {
+                if (documentSnapshot.exists()){
+                    console.log("document snap", documentSnapshot);
+                    //user matched, they swiped on you already
+                    console.log("MATCHED with", userSwiped.displayName);
+
+                    setDoc(doc(db, 'matches', generateId(user.uid, userSwiped.id)), {
+                        users: {
+                            [user.uid]: loggedProfile,
+                            [userSwiped.id]: userSwiped
+                        },
+                        userMatched: [user.uid, userSwiped.id],
+                        timeStamped: serverTimestamp()
+                    });
+
+                    navigation.navigate("Match", {loggedProfile, userSwiped});
+
+                } else {
+                    //first swipe of interaction
+                    console.log("you swiped right on",  userSwiped.displayName);
+
+                }
+                setDoc(doc(db, 'users', user.uid, "swipes",  userSwiped.id),  userSwiped);
+            }
+            
+        );
     }
 
 
-    const DUMMY_DATA = [
-        {
-            displayName: "Darren",
-            job: "Entrepreneur",
-            photoURL: "https://i.pinimg.com/236x/a3/d4/6c/a3d46c39fe2060d4df2678f145570571.jpg",
-            age: 26,
-            id: 1,
-            mission: "Create a 10k coaching business"
-        },
-        {
-            displayName: "Johnny",
-            job: "Police Officer",
-            photoURL: "https://www.portseattle.org/sites/default/files/styles/detailpageimagesize/public/2022-08/22_08_26_Officer%20Cody-Berry%20Portrait-2.jpg?itok=vv5pjGJu",
-            age: 37,
-            id: 2,
-            mission: "Create a safer city for children"
-        },
-        {
-            displayName: "Mia",
-            job: "Doctor",
-            photoURL: "https://t3.ftcdn.net/jpg/02/74/03/26/360_F_274032618_OhzkPv4gkPC7pIumPDQYlILKH6eB28WH.jpg",
-            age: 27,
-            id: 3,
-            mission: "Help people recover from COVID vaccine injuries"
-        },
-        {
-            displayName: "Riley",
-            job: "Lawyer",
-            photoURL: "https://a9p9n2x2.stackpathcdn.com/wp-content/blogs.dir/1/files/2016/09/iStock-183996292-e1548441545549.jpg",
-            age: 23,
-            id: 4,
-            mission: "Ensure freedom of speech in social media spaces"
-        },
-        {
-            displayName: "Lana",
-            job: "Engineer",
-            photoURL: "https://t4.ftcdn.net/jpg/03/39/53/13/360_F_339531358_ydG0IxRqQj6iGG0ddAnRExu9lLpGhUdV.jpg",
-            age: 29,
-            id: 5,
-            mission: "Advance A.I towards solving world problems"
-        }
+    // const DUMMY_DATA = [
+    //     {
+    //         displayName: "Darren",
+    //         job: "Entrepreneur",
+    //         photoURL: "https://i.pinimg.com/236x/a3/d4/6c/a3d46c39fe2060d4df2678f145570571.jpg",
+    //         age: 26,
+    //         id: 1,
+    //         mission: "Create a 10k coaching business"
+    //     },
+    //     {
+    //         displayName: "Johnny",
+    //         job: "Police Officer",
+    //         photoURL: "https://www.portseattle.org/sites/default/files/styles/detailpageimagesize/public/2022-08/22_08_26_Officer%20Cody-Berry%20Portrait-2.jpg?itok=vv5pjGJu",
+    //         age: 37,
+    //         id: 2,
+    //         mission: "Create a safer city for children"
+    //     },
+    //     {
+    //         displayName: "Mia",
+    //         job: "Doctor",
+    //         photoURL: "https://t3.ftcdn.net/jpg/02/74/03/26/360_F_274032618_OhzkPv4gkPC7pIumPDQYlILKH6eB28WH.jpg",
+    //         age: 27,
+    //         id: 3,
+    //         mission: "Help people recover from COVID vaccine injuries"
+    //     },
+    //     {
+    //         displayName: "Riley",
+    //         job: "Lawyer",
+    //         photoURL: "https://a9p9n2x2.stackpathcdn.com/wp-content/blogs.dir/1/files/2016/09/iStock-183996292-e1548441545549.jpg",
+    //         age: 23,
+    //         id: 4,
+    //         mission: "Ensure freedom of speech in social media spaces"
+    //     },
+    //     {
+    //         displayName: "Lana",
+    //         job: "Engineer",
+    //         photoURL: "https://t4.ftcdn.net/jpg/03/39/53/13/360_F_339531358_ydG0IxRqQj6iGG0ddAnRExu9lLpGhUdV.jpg",
+    //         age: 29,
+    //         id: 5,
+    //         mission: "Advance A.I towards solving world problems"
+    //     }
 
-    ]
+    // ]
 
 
   return (
