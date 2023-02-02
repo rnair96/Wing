@@ -6,28 +6,46 @@ import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 
 const ChatRow = ({ matchedDetails }) => {
 
-    const  navigate = useNavigation();
     const  { user } = useAuth();
-    const [matchedUserInfo, setMatchedUserInfo]  = useState(null);
-
+    const [ matchedUserInfo, setMatchedUserInfo ] = useState(null);
+    const navigator = useNavigation();
+   
 
     useEffect(()=>{
-        setMatchedUserInfo(getMatchedUserInfo(matchedDetails.users, user));
-        console.log("matchInfo",matchedUserInfo[1].photoURL);
+        // console.log("are you here at least?")
+        setMatchedUserInfo(getMatchedUserInfo(matchedDetails.users,user.uid));
+        // console.log("matched user", matchedUserInfo)
+        
+    },[matchedDetails, user]);
+    
 
-    },[matchedDetails, user])
 
-    return (
-      <TouchableOpacity style={styles.container}>
-        <Image style = {{height:80, width:80, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.photoURL}}/>
-      </TouchableOpacity>
+//create a loading value
+    return ( 
+        matchedUserInfo? (
+        <TouchableOpacity style={styles.container} onPress={()=>navigator.navigate("Message",{
+            matchedDetails
+        })}>
+         <Image style = {{height:60, width:60, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.photoURL}}/>
+         <View style={{padding:10}}>
+            <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5}}>{matchedUserInfo[1]?.displayName}</Text>
+            <Text style={{paddingLeft:10}}>Say Hi!</Text>
+         </View>
+       </TouchableOpacity>
+    ):(
+        <Text>Not Here!!!</Text>
     )
+    )
+
+
 }
 
 const styles = StyleSheet.create({
     container:{
+        left:20,
         flexDirection:"row",
         backgroundColor:"white",
+        alignItems:"center",
         padding:10,
         shadowColor:"#000",
         shadowOffset: {
@@ -39,5 +57,6 @@ const styles = StyleSheet.create({
         elevation:2
     }
 })
+
 
 export default ChatRow

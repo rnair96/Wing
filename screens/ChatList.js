@@ -28,11 +28,9 @@ const ChatList = () => {
     )
   },[user]);
 
-  // console.log("matches", matches)
-
 
     return matches.length > 0 ? (
-      <FlatList style={{height:300, width:300}}
+      <FlatList style={{height:200, width:360}}
       data = {matches}
       keyExtractor = {item => item.id}
       renderItem = {({item}) => <ChatRow matchedDetails = {item}/>
@@ -43,6 +41,7 @@ const ChatList = () => {
         <Text> No Matches at this time </Text>
       </View>
     )
+    
 }
 
 export default ChatList
