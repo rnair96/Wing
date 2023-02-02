@@ -6,6 +6,8 @@ import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
+import { addDoc, collection, getDoc, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const MessageScreen = () => {
 
@@ -16,11 +18,28 @@ const MessageScreen = () => {
     const { user } = useAuth();
 
 
-    useEffect(()=>{
-        
-    },[])
+    useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
+        orderBy("timestamp", "desc")), (snapshot) => {
+            setMessages(snapshot.docs.map((doc)=>({
+                id: doc.id,
+                ...doc.data()
+            })
+            ))
+        })
+        ,[matchedDetails, db]);
 
-    const sendMessage = () => {}
+    const sendMessage = () => {
+        addDoc(collection(db, "matches", matchedDetails.id, "messages"), {
+            timestamp: serverTimestamp(),
+            userId: user.uid,
+            displayName: user.displayName,
+            photoURL: matchedDetails.users[user.uid].photoURL,
+            message: input,
+
+        })
+        setInput("");
+        // setMessages([input,...messages]);
+    }
     //add message to messages array using setMessage
 
     //update messages array from DB if pre-existing through useEffect or useLayoutEffect
@@ -34,15 +53,18 @@ const MessageScreen = () => {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{flex:1}}
-            keyboardVerticalOffset={10}/>
+            keyboardVerticalOffset={10}>
 
 
         {/* must create messages for data */}
 
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss()}>
+        <TouchableWithoutFeedback 
+        // onPress={Keyboard.dismiss()}
+        >
             <FlatList
                 data={messages}
                 style={{}}
+                inverted={-1}
                 keyExtractor={(item) => item.id}
                 renderItem = {({item:message}) =>
                     message.userId === user.uid ? (
@@ -54,9 +76,11 @@ const MessageScreen = () => {
             />
         </TouchableWithoutFeedback>
 
-        <View style={{flexDirection:"row"}}>
+
+        <View 
+        style={{flexDirection:"row", borderColor:"#E0E0E0", borderWidth:2, alignItems:"center"}}>
             <TextInput
-            style={{height:40, width: 300, fontSize:15, padding:30}}
+            style={{height:50, width: 300, fontSize:15, padding:10}}
             placeholder = "Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}
@@ -64,6 +88,7 @@ const MessageScreen = () => {
             />
             <Button onPress={sendMessage} title="Send" color="#00BFFF"/>
         </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     )
 }

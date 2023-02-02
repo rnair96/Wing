@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
+import { onSnapshot, orderBy, query, collection } from 'firebase/firestore';
 import React, { Component, useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native'
+import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 
@@ -8,6 +10,7 @@ const ChatRow = ({ matchedDetails }) => {
 
     const  { user } = useAuth();
     const [ matchedUserInfo, setMatchedUserInfo ] = useState(null);
+    const [ lastMessage, setLastMessage ] = useState();
     const navigator = useNavigation();
    
 
@@ -17,6 +20,12 @@ const ChatRow = ({ matchedDetails }) => {
         // console.log("matched user", matchedUserInfo)
         
     },[matchedDetails, user]);
+
+
+    // useEffect(()=>onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
+    //     orderBy("timestamp", "desc"), (snaptshot) => 
+    //     setLastMessage(snapshot.docs[0]?.data()?.message))
+    //     ), [matchedDetails, db])
     
 
 
@@ -29,7 +38,7 @@ const ChatRow = ({ matchedDetails }) => {
          <Image style = {{height:60, width:60, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.photoURL}}/>
          <View style={{padding:10}}>
             <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5}}>{matchedUserInfo[1]?.displayName}</Text>
-            <Text style={{paddingLeft:10}}>Say Hi!</Text>
+            <Text style={{paddingLeft:10}}>{lastMessage || "Say Hi!"}</Text>
          </View>
        </TouchableOpacity>
     ):(
@@ -42,12 +51,13 @@ const ChatRow = ({ matchedDetails }) => {
 
 const styles = StyleSheet.create({
     container:{
-        left:20,
+        left:15,
         flexDirection:"row",
         backgroundColor:"white",
         alignItems:"center",
-        padding:10,
+        padding:5,
         shadowColor:"#000",
+        borderRadius:20,
         shadowOffset: {
             width: 0,
             height: 1
