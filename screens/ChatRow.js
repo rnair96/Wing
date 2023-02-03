@@ -22,10 +22,11 @@ const ChatRow = ({ matchedDetails }) => {
     },[matchedDetails, user]);
 
 
-    // useEffect(()=>onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
-    //     orderBy("timestamp", "desc"), (snaptshot) => 
-    //     setLastMessage(snapshot.docs[0]?.data()?.message))
-    //     ), [matchedDetails, db])
+    useEffect(()=>
+    onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
+        orderBy("timestamp", "desc")), (snapshot) => 
+        setLastMessage(snapshot.docs[0]?.data()?.message))
+        , [matchedDetails, db]);
     
 
 
@@ -57,7 +58,9 @@ const styles = StyleSheet.create({
         alignItems:"center",
         padding:5,
         shadowColor:"#000",
-        borderRadius:20,
+        borderRadius:15,
+        // borderBottomRightRadius:40,
+        // borderTopRightRadius:40,
         shadowOffset: {
             width: 0,
             height: 1

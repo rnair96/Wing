@@ -37,6 +37,10 @@ const  ModalScreen = () => {
         });
     }
 
+    const handlePaste = (event) => {
+        setImage(event.nativeEvent.clipboard.getData('text/plain'));
+      };
+
 
   return (
     <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
@@ -46,6 +50,7 @@ const  ModalScreen = () => {
         <TextInput
         value = {image}
         onChangeText = {setImage}
+        onPaste={handlePaste}
         placeholder='Enter Your Profile Pic URL'/>
 
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 2: The Job</Text>
