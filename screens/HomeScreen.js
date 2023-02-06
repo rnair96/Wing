@@ -167,7 +167,7 @@ const HomeScreen = () => {
             renderCard={(card)=> card ? (
                 <View key={card.id} style={styles.cardcontainer}>
                     <Text style={{fontWeight:"bold", fontSize:15, justifyContent:"center", padding: 5}}>{card.mission}</Text>
-                    <Image style={{height:450 ,maxWidth:400}} source={{uri: card.photoURL}}/>
+                    <Image style={{height:450 ,maxWidth:400}} source={{uri: card.images[0]}}/>
                     <View style={styles.infocontainer}>
                         <View>
                             <Text style={{fontWeight:"bold", fontSize:20}}>

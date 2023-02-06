@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-const ImageUpload = () => {
+const ImageUpload = ({ images, index, setImages}) => {
     const [ image, setImage ]= useState(null);
 
     const selectImage = async () => {      
@@ -17,6 +17,8 @@ const ImageUpload = () => {
     
         if (!result.canceled) {
           setImage(result.assets[0].uri);
+          
+          setImages([...images, result.assets[0].uri])//must correct to ensure added image is at correct place in array
 
         }
     };
@@ -24,6 +26,9 @@ const ImageUpload = () => {
 
   const removeImage = async () => {       
       setImage(null);
+      const arr = images;
+      arr.splice(index,1);
+      setImages(arr);
   };
 
     return (

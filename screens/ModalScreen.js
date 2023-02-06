@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, Image, TextInput, TouchableOpacity} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
@@ -14,23 +14,29 @@ const  ModalScreen = () => {
     const [ job, setJob ] = useState(null);
     const [ age, setAge ] = useState(null);
     const [ mission, setMission ] = useState(null);
-    const [ gender, setGender ] = useState(null); 
+    const [ gender, setGender ] = useState(null);
+    const [ accomplishments, setAccomplishments ] = useState(null);
+    const [ skills, setSkills ] = useState(null);
+    const [ desires, setDesires ] = useState(null);
 
     const navigation = useNavigation();
 
 
-    const incompleteform = !images||!job||!age;
+    const incompleteform = !images||!gender||!age||!mission||!accomplishments||!skills||!desires||!job;
     //use LayoutEffect to update header profile if you want to
 
     const updateUserProfile = () => {
         setDoc(doc(db, 'users', user.uid), {
             id: user.uid,
             displayName: user.displayName,
-            photos: images,//change photoURL to profile pic(s)
+            photos: images,
             job: job,
             age: age,
             gender: gender,
             mission: mission,
+            accomplishments: accomplishments,
+            skills: skills,
+            desires: desires,
             timestamp: serverTimestamp()
         }).then(()=> {
             navigation.navigate("Home")
@@ -39,47 +45,19 @@ const  ModalScreen = () => {
         });
     }
 
-    // const selectImage = async () => {      
-    //       const result = await ImagePicker.launchImageLibraryAsync({
-    //         mediaTypes: ImagePicker.MediaTypeOptions.All,
-    //         allowsEditing: true,
-    //         aspect: [4, 3],
-    //         quality: 1,
-    //       });
-      
-    //       if (!result.canceled) {
-    //         setImages(images.push(result.assets[0].uri));
-    //         console.log("images added",images[0]);
-    //         console.log("images added",images.length);
-
-
-    //       }
-    //   };
+    useEffect(() => {
+        console.log("imges",images);
+    },[images, setImages])
       
 
-    // const removeImage = async (index) => {       
-    //     images.splice(index,1);
-    //     setImages(images);
-    //     console.log("images removed",images);
-
-    // };
+    //add multiline texts to inputs
       
-
-      
-
-
   return (
     <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
         {/* <ScrollView> */}
-        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
+        <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
         <Text style={{fontSize:20, fontWeight: "bold"}}>Welcome {user.displayName}</Text>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Set Up Your Profile</Text>
-
-        <View style ={{flexDirection:"row"}}>
-        <ImageUpload/>
-        <ImageUpload/>
-        <ImageUpload/>  
-        </View>
+        {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Set Up Your Profile</Text> */}
 
         <View style ={{flexDirection:"row"}}>
         <View style ={{padding:10}}>
@@ -87,7 +65,7 @@ const  ModalScreen = () => {
         <TextInput
         value = {age}
         onChangeText = {setAge} 
-        placeholder='Enter Your Age'
+        placeholder="What's Your Age?"
         maxLength={2}/>
         </View>
         
@@ -96,7 +74,7 @@ const  ModalScreen = () => {
         <TextInput
         value = {gender}
         onChangeText = {setGender} 
-        placeholder='Enter Your Gender'/>
+        placeholder="What's Your Gender"/>
         </View>
         </View>
 
@@ -104,13 +82,52 @@ const  ModalScreen = () => {
         <TextInput
         value = {job}
         onChangeText = {setJob} 
-        placeholder='Enter Your Job'/>
+        placeholder='What do you do?'/>
+
+
+        <View style ={{flexDirection:"row"}}>
+        <ImageUpload images = {images} index={0} setImages = {setImages}/>
+        <ImageUpload images = {images} index={1} setImages = {setImages}/>
+        <ImageUpload images = {images} index={2} setImages = {setImages}/>  
+        </View>
 
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission</Text>
         <TextInput
         value = {mission}
+        multiline
+        numberOfLines={2}
         onChangeText = {setMission} 
-        placeholder='Enter Your Mission'/>
+        placeholder='What goal do you want to achieve? i.e Lose 10 pounds'/>
+
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Medals</Text>
+        <TextInput
+        value = {accomplishments}
+        multiline
+        numberOfLines={2}
+        onChangeText = {setAccomplishments} 
+        placeholder="What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"/>
+
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Strengths</Text>
+        <TextInput
+        value = {skills}
+        multiline
+        numberOfLines={2}
+        onChangeText = {setSkills} 
+        placeholder='What are you good at? i.e: Calculating calories and being consistent'/>
+
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>The Ideal Wing</Text>
+        <TextInput
+        value = {desires}
+        multiline
+        numberOfLines={2}
+        onChangeText = {setDesires} 
+        placeholder='How can a Wing best support you? i.e: Push me in the gym'/>
+
+        {/* <textarea
+        rows=
+        value = {desires}
+        onChangeText = {setDesires} 
+        placeholder='How can a Wing best support you? i.e: Train at the gym with me'/> */}
 
         <TouchableOpacity 
             disabled = {incompleteform}

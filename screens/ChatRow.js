@@ -36,7 +36,7 @@ const ChatRow = ({ matchedDetails }) => {
         <TouchableOpacity style={styles.container} onPress={()=>navigator.navigate("Message",{
             matchedDetails
         })}>
-         <Image style = {{height:60, width:60, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.photoURL}}/>
+         <Image style = {{height:60, width:60, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.images[0]}}/>
          <View style={{padding:10}}>
             <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5}}>{matchedUserInfo[1]?.displayName}</Text>
             <Text style={{paddingLeft:10}}>{lastMessage || "Say Hi!"}</Text>
