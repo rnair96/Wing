@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
+import { View, ScrollView, Text, Image, TextInput, TouchableOpacity} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigation } from '@react-navigation/core';
+import * as ImagePicker from 'expo-image-picker';
+import ImageUpload from '../components/ImageUpload';
 
 
 const  ModalScreen = () => {
     const { user } = useAuth();
-    const [ image, setImage ]= useState(null);
+    const [ images, setImages ]= useState([]);
     const [ job, setJob ] = useState(null);
     const [ age, setAge ] = useState(null);
     const [ mission, setMission ] = useState(null);
-    // const [ gender, setGender ] = useState(null); & location
+    const [ gender, setGender ] = useState(null); 
 
     const navigation = useNavigation();
 
 
-    const incompleteform = !image||!job||!age;
+    const incompleteform = !images||!job||!age;
     //use LayoutEffect to update header profile if you want to
 
     const updateUserProfile = () => {
         setDoc(doc(db, 'users', user.uid), {
             id: user.uid,
             displayName: user.displayName,
-            photoURL: image,
+            photos: images,//change photoURL to profile pic(s)
             job: job,
             age: age,
-            // gender: gender,
+            gender: gender,
             mission: mission,
             timestamp: serverTimestamp()
         }).then(()=> {
@@ -37,42 +39,74 @@ const  ModalScreen = () => {
         });
     }
 
-    const handlePaste = (event) => {
-        setImage(event.nativeEvent.clipboard.getData('text/plain'));
-      };
+    // const selectImage = async () => {      
+    //       const result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //         allowsEditing: true,
+    //         aspect: [4, 3],
+    //         quality: 1,
+    //       });
+      
+    //       if (!result.canceled) {
+    //         setImages(images.push(result.assets[0].uri));
+    //         console.log("images added",images[0]);
+    //         console.log("images added",images.length);
+
+
+    //       }
+    //   };
+      
+
+    // const removeImage = async (index) => {       
+    //     images.splice(index,1);
+    //     setImages(images);
+    //     console.log("images removed",images);
+
+    // };
+      
+
+      
 
 
   return (
     <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+        {/* <ScrollView> */}
         <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
         <Text style={{fontSize:20, fontWeight: "bold"}}>Welcome {user.displayName}</Text>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 1: The Profile Pic</Text>
-        <TextInput
-        value = {image}
-        onChangeText = {setImage}
-        onPaste={handlePaste}
-        placeholder='Enter Your Profile Pic URL'/>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Set Up Your Profile</Text>
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 2: The Job</Text>
-        <TextInput
-        value = {job}
-        onChangeText = {setJob} 
-        placeholder='Enter Your Job'/>
+        <View style ={{flexDirection:"row"}}>
+        <ImageUpload/>
+        <ImageUpload/>
+        <ImageUpload/>  
+        </View>
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 3: The Age</Text>
+        <View style ={{flexDirection:"row"}}>
+        <View style ={{padding:10}}>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Age</Text>
         <TextInput
         value = {age}
         onChangeText = {setAge} 
         placeholder='Enter Your Age'
         maxLength={2}/>
-
-        {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Step 2: The Job</Text>
+        </View>
+        
+        <View style={{padding:10}}>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
         <TextInput
         value = {gender}
         onChangeText = {setGender} 
-        placeholder='Enter Your Gender'/> */}
+        placeholder='Enter Your Gender'/>
+        </View>
+        </View>
 
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Step 4: The Mission</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Job</Text>
+        <TextInput
+        value = {job}
+        onChangeText = {setJob} 
+        placeholder='Enter Your Job'/>
+
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission</Text>
         <TextInput
         value = {mission}
         onChangeText = {setMission} 
@@ -84,6 +118,7 @@ const  ModalScreen = () => {
             onPress = {updateUserProfile}>
             <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Profile</Text>
         </TouchableOpacity>
+        {/* </ScrollView> */}
     </View>
   )
 }
