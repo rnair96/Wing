@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useRef, useState, useEffect} from 'react'
-import { Button, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { Button, View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ImageBackground, TurboModuleRegistry } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -166,8 +166,9 @@ const HomeScreen = () => {
             containerStyle={{backgroundColor:"transparent"}}
             renderCard={(card)=> card ? (
                 <View key={card.id} style={styles.cardcontainer}>
-                    <Text style={{fontWeight:"bold", fontSize:15, justifyContent:"center", padding: 5}}>{card.mission}</Text>
-                    <Image style={{height:450 ,maxWidth:400}} source={{uri: card.images[0]}}/>
+                    <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", card)}}>
+                    <Text style={{fontWeight:"bold", fontSize:15, alignItems:"center" ,justifyContent:"center", padding: 10}}>{card.mission}</Text>
+                    <Image style={{height:440 ,maxWidth:400}} source={{uri: card.images[0]}}/>
                     <View style={styles.infocontainer}>
                         <View>
                             <Text style={{fontWeight:"bold", fontSize:20}}>
@@ -179,6 +180,7 @@ const HomeScreen = () => {
                         </View>
                         <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
                     </View>
+                    </TouchableOpacity>
                 </View>
             ):(
             <View style={[styles.cardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
