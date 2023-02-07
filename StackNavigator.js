@@ -3,10 +3,11 @@ import React, { Component } from 'react'
 import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
 import LoginScreen from './screens/LoginScreen';
-import ModalScreen from './screens/ModalScreen';
+import MenuScreen from './screens/MenuScreen';
 import MatchScreen from './screens/MatchScreen';
 import useAuth from './hooks/useAuth';
 import MessageScreen from './screens/MessageScreen';
+import EditProfileScreen from './screens/EditProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,9 +25,11 @@ const StackNavigator = () => {
             <Stack.Screen name="Home" component={HomeScreen}/>
             <Stack.Screen name="Chat" component={ChatScreen}/>
             <Stack.Screen name="Message" component={MessageScreen}/>
+            <Stack.Screen name="Menu" component={MenuScreen} />
+            
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
-              <Stack.Screen name="Modal" component={ModalScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen}/>
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "transparentModal" }}>
               <Stack.Screen name="Match" component={MatchScreen} />

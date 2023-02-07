@@ -7,6 +7,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const ImageUpload = ({ images, index, setImages}) => {
     const [ image, setImage ]= useState(null);
 
+
+    //add a useeffect that instantiates image if there is already an existing image at the given index for images
+
     const selectImage = async () => {      
         const result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,

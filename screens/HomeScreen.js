@@ -21,7 +21,7 @@ const HomeScreen = () => {
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
-                    navigation.navigate("Modal");
+                    navigation.navigate("EditProfile");
                 }
             }
         )
@@ -119,7 +119,7 @@ const HomeScreen = () => {
         <TouchableOpacity  onPress= {logout} style={{left: 20, top:10}}>
             <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/>
         </TouchableOpacity>
-        <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Modal")}>
+        <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu")}>
             <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
         </TouchableOpacity>
         <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Chat")}>
