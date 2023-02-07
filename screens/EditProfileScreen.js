@@ -90,6 +90,7 @@ return (
       placeholder={profile ? profile?.job:'What do you do?'}/>
 
       {/* somehow pass in profile.photos as images when profile is existing */}
+      {/* Does the placeholder info actually pass in the info to VALUE when updating profile? */}
       <View style ={{flexDirection:"row"}}>
       <ImageUpload images = {images} index={0} setImages = {setImages}/>
       <ImageUpload images = {images} index={1} setImages = {setImages}/>

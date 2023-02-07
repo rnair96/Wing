@@ -1,9 +1,11 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, Image } from 'react-native';
+import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { collection, getDoc, onSnapshot, doc, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 
 
@@ -38,22 +40,39 @@ const  MenuScreen = () => {
     return (
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
         <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={{uri: profile?.photos[0]}}/>
-        <Text style={{fontSize:20, fontWeight: "bold"}}>{user.displayName}: Wing Member</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("EditProfile", profile)}>
+        <Text style={{fontSize:20, fontWeight: "bold"}}>{user.displayName}</Text>
+        <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Wing Member</Text>
+        <MaterialCommunityIcons name="account-check" size={20} color="#32CD32" />
+        </View>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("EditProfile", profile)}>
         <Text>Edit Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity style={styles.buttonContainer}>
         <Text>Matching Prefences</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Home")}>
         <Text>Start Matching</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity style={styles.buttonContainer}>
         <Text>Settings</Text>
         </TouchableOpacity>
 
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    buttonContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 200,
+      height: 50,
+      margin: 10,
+      borderWidth: 1,
+      borderColor: '#ccc'
+    },
+    });
+
 
 export default MenuScreen
