@@ -56,7 +56,11 @@ export const ProfileSwipeScreen = () => {
                 <View>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20}}>
                     <View style={{alignItems:"center"}}>
-                    <Text>Mission</Text>
+                    <View style={{flexDirection:"row", padding: 10}}>
+                    <Image style={{height: 30, width:30}} source={require("../images/reverse_mission.jpeg")}/>
+                    <Text style = {{padding: 10}}>Mission</Text>
+                    <Image style={{height: 30, width:30}} source={require("../images/mission.jpeg")}/>
+                    </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.mission}</Text>
                     <Image style={{height:440 ,width:"90%"}} source={{uri: card.item.images[0]}}/>
                     </View>
@@ -73,17 +77,29 @@ export const ProfileSwipeScreen = () => {
                     </View>
                     </View>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center", paddingBottom:10}}>
-                    <Text>Medals</Text>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text>
+                    <View style={{flexDirection:"row", padding: 10}}>
+                    <Image style={{height: 30, width:30}} source={require("../images/reverselogo.jpg")}/>
+                    <Text style = {{padding: 10}}>My Ideal Wing</Text>
+                    <Image style={{height: 30, width:30}} source={require("../images/logo2.jpg")}/>
+                    </View>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.desires}</Text>
                     <Image style={{height:440 ,width:"90%"}} source={{uri: card.item.images[1]}}/>
                     </View>
-                    <View style={{height:700}}>
+                    <View style={{height:750}}>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
-                    <Text>Strengths</Text>
+                    <View style={{flexDirection:"row", padding: 10}}>
+                    <Image style={{height: 30, width:30}} source={require("../images/reverse_biceps.jpg")}/>
+                    <Text style = {{padding: 10}}>Strengths</Text>
+                    <Image style={{height: 30, width:30}} source={require("../images/bicep.jpg")}/>
+                    </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.skills}</Text>
                     <Image style={{height:440 ,width:"90%"}} source={{uri: card.item.images[2]}}/>
-                    <Text>My Ideal Wing</Text>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.desires}</Text>
+                    <View style={{flexDirection:"row", padding: 10}}>
+                    <Image style={{height: 40, width:40}} source={require("../images/medal.jpg")}/>
+                    <Text style = {{padding: 10}}>Medals</Text>
+                    <Image style={{height: 40, width:40}} source={require("../images/medal.jpg")}/>
+                    </View>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text>
                     </View>
                     </View>
                 </View>
