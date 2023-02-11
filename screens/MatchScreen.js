@@ -13,8 +13,8 @@ const MatchScreen =()=> {
         <Text style={{color:"white", fontSize:40, fontWeight:"bold"}}> Mission Aligned</Text>
         <Text style={{color:"white", fontSize:20, paddingLeft:20, paddingRight:20}}> You and {userSwiped.displayName} have selected each other as potential Wings!</Text> 
         <View style ={{flexDirection:"row"}}>
-            <Image style ={{width:180, height:180, borderRadius:200, right:10}} source={{uri:loggedProfile.photoURL}}/>
-            <Image style ={{width:180, height:180, borderRadius:200, left:10}} source={{uri:userSwiped.photoURL}}/>
+            <Image style ={{width:180, height:180, borderRadius:200, right:10}} source={{uri:loggedProfile.images[0]}}/>
+            <Image style ={{width:180, height:180, borderRadius:200, left:10}} source={{uri:userSwiped.images[0]}}/>
         </View>
 
         <View style={{alignItems:"center"}}>

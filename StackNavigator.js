@@ -9,6 +9,7 @@ import useAuth from './hooks/useAuth';
 import MessageScreen from './screens/MessageScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
 import ProfileSwipeScreen from './screens/ProfileSwipeScreen';
+import MissionControlScreen from './screens/MissionControlScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ const StackNavigator = () => {
             <Stack.Screen name="Message" component={MessageScreen}/>
             <Stack.Screen name="Menu" component={MenuScreen} />
             <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen}/>
+            <Stack.Screen name="MissionControl" component={MissionControlScreen}/>
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}/>

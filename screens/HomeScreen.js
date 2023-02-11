@@ -164,13 +164,13 @@ const HomeScreen = () => {
                 }
             }}
             containerStyle={{backgroundColor:"transparent"}}
-            renderCard={(card)=> card ? (
+            renderCard={(card)=> card && card?.images ? (
                 <View key={card.id} style={styles.cardcontainer}>
                     <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card, swipeRef: swipeRef})}}>
                     <View style={{alignItems:"center"}}>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
                     </View>   
-                    <Image style={{height:440 ,maxWidth:400}} source={{uri: card.images[0]}}/>
+                    <Image style={{height:440 ,maxWidth:400}} source={{uri: card?.images[0]}}/>
                     <View style={styles.infocontainer}>
                         <View>
                             <Text style={{fontWeight:"bold", fontSize:20}}>

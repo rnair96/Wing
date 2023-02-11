@@ -1,6 +1,6 @@
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { Component, useEffect, useState } from 'react'
-import { Text, SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Keyboard } from 'react-native';
+import { Text, SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Keyboard, TouchableOpacity} from 'react-native';
 import Header from '../Header';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import useAuth from '../hooks/useAuth';
@@ -8,6 +8,7 @@ import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, getDoc, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
 import { db } from '../firebase';
+import { Entypo, Ionicons} from '@expo/vector-icons';
 
 const MessageScreen = () => {
 
@@ -16,6 +17,7 @@ const MessageScreen = () => {
     const [ input, setInput ] = useState();
     const [ messages, setMessages ] = useState([])
     const { user } = useAuth();
+    const navigation = useNavigation();
 
 
     useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
@@ -75,6 +77,11 @@ const MessageScreen = () => {
             }
             />
         </TouchableWithoutFeedback>
+        <View style={{flexDirection:"row", justifyContent:"flex-end", bottom:30, padding:10}}>
+        <TouchableOpacity style={styles.missionControl} onPress={()=>navigation.navigate("MissionControl")}>
+                <Entypo name="aircraft-take-off" size={30} color="blue"/>
+        </TouchableOpacity>
+    </View>
 
 
         <View 
@@ -92,5 +99,17 @@ const MessageScreen = () => {
       </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+     missionControl:{
+        bottom: 10,
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#00BFFF"
+     }
+  });
 
 export default MessageScreen
