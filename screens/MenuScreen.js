@@ -51,13 +51,15 @@ const  MenuScreen = () => {
         <TouchableOpacity style={styles.buttonContainer}>
         <Text>Matching Prefences</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Home")}>
-        <Text>Start Matching</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer}>
         <Text>Settings</Text>
         </TouchableOpacity>
-
+        <TouchableOpacity style={styles.buttonContainer}>
+        <Text>Help</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>        
+        </TouchableOpacity>
         </View>
     )
 }
@@ -72,6 +74,13 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: '#ccc'
     },
+    iconcontainer: {
+        height: 60,
+        width: 60,
+        borderRadius: 50,
+        borderColor:"#00BFFF",
+        borderWidth: 2
+    }
     });
 
 
