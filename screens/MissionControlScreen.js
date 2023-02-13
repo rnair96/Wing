@@ -1,14 +1,14 @@
 import React, { Component, useState } from 'react';
-import { Text, SafeAreaView, View, TextInput, Button, FlatList } from 'react-native';
+import { Text, SafeAreaView, View, TextInput, Button, FlatList, StyleSheet } from 'react-native';
 import Header from '../Header';
 import axios from 'axios';
 
 
 const MissionControlScreen = () => {
     const [userText, setUserText] = useState('');
-    const [data, setData] = useState();
+    const [data, setData] = useState([]);
     const apiKey = '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'
-    const apiURL = 'https://api.openai.com/v1/engines/text-davinci-002/completions'
+    const apiURL = 'https://api.openai.com/v1/completions'
 
 
     const handleSend = async ()=> {
@@ -17,17 +17,23 @@ const MissionControlScreen = () => {
             prompt: prompt,
             max_tokens: 1024,
             temperature:  0.5,
+            model: "text-davinci-001",
         },{
             headers: {
                 'Content-Type' : 'application/json',
                 'Authorization' : `Bearer ${apiKey}`
             }
+        }).catch(function (error) {
+            return {
+                type: "REGISTER_USER",
+                api_response: {success: false}
+            }
         });
-        const text = response.data.choices[0].text;
-        setData([...data, {type: 'user', 'text':userText}, {type: 'bot', 'text': text}])
-        setUserText('')
-    } 
 
+        const text = response.data.choices[0].text;
+        setData([...data, {type: 'user', 'text':userText}, {type: 'bot', 'text': text}]);
+        setUserText('');
+        }
 
 
     return (
@@ -35,11 +41,12 @@ const MissionControlScreen = () => {
         <Header title={"Mission Control"}/>
         <FlatList
             data = {data}
+            style={styles.container}
             keyExtractor = {(item, index) => index.toString()}
             renderItem = {({item}) => (
-                <View style ={{flexDirection:'row', padding:10}}>
-                    <Text style={{fontWeight:'bold', color: item.type === 'user' ? 'blue' : 'red'}}>{item.type === 'user' ? 'Wing' : 'Mission Control'}</Text>
-                    <Text>{item.text}</Text>
+                <View style ={{flexDirection:'row', paddingBottom:10}}>
+                    <Text style={{fontWeight:'bold', padding:10, color: item.type === 'user' ? 'blue' : 'red'}}>{item.type === 'user' ? 'Wing' : 'Mission Control'}</Text>
+                    <Text style={{top:20, right:20}}>{item.text}</Text>
                 </View>
             )}
         />
@@ -57,5 +64,19 @@ const MissionControlScreen = () => {
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    container :{
+        width:'90%',
+        margin:10,
+    },
+    message: {
+
+    }, 
+    title:{
+
+    }
+
+})
 
 export default MissionControlScreen

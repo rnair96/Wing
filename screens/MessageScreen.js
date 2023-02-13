@@ -35,7 +35,7 @@ const MessageScreen = () => {
             timestamp: serverTimestamp(),
             userId: user.uid,
             displayName: user.displayName,
-            photoURL: matchedDetails.users[user.uid].photoURL,
+            photoURL: matchedDetails.users[user.uid].images[0],
             message: input,
 
         })
