@@ -39,7 +39,7 @@ const  MenuScreen = () => {
 
     return (
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={{uri: profile?.photos[0]}}/>
+        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={{uri: profile?.images[0]}}/>
         <Text style={{fontSize:20, fontWeight: "bold"}}>{user.displayName}</Text>
         <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Wing Member</Text>

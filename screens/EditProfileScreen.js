@@ -16,6 +16,9 @@ const EditProfileScreen = () => {
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
   const [ desires, setDesires ] = useState(null);
+  const [ location, setLocation ] = useState(null);
+  const [ hobbies, setHobbies ] = useState(null);
+
 
   const { params } = useRoute();
   const profile = params;
@@ -24,7 +27,7 @@ const EditProfileScreen = () => {
   const navigation = useNavigation();
 
 
-  const incompleteform = !images||!gender||!age||!mission||!accomplishments||!skills||!desires||!job;
+  const incompleteform = !images||!gender||!age||!mission||!accomplishments||!skills||!desires||!location||!hobbies;
   //use LayoutEffect to update header profile if you want to
 
   const updateUserProfile = () => {
@@ -39,6 +42,7 @@ const EditProfileScreen = () => {
           accomplishments: accomplishments,
           skills: skills,
           desires: desires,
+          location: location,
           timestamp: serverTimestamp()
       }).then(()=> {
           navigation.navigate("Home")
@@ -47,24 +51,20 @@ const EditProfileScreen = () => {
       });
   }
 
-  useEffect(() => {
-      console.log("imges",images);
-      console.log("profile in edit", profile)
-  },[images, setImages])
-    
 
   //add multiline texts to inputs
     
 return (
-  <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-      {/* <ScrollView> */}
-      <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
+  <View>
+      <ScrollView>
+        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+      <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Menu")}>
       <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
       </TouchableOpacity>
-      <Text style={{fontSize:15, fontWeight: "bold"}}>Edit Your Profile</Text>
+      <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
       {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Set Up Your Profile</Text> */}
 
-      <View style ={{flexDirection:"row"}}>
+      <View style ={{flexDirection:"row", padding:10}}>
       <View style ={{padding:10}}>
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Age</Text>
       <TextInput
@@ -83,21 +83,53 @@ return (
       </View>
       </View>
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Job</Text>
+    <View style={{flexDirection:"row", padding:10}}>
+        <View style={{padding:10}}>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Job</Text>
       <TextInput
       value = {job}
       onChangeText = {setJob} 
       placeholder={profile ? profile?.job:'What do you do?'}/>
+        </View>
+   
 
-      {/* somehow pass in profile.photos as images when profile is existing */}
+        <View style={{padding:10}}>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Location</Text>
+        <TextInput
+        value = {location}
+        onChangeText = {setLocation} 
+        placeholder={profile ? profile?.location:'What area are you in? (City, State)'}/>
+        </View>
+        </View>
+        
+      
+
       {/* Does the placeholder info actually pass in the info to VALUE when updating profile? */}
-      <View style ={{flexDirection:"row"}}>
-      <ImageUpload images = {images} index={0} setImages = {setImages}/>
-      <ImageUpload images = {images} index={1} setImages = {setImages}/>
-      <ImageUpload images = {images} index={2} setImages = {setImages}/>  
-      </View>
+      {/* make images editable - probably add a function in ImageUpload to place user image there
+      if profile is existing */}
+        {profile ?( 
+        <View style ={{flexDirection:"row", padding:20}}>
+            <Image style={{height:100, width:100, padding:10}} source = {{uri:profile.images[0]}}/>
+            <Image style={{height:100, width:100, padding:10}} source = {{uri:profile.images[1]}}/>
+            <Image style={{height:100, width:100, padding:10}} source = {{uri:profile.images[2]}}/>
+            </View>
+        ):(
+        <View style ={{flexDirection:"row", padding:20}}>
+            <ImageUpload images = {images} index={0} setImages = {setImages}/>
+            <ImageUpload images = {images} index={1} setImages = {setImages}/>
+            <ImageUpload images = {images} index={2} setImages = {setImages}/>
+            </View> 
+        )} 
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission</Text>
+      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:10}}>Hobbies</Text>
+      <TextInput
+      value = {hobbies}
+      multiline
+      numberOfLines={2}
+      onChangeText = {setHobbies} 
+      placeholder={profile ? profile?.hobbies: 'What do you do for fun? i.e: Trying out new restaurants!'}/>
+
+      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Mission</Text>
       <TextInput
       value = {mission}
       multiline
@@ -105,7 +137,7 @@ return (
       onChangeText = {setMission} 
       placeholder={profile ? profile?.mission:'What goal do you want to achieve? i.e Lose 10 pounds'}/>
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Medals</Text>
+      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Medals</Text>
       <TextInput
       value = {accomplishments}
       multiline
@@ -113,15 +145,15 @@ return (
       onChangeText = {setAccomplishments} 
       placeholder={profile ? profile?.accomplishments: "What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}/>
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Strengths</Text>
+      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Strengths</Text>
       <TextInput
       value = {skills}
       multiline
       numberOfLines={2}
       onChangeText = {setSkills} 
-      placeholder={profile ? profile?.skills:'What are you good at? i.e: Calculating calories and being consistent'}/>
+      placeholder={profile ? profile?.skills:'What are you good at? i.e: Calculating calories and being consistent'}/>    
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>The Ideal Wing</Text>
+      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>The Ideal Wing</Text>
       <TextInput
       value = {desires}
       multiline
@@ -129,19 +161,15 @@ return (
       onChangeText = {setDesires} 
       placeholder={profile ? profile?.desires: 'How can a Wing best support you? i.e: Push me in the gym'}/>
 
-      {/* <textarea
-      rows=
-      value = {desires}
-      onChangeText = {setDesires} 
-      placeholder='How can a Wing best support you? i.e: Train at the gym with me'/> */}
 
       <TouchableOpacity 
           disabled = {incompleteform}
-          style={[{width:200, height:50, paddingTop:15, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
+          style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
           onPress = {updateUserProfile}>
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Profile</Text>
       </TouchableOpacity>
-      {/* </ScrollView> */}
+      </View>
+      </ScrollView>
   </View>
 )
 }

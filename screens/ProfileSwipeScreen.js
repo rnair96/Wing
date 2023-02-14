@@ -85,7 +85,6 @@ export const ProfileSwipeScreen = () => {
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.desires}</Text>
                     <Image style={{height:440 ,width:"90%"}} source={{uri: card.item.images[1]}}/>
                     </View>
-                    <View style={{height:750}}>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
                     <View style={{flexDirection:"row", padding: 10}}>
                     <Image style={{height: 30, width:30}} source={require("../images/reverse_biceps.jpg")}/>
@@ -100,6 +99,20 @@ export const ProfileSwipeScreen = () => {
                     <Image style={{height: 40, width:40}} source={require("../images/medal.jpg")}/>
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text>
+                    </View>
+
+                    <View style={{height:450}}>
+                    <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
+                    <View style={{flexDirection:"row", padding: 10}}>
+                    <Image style={{height: 30, width:30}} source={require("../images/smile.jpeg")}/>
+                    <Text style = {{padding: 10}}>Hobbies</Text>
+                    <Image style={{height: 30, width:30}} source={require("../images/smile.jpeg")}/>
+                    </View>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.hobbies}</Text>
+                    <View style={{flexDirection:"column", padding: 10}}>
+                    <Image style={{height: 40, width:40, alignSelf:"center"}} source={require("../images/location.jpeg")}/>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.location}</Text>
+                    </View>
                     </View>
                     </View>
                 </View>
