@@ -1,18 +1,35 @@
 import React, { Component, useState } from 'react';
-import { Text, SafeAreaView, View, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import { Text, SafeAreaView, View, TextInput, Button, FlatList, StyleSheet} from 'react-native';
 import Header from '../Header';
 import axios from 'axios';
+import SenderMC from './SenderMC';
+import RecieverMC from './RecieverMC';
+import { Picker } from '@react-native-picker/picker';
 
 
 const MissionControlScreen = () => {
-    const [userText, setUserText] = useState('');
+    const inputs = [
+        "What are 5 collaborative goals can someone who wants to help with relationships and an online marketer do together?",
+        "What's a good icebreaker line to someone who does online marketing?",
+        "What's a weekly goal to attain for two guys who want to build an online relationship business together?"
+    ]
+    const [userText, setUserText] = useState(inputs[0]);
     const [data, setData] = useState([]);
     const apiKey = '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'
     const apiURL = 'https://api.openai.com/v1/completions'
+    const [count, setCount] = useState(0);
+    const [selectedOption, setSelectedOption] = useState(inputs[0]);
+
+    const handleOptionChange = (option) => {
+      setSelectedOption(option);
+    //   setUserText(option);
+      console.log("user text", selectedOption);
+    };
+    
 
 
     const handleSend = async ()=> {
-        const prompt = userText
+        const prompt = selectedOption
         const response = await axios.post(apiURL, {
             prompt: prompt,
             max_tokens: 1024,
@@ -31,8 +48,8 @@ const MissionControlScreen = () => {
         });
 
         const text = response.data.choices[0].text;
-        setData([...data, {type: 'user', 'text':userText}, {type: 'bot', 'text': text}]);
-        setUserText('');
+        setData([...data, {type: 'user', 'text':selectedOption}, {type: 'bot', 'text': text}]);
+        // setUserText('');
         }
 
 
@@ -44,22 +61,33 @@ const MissionControlScreen = () => {
             style={styles.container}
             keyExtractor = {(item, index) => index.toString()}
             renderItem = {({item}) => (
-                <View style ={{flexDirection:'row', paddingBottom:10}}>
-                    <Text style={{fontWeight:'bold', padding:10, color: item.type === 'user' ? 'blue' : 'red'}}>{item.type === 'user' ? 'Wing' : 'Mission Control'}</Text>
-                    <Text style={{top:20, right:20}}>{item.text}</Text>
-                </View>
+                item.type === 'user' ? (
+                    <SenderMC key = {1} message={item.text}/>
+                ):(
+                    <RecieverMC key = {2} message={item.text}/>
+                )
             )}
         />
         <View 
         style={{flexDirection:"row", borderColor:"#E0E0E0", borderWidth:2, alignItems:"center"}}>
-            <TextInput
+            <Picker
+            style={{height:200, width:'80%'}}
+        selectedValue={selectedOption}
+        onValueChange={handleOptionChange}
+        enabled='true'
+      >
+        <Picker.Item label="Ask for a Mission" value={inputs[0]} />
+        <Picker.Item label="Ask for an Icebreaker" value={inputs[1]} />
+        <Picker.Item label="Ask for a Goal" value={inputs[2]} />
+      </Picker>
+            {/* <TextInput
             style={{height:50, width: 300, fontSize:15, padding:10}}
             placeholder = "Ask Mission Control..."
             onChangeText={setUserText}
             onSubmitEditing={handleSend}
             value={userText}
-            />
-            <Button onPress={handleSend} title="Send" color="#00BFFF"/>
+            /> */}
+            <Button onPress={handleSend} title="Radio" color="#00BFFF"/>
         </View>
         </SafeAreaView>
     )
