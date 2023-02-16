@@ -11,10 +11,7 @@ import Footer from '../components/Footer';
 
 export const ProfileSwipeScreen = () => {
     const { params } = useRoute();
-    console.log("params",params);
     const { card, swipeRef } = params;
-    console.log("card",card);
-    console.log("swipe",swipeRef);
 
 
     const navigation = useNavigation();

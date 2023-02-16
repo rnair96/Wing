@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, View, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { collection, getDoc, onSnapshot, doc, query, limit, where } from 'firebase/firestore';
@@ -15,7 +15,6 @@ const  MenuScreen = () => {
     const navigation = useNavigation();
     const [ profile, setProfile ] = useState();
 
-
     // must figure out how to simplify this database get method
     useEffect(()=> {
         unsub = onSnapshot(query(collection(db,"users"), where("id","in", [user.uid]))
@@ -27,19 +26,15 @@ const  MenuScreen = () => {
                     ...doc.data()
                 }
                 ))
-                setProfile(...info)
+                setProfile(...info);
             })
-
         return unsub;
    
     },[db]);
 
-    console.log("profile",profile);
-
-
     return (
-        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={{uri: profile?.images[0]}}/>
+        <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={{uri: profile? profile?.images[0]: '../images/account.jpeg'}}/>
         <Text style={{fontSize:20, fontWeight: "bold"}}>{user.displayName}</Text>
         <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Wing Member</Text>
@@ -60,7 +55,7 @@ const  MenuScreen = () => {
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>        
         </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     )
 }
 

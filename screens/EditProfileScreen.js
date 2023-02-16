@@ -23,6 +23,22 @@ const EditProfileScreen = () => {
   const { params } = useRoute();
   const profile = params;
 
+  useEffect(()=>{
+    if (profile) {
+        setImages(profile.images);
+        setJob(profile.job);
+        setAge(profile.age);
+        setMission(profile.mission);
+        setGender(profile.gender);
+        setAccomplishments(profile.accomplishments);
+        setSkills(profile.skills);
+        setLocation(profile.location);
+        setHobbies(profile.hobbies);
+        setDesires(profile.desires);
+    }
+
+  },[profile])
+
 
   const navigation = useNavigation();
 
@@ -34,7 +50,7 @@ const EditProfileScreen = () => {
       setDoc(doc(db, 'users', user.uid), {
           id: user.uid,
           displayName: user.displayName,
-          photos: images,
+          images: images,
           job: job,
           age: age,
           gender: gender,
@@ -43,6 +59,7 @@ const EditProfileScreen = () => {
           skills: skills,
           desires: desires,
           location: location,
+          hobbies: hobbies,
           timestamp: serverTimestamp()
       }).then(()=> {
           navigation.navigate("Home")
@@ -70,7 +87,7 @@ return (
       <TextInput
       value = {age}
       onChangeText = {setAge} 
-      placeholder={profile ? profile?.age: "What's Your Age?"}
+      placeholder={"What's Your Age?"}
       maxLength={2}/>
       </View>
       
@@ -79,7 +96,7 @@ return (
       <TextInput
       value = {gender}
       onChangeText = {setGender} 
-      placeholder={profile ? profile?.gender: "What's Your Gender"}/>
+      placeholder={"What's Your Gender"}/>
       </View>
       </View>
 
@@ -89,7 +106,7 @@ return (
       <TextInput
       value = {job}
       onChangeText = {setJob} 
-      placeholder={profile ? profile?.job:'What do you do?'}/>
+      placeholder={'What do you do?'}/>
         </View>
    
 
@@ -98,28 +115,20 @@ return (
         <TextInput
         value = {location}
         onChangeText = {setLocation} 
-        placeholder={profile ? profile?.location:'What area are you in? (City, State)'}/>
+        placeholder={'What area are you in? (City, State)'}/>
         </View>
-        </View>
-        
+        </View>        
       
 
       {/* Does the placeholder info actually pass in the info to VALUE when updating profile? */}
       {/* make images editable - probably add a function in ImageUpload to place user image there
       if profile is existing */}
-        {profile ?( 
-        <View style ={{flexDirection:"row", padding:20}}>
-            <Image style={{height:100, width:100, padding:10}} source = {{uri:profile.images[0]}}/>
-            <Image style={{height:100, width:100, padding:10}} source = {{uri:profile.images[1]}}/>
-            <Image style={{height:100, width:100, padding:10}} source = {{uri:profile.images[2]}}/>
-            </View>
-        ):(
+
         <View style ={{flexDirection:"row", padding:20}}>
             <ImageUpload images = {images} index={0} setImages = {setImages}/>
             <ImageUpload images = {images} index={1} setImages = {setImages}/>
             <ImageUpload images = {images} index={2} setImages = {setImages}/>
             </View> 
-        )} 
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:10}}>Hobbies</Text>
       <TextInput
@@ -127,7 +136,7 @@ return (
       multiline
       numberOfLines={2}
       onChangeText = {setHobbies} 
-      placeholder={profile ? profile?.hobbies: 'What do you do for fun? i.e: Trying out new restaurants!'}/>
+      placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}/>
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Mission</Text>
       <TextInput
@@ -135,7 +144,7 @@ return (
       multiline
       numberOfLines={2}
       onChangeText = {setMission} 
-      placeholder={profile ? profile?.mission:'What goal do you want to achieve? i.e Lose 10 pounds'}/>
+      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}/>
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Medals</Text>
       <TextInput
@@ -143,7 +152,7 @@ return (
       multiline
       numberOfLines={2}
       onChangeText = {setAccomplishments} 
-      placeholder={profile ? profile?.accomplishments: "What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}/>
+      placeholder={"What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}/>
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Strengths</Text>
       <TextInput
@@ -151,15 +160,17 @@ return (
       multiline
       numberOfLines={2}
       onChangeText = {setSkills} 
-      placeholder={profile ? profile?.skills:'What are you good at? i.e: Calculating calories and being consistent'}/>    
+      placeholder={'What are you good at? i.e: Calculating calories and being consistent'}/>    
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>The Ideal Wing</Text>
       <TextInput
       value = {desires}
       multiline
       numberOfLines={2}
-      onChangeText = {setDesires} 
-      placeholder={profile ? profile?.desires: 'How can a Wing best support you? i.e: Push me in the gym'}/>
+      onChangeText = {setDesires}
+      placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
+
+      />
 
 
       <TouchableOpacity 

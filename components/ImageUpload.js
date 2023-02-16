@@ -1,4 +1,4 @@
-import React, { Component, useState} from 'react';
+import React, { Component, useEffect, useState} from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity  } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -6,6 +6,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const ImageUpload = ({ images, index, setImages}) => {
     const [ image, setImage ]= useState(null);
+
+    useEffect(()=>{
+      if (images && images?.length > index) {
+        setImage(images[index])
+      }
+    },[images])
 
 
     //add a useeffect that instantiates image if there is already an existing image at the given index for images
@@ -37,10 +43,10 @@ const ImageUpload = ({ images, index, setImages}) => {
     return (
     <View style={{alignItems: 'center', justifyContent: 'center' }}>
          {image ? (
-        <View>
+        <View style={{alignItems:"center", justifyContent:"center"}}>
         <Image source={{uri: image}} style={styles.imageContainer} />
         <TouchableOpacity onPress={removeImage}>
-        <Text>Delete</Text>
+        <MaterialCommunityIcons name="close-circle" size={20} color="#fd5c63" />
         </TouchableOpacity>
         </View>
         ):(
@@ -63,7 +69,9 @@ const styles = StyleSheet.create({
       width: 100,
       height: 100,
       margin: 10,
-      borderWidth: 1,
+      borderWidth: 3,
+      borderColor: "",
+      borderRadius: 20,
       borderColor: '#ccc'
     },
     emptyImageContainer: {
