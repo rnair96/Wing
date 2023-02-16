@@ -10,6 +10,7 @@ import MessageScreen from './screens/MessageScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
 import ProfileSwipeScreen from './screens/ProfileSwipeScreen';
 import MissionControlScreen from './screens/MissionControlScreen';
+import MatchingPreferences from './screens/MatchingPreferences';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ const StackNavigator = () => {
             <Stack.Screen name="Menu" component={MenuScreen} />
             <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen}/>
             <Stack.Screen name="MissionControl" component={MissionControlScreen}/>
+            <Stack.Screen name="Preferences" component={MatchingPreferences} />
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}/>

@@ -43,7 +43,7 @@ const  MenuScreen = () => {
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("EditProfile", profile)}>
         <Text>Edit Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
         <Text>Matching Prefences</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer}>

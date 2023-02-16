@@ -43,10 +43,14 @@ const HomeScreen = () => {
             await getDocs(collection(db,"users",user.uid,"swipes")).then((snapshot) => {
                 snapshot.docs.map((doc) => swipedIds.push(doc.id))
             });
+
+            //get preferences data for user
  
 
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
             const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
+
+            //add preferences filter in query
 
             unsub = onSnapshot(query(collection(db,"users"), where("id","not-in", [...passedUIds, ...swipedUIds]) )
             ,(snapshot) =>{
