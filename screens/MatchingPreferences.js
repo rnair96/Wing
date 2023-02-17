@@ -1,9 +1,10 @@
 import React, { Component, useState, useEffect } from 'react'
 import { Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
-import { doc, addDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { Picker } from '@react-native-picker/picker';
 import Header from '../Header';
+import { db } from '../firebase';
 
 
 
@@ -36,16 +37,18 @@ const MatchingPreferences = () => {
 
     const incompleteform = !ageMin||!gender||!ageMax
 
+    console.log('profile',profile.id)
+
 
     const updatePreferences = () => {
-        addDoc(doc(db, 'users', user.uid), {
+        setDoc(doc(db, 'users', profile.id, 'preferences', profile.id), {
             ageMin: ageMin,
             ageMax: ageMax,
             // matchRadius: matchRadius,
-            genderPreference: gender,
+            genderPreference: gender
             // globalMatchingBoolean: global
             }).then(()=> {
-            navigation.navigate("Home")
+            navigation.navigate("Menu")
         }).catch((error) => {
             alert(error.message)
         });
@@ -54,9 +57,9 @@ const MatchingPreferences = () => {
 
     return (
     <SafeAreaView>
+    <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
     <View style={{alignItems:"center", justifyContent:"space-evenly"}}>
 
-    <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
 
     <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
 
@@ -87,9 +90,9 @@ const MatchingPreferences = () => {
         onValueChange={handleGenderChange}
         enabled='true'
       >
-        <Picker.Item label="Male" value="male" />
-        <Picker.Item label="Female" value="female" />
-        <Picker.Item label="Both" value="both" />
+        <Picker.Item label="Both" value="Both" />
+        <Picker.Item label="Male" value="Male" />
+        <Picker.Item label="Female" value="Female" />
       </Picker>
 
       {/* <Button onPress={} title="Radio" color="#00BFFF"/> */}

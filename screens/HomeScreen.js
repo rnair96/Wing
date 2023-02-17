@@ -44,6 +44,14 @@ const HomeScreen = () => {
                 snapshot.docs.map((doc) => swipedIds.push(doc.id))
             });
 
+            const preferences = [];
+            await getDocs(collection(db,"users",user.uid,"preferences")).then((snapshot) => {
+                // preferences = snapshot;
+                snapshot.docs.map((doc) => preferences.push(doc))
+            });
+
+            console.log("preferences",preferences[0])
+
             //get preferences data for user
  
 
