@@ -15,6 +15,7 @@ const HomeScreen = () => {
     const { user, logout } = useAuth();
     const swipeRef = useRef(null);
     const [ profiles,setProfiles ] = useState([]);
+    const [ loggedProfile, setLoggedProfile ] = useState(null)
 
     // console.log("user HOME", user);
 
@@ -22,7 +23,16 @@ const HomeScreen = () => {
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
                     navigation.navigate("EditProfile");
-                }
+                } 
+                // else {
+                //     const info = snapshot?.docs.map((doc) => (
+                //         {
+                //         id: doc.id,
+                //         ...doc.data()
+                //     }
+                //     ))
+                //     setLoggedProfile(...info);
+                // }
             }
         )
         });
@@ -32,39 +42,33 @@ const HomeScreen = () => {
 
         const fetchCards = async() => {
 
-
             const passedIds = [];
             await getDocs(collection(db,"users",user.uid,"passes")).then((snapshot) => {
                 snapshot.docs.map((doc) => passedIds.push(doc.id))
             });
 
-    
             const swipedIds = [];
             await getDocs(collection(db,"users",user.uid,"swipes")).then((snapshot) => {
                 snapshot.docs.map((doc) => swipedIds.push(doc.id))
             });
 
-            const preferences = [];
-            await getDocs(collection(db,"users",user.uid,"preferences")).then((snapshot) => {
-                // preferences = snapshot;
-                snapshot.docs.map((doc) => preferences.push(doc))
-            });
+            const profile = await (await getDoc(doc(db, 'users', user.uid))).data();
+            setLoggedProfile(profile);
 
-            console.log("preferences",preferences[0])
-
-            //get preferences data for user
- 
+            const ageMin  = profile ? parseInt(profile.ageMin): 18;
+            const ageMax = profile ? parseInt(profile.ageMax): 100;
+            const genderPreference = profile ? profile.genderPreference: "Both"
 
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
             const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
 
-            //add preferences filter in query
-
             unsub = onSnapshot(query(collection(db,"users"), where("id","not-in", [...passedUIds, ...swipedUIds]) )
             ,(snapshot) =>{
                 setProfiles(
-                    snapshot.docs.filter((doc) => doc.id !== user.uid).map((doc) => (
-                        {
+                    snapshot.docs.filter((doc) => doc.id !== user.uid 
+                    && (doc.data().gender === genderPreference || genderPreference === "both") 
+                    && (parseInt(doc.data().age)>=ageMin && parseInt(doc.data().age)<=ageMax)).map((doc) => (
+                    {
                         id: doc.id,
                         ...doc.data()
                     }
@@ -92,7 +96,8 @@ const HomeScreen = () => {
 
         const userSwiped = profiles[cardIndex]
 
-        const loggedProfile = await (await getDoc(doc(db, 'users', user.uid))).data();
+        // const loggedProfile = await (await getDoc(doc(db, 'users', user.uid))).data();
+        // console.log("loggedProfile",loggedProfile)
 
         getDoc(doc(db, 'users', userSwiped.id, "swipes", user.uid)).then(
             documentSnapshot => {
@@ -124,14 +129,16 @@ const HomeScreen = () => {
     }
 
 
+
+    //edit profile with loggedprofile
   return (
    <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
     {/* Header */}
     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
-        <TouchableOpacity  onPress= {logout} style={{left: 20, top:10}}>
+        <TouchableOpacity  onPress= {() => navigation.navigate("EditProfile", loggedProfile)} style={{left: 20, top:10}}>
             <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/>
         </TouchableOpacity>
-        <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu")}>
+        <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu", loggedProfile)}>
             <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
         </TouchableOpacity>
         <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Chat")}>

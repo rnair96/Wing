@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Image, StyleSheet, SafeAreaView } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { collection, getDoc, onSnapshot, doc, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -13,24 +13,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const  MenuScreen = () => {
     const { user } = useAuth();
     const navigation = useNavigation();
-    const [ profile, setProfile ] = useState();
-
-    // must figure out how to simplify this database get method
-    useEffect(()=> {
-        unsub = onSnapshot(query(collection(db,"users"), where("id","in", [user.uid]))
-            ,(snapshot) =>{
-                // console.log("snapshot",snapshot.docs.photos);
-                const info = snapshot.docs.map((doc) => (
-                    {
-                    id: doc.id,
-                    ...doc.data()
-                }
-                ))
-                setProfile(...info);
-            })
-        return unsub;
-   
-    },[db]);
+    const { params } = useRoute();
+    const profile = params;
 
     return (
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
@@ -46,7 +30,7 @@ const  MenuScreen = () => {
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
         <Text>Matching Prefences</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Settings")}>
         <Text>Settings</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer}>

@@ -62,6 +62,7 @@ const EditProfileScreen = () => {
           hobbies: hobbies,
           timestamp: serverTimestamp()
       }).then(()=> {
+          //if user does not have preferences go to preferences page otherwise go home
           navigation.navigate("Home")
       }).catch((error) => {
           alert(error.message)
