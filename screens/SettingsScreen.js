@@ -3,12 +3,26 @@ import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-nat
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation } from '@react-navigation/core';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 
 
 const SettingsScreen = () => {
     const { user, logout } = useAuth();
     const navigation = useNavigation();
+
+
+    //deleting matches and passes and swipes
+    const deleteUser = async () => {
+        await deleteDoc(doc(db, 'users', user.uid)).then(() => {
+            logout();
+            console.log("User has been deleted successfully.")
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
 
 
     return (
@@ -41,7 +55,7 @@ const SettingsScreen = () => {
 
           <TouchableOpacity 
               style={[{width:200, height:50, padding:15, borderRadius:10}, {backgroundColor:"red"}]}
-              onPress = {logout}>
+              onPress = {deleteUser}>
               <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Delete Account</Text>
           </TouchableOpacity>
 

@@ -6,10 +6,6 @@ import { collection, getDoc, onSnapshot, doc, query, limit, where } from 'fireba
 import { db } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-
-
-
-
 const  MenuScreen = () => {
     const { user } = useAuth();
     const navigation = useNavigation();

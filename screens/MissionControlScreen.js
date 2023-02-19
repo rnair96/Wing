@@ -22,8 +22,6 @@ const MissionControlScreen = () => {
 
     const handleOptionChange = (option) => {
       setSelectedOption(option);
-    //   setUserText(option);
-      console.log("user text", selectedOption);
     };
     
 
