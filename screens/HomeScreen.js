@@ -55,9 +55,9 @@ const HomeScreen = () => {
             const profile = await (await getDoc(doc(db, 'users', user.uid))).data();
             setLoggedProfile(profile);
 
-            const ageMin  = profile ? parseInt(profile.ageMin): 18;
-            const ageMax = profile ? parseInt(profile.ageMax): 100;
-            const genderPreference = profile ? profile.genderPreference: "Both"
+            const ageMin  = profile?.ageMin ? parseInt(profile.ageMin): 18;
+            const ageMax = profile?.ageMax ? parseInt(profile.ageMax): 100;
+            const genderPreference = profile?.genderPreference ? profile.genderPreference: "both";
 
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
             const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];

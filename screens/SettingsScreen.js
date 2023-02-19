@@ -3,7 +3,7 @@ import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-nat
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation } from '@react-navigation/core';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteDoc, doc, getDocs, collection, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 
 
@@ -13,16 +13,91 @@ const SettingsScreen = () => {
     const navigation = useNavigation();
 
 
-    //deleting matches and passes and swipes
+
+    //deleting matches, passes and swipes, and user
+
+    const deleteAll = async () => {
+        await deleteInfo().then(()=> {
+            deleteUser();
+        }).catch(error => {
+            console.log('There was an error',);
+        })
+    }
+
+    const deleteInfo = async () => {
+        deleteMatches();
+        deleteSwipeHistory("swipes");
+        deleteSwipeHistory("passes");
+        // deleteOthersHistory();
+    }
+
     const deleteUser = async () => {
         await deleteDoc(doc(db, 'users', user.uid)).then(() => {
             logout();
             console.log("User has been deleted successfully.")
         })
         .catch(error => {
-            console.log(error);
+            console.log('Error deleting user',error);
         })
     }
+
+    const deleteMatches = async () => {
+        const batch = writeBatch(db);
+        const matches =[]
+        await getDocs(collection(db,"matches")).then((snapshot) => {
+            snapshot.docs.filter((doc)=> doc.id.includes(user.uid)).map((doc) => matches.push(doc.id))
+        })
+
+        if (matches.length>0){
+            matches.map((matchID)=>{
+                batch.delete(doc(db,'matches',matchID))
+            })
+    
+            await batch.commit().then(() => {
+                console.log('Matches deleted successfully.');
+            }).catch((error) => {
+                console.error('Error deleting matches: ', error);
+            });
+        }
+        
+    }
+
+    const deleteSwipeHistory = async (swipe_collection) => {
+        const batch = writeBatch(db);
+        const history =[]
+        await getDocs(collection(db, "users", user.uid, swipe_collection)).then((snapshot) => {
+            snapshot.docs.map((doc) => history.push(doc.id))
+        })
+
+
+        if (history.length>0){
+            history.map((historyID)=>{
+                batch.delete(doc(db,'users',user.uid, swipe_collection, historyID))
+            })
+    
+            await batch.commit().then(() => {
+                console.log(swipe_collection, 'History deleted successfully.');
+            }).catch((error) => {
+                console.error('Error deleting',swipe_collection,'history: ', error);
+            });
+        }
+        
+    }
+
+    // const deleteOthersHistory = async () => {
+    //     const history =[]
+    //     await getDocs(collection(db, "users")).then((snapshot) => {
+    //         snapshot.docs.filter((doc) => 
+    //         await getDocs(collection(db, 'users', doc.id, "swipes").then((swipesnapshot) =>{
+    //             swipesnapshot.docs.filter((swipe) => swipe.id === user.uid).map((swipe) => {
+    //                 history.push[doc.id]
+    //             })
+    //         }
+
+    //         ))
+    //         )}
+    //         )
+    // }
 
 
     return (
@@ -55,7 +130,7 @@ const SettingsScreen = () => {
 
           <TouchableOpacity 
               style={[{width:200, height:50, padding:15, borderRadius:10}, {backgroundColor:"red"}]}
-              onPress = {deleteUser}>
+              onPress = {deleteAll}>
               <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Delete Account</Text>
           </TouchableOpacity>
 
