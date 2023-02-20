@@ -1,8 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { Component, useEffect, useState } from 'react'
 import { Text, SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Keyboard, TouchableOpacity} from 'react-native';
-import Header from '../Header';
-import getMatchedUserInfo from '../lib/getMatchedUserInfo';
+import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
@@ -18,6 +17,7 @@ const MessageScreen = () => {
     const [ messages, setMessages ] = useState([])
     const { user } = useAuth();
     const navigation = useNavigation();
+    //pass matchedDetails into ChatHeader
 
 
     useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
@@ -50,7 +50,7 @@ const MessageScreen = () => {
 
     return (
       <SafeAreaView style={{flex:1}}>
-        <Header title={getMatchedUserInfo(matchedDetails.users, user.uid)[1]?.displayName}/>
+        <ChatHeader matchedDetails={matchedDetails}/>
 
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
