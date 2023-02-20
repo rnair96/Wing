@@ -5,14 +5,17 @@ import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import ImageUpload from '../components/ImageUpload';
+import AgePicker from '../components/AgePicker';
+import GenderPicker from '../components/GenderPicker';
+
 
 const EditProfileScreen = () => {
   const { user } = useAuth();
   const [ images, setImages ]= useState([]);
   const [ job, setJob ] = useState(null);
-  const [ age, setAge ] = useState(null);
+  const [ age, setAge ] = useState(18);
   const [ mission, setMission ] = useState(null);
-  const [ gender, setGender ] = useState(null);
+  const [ gender, setGender ] = useState("male");
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
   const [ desires, setDesires ] = useState(null);
@@ -27,7 +30,7 @@ const EditProfileScreen = () => {
     if (profile) {
         setImages(profile.images);
         setJob(profile.job);
-        setAge(profile.age);
+        setAge(parseInt(profile.age));
         setMission(profile.mission);
         setGender(profile.gender);
         setAccomplishments(profile.accomplishments);
@@ -43,8 +46,15 @@ const EditProfileScreen = () => {
   const navigation = useNavigation();
 
 
-  const incompleteform = !images||!gender||!age||!mission||!accomplishments||!skills||!desires||!location||!hobbies;
+  const incompleteform = !images||(images && images.length < 3)||!gender||!age||!mission||!accomplishments||!skills||!desires||!location||!hobbies;
   //use LayoutEffect to update header profile if you want to
+
+// useEffect(()=>{
+//   console.log("form", incompleteform)
+//   console.log("gender", gender);
+//   console.log("age", age);
+
+// },[incompleteform]);
 
   const updateUserProfile = () => {
       setDoc(doc(db, 'users', user.uid), {
@@ -62,8 +72,14 @@ const EditProfileScreen = () => {
           hobbies: hobbies,
           timestamp: serverTimestamp()
       }).then(()=> {
-          //if user does not have preferences go to preferences page otherwise go home
-          navigation.navigate("Home")
+          // if(profile?.genderPreference){
+            navigation.navigate("Home");
+          // } else {
+            //must close modal and open preferences page and pass in DB object of profile
+            //or add a ternary operator if no preferences selected yet 
+            //and showcase preferences in Edit Profile Screen
+          //   navigation.navigate("Preferences", profile)
+          // }
       }).catch((error) => {
           alert(error.message)
       });
@@ -74,49 +90,63 @@ const EditProfileScreen = () => {
     
 return (
   <View>
-      <ScrollView>
+      <ScrollView style={{margin:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-      <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Menu")}>
+      <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Menu", profile)}>
       <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
       </TouchableOpacity>
       <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
       {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Set Up Your Profile</Text> */}
 
+      
       <View style ={{flexDirection:"row", padding:10}}>
       <View style ={{padding:10}}>
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Age</Text>
-      <TextInput
+      {/* <TextInput
       value = {age}
       onChangeText = {setAge} 
       placeholder={"What's Your Age?"}
-      maxLength={2}/>
+      maxLength={2}/> */}
+      {!profile?.age ? (
+        <AgePicker age= {age} setAge={setAge} />
+      ):(
+        <Text>{age}</Text>
+      )}
+      
       </View>
       
       <View style={{padding:10}}>
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
-      <TextInput
+      {/* <TextInput
       value = {gender}
       onChangeText = {setGender} 
-      placeholder={"What's Your Gender"}/>
+      placeholder={"What's Your Gender"}/> */}
+      {!profile?.gender ? (
+        <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
+      ):(
+        <Text>{gender}</Text>
+      )}
       </View>
       </View>
 
-    <View style={{flexDirection:"row", padding:10}}>
-        <View style={{padding:10}}>
+    <View style={{flexDirection:"column", padding:10}}>
+        <View style={{padding:10, alignItems:"center"}}>
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Job</Text>
       <TextInput
       value = {job}
       onChangeText = {setJob} 
-      placeholder={'What do you do?'}/>
+      placeholder={'What do you do?'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         </View>
    
 
-        <View style={{padding:10}}>
+        <View style={{padding:10, alignItems:"center"}}>
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Location</Text>
         <TextInput
         value = {location}
         onChangeText = {setLocation} 
-        placeholder={'What area are you in? (City, State)'}/>
+        placeholder={'What area are you in? (City, State)'}
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         </View>
         </View>        
       
@@ -135,43 +165,47 @@ return (
       <TextInput
       value = {hobbies}
       multiline
-      numberOfLines={2}
+      numberOfLines={3}
       onChangeText = {setHobbies} 
-      placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}/>
+      placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Mission</Text>
       <TextInput
       value = {mission}
       multiline
-      numberOfLines={2}
+      numberOfLines={3}
       onChangeText = {setMission} 
-      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}/>
+      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Medals</Text>
       <TextInput
       value = {accomplishments}
       multiline
-      numberOfLines={2}
+      numberOfLines={3}
       onChangeText = {setAccomplishments} 
-      placeholder={"What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}/>
+      placeholder={"What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Strengths</Text>
       <TextInput
       value = {skills}
       multiline
-      numberOfLines={2}
+      numberOfLines={3}
       onChangeText = {setSkills} 
-      placeholder={'What are you good at? i.e: Calculating calories and being consistent'}/>    
+      placeholder={'What are you good at? i.e: Calculating calories and being consistent'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+    
 
       <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>The Ideal Wing</Text>
       <TextInput
       value = {desires}
       multiline
-      numberOfLines={2}
+      numberOfLines={3}
       onChangeText = {setDesires}
       placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
-
-      />
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
 
       <TouchableOpacity 

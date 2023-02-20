@@ -2,26 +2,28 @@ import React, { Component, useState, useEffect } from 'react'
 import { Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
 import { doc, setDoc, addDoc, updateDoc } from 'firebase/firestore';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import { Picker } from '@react-native-picker/picker';
 import Header from '../Header';
 import { db } from '../firebase';
+import AgePicker from '../components/AgePicker';
+import GenderPicker from '../components/GenderPicker';
 
 
 
 
 const MatchingPreferences = () => {
-    const [ ageMin, setAgeMin ] = useState("18");
-    const [ ageMax, setAgeMax ] = useState("100");
+    const [ ageMin, setAgeMin ] = useState(18);
+    const [ ageMax, setAgeMax ] = useState(100);
     // const [ matchRadius, setMatchRadius ] = useState(100);
     const [ gender, setGender ] = useState("both");
     // const [ global, setGlobal ] = useState("true");
 
-    const handleGenderChange = (option) => {
-      setGender(option);
-    };
+    // const handleGenderChange = (option) => {
+    //   setGender(option);
+    // };
 
     const { params } = useRoute();
     const profile = params;
+    console.log("profile",profile)
 
     const navigation = useNavigation();
 
@@ -64,20 +66,22 @@ const MatchingPreferences = () => {
 
     <View style ={{flexDirection:"row", alignItems:"center"}}>
     <View style ={{padding:10}}>
-      <TextInput
+      {/* <TextInput
       value = {ageMin}
       onChangeText = {setAgeMin} 
       placeholder={"Minimum age"}
-      maxLength={2}/>
+      maxLength={2}/> */}
+      <AgePicker age= {ageMin} setAge={setAgeMin} />
       </View>
       
         <Text>-</Text>
 
       <View style={{padding:10}}>
-      <TextInput
+      {/* <TextInput
       value = {ageMax}
       onChangeText = {setAgeMax} 
-      placeholder={"Maximum age"}/>
+      placeholder={"Maximum age"}/> */}
+      <AgePicker age= {ageMax} setAge={setAgeMax} />
       </View>
       </View>
 
@@ -85,7 +89,7 @@ const MatchingPreferences = () => {
       <View 
         style={{flexDirection:"row", alignItems:"center"}}>
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
-      <Picker
+      {/* <Picker
             style={{height:200, width:'40%'}}
         selectedValue={gender}
         onValueChange={handleGenderChange}
@@ -94,7 +98,8 @@ const MatchingPreferences = () => {
         <Picker.Item label="Both" value="both" />
         <Picker.Item label="Male" value="male" />
         <Picker.Item label="Female" value="female" />
-      </Picker>
+      </Picker> */}
+          <GenderPicker gender= {gender} setGender={setGender} both_boolean={true} />
 
       {/* <Button onPress={} title="Radio" color="#00BFFF"/> */}
 

@@ -4,17 +4,33 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import useAuth from '../hooks/useAuth';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteDoc, doc, writeBatch, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-
+// import messaging from '@react-native-firebase/messaging';
 
 
 const ChatHeader = ({matchedDetails}) => {
     const navigator = useNavigation();
     const { user } = useAuth();
     const [modalVisible, setModalVisible] = useState(false);
+    const [ secondModal, setSecondModal ] = useState(false);
 
     const matched_user = getMatchedUserInfo(matchedDetails.users, user.uid);
+
+    // messaging().setBackgroundMessageHandler(async remoteMessage => {
+    //     console.log('Received background message', remoteMessage);
+    //   });
+
+    const setNotifications = () => {
+        // messaging()
+        //   .requestPermission()
+        //   .then(() => {
+        //     console.log('Permission granted');
+        //   })
+        //   .catch(error => {
+        //     console.log('Permission denied', error);
+        //   });
+      };
 
     const deleteMatch = async () => {
         await deleteDoc(doc(db, 'matches', matchedDetails.id)).then(() => {
@@ -25,6 +41,28 @@ const ChatHeader = ({matchedDetails}) => {
         .catch(error => {
             console.log('Error deleting Match',error);
         })
+    }
+
+    const deleteMessages = async () => {
+        const batch = writeBatch(db);
+        const messages =[]
+        await getDocs(collection(db,"matches", matchedDetails.id, "messages")).then((snapshot) => {
+            snapshot.docs.map((doc) => messages.push(doc.id))
+        })
+
+        if (messages.length>0){
+            messages.map((messageID)=>{
+                batch.delete(doc(db,'matches', matchedDetails.id, "messages", messageID))
+            })
+    
+            await batch.commit().then(() => {
+                console.log('Messages deleted successfully.');
+                deleteMatch();
+            }).catch((error) => {
+                console.error('Error deleting messages: ', error);
+            });
+        }
+        
     }
 
     return (
@@ -53,16 +91,17 @@ const ChatHeader = ({matchedDetails}) => {
           <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                navigator.navigate("Chat")
+                setNotifications();
               }}
             >
-              <Text style={styles.textStyle}>Mute</Text>
+              <Text style={styles.textStyle}>Set Notifications</Text>
             </TouchableHighlight>
             {/* Unmatch function */}
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                deleteMatch();
+                setModalVisible(!modalVisible);
+                setSecondModal(true);
               }}
             >
               <Text style={styles.textStyle}>Unmatch</Text>
@@ -77,6 +116,40 @@ const ChatHeader = ({matchedDetails}) => {
             </TouchableHighlight>
           </View>
           </View>
+      </Modal>
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={secondModal}
+        onRequestClose={() => {
+          setSecondModal(!secondModal);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+        <Text>Are You Sure?</Text>
+        <TouchableHighlight
+              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              onPress={() => {
+                deleteMessages();
+              }}
+            >
+              <Text style={styles.textStyle}>Yes</Text>
+            </TouchableHighlight>
+        <TouchableHighlight
+              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              onPress={() => {
+                setSecondModal(!secondModal);
+              }}
+            >
+              <Text style={styles.textStyle}>No</Text>
+            </TouchableHighlight>
+            </View>
+            </View>
+
+
       </Modal>
       </View>
     )

@@ -55,8 +55,8 @@ const HomeScreen = () => {
             const profile = await (await getDoc(doc(db, 'users', user.uid))).data();
             setLoggedProfile(profile);
 
-            const ageMin  = profile?.ageMin ? parseInt(profile.ageMin): 18;
-            const ageMax = profile?.ageMax ? parseInt(profile.ageMax): 100;
+            const ageMin  = profile?.ageMin ? profile.ageMin: 18;
+            const ageMax = profile?.ageMax ? profile.ageMax: 100;
             const genderPreference = profile?.genderPreference ? profile.genderPreference: "both";
 
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
@@ -67,7 +67,7 @@ const HomeScreen = () => {
                 setProfiles(
                     snapshot.docs.filter((doc) => doc.id !== user.uid 
                     && (doc.data().gender === genderPreference || genderPreference === "both") 
-                    && (parseInt(doc.data().age)>=ageMin && parseInt(doc.data().age)<=ageMax)).map((doc) => (
+                    && (doc.data().age>=ageMin && doc.data().age<=ageMax)).map((doc) => (
                     {
                         id: doc.id,
                         ...doc.data()

@@ -13,7 +13,6 @@ const SettingsScreen = () => {
     const navigation = useNavigation();
 
 
-
     //deleting matches, passes and swipes, and user
 
     const deleteAll = async () => {

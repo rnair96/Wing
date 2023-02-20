@@ -42,11 +42,7 @@ const MessageScreen = () => {
         setInput("");
         // setMessages([input,...messages]);
     }
-    //add message to messages array using setMessage
-
-    //update messages array from DB if pre-existing through useEffect or useLayoutEffect
-    //update messages array to DB when a new message is added in useEffect
-    //depedent variable is messages array
+    
 
     return (
       <SafeAreaView style={{flex:1}}>
