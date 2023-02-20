@@ -32,13 +32,13 @@ const StackNavigator = () => {
             <Stack.Screen name="Message" component={MessageScreen}/>
             <Stack.Screen name="Menu" component={MenuScreen} />
             <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen}/>
-            <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
             <Stack.Screen name="MissionControl" component={MissionControlScreen}/>
             <Stack.Screen name="Preferences" component={MatchingPreferences} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="EditProfile" component={EditProfileScreen}/>
+            <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "transparentModal" }}>
               <Stack.Screen name="Match" component={MatchScreen} />

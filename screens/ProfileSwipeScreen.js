@@ -9,6 +9,8 @@ import Footer from '../components/Footer';
 // import Container from '../components/Footer';
 
 
+//remove and replace with Profile View Screen!! use goBack function in arrow
+//to deal with state breakage issue
 export const ProfileSwipeScreen = () => {
     const { params } = useRoute();
     const { card, swipeRef } = params;

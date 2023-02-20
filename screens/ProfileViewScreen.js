@@ -31,8 +31,8 @@ export const ProfileViewScreen = () => {
       <SafeAreaView style={{flex:1}}>
       {/* <View> */}
     <View style={{justifyContent:"center", alignItems:"center", padding: 10}}>
-        <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Message",{matchedDetails})}>
-            <Ionicons name="chatbubbles-sharp" size={30} color = "#00BFFF"/>
+        <TouchableOpacity onPress={() => navigation.navigate("Message",{matchedDetails})}>
+            <Ionicons name="arrow-down" size={30} color = "#00BFFF"/>
         </TouchableOpacity>
     </View>
 

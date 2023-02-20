@@ -77,7 +77,7 @@ const MessageScreen = () => {
             }
             />
         </TouchableWithoutFeedback>
-        <View style={{flexDirection:"row", justifyContent:"flex-end", bottom:30, padding:10}}>
+        <View style={{flexDirection:"row", justifyContent:"flex-end", bottom:10, padding:10}}>
         <TouchableOpacity style={styles.missionControl} onPress={()=>navigation.navigate("MissionControl")}>
                 <Entypo name="aircraft-take-off" size={30} color="blue"/>
         </TouchableOpacity>
