@@ -109,15 +109,15 @@ const SettingsScreen = () => {
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Push Notifications</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Menu")}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("PrivacyPolicy")}>
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Privacy Policy</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Menu")}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Terms")}>
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Terms of Service</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Menu")}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Guidelines")}>
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Community Guidelines</Text>
         </TouchableOpacity>
 

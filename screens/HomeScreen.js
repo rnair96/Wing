@@ -16,26 +16,24 @@ const HomeScreen = () => {
     const swipeRef = useRef(null);
     const [ profiles,setProfiles ] = useState([]);
     const [ loggedProfile, setLoggedProfile ] = useState(null)
-
-    // console.log("user HOME", user);
+    
 
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
                     navigation.navigate("EditProfile");
                 } 
-                // else {
-                //     const info = snapshot?.docs.map((doc) => (
-                //         {
-                //         id: doc.id,
-                //         ...doc.data()
-                //     }
-                //     ))
-                //     setLoggedProfile(...info);
-                // }
+                else {
+                    const info = 
+                        {
+                        id: snapshot.id,
+                        ...snapshot.data()
+                    }
+                    setLoggedProfile(info);
+                }
             }
         )
-        });
+        },[db]);
 
     useEffect(()=>{
         let unsub;
@@ -52,12 +50,12 @@ const HomeScreen = () => {
                 snapshot.docs.map((doc) => swipedIds.push(doc.id))
             });
 
-            const profile = await (await getDoc(doc(db, 'users', user.uid))).data();
-            setLoggedProfile(profile);
+            const ageMin = loggedProfile?.ageMin ? loggedProfile.ageMin : 18;
+            
+            const ageMax = loggedProfile?.ageMax ? loggedProfile.ageMax : 100;
 
-            const ageMin  = profile?.ageMin ? profile.ageMin: 18;
-            const ageMax = profile?.ageMax ? profile.ageMax: 100;
-            const genderPreference = profile?.genderPreference ? profile.genderPreference: "both";
+            const genderPreference = loggedProfile?.genderPreference ? loggedProfile.genderPreference : "both";
+
 
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
             const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
@@ -82,7 +80,7 @@ const HomeScreen = () => {
         fetchCards();
         return unsub;
 
-    },[db]);
+    },[db, loggedProfile?.ageMin, loggedProfile?.ageMax, loggedProfile?.genderPreference]);
 
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]){ return;}
@@ -95,9 +93,6 @@ const HomeScreen = () => {
         if (!profiles[cardIndex]){ return;}
 
         const userSwiped = profiles[cardIndex]
-
-        // const loggedProfile = await (await getDoc(doc(db, 'users', user.uid))).data();
-        // console.log("loggedProfile",loggedProfile)
 
         getDoc(doc(db, 'users', userSwiped.id, "swipes", user.uid)).then(
             documentSnapshot => {
@@ -130,7 +125,6 @@ const HomeScreen = () => {
 
 
 
-    //edit profile with loggedprofile
   return (
    <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
     {/* Header */}

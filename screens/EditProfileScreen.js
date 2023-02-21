@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity} from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -7,6 +7,8 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import ImageUpload from '../components/ImageUpload';
 import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
+import { Ionicons} from '@expo/vector-icons';
+import Header from '../Header';
 
 
 const EditProfileScreen = () => {
@@ -72,41 +74,43 @@ const EditProfileScreen = () => {
           hobbies: hobbies,
           timestamp: serverTimestamp()
       }).then(()=> {
-          // if(profile?.genderPreference){
+          if(profile?.genderPreference){
             navigation.navigate("Home");
-          // } else {
+          } else {
             //must close modal and open preferences page and pass in DB object of profile
             //or add a ternary operator if no preferences selected yet 
             //and showcase preferences in Edit Profile Screen
-          //   navigation.navigate("Preferences", profile)
-          // }
+            // navigation.navigate("Home");
+            navigation.navigate("Preferences", {id:user.uid})
+          }
       }).catch((error) => {
           alert(error.message)
       });
   }
 
 
-  //add multiline texts to inputs
+  //Use Header
     
 return (
   <View>
-      <ScrollView style={{margin:10}}>
+      <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-      <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Menu", profile)}>
-      <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
-      </TouchableOpacity>
-      <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
-      {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Set Up Your Profile</Text> */}
+        {profile ? (
+          <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Home")}>
+          <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
+          </TouchableOpacity>
+  
+        )
+        :(
+          <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/2</Text>
+        )}
 
+        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
       
-      <View style ={{flexDirection:"row", padding:10}}>
-      <View style ={{padding:10}}>
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Age</Text>
-      {/* <TextInput
-      value = {age}
-      onChangeText = {setAge} 
-      placeholder={"What's Your Age?"}
-      maxLength={2}/> */}
+      <View style ={{flexDirection:"row"}}>
+      <View style ={{alignItems:"center"}}>
+      <Text style={styles.formTitle}>Age</Text>
+      
       {!profile?.age ? (
         <AgePicker age= {age} setAge={setAge} />
       ):(
@@ -115,12 +119,9 @@ return (
       
       </View>
       
-      <View style={{padding:10}}>
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
-      {/* <TextInput
-      value = {gender}
-      onChangeText = {setGender} 
-      placeholder={"What's Your Gender"}/> */}
+      <View style={{alignItems:"center"}}>
+      <Text style={styles.formTitle}>Gender</Text>
+      
       {!profile?.gender ? (
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
       ):(
@@ -131,7 +132,7 @@ return (
 
     <View style={{flexDirection:"column", padding:10}}>
         <View style={{padding:10, alignItems:"center"}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Job</Text>
+        <Text style={styles.formTitle}>Job</Text>
       <TextInput
       value = {job}
       onChangeText = {setJob} 
@@ -141,7 +142,7 @@ return (
    
 
         <View style={{padding:10, alignItems:"center"}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Location</Text>
+        <Text style={styles.formTitle}>Location</Text>
         <TextInput
         value = {location}
         onChangeText = {setLocation} 
@@ -149,11 +150,7 @@ return (
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         </View>
         </View>        
-      
-
-      {/* Does the placeholder info actually pass in the info to VALUE when updating profile? */}
-      {/* make images editable - probably add a function in ImageUpload to place user image there
-      if profile is existing */}
+  
 
         <View style ={{flexDirection:"row", padding:20}}>
             <ImageUpload images = {images} index={0} setImages = {setImages}/>
@@ -161,7 +158,7 @@ return (
             <ImageUpload images = {images} index={2} setImages = {setImages}/>
             </View> 
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:10}}>Hobbies</Text>
+      <Text style={styles.formTitle}>Hobbies</Text>
       <TextInput
       value = {hobbies}
       multiline
@@ -170,7 +167,7 @@ return (
       placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Mission</Text>
+      <Text style={styles.formTitle}>Mission</Text>
       <TextInput
       value = {mission}
       multiline
@@ -179,7 +176,7 @@ return (
       placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Medals</Text>
+      <Text style={styles.formTitle}>Medals</Text>
       <TextInput
       value = {accomplishments}
       multiline
@@ -188,7 +185,7 @@ return (
       placeholder={"What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>Strengths</Text>
+      <Text style={styles.formTitle}>Strengths</Text>
       <TextInput
       value = {skills}
       multiline
@@ -198,7 +195,7 @@ return (
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", paddingTop:20}}>The Ideal Wing</Text>
+      <Text style={styles.formTitle}>The Ideal Wing</Text>
       <TextInput
       value = {desires}
       multiline
@@ -219,5 +216,14 @@ return (
   </View>
 )
 }
+
+const styles = StyleSheet.create({
+  formTitle :{
+    fontSize:15, 
+    fontWeight: "bold", 
+    color:"#00308F", 
+    padding:20
+  }
+})
 
 export default EditProfileScreen;

@@ -23,7 +23,7 @@ const MatchingPreferences = () => {
 
     const { params } = useRoute();
     const profile = params;
-    console.log("profile",profile)
+    // console.log("profile",profile)
 
     const navigation = useNavigation();
 
@@ -58,9 +58,16 @@ const MatchingPreferences = () => {
 
     return (
     <SafeAreaView>
-    <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
+
+     {profile?.genderPreference ? 
+     (
+      <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
+     ):(
+      <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 2/2"}/>
+     )} 
     <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
+    <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Choose Your Preferences</Text> 
 
     <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
 
