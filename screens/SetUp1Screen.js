@@ -12,7 +12,7 @@ import Header from '../Header';
 import TagPicker from '../components/TagPicker';
 
 
-const EditProfileScreen = () => {
+const SetUp1Screen = () => {
   const { user } = useAuth();
   const [ images, setImages ]= useState([]);
   const [ job, setJob ] = useState(null);
@@ -20,39 +20,15 @@ const EditProfileScreen = () => {
   const [ mission, setMission ] = useState(null);
   const [ tag, setTag ] = useState(null);
   const [ gender, setGender ] = useState("male");
-  const [ accomplishments, setAccomplishments ] = useState(null);
-  const [ skills, setSkills ] = useState(null);
   const [ desires, setDesires ] = useState(null);
   const [ location, setLocation ] = useState(null);
-  const [ hobbies, setHobbies ] = useState(null);
-
-
-  const { params } = useRoute();
-  const profile = params;
-
-  useEffect(()=>{
-    if (profile) {
-        setImages(profile.images);
-        setJob(profile.job);
-        setAge(parseInt(profile.age));
-        setMission(profile.mission);
-        setGender(profile.gender);
-        setAccomplishments(profile.accomplishments);
-        setSkills(profile.skills);
-        setLocation(profile.location);
-        setHobbies(profile.hobbies);
-        setDesires(profile.desires);
-        setTag(profile.tag)
-    }
-
-  },[profile])
 
 
   const navigation = useNavigation();
 
 
-  const incompleteform = !images||(images && images.length < 3)||!gender||!age||!mission||!accomplishments||!skills||!desires||!location||!hobbies;
-  
+  const incompleteform = !images||(images && images.length < 3)||!gender||!age||!mission||!desires||!location;
+ 
 
   const updateUserProfile = () => {
       setDoc(doc(db, 'users', user.uid), {
@@ -63,15 +39,13 @@ const EditProfileScreen = () => {
           age: age,
           gender: gender,
           mission: mission,
-          accomplishments: accomplishments,
-          skills: skills,
           desires: desires,
           location: location,
-          hobbies: hobbies,
           tag: tag,
           timestamp: serverTimestamp()
       }).then(()=> {
-            navigation.navigate("Home");
+            
+            navigation.navigate("SetUp2", {id: user.uid})
       }).catch((error) => {
           alert(error.message)
       });
@@ -85,33 +59,25 @@ return (
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
-          <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Home")}>
-          <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
-          </TouchableOpacity>
+          <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
           </SafeAreaView>
 
-        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
-      
+          <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Mission & The Wing</Text>
+
+  
+          
       <View style ={{flexDirection:"row"}}>
       <View style ={{alignItems:"center"}}>
       <Text style={styles.formTitle}>Age</Text>
       
-      {!profile?.age ? (
         <AgePicker age= {age} setAge={setAge} />
-      ):(
-        <Text>{age}</Text>
-      )}
       
       </View>
       
       <View style={{alignItems:"center"}}>
       <Text style={styles.formTitle}>Gender</Text>
       
-      {!profile?.gender ? (
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
-      ):(
-        <Text>{gender}</Text>
-      )}
       </View>
       </View>
 
@@ -143,53 +109,26 @@ return (
             <ImageUpload images = {images} index={2} setImages = {setImages}/>
             </View> 
 
-      <Text style={styles.formTitle}>Hobbies</Text>
-      <TextInput
-      value = {hobbies}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setHobbies} 
-      placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-
-      <Text style={styles.formTitle}>Mission</Text>
+      <Text style={styles.formTitle}>Define Your Mission</Text>
       <TextInput
       value = {mission}
       multiline
       numberOfLines={3}
       onChangeText = {setMission} 
-      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
+      placeholder={'I.e Lose 10 pounds'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={styles.formTitle}>Mission Category</Text>
+      <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>
       <TagPicker tag={tag} setTag={setTag}/>
-
-      <Text style={styles.formTitle}>Medals</Text>
-      <TextInput
-      value = {accomplishments}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setAccomplishments} 
-      placeholder={"What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-
-      <Text style={styles.formTitle}>Strengths</Text>
-      <TextInput
-      value = {skills}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setSkills} 
-      placeholder={'What are you good at? i.e: Calculating calories and being consistent'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     
 
-      <Text style={styles.formTitle}>The Ideal Wing</Text>
+      <Text style={styles.formTitle}>How Can Your Wing Best Support You?</Text>
       <TextInput
       value = {desires}
       multiline
-      numberOfLines={3}
+      numberOfLines={4}
       onChangeText = {setDesires}
-      placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
+      placeholder={'I.e: Push me in the gym'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
         <View style={{height:150}}>
@@ -197,7 +136,7 @@ return (
           disabled = {incompleteform}
           style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
           onPress = {updateUserProfile}>
-          <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Profile</Text>
+          <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Next</Text>
       </TouchableOpacity>
       </View>
       </View>
@@ -215,4 +154,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default EditProfileScreen;
+export default SetUp1Screen;

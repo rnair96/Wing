@@ -16,6 +16,8 @@ import ProfileViewScreen from './screens/ProfileViewScreen';
 import PolicyScreen from './screens/PolicyScreen';
 import TermsScreen from './screens/TermsScreen';
 import GuideScreen from './screens/GuideScreen';
+import SetUp1Screen from './screens/SetUp1Screen';
+import SetUp2Screen from './screens/SetUp2Screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +43,8 @@ const StackNavigator = () => {
             <Stack.Screen name="PrivacyPolicy" component={PolicyScreen} />
             <Stack.Screen name="Terms" component={TermsScreen} />
             <Stack.Screen name="Guidelines" component={GuideScreen} />
+            <Stack.Screen name="SetUp1" component={SetUp1Screen} />
+            <Stack.Screen name="SetUp2" component={SetUp2Screen} />
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />

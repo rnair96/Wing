@@ -1,0 +1,103 @@
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import useAuth from '../hooks/useAuth';
+import { setDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { useNavigation, useRoute } from '@react-navigation/core';
+import Header from '../Header';
+
+
+const SetUp2Screen = () => {
+// const { user } = useAuth();
+  const [ accomplishments, setAccomplishments ] = useState(null);
+  const [ skills, setSkills ] = useState(null);
+  const [ hobbies, setHobbies ] = useState(null);
+
+
+  const navigation = useNavigation();
+  const { params } = useRoute();
+  const user= params;
+
+
+  const incompleteform = !accomplishments||!skills||!hobbies;
+  
+
+  const updateUserProfile = () => {
+      updateDoc(doc(db, 'users', user.id), {
+          accomplishments: accomplishments,
+          skills: skills,
+          hobbies: hobbies,
+          timestamp: serverTimestamp()
+      }).then(()=> {
+            navigation.navigate("Preferences", {id: user.id})
+      }).catch((error) => {
+          alert(error.message)
+      });
+  }
+
+
+  //Use Header
+    
+return (
+  <View>
+      <ScrollView style={{marginHorizontal:10}}>
+        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+          <SafeAreaView>
+            <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 2/3"}/>
+          </SafeAreaView>
+  
+        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Define Yourself</Text>
+      
+
+      <Text style={styles.formTitle}>What Accomplishments Are You Most Proud Of?</Text>
+      <TextInput
+      value = {accomplishments}
+      multiline
+      numberOfLines={3}
+      onChangeText = {setAccomplishments} 
+      placeholder={"i.e Completing a marathon with a bad foot"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+
+      <Text style={styles.formTitle}>What Are You Good At?</Text>
+      <TextInput
+      value = {skills}
+      multiline
+      numberOfLines={3}
+      onChangeText = {setSkills} 
+      placeholder={'i.e: Calculating calories and being consistent'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+
+        <Text style={styles.formTitle}>What Do You Do For Fun?</Text>
+      <TextInput
+      value = {hobbies}
+      multiline
+      numberOfLines={3}
+      onChangeText = {setHobbies} 
+      placeholder={'I.e: Trying out new restaurants!'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+    
+
+        <View style={{height:150}}>
+      <TouchableOpacity 
+          disabled = {incompleteform}
+          style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
+          onPress = {updateUserProfile}>
+          <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Next</Text>
+      </TouchableOpacity>
+      </View>
+      </View>
+      </ScrollView>
+  </View>
+)
+}
+
+const styles = StyleSheet.create({
+  formTitle :{
+    fontSize:15, 
+    fontWeight: "bold", 
+    color:"#00308F", 
+    padding:20
+  }
+})
+
+export default SetUp2Screen;

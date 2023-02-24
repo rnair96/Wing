@@ -68,7 +68,7 @@ const MatchingPreferences = () => {
      (
       <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
      ):(
-      <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 2/2"}/>
+      <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/3"}/>
      )} 
     <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
@@ -118,7 +118,7 @@ const MatchingPreferences = () => {
 
       <View 
         style={{alignItems:"center"}}>
-        <Text style={{top:40,fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission Tags</Text>
+        <Text style={{top:40,fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission Category</Text>
 
       {/* <Picker
             style={{height:200, width:'40%'}}
