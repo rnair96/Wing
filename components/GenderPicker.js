@@ -9,7 +9,7 @@ const GenderPicker = ({gender, setGender, both_boolean}) => {
       <View>
         {both_boolean ? (
           <Picker
-          style={{width:150, height:200}}
+          style={{width:150, height:150}}
           selectedValue={gender ? gender : "both"}
           onValueChange={setGender}
         >
@@ -19,7 +19,7 @@ const GenderPicker = ({gender, setGender, both_boolean}) => {
         </Picker>
         ):(
           <Picker
-        style={{width:150, height:200}}
+        style={{width:150, height:150}}
         selectedValue={gender ? gender : "male"}
         onValueChange={setGender}
       >

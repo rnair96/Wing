@@ -56,6 +56,7 @@ const HomeScreen = () => {
 
             const genderPreference = loggedProfile?.genderPreference ? loggedProfile.genderPreference : "both";
 
+            const tagPreference = loggedProfile?.tagPreference ? loggedProfile.tagPreference : "All";
 
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
             const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
@@ -65,6 +66,7 @@ const HomeScreen = () => {
                 setProfiles(
                     snapshot.docs.filter((doc) => doc.id !== user.uid 
                     && (doc.data().gender === genderPreference || genderPreference === "both") 
+                    && (doc.data().tag === tagPreference || tagPreference === "All") 
                     && (doc.data().age>=ageMin && doc.data().age<=ageMax)).map((doc) => (
                     {
                         id: doc.id,
@@ -80,7 +82,7 @@ const HomeScreen = () => {
         fetchCards();
         return unsub;
 
-    },[db, loggedProfile?.ageMin, loggedProfile?.ageMax, loggedProfile?.genderPreference]);
+    },[db, loggedProfile?.ageMin, loggedProfile?.ageMax, loggedProfile?.genderPreference, loggedProfile?.tagPreference]);
 
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]){ return;}
@@ -176,14 +178,19 @@ const HomeScreen = () => {
                     }
                 }
             }}
+
+            // pass swiperef to profile swipe to include swipe function , swipeRef: swipeRef
             containerStyle={{backgroundColor:"transparent"}}
             renderCard={(card)=> card && card?.images ? (
                 <View key={card.id} style={styles.cardcontainer}>
-                    <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card, swipeRef: swipeRef})}}>
+                    {/* <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}> */}
                     <View style={{alignItems:"center"}}>
+                    {/* <View style={{padding: 5, backgroundColor:"#00BFFF", borderRadius:50}}>
+                    <Text style={{fontWeight:"bold", fontSize:15, color:"white"}}>{card.tag}</Text>
+                    </View> */}
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
                     </View>   
-                    <Image style={{height:440 ,maxWidth:400}} source={{uri: card?.images[0]}}/>
+                    <Image style={{height:"85%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
                     <View style={styles.infocontainer}>
                         <View>
                             <Text style={{fontWeight:"bold", fontSize:20}}>
@@ -193,9 +200,18 @@ const HomeScreen = () => {
                             {card.job}
                             </Text>
                         </View>
+                        <View>
                         <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
+                        <Text>{card.location}</Text>
+                        </View>
                     </View>
+                    {/* </TouchableOpacity> */}
+                    <View style={{flexDirection:"row", justifyContent:'center'}}>
+                    <TouchableOpacity style={styles.swipeButtonDown} onPress={()=>navigation.navigate("ProfileSwipe", {card: card})}>
+                            <Entypo name="arrow-bold-down" size={30} color="white"/>
                     </TouchableOpacity>
+                    </View>
+                    
                 </View>
             ):(
             <View style={[styles.cardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
@@ -238,7 +254,7 @@ const styles = StyleSheet.create({
     },
     cardcontainer: {
         backgroundColor: "white",
-        height:500,
+        height:"75%",
         borderRadius: 20,
         shadowColor:"#000",
         shadowOffset: {
@@ -250,9 +266,9 @@ const styles = StyleSheet.create({
         elevation:2
     },
     infocontainer: {
-        bottom:70 ,
+        bottom:"10%" ,
         backgroundColor:"white", 
-        paddingVertical: 15, 
+        paddingVertical: 10, 
         flexDirection:"row",
         justifyContent: "space-between",
         paddingHorizontal: 30
@@ -274,7 +290,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#32de84"
-     }
+     },
+     swipeButtonDown: {
+        // marginHorizontal:"45%",
+        bottom: "33%",
+        width: 60,
+        height: 60,
+        borderRadius: 50,
+        borderWidth:2,
+        borderColor:"white",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#00BFFF"
+      }
 });
 
 

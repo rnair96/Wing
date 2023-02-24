@@ -20,7 +20,7 @@ const AgePicker = ({age, setAge}) => {
         <Picker
           selectedValue={age ? age: 18}
           onValueChange={(itemValue) => setAge(itemValue)}
-          style={{width:100, height:200}}
+          style={{width:100, height:150}}
         >
           {renderPickerItems()}
         </Picker>

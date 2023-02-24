@@ -6,6 +6,7 @@ import Header from '../Header';
 import { db } from '../firebase';
 import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
+import TagPicker from '../components/TagPicker';
 
 
 
@@ -13,6 +14,7 @@ import GenderPicker from '../components/GenderPicker';
 const MatchingPreferences = () => {
     const [ ageMin, setAgeMin ] = useState(18);
     const [ ageMax, setAgeMax ] = useState(100);
+    const [ tag, setTag ] = useState("All")
     // const [ matchRadius, setMatchRadius ] = useState(100);
     const [ gender, setGender ] = useState("both");
     // const [ global, setGlobal ] = useState("true");
@@ -29,15 +31,17 @@ const MatchingPreferences = () => {
 
 
     useEffect(()=>{
-        if (profile && profile?.ageMin && profile?.ageMax && profile?.genderPreference) {
+        if (profile && profile?.ageMin && profile?.ageMax && profile?.genderPreference && profile?.tagPreference) {
             setAgeMax(profile.ageMax);
             setAgeMin(profile.ageMin);
             setGender(profile.genderPreference);
+            setTag(profile.tagPreference);
+
         }
     
       },[profile])
 
-    const incompleteform = !ageMin||!gender||!ageMax
+    const incompleteform = !ageMin||!gender||!ageMax||!tag
 
 
     const updatePreferences = () => {
@@ -45,7 +49,8 @@ const MatchingPreferences = () => {
             ageMin: ageMin,
             ageMax: ageMax,
             // matchRadius: matchRadius,
-            genderPreference: gender
+            genderPreference: gender,
+            tagPreference: tag
             // globalMatchingBoolean: global
             }).then(()=> {
               //must trigger a refresh upon entering home screen
@@ -94,8 +99,8 @@ const MatchingPreferences = () => {
 
 
       <View 
-        style={{flexDirection:"row", alignItems:"center"}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
+        style={{alignItems:"center", paddingBottom:30}}>
+        <Text style={{fontSize:15, top:40, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
       {/* <Picker
             style={{height:200, width:'40%'}}
         selectedValue={gender}
@@ -107,8 +112,25 @@ const MatchingPreferences = () => {
         <Picker.Item label="Female" value="female" />
       </Picker> */}
           <GenderPicker gender= {gender} setGender={setGender} both_boolean={true} />
+          </View>
 
       {/* <Button onPress={} title="Radio" color="#00BFFF"/> */}
+
+      <View 
+        style={{alignItems:"center"}}>
+        <Text style={{top:40,fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission Tags</Text>
+
+      {/* <Picker
+            style={{height:200, width:'40%'}}
+        selectedValue={gender}
+        onValueChange={handleGenderChange}
+        enabled='true'
+      >
+        <Picker.Item label="Both" value="both" />
+        <Picker.Item label="Male" value="male" />
+        <Picker.Item label="Female" value="female" />
+      </Picker> */}
+          <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
 
 
 

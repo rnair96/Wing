@@ -9,6 +9,7 @@ import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
 import { Ionicons} from '@expo/vector-icons';
 import Header from '../Header';
+import TagPicker from '../components/TagPicker';
 
 
 const EditProfileScreen = () => {
@@ -17,6 +18,7 @@ const EditProfileScreen = () => {
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
   const [ mission, setMission ] = useState(null);
+  const [ tag, setTag ] = useState(null);
   const [ gender, setGender ] = useState("male");
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
@@ -40,6 +42,7 @@ const EditProfileScreen = () => {
         setLocation(profile.location);
         setHobbies(profile.hobbies);
         setDesires(profile.desires);
+        setTag(profile.tag)
     }
 
   },[profile])
@@ -72,6 +75,7 @@ const EditProfileScreen = () => {
           desires: desires,
           location: location,
           hobbies: hobbies,
+          tag: tag,
           timestamp: serverTimestamp()
       }).then(()=> {
           if(profile?.genderPreference){
@@ -96,9 +100,11 @@ return (
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
         {profile ? (
+          <SafeAreaView>
           <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Home")}>
           <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
           </TouchableOpacity>
+          </SafeAreaView>
   
         )
         :(
@@ -176,6 +182,9 @@ return (
       placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
+      <Text style={styles.formTitle}>Mission Category</Text>
+      <TagPicker tag={tag} setTag={setTag}/>
+
       <Text style={styles.formTitle}>Medals</Text>
       <TextInput
       value = {accomplishments}
@@ -204,13 +213,14 @@ return (
       placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-
+        <View style={{height:150}}>
       <TouchableOpacity 
           disabled = {incompleteform}
           style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
           onPress = {updateUserProfile}>
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Profile</Text>
       </TouchableOpacity>
+      </View>
       </View>
       </ScrollView>
   </View>

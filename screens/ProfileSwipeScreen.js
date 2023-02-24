@@ -13,55 +13,54 @@ import Footer from '../components/Footer';
 //to deal with state breakage issue
 export const ProfileSwipeScreen = () => {
     const { params } = useRoute();
-    const { card, swipeRef } = params;
+    const { card } = params; //add swiperef for swipe function
 
 
     const navigation = useNavigation();
     const { user } = useAuth();
 
-    const profileSwipeLeft = () => {
-      navigation.navigate("Home");
-      swipeRef.current.swipeLeft()
-    }
+    // const profileSwipeLeft = () => {
+    //   navigation.navigate("Home");
+    //   swipeRef.current.swipeLeft()
+    // }
 
-    const profileSwipeRight = () => {
-      navigation.navigate("Home");
-      swipeRef.current.swipeRight()
+    // const profileSwipeRight = () => {
+    //   navigation.navigate("Home");
+    //   swipeRef.current.swipeRight()
+    // }
+
+    const tagColor = (tag) => {
+        if (tag === "Career-Focused") {
+           return "#FF033E";
+        } else if (tag === "Personal Growth") {
+            return "#002D62";
+        } else return "#018749";
     }
 
 
     return (
-      <SafeAreaView style={{flex:1}}>
-      {/* <View> */}
-    <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")} style={{left: 20, top:10}}>
-            <MaterialCommunityIcons name="arrow-left-bold" size={20} color="#00BFFF" />
-        </TouchableOpacity>
-        <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu")}>
-            <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
-        </TouchableOpacity>
-        <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Chat")}>
-            <Ionicons name="chatbubbles-sharp" size={30} color = "#00BFFF"/>
-        </TouchableOpacity>
-    </View>
+      
 
-      <View>
+      <View style={{flex:1}}>
       <FlatList
       data = {[card]}
       keyExtractor={(card) => card.id}
       contentContainerStyle={{ flexGrow: 0 }}
       renderItem = {(card) =>
         (
-                <View>
+                <View style={{backgroundColor:"black"}}>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20}}>
                     <View style={{alignItems:"center"}}>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={{height: 30, width:30}} source={require("../images/reverse_mission.jpeg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/reverse_mission.jpeg")}/>
                     <Text style = {{padding: 10}}>Mission</Text>
-                    <Image style={{height: 30, width:30}} source={require("../images/mission.jpeg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/mission.jpeg")}/>
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.mission}</Text>
-                    <Image style={{height:440 ,width:"90%"}} source={{uri: card.item.images[0]}}/>
+                    <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.tag)}}>
+                    <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{card.item.tag}</Text>
+                    </View>
+                    <Image style={styles.imagecontainer} source={{uri: card.item.images[0]}}/>
                     </View>
                     <View style={styles.infocontainer}>
                         <View>
@@ -77,35 +76,35 @@ export const ProfileSwipeScreen = () => {
                     </View>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center", paddingBottom:10}}>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={{height: 30, width:30}} source={require("../images/reverselogo.jpg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/reverselogo.jpg")}/>
                     <Text style = {{padding: 10}}>My Ideal Wing</Text>
-                    <Image style={{height: 30, width:30}} source={require("../images/logo2.jpg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.desires}</Text>
-                    <Image style={{height:440 ,width:"90%"}} source={{uri: card.item.images[1]}}/>
+                    <Image style={styles.imagecontainer} source={{uri: card.item.images[1]}}/>
                     </View>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={{height: 30, width:30}} source={require("../images/reverse_biceps.jpg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/reverse_biceps.jpg")}/>
                     <Text style = {{padding: 10}}>Strengths</Text>
-                    <Image style={{height: 30, width:30}} source={require("../images/bicep.jpg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/bicep.jpg")}/>
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.skills}</Text>
-                    <Image style={{height:440 ,width:"90%"}} source={{uri: card.item.images[2]}}/>
+                    <Image style={styles.imagecontainer} source={{uri: card.item.images[2]}}/>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={{height: 40, width:40}} source={require("../images/medal.jpg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/>
                     <Text style = {{padding: 10}}>Medals</Text>
-                    <Image style={{height: 40, width:40}} source={require("../images/medal.jpg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/>
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text>
                     </View>
 
-                    <View style={{height:450}}>
+                    <View style={{height:300}}>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={{height: 30, width:30}} source={require("../images/smile.jpeg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/>
                     <Text style = {{padding: 10}}>Hobbies</Text>
-                    <Image style={{height: 30, width:30}} source={require("../images/smile.jpeg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/>
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.hobbies}</Text>
                     <View style={{flexDirection:"column", padding: 10}}>
@@ -116,36 +115,38 @@ export const ProfileSwipeScreen = () => {
                     </View>
                 </View>
       )
-    }
+    }//add distance to user on location
         />
-        <View style={{flexDirection:"row", justifyContent:"space-evenly", bottom:150}}>
+        {/* <View style={{flexDirection:"row", justifyContent:"space-evenly", bottom:150}}>
         <TouchableOpacity style={styles.swipeButtonCross} onPress={()=>profileSwipeLeft()}>
                 <Entypo name="cross" size={30} color="red"/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.swipeButtonHeart} onPress={()=>profileSwipeRight()}>
                 <Entypo name="heart" size={30} color="green"/>
         </TouchableOpacity>
+    </View> */}
+
+    <View style={{flexDirection:"row", justifyContent:"center", bottom:100}}>
+    <TouchableOpacity style={styles.swipeButtonUp} onPress={()=>navigation.goBack()}>
+            <Entypo name="arrow-bold-up" size={30} color="white"/>
+    </TouchableOpacity>
     </View>
          {/* <Foo ter/> */}
         </View>
-        </SafeAreaView>
+        // </SafeAreaView>
         
     )
 }
 
 const styles = StyleSheet.create({
   imagecontainer: {
-       width: 30,
-       height: 30,
-       borderRadius: 50
+    height:440,
+    width:"90%", 
+    borderRadius:20
    },
    iconcontainer: {
-       height: 60,
-       width: 60,
-       borderRadius: 50,
-       bottom: 25,
-       borderColor:"#00BFFF",
-       borderWidth: 2
+    height: 30,
+    width:30
    },
    cardscontainer: {
       //  flex: 1,
@@ -171,23 +172,34 @@ const styles = StyleSheet.create({
        justifyContent: "space-between",
        paddingHorizontal: 30
    },
-   swipeButtonCross:{
+//    swipeButtonCross:{
+//       bottom: 10,
+//       width: 50,
+//       height: 50,
+//       borderRadius: 50,
+//       alignItems: "center",
+//       justifyContent: "center",
+//       backgroundColor: "#FF5864"
+//    },
+//    swipeButtonHeart:{
+//        bottom: 10,
+//        width: 50,
+//        height: 50,
+//        borderRadius: 50,
+//        alignItems: "center",
+//        justifyContent: "center",
+//        backgroundColor: "#32de84"
+//     }, 
+    swipeButtonUp: {
       bottom: 10,
-      width: 50,
-      height: 50,
+      width: 60,
+      height: 60,
       borderRadius: 50,
+      borderWidth:2,
+      borderColor:"white",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "#FF5864"
-   },
-   swipeButtonHeart:{
-       bottom: 10,
-       width: 50,
-       height: 50,
-       borderRadius: 50,
-       alignItems: "center",
-       justifyContent: "center",
-       backgroundColor: "#32de84"
+      backgroundColor: "#00BFFF"
     }
 });
 
