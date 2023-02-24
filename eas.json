@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 3.3.2"
+    "version": "3.5.2"
   },
   "build": {
     "development": {
@@ -16,6 +16,11 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "rkingnair@email.com",
+        "ascAppId": "5c4bf1ec-66df-4386-bed0-abf7b2bf19db"
+      }
+    }
   }
 }

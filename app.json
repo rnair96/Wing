@@ -4,7 +4,7 @@
     "slug": "mission_partner",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "host.exp.exponent",
+    "scheme": "com.wingcommunity.wing",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -13,14 +13,15 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/5c4bf1ec-66df-4386-bed0-abf7b2bf19db"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "host.exp.exponent"
+      "bundleIdentifier": "com.wingcommunity.wing"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,11 +29,12 @@
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
-    ],
-      "package": "host.exp.exponent"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.wingcommunity.wing"
     },
     "web": {
       "favicon": "./assets/favicon.png"
