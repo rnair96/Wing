@@ -27,8 +27,14 @@ const ImageUpload = ({ images, index, setImages}) => {
         if (!result.canceled) {
           setImage(result.assets[0].uri);
           
-          setImages([...images, result.assets[0].uri])//must correct to ensure added image is at correct place in array
-
+          if(images.length>index){
+            const arr = images;
+            arr.splice(index,0,result.assets[0].uri)
+            setImages(arr);
+          } else {
+            setImages([...images, result.assets[0].uri])
+          }
+          
         }
     };
     

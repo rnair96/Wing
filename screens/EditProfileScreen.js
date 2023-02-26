@@ -25,6 +25,7 @@ const EditProfileScreen = () => {
   const [ desires, setDesires ] = useState(null);
   const [ location, setLocation ] = useState(null);
   const [ hobbies, setHobbies ] = useState(null);
+  const [ incompleteForm, setIncompleteForm ] = useState(true);
 
 
   const { params } = useRoute();
@@ -50,8 +51,11 @@ const EditProfileScreen = () => {
 
   const navigation = useNavigation();
 
+  useEffect(()=>{
+    const form = !images||(images && images.length < 3)||!gender||!age||!mission||!accomplishments||!skills||!desires||!location||!hobbies;
+    setIncompleteForm(form);
 
-  const incompleteform = !images||(images && images.length < 3)||!gender||!age||!mission||!accomplishments||!skills||!desires||!location||!hobbies;
+  },[images, images?.length ,gender, age,mission, accomplishments, skills, desires, location, hobbies])
   
 
   const updateUserProfile = () => {
@@ -194,8 +198,8 @@ return (
 
         <View style={{height:150}}>
       <TouchableOpacity 
-          disabled = {incompleteform}
-          style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
+          disabled = {incompleteForm}
+          style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteForm ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
           onPress = {updateUserProfile}>
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Profile</Text>
       </TouchableOpacity>
