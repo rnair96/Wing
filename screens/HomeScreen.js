@@ -12,11 +12,13 @@ import generateId from '../lib/generateId'
 
 const HomeScreen = () => {
     const navigation = useNavigation();
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const swipeRef = useRef(null);
-    const [ profiles,setProfiles ] = useState([]);
-    const [ loggedProfile, setLoggedProfile ] = useState(null)
-    
+    const [ profiles, setProfiles ] = useState([]);
+    const [ loggedProfile, setLoggedProfile ] = useState(null);
+    // const [ topLine, setTopLine ] = useState(0);
+    // const [ endReached, setEndReached ] = useState(false);
+    // const [ cardINDEX , setCardINDEX ] = useState(0);
 
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
@@ -125,8 +127,6 @@ const HomeScreen = () => {
         );
     }
 
-
-
   return (
    <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
     {/* Header */}
@@ -143,21 +143,38 @@ const HomeScreen = () => {
     </View>
     {/* End of Header */}
     {/* Cards */}
-    <View style={styles.cardscontainer}>
+    {profiles.length === 0 ? (
+        <View style={[styles.emptycardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
+            <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>No Wings Around... Try Again Later</Text>
+            <Image style={{height:300 ,width:300, borderRadius:150}} source={require("../images/island_plane.jpg")}/>
+            </View>
+    ):(
+        <View style={styles.cardscontainer}>
         <Swiper cards={profiles}
             ref={swipeRef} 
             stackSize={5}
-            cardIndex={0}
             animateCardOpacity={true}
             verticalSwipe={false}
+            cardIndex={0}
+            onSwipedAll={() => {
+                setProfiles([])}}
+                
             onSwipedLeft={(cardIndex) => {
                 swipeLeft(cardIndex);
-                // console.log("Swipe PASS")
+                
             }}
             onSwipedRight={(cardIndex) => {
                 swipeRight(cardIndex);
-                // console.log("Swipe MATCH")
+
             }}
+            // onTapCard={(cardIndex) =>{
+            //     if(topLine <= 2){
+            //         setTopLine(topLine+1);
+            //         console.log("topline",topLine)
+            //     } else {
+            //         setTopLine(0);
+            //     }
+            // }}
             overlayLabels={{
                 left: {
                     title: "DENY",
@@ -181,52 +198,62 @@ const HomeScreen = () => {
 
             // pass swiperef to profile swipe to include swipe function , swipeRef: swipeRef
             containerStyle={{backgroundColor:"transparent"}}
-            renderCard={(card)=> card && card?.images ? (
-                <View key={card.id} style={styles.cardcontainer}>
-                    {/* <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}> */}
-                    <View style={{alignItems:"center"}}>
-                    {/* <View style={{padding: 5, backgroundColor:"#00BFFF", borderRadius:50}}>
-                    <Text style={{fontWeight:"bold", fontSize:15, color:"white"}}>{card.tag}</Text>
-                    </View> */}
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
-                    </View>   
-                    <Image style={{height:"85%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
-                    <View style={styles.infocontainer}>
-                        <View>
-                            <Text style={{fontWeight:"bold", fontSize:20}}>
-                                {card.displayName}
-                            </Text>
-                            <Text>
-                            {card.job}
-                            </Text>
-                        </View>
-                        <View>
-                        <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
-                        <Text>{card.location}</Text>
-                        </View>
-                    </View>
-                    {/* </TouchableOpacity> */}
-                    <View style={{flexDirection:"row", justifyContent:'center'}}>
-                    <TouchableOpacity style={styles.swipeButtonDown} onPress={()=>navigation.navigate("ProfileSwipe", {card: card})}>
-                            <Entypo name="arrow-bold-down" size={30} color="white"/>
-                    </TouchableOpacity>
-                    </View>
+            renderCard={(card)=> {
+                if (card) {
+                
+                    const index = profiles.indexOf(card);
+                    console.log("index",index)
+                    console.log("length", profiles.length)
+                    // const line = topLine === 0 ? card.mission : (topLine === 1 ? card.desires : card.strengths);
                     
-                </View>
-            ):(
-            <View style={[styles.cardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
-                <Text style={{fontWeight:"bold", fontSize:15}}>No more Wings... Try Again Later</Text>
-                <Image style={{height:300 ,width:335}} source={{uri:"https://img.atlasobscura.com/eeEvT-_nW7UF3uI4qqFlSaDwNwib1jH618G8KVVSTi4/rt:fit/w:1280/q:81/sm:1/scp:1/ar:1/aHR0cHM6Ly9hdGxh/cy1kZXYuczMuYW1h/em9uYXdzLmNvbS91/cGxvYWRzL2Fzc2V0/cy9lMjMwZDA2MS0z/MDI5LTQ4ZjEtOGJh/Ni1iNzYzZTY1MWZm/MDhjZTMxZGZmMzg2/Mzk5ZGQ0NmVfRUI0/Q0ZYLmpwZw.jpg"}}/>
-            </View>
-            )}
+                    return (
+                        <View key={card.id} style={styles.cardcontainer}>
+                        {/* <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}> */}
+                        <View style={{alignItems:"center"}}>
+                        <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
+                        </View>   
+                        <Image style={{height:"85%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
+                        <View style={styles.infocontainer}>
+                            <View>
+                                <Text style={{fontWeight:"bold", fontSize:20}}>
+                                    {card.displayName}
+                                </Text>
+                                <Text>
+                                {card.job}
+                                </Text>
+                            </View>
+                            <View>
+                            <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
+                            <Text>{card.location}</Text>
+                            </View>
+                        </View>
+                        {/* </TouchableOpacity> */}
+                        <View style={{flexDirection:"row", justifyContent:'center'}}>
+                        <TouchableOpacity style={styles.swipeButtonDown} onPress={()=>navigation.navigate("ProfileSwipe", {card: card})}>
+                                <Entypo name="arrow-bold-down" size={30} color="white"/>
+                        </TouchableOpacity>
+                        </View>
+                        
+                    </View>
+                    )
+                }
+            }
+        }
         />
+        {/* <View style={[styles.cardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
+                    <Text style={{fontWeight:"bold", fontSize:15}}>No more Wings... Try Again Later</Text>
+                    <Image style={{height:300 ,width:335}} source={{uri:"https://img.atlasobscura.com/eeEvT-_nW7UF3uI4qqFlSaDwNwib1jH618G8KVVSTi4/rt:fit/w:1280/q:81/sm:1/scp:1/ar:1/aHR0cHM6Ly9hdGxh/cy1kZXYuczMuYW1h/em9uYXdzLmNvbS91/cGxvYWRzL2Fzc2V0/cy9lMjMwZDA2MS0z/MDI5LTQ4ZjEtOGJh/Ni1iNzYzZTY1MWZm/MDhjZTMxZGZmMzg2/Mzk5ZGQ0NmVfRUI0/Q0ZYLmpwZw.jpg"}}/>
+                    </View> */}
     </View>
+    )}
+    
+    
 
     <View style={{flexDirection:"row", justifyContent:"space-evenly"}}>
-        <TouchableOpacity style={styles.swipeButtonCross} onPress={()=>swipeRef.current.swipeLeft()}>
+        <TouchableOpacity style={styles.swipeButtonCross} onPress={()=> swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft(): console.log("no action")}>
                 <Entypo name="cross" size={24} color="red"/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.swipeButtonHeart} onPress={()=>swipeRef.current.swipeRight()}>
+        <TouchableOpacity style={styles.swipeButtonHeart} onPress={()=>swipeRef && swipeRef?.current ? swipeRef.current.swipeRight(): console.log("no action")}>
                 <Entypo name="heart" size={24} color="green"/>
         </TouchableOpacity>
     </View>
@@ -264,6 +291,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 1.41,
         elevation:2
+    },
+    emptycardcontainer: {
+        // backgroundColor: "black",
+        height:"75%",
+        // borderRadius: 20,
+        // shadowColor:"#000",
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 1
+        // },
+        // shadowOpacity: 0.2,
+        // shadowRadius: 1.41,
+        // elevation:2
     },
     infocontainer: {
         bottom:"10%" ,
