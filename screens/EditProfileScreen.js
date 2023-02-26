@@ -152,18 +152,6 @@ return (
       placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={styles.formTitle}>Mission</Text>
-      <TextInput
-      value = {mission}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setMission} 
-      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-
-      <Text style={styles.formTitle}>Mission Category</Text>
-      <TagPicker tag={tag} setTag={setTag}/>
-
       <Text style={styles.formTitle}>Medals</Text>
       <TextInput
       value = {accomplishments}
@@ -191,6 +179,18 @@ return (
       onChangeText = {setDesires}
       placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+
+      <Text style={styles.formTitle}>Mission</Text>
+      <TextInput
+      value = {mission}
+      multiline
+      numberOfLines={3}
+      onChangeText = {setMission} 
+      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+
+      <Text style={styles.formTitle}>Mission Category</Text>
+      <TagPicker tag={tag} setTag={setTag}/>
 
         <View style={{height:150}}>
       <TouchableOpacity 

@@ -17,8 +17,6 @@ const HomeScreen = () => {
     const [ profiles, setProfiles ] = useState([]);
     const [ loggedProfile, setLoggedProfile ] = useState(null);
     // const [ topLine, setTopLine ] = useState(0);
-    // const [ endReached, setEndReached ] = useState(false);
-    // const [ cardINDEX , setCardINDEX ] = useState(0);
 
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
@@ -201,11 +199,6 @@ const HomeScreen = () => {
             renderCard={(card)=> {
                 if (card) {
                 
-                    const index = profiles.indexOf(card);
-                    console.log("index",index)
-                    console.log("length", profiles.length)
-                    // const line = topLine === 0 ? card.mission : (topLine === 1 ? card.desires : card.strengths);
-                    
                     return (
                         <View key={card.id} style={styles.cardcontainer}>
                         {/* <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}> */}
