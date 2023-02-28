@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useLayoutEffect} from 'react'
-import {StyleSheet, ImageBackground, Text, View, TouchableOpacity, Image } from 'react-native'
+import {StyleSheet, ImageBackground, Text, View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import useAuth from '../hooks/useAuth';
 
 
@@ -14,22 +14,24 @@ const LoginScreen = () => {
         });
     }, []);
 
-
     return (
-    <View style={[styles.container]}>
+    <SafeAreaView style={[styles.container]}>
         <ImageBackground
         resizeMode='cover'
         style = {[styles.container]} 
         source={require("../images/pilots2.jpeg")}>
-        <Text style={{left:140, top:80, fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman", color:"#00308F"}}>Wing</Text>
-        <Text style={{left:"8%", top:100, fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman"}}>Find Your Wingman. Go On Missions.</Text>
-        {/* <Text style={{left:25, top:100, fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman"}}>Chase Your Mission</Text> */}
+        <View style={{height:"30%", justifyContent:"center", alignItems:"center", justifyContent:"space-evenly"}}>
+        <View style={{flexDirection:"row", justifyContent:"center"}}>
+        <Text style={{fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman", color:"#00308F"}}>Wing</Text>
         <Image style = {styles.iconcontainer} source={require("../images/logo2.jpg")}/>
+        </View>
+        <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"#00308F"}}>Find Your Wingman. Go On Missions.</Text>
+        </View>
         <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
-            <Text style = {styles.textcontainer}>Sign in & Get Swiping</Text>
+            <Text style = {styles.textcontainer}>Sign in</Text>
         </TouchableOpacity>
         </ImageBackground>
-    </View>
+    </SafeAreaView>
     )
 }
 
@@ -38,9 +40,8 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     opacitycontainer: {
-        marginTop: 400,
-        width: 180,
         marginHorizontal: "30%",
+        marginVertical:"40%",
         backgroundColor: "white",
         padding: 5,
         borderRadius: 10,
@@ -53,8 +54,6 @@ const styles = StyleSheet.create({
     iconcontainer: {
         height:40, 
         width:40, 
-        left:235, 
-        top:15, 
         borderRadius:50, 
         borderColor:"#00308F", 
         borderWidth:2
