@@ -4,7 +4,7 @@
     "slug": "mission_partner",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "host.exp.exponent",
+    "scheme": "com.wingcommunity.wing",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -20,7 +20,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "host.exp.exponent"
+      "bundleIdentifier": "com.wingcommunity.wing"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +31,7 @@
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
-    ],
+      ],
       "package": "host.exp.exponent"
     },
     "web": {
@@ -43,7 +43,8 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
     "extra": {
       "eas": {
