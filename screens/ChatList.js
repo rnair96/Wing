@@ -37,8 +37,8 @@ const ChatList = () => {
     }/>
     ):
     (
-      <View>
-        <Text> No Matches at this time </Text>
+      <View style ={{flexDirection:"row", marginVertical:"60%", justifyContent:"center"}}>
+        <Text style={{fontWeight:"bold"}}> No Matches At This Time </Text>
       </View>
     )
     

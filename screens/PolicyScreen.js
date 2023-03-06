@@ -8,7 +8,9 @@ const PolicyScreen = () => {
     return (
       <ScrollView>
         <View style ={{flex:1, padding:10}}>
-        <Header title = "Privacy Policy"/>
+          <SafeAreaView>
+          <Header title = "Privacy Policy"/>
+          </SafeAreaView>
         <Text style={{padding:10}}>Wing is a social networking app that allows users to create a profile with their name, age, and location in order to connect with other users on the app. This Privacy Policy describes how we collect, use, and share information about our users, and applies to your use of the Wing app and any related services provided by Wing Community, LLC ("Wing", "we", "us", or "our").
 1. Information We Collect
 When you create a profile on Wing, we may collect the following information:

@@ -5,6 +5,8 @@ import useAuth from '../hooks/useAuth';
 import { collection, getDoc, onSnapshot, doc, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons} from '@expo/vector-icons';
+
 
 const  MenuScreen = () => {
     const { user } = useAuth();
@@ -14,23 +16,31 @@ const  MenuScreen = () => {
 
     return (
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={{uri: profile? profile?.images[0]: '../images/account.jpeg'}}/>
+        <TouchableOpacity style={{flexDirection:"row", alignItems:"center"}} onPress={() => navigation.navigate("EditProfile", profile)}>
+        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2, left:20}} source={{uri: profile? profile?.images[0]: '../images/account.jpeg'}}/>
+        <View style={{padding:2, backgroundColor:"white", borderRadius:20, borderWidth:1,borderColor:"#989898"}}>
+        <Ionicons name="pencil" size={30} color = "#00308F"/>
+        </View>
+        </TouchableOpacity>
         <Text style={{fontSize:20, fontWeight: "bold"}}>{user.displayName}</Text>
         <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Wing Member</Text>
         <MaterialCommunityIcons name="account-check" size={20} color="#32CD32" />
         </View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("EditProfile", profile)}>
-        <Text>Edit Profile</Text>
-        </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("EditProfile", profile)}>
+        <Text style={{padding:10}}>Edit Profile</Text>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
-        <Text>Matching Prefences</Text>
+        <Text style={{padding:10, fontSize:15}}>Matching Prefences</Text>
+        <Ionicons name="heart-outline" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Settings")}>
-        <Text>Settings</Text>
+        <Text style={{padding:10, fontSize:15}}>Settings</Text>
+        <Ionicons name="settings-outline" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer}>
-        <Text>Help</Text>
+        <Text style={{padding:10, fontSize:15}}>Help</Text>
+        <Ionicons name="help" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>        
@@ -41,9 +51,10 @@ const  MenuScreen = () => {
 
 const styles = StyleSheet.create({
     buttonContainer: {
+      flexDirection:"row",
       alignItems: 'center',
-      justifyContent: 'center',
-      width: 200,
+      justifyContent:'space-between',
+      width: "90%",
       height: 50,
       margin: 10,
       borderWidth: 1,
@@ -53,7 +64,7 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         borderRadius: 50,
-        borderColor:"#00BFFF",
+        borderColor:"#00308F",
         borderWidth: 2
     }
     });

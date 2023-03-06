@@ -7,7 +7,9 @@ const GuideScreen = () => {
     return (
       <ScrollView>
         <View style ={{flex:1, padding:10}}>
+        <SafeAreaView>
         <Header title = "Community Guidelines"/>
+        </SafeAreaView>
         <Text style={{padding:10}}>
 1. Respectful Communication
 Users of our app are expected to treat each other with respect and kindness at all times. Any messages or comments that are discriminatory, abusive, or hateful will not be tolerated. Users should not harass or bully other users, and should always strive to communicate in a respectful and positive manner.

@@ -7,7 +7,9 @@ const TermsScreen = () => {
     return (
       <ScrollView>
         <View style ={{flex:1, padding:10}}>
-        <Header title = "Terms of Service"/>
+          <SafeAreaView>
+          <Header title = "Terms of Service"/>
+          </SafeAreaView>
         <Text style={{padding:10}}>These Terms of Service ("Terms") govern your use of the Wing app and any related services provided by Wing Community, LLC ("Wing", "we", "us", or "our"). By using the Wing app, you agree to these Terms.
 1. Description of the Service
 Wing is a social networking app that allows users to create a profile with their name, age, and location in order to connect with other users on the app. The app is free to download from the App Store, with potential purchasable add-ons in the future. The app operates in a manner that is similar to other social networking apps, such as Tinder.

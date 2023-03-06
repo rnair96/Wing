@@ -130,7 +130,8 @@ const HomeScreen = () => {
     {/* Header */}
     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
         <TouchableOpacity  onPress= {() => navigation.navigate("EditProfile", loggedProfile)} style={{left: 20, top:10}}>
-            <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/>
+            {/* <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/> */}
+            <Ionicons name="person" size={30} color = "#00BFFF"/>
         </TouchableOpacity>
         <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu", loggedProfile)}>
             <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>

@@ -87,12 +87,16 @@ const EditProfileScreen = () => {
 return (
   <View>
       <ScrollView style={{marginHorizontal:10}}>
-        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-          <SafeAreaView>
+      <SafeAreaView style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly", right:"4%"}}>
+            <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.goBack()}>
+            <Ionicons name="ios-arrow-back" size={30} color = "#00BFFF"/>
+            </TouchableOpacity>
           <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Home")}>
           <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo2.jpg")}/>
           </TouchableOpacity>
           </SafeAreaView>
+        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+          
 
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
       
