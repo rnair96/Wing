@@ -2,11 +2,11 @@
   "expo": {
     "name": "mission_partner",
     "slug": "mission_partner",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "scheme": "com.wingcommunity.wing",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "scheme": "com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -20,7 +20,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wingcommunity.wing"
+      "bundleIdentifier": "com.wingcommunity.wing",
+      "infoPlist": {
+        "UIApplicationSceneManifest": {
+            "UIApplicationSupportsMultipleScenes": false,
+              "UISceneConfigurations": {}
+          }
+          
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +39,7 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],
-      "package": "host.exp.exponent"
+      "package": "com.wingcommunity.wing"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -44,7 +51,8 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ],
-      "expo-build-properties"
+      "expo-build-properties",
+      "expo-updates"
     ],
     "extra": {
       "eas": {
