@@ -16,7 +16,7 @@ const HomeScreen = () => {
     const swipeRef = useRef(null);
     const [ profiles, setProfiles ] = useState([]);
     const [ loggedProfile, setLoggedProfile ] = useState(null);
-    // const [ topLine, setTopLine ] = useState(0);
+
 
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
@@ -129,14 +129,15 @@ const HomeScreen = () => {
    <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
     {/* Header */}
     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
-        <TouchableOpacity  onPress= {() => navigation.navigate("EditProfile", loggedProfile)} style={{left: 20, top:10}}>
-            {/* <Image style = {styles.imagecontainer} source={{ uri: user.photoURL }}/> */}
+        <TouchableOpacity  onPress= {() => navigation.navigate("EditProfile", loggedProfile)}>
+            {/* left: 20, top:10 */}
             <Ionicons name="person" size={30} color = "#00BFFF"/>
         </TouchableOpacity>
         <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu", loggedProfile)}>
             <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
         </TouchableOpacity>
-        <TouchableOpacity style={{right:20, top:10}} onPress={() => navigation.navigate("Chat")}>
+        {/* right:20, top:10 */}
+        <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
             <Ionicons name="chatbubbles-sharp" size={30} color = "#00BFFF"/>
         </TouchableOpacity>
     </View>
@@ -287,17 +288,7 @@ const styles = StyleSheet.create({
         elevation:2
     },
     emptycardcontainer: {
-        // backgroundColor: "black",
         height:"75%",
-        // borderRadius: 20,
-        // shadowColor:"#000",
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 1
-        // },
-        // shadowOpacity: 0.2,
-        // shadowRadius: 1.41,
-        // elevation:2
     },
     infocontainer: {
         bottom:"10%" ,

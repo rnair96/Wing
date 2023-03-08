@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
       height: 50,
       margin: 10,
       borderWidth: 1,
+      borderRadius: 10,
       borderColor: '#ccc'
     },
     iconcontainer: {

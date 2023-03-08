@@ -13,7 +13,6 @@ const AuthContext = createContext({});
 
 
 export const AuthProvider = ({children}) => {
-  // const [error, setError] = useState(null);
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +29,8 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
       //checks the authentication state of user in firebase 
       onAuthStateChanged(auth, (authuser)=> {
+        // console.log("auth",auth)
+        // console.log("authuser",authuser)
         if (authuser) {
           //logged in
           setUser(authuser);
@@ -47,42 +48,72 @@ export const AuthProvider = ({children}) => {
 
   const signInWithGoogle = async () => {
     try {
+
       //gets accesstokens for Google authenticaiton
       const result = await promptAsync({ useProxy: false, showInRecents: true, projectNameForProxy:'@rnair96/mission_partner'});//, projectNameForProxy:"@rkingnair@gmail.com/mission_partner"
+      // setTimeout(() => {
       setLoading(true);
+      // }, 2000);
+      
 
       // console.log("full Result",fullResult);
       // console.log("result",result);
 
 
-      if (fullResult?.type === 'success') {
-        // Token is always filled, when running on iOS/Android and when running in Expo
-        const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-          headers: {
-            Authorization: `Bearer ${fullResult.params.access_token}`,
-          },
-        }).then((response) => response.json());
-        setUser(userData);
+      if (result.type === 'success') {
+
+        let idToken = null;
+        let accessToken = null;
+
+        if(result?.authentication){
+          console.log("result authentication")
+          idToken = result.authentication.idToken;
+          accessToken = result.authentication.accessToken;
+        } else if (fullResult?.type === 'success') {
+          console.log("full Result params")
+          idToken = fullResult.params.id_token;
+          accessToken = fullResult.params.access_token;
+        }
+
+        console.log("accesstoken", accessToken);
+        console.log("idToken",idToken);
+
+        //fetch and sets user data from Google via token for Expo Go
+
+        if (accessToken && idToken) {
+            const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }).then((response) => response.json());
+          setUser(userData);
 
 
-        //signs in to firestore db
-        const credential = GoogleAuthProvider.credential(fullResult.params.id_token ,result.params.access_token)
-        await signInWithCredential(auth, credential);
+          //signs in to firestore db
+          const credential = GoogleAuthProvider.credential(idToken , accessToken)
+          await signInWithCredential(auth, credential);
 
-      } else if (result.type === 'success' && result.authentication) {
-
-        //fetch and sets user data from Google via token
-        const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-          headers: {
-            Authorization: `Bearer ${result.authentication.accessToken}`,
-          },
-        }).then((response) => response.json());
-        setUser(userData);
-
-
-        //signs in to firestore db
-        const credential = GoogleAuthProvider.credential(result.authentication.idToken ,result.authentication.accessToken)
-        await signInWithCredential(auth, credential);
+        } else {
+          console.log("Tokens are null")
+        }
+        
+        // else if (fullResult?.type === 'success') {
+        //   console.log("inside fullResult")
+        //   // Token is always filled, when running on iOS/Android and when running in Expo
+    
+        //   const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+        //     headers: {
+        //       Authorization: `Bearer ${fullResult.params.access_token}`,
+        //     },
+        //   }).then((response) => response.json());
+        //   setUser(userData);
+    
+    
+        //   //signs in to firestore db
+        //   const credential = GoogleAuthProvider.credential(fullResult.params.id_token ,result.params.access_token)
+        //   await signInWithCredential(auth, credential);
+    
+        // }
         
     } else {
       console.log('cancelled');

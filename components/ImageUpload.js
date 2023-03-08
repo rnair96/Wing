@@ -25,6 +25,7 @@ const ImageUpload = ({ images, index, setImages}) => {
         });
     
         if (!result.canceled) {
+          console.log("image results",result)
           setImage(result.assets[0].uri);
           
           if(images.length>index){

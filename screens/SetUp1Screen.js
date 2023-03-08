@@ -7,8 +7,6 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import ImageUpload from '../components/ImageUpload';
 import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
-import { Ionicons} from '@expo/vector-icons';
-import Header from '../Header';
 import TagPicker from '../components/TagPicker';
 
 
@@ -56,13 +54,17 @@ const SetUp1Screen = () => {
     
 return (
   <View>
+    <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1}}
+            keyboardVerticalOffset={10}>
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
           <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
           </SafeAreaView>
 
-          <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Mission & The Wing</Text>
+          <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Essentials</Text>
 
   
           
@@ -141,6 +143,7 @@ return (
       </View>
       </View>
       </ScrollView>
+      </KeyboardAvoidingView>
   </View>
 )
 }
