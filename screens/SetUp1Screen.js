@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -54,11 +54,11 @@ const SetUp1Screen = () => {
     
 return (
   <View>
-    <KeyboardAvoidingView
+      <ScrollView style={{marginHorizontal:10}}>
+      <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{flex:1}}
             keyboardVerticalOffset={10}>
-      <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
           <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
@@ -142,8 +142,8 @@ return (
       </TouchableOpacity>
       </View>
       </View>
-      </ScrollView>
       </KeyboardAvoidingView>
+      </ScrollView>
   </View>
 )
 }

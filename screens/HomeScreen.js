@@ -203,11 +203,11 @@ const HomeScreen = () => {
                 
                     return (
                         <View key={card.id} style={styles.cardcontainer}>
-                        {/* <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}> */}
+                        <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}>
                         <View style={{alignItems:"center"}}>
                         <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
                         </View>   
-                        <Image style={{height:"85%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
+                        <Image style={{height:"75%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
                         <View style={styles.infocontainer}>
                             <View>
                                 <Text style={{fontWeight:"bold", fontSize:20}}>
@@ -222,7 +222,7 @@ const HomeScreen = () => {
                             <Text>{card.location}</Text>
                             </View>
                         </View>
-                        {/* </TouchableOpacity> */}
+                        </TouchableOpacity>
                         <View style={{flexDirection:"row", justifyContent:'center'}}>
                         <TouchableOpacity style={styles.swipeButtonDown} onPress={()=>navigation.navigate("ProfileSwipe", {card: card})}>
                                 <Entypo name="arrow-bold-down" size={30} color="white"/>
@@ -235,10 +235,6 @@ const HomeScreen = () => {
             }
         }
         />
-        {/* <View style={[styles.cardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
-                    <Text style={{fontWeight:"bold", fontSize:15}}>No more Wings... Try Again Later</Text>
-                    <Image style={{height:300 ,width:335}} source={{uri:"https://img.atlasobscura.com/eeEvT-_nW7UF3uI4qqFlSaDwNwib1jH618G8KVVSTi4/rt:fit/w:1280/q:81/sm:1/scp:1/ar:1/aHR0cHM6Ly9hdGxh/cy1kZXYuczMuYW1h/em9uYXdzLmNvbS91/cGxvYWRzL2Fzc2V0/cy9lMjMwZDA2MS0z/MDI5LTQ4ZjEtOGJh/Ni1iNzYzZTY1MWZm/MDhjZTMxZGZmMzg2/Mzk5ZGQ0NmVfRUI0/Q0ZYLmpwZw.jpg"}}/>
-                    </View> */}
     </View>
     )}
     
@@ -291,9 +287,8 @@ const styles = StyleSheet.create({
         height:"75%",
     },
     infocontainer: {
-        bottom:"10%" ,
-        backgroundColor:"white", 
-        paddingVertical: 10, 
+        backgroundColor:"white",
+        paddingTop: 15, 
         flexDirection:"row",
         justifyContent: "space-between",
         paddingHorizontal: 30
@@ -318,7 +313,7 @@ const styles = StyleSheet.create({
      },
      swipeButtonDown: {
         // marginHorizontal:"45%",
-        bottom: "33%",
+        bottom: "30%",
         width: 60,
         height: 60,
         borderRadius: 50,
