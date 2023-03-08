@@ -21,17 +21,20 @@ const SetUp1Screen = () => {
   const [ idealwing, setIdealWing ] = useState(null);
   const [ location, setLocation ] = useState(null);
 
+  // const { params } = useRoute();
+  // const { user } = params? params: useAuth()
+
 
   const navigation = useNavigation();
 
 
-  const incompleteform = !images||(images && images.length < 3)||!gender||!age||!mission||!desires||!location;
+  const incompleteform = !images||(images && images.length < 3)||!gender||!age||!mission||!idealwing||!location;
  
 
   const updateUserProfile = () => {
       setDoc(doc(db, 'users', user.uid), {
           id: user.uid,
-          displayName: user.displayName,
+          displayName: user.displayName.split(" ")[0],
           email: user.email,
           images: images,
           job: job,
@@ -56,10 +59,6 @@ const SetUp1Screen = () => {
 return (
   <View>
       <ScrollView style={{marginHorizontal:10}}>
-      {/* <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            // style={{flex:1}}
-            keyboardVerticalOffset={5}> */}
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
           <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
@@ -143,7 +142,6 @@ return (
       </TouchableOpacity>
       </View>
       </View>
-      {/* </KeyboardAvoidingView> */}
       </ScrollView>
   </View>
 )

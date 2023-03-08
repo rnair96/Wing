@@ -27,9 +27,17 @@ const LoginScreen = () => {
         </View>
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"#00308F"}}>Find Your Wingman. Go On Missions.</Text>
         </View>
+        <View style={{marginVertical:"20%",alignItems: 'center', height:"20%", justifyContent:"space-evenly"}}>
         <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
-            <Text style = {styles.textcontainer}>Sign in</Text>
+            <Text style = {styles.textcontainer}>Sign In with Google</Text>
         </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.opacitycontainer} onPress={navigation.navigate("SignUp")}>
+            <Text style = {styles.textcontainer}>Sign Up Manually</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.opacitycontainer}>
+            <Text style = {styles.textcontainer}>Log In</Text>
+        </TouchableOpacity> */}
+        </View>
         </ImageBackground>
     </SafeAreaView>
     )
@@ -40,13 +48,13 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     opacitycontainer: {
-        marginHorizontal: "30%",
-        marginVertical:"40%",
         backgroundColor: "white",
         padding: 5,
         borderRadius: 10,
-        alignItems: 'center'
-    },
+        width:200,
+        alignItems:"center"
+
+        },
     textcontainer: {
         alignItems: 'center',
         fontWeight: 'bold',

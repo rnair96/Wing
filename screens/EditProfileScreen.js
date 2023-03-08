@@ -18,7 +18,7 @@ const EditProfileScreen = () => {
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
   const [ mission, setMission ] = useState(null);
-  const [ missiontag, setMissionTag ] = useState(null);
+  const [ missiontag, setMissionTag ] = useState("Personal Growth");
   const [ gender, setGender ] = useState("male");
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
@@ -52,16 +52,16 @@ const EditProfileScreen = () => {
   const navigation = useNavigation();
 
   useEffect(()=>{
-    const form = !images||(images && images.length < 3)||!gender||!age||!mission||!accomplishments||!skills||!desires||!location||!hobbies;
+    const form = !images||(images && images.length < 3)||!gender||!age||!mission||!accomplishments||!skills||!idealwing||!location||!hobbies;
     setIncompleteForm(form);
 
-  },[images, images?.length ,gender, age,mission, accomplishments, skills, desires, location, hobbies])
+  },[images, images?.length ,gender, age,mission, accomplishments, skills, idealwing, location, hobbies])
   
 
   const updateUserProfile = () => {
       setDoc(doc(db, 'users', user.uid), {
           id: user.uid,
-          displayName: user.displayName,
+          displayName: user.displayName.split(" ")[0],
           email: user.email,
           images: images,
           job: job,

@@ -13,7 +13,7 @@ import TagPicker from '../components/TagPicker';
 
 const MatchingPreferences = () => {
     const [ ageMin, setAgeMin ] = useState(18);
-    const [ ageMax, setAgeMax ] = useState(100);
+    const [ ageMax, setAgeMax ] = useState(50);
     const [ tag, setTag ] = useState("All")
     // const [ matchRadius, setMatchRadius ] = useState(100);
     const [ gender, setGender ] = useState("both");
