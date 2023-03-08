@@ -57,8 +57,8 @@ export const ProfileSwipeScreen = () => {
                     <Image style={styles.iconcontainer} source={require("../images/mission.jpeg")}/>
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.mission}</Text>
-                    <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.tag)}}>
-                    <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{card.item.tag}</Text>
+                    <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.mission_tag)}}>
+                    <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{card.item.mission_tag}</Text>
                     </View>
                     <Image style={styles.imagecontainer} source={{uri: card.item.images[0]}}/>
                     </View>
@@ -80,7 +80,7 @@ export const ProfileSwipeScreen = () => {
                     <Text style = {{padding: 10}}>My Ideal Wing</Text>
                     <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
                     </View>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.desires}</Text>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.ideal_wing}</Text>
                     <Image style={styles.imagecontainer} source={{uri: card.item.images[1]}}/>
                     </View>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>

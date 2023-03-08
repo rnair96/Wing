@@ -16,9 +16,9 @@ const SetUp1Screen = () => {
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
   const [ mission, setMission ] = useState(null);
-  const [ tag, setTag ] = useState(null);
+  const [ missiontag, setMissionTag ] = useState("Personal Growth");
   const [ gender, setGender ] = useState("male");
-  const [ desires, setDesires ] = useState(null);
+  const [ idealwing, setIdealWing ] = useState(null);
   const [ location, setLocation ] = useState(null);
 
 
@@ -32,14 +32,15 @@ const SetUp1Screen = () => {
       setDoc(doc(db, 'users', user.uid), {
           id: user.uid,
           displayName: user.displayName,
+          email: user.email,
           images: images,
           job: job,
           age: age,
           gender: gender,
           mission: mission,
-          desires: desires,
+          ideal_wing: idealwing,
           location: location,
-          tag: tag,
+          mission_tag: missiontag,
           timestamp: serverTimestamp()
       }).then(()=> {
             
@@ -55,10 +56,10 @@ const SetUp1Screen = () => {
 return (
   <View>
       <ScrollView style={{marginHorizontal:10}}>
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{flex:1}}
-            keyboardVerticalOffset={10}>
+            // style={{flex:1}}
+            keyboardVerticalOffset={5}> */}
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
           <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
@@ -121,19 +122,19 @@ return (
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
       <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>
-      <TagPicker tag={tag} setTag={setTag}/>
+      <TagPicker tag={missiontag} setTag={setMissionTag}/>
     
 
       <Text style={styles.formTitle}>How Can Your Wing Best Support You?</Text>
       <TextInput
-      value = {desires}
+      value = {idealwing}
       multiline
       numberOfLines={4}
-      onChangeText = {setDesires}
+      onChangeText = {setIdealWing}
       placeholder={'I.e: Push me in the gym'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-        <View style={{height:150}}>
+        <View style={{height:300}}>
       <TouchableOpacity 
           disabled = {incompleteform}
           style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
@@ -142,7 +143,7 @@ return (
       </TouchableOpacity>
       </View>
       </View>
-      </KeyboardAvoidingView>
+      {/* </KeyboardAvoidingView> */}
       </ScrollView>
   </View>
 )

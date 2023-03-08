@@ -18,11 +18,11 @@ const EditProfileScreen = () => {
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
   const [ mission, setMission ] = useState(null);
-  const [ tag, setTag ] = useState(null);
+  const [ missiontag, setMissionTag ] = useState(null);
   const [ gender, setGender ] = useState("male");
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
-  const [ desires, setDesires ] = useState(null);
+  const [ idealwing, setIdealWing ] = useState(null);
   const [ location, setLocation ] = useState(null);
   const [ hobbies, setHobbies ] = useState(null);
   const [ incompleteForm, setIncompleteForm ] = useState(true);
@@ -42,8 +42,8 @@ const EditProfileScreen = () => {
         setSkills(profile.skills);
         setLocation(profile.location);
         setHobbies(profile.hobbies);
-        setDesires(profile.desires);
-        setTag(profile.tag)
+        setIdealWing(profile.ideal_wing);
+        setMissionTag(profile.mission_tag)
     }
 
   },[profile])
@@ -62,6 +62,7 @@ const EditProfileScreen = () => {
       setDoc(doc(db, 'users', user.uid), {
           id: user.uid,
           displayName: user.displayName,
+          email: user.email,
           images: images,
           job: job,
           age: age,
@@ -69,10 +70,10 @@ const EditProfileScreen = () => {
           mission: mission,
           accomplishments: accomplishments,
           skills: skills,
-          desires: desires,
+          ideal_wing: idealwing,
           location: location,
           hobbies: hobbies,
-          tag: tag,
+          mission_tag: missiontag,
           timestamp: serverTimestamp()
       }).then(()=> {
             navigation.navigate("Home");
@@ -181,10 +182,10 @@ return (
 
       <Text style={styles.formTitle}>The Ideal Wing</Text>
       <TextInput
-      value = {desires}
+      value = {idealwing}
       multiline
       numberOfLines={3}
-      onChangeText = {setDesires}
+      onChangeText = {setIdealWing}
       placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
@@ -198,7 +199,7 @@ return (
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
       <Text style={styles.formTitle}>Mission Category</Text>
-      <TagPicker tag={tag} setTag={setTag}/>
+      <TagPicker tag={missiontag} setTag={setMissionTag}/>
 
         <View style={{height:150}}>
       <TouchableOpacity 
