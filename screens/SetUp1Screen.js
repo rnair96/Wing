@@ -8,7 +8,7 @@ import ImageUpload from '../components/ImageUpload';
 import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
 import TagPicker from '../components/TagPicker';
-
+import { registerIndieID } from 'native-notify';
 
 const SetUp1Screen = () => {
   const { user } = useAuth();
@@ -23,6 +23,8 @@ const SetUp1Screen = () => {
 
   // const { params } = useRoute();
   // const { user } = params? params: useAuth()
+  registerIndieID(user.uid, 6654, 'A2FDEodxIsFgrMD1Mbvpll');
+
 
 
   const navigation = useNavigation();

@@ -8,6 +8,9 @@ import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, getDoc, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Entypo, Ionicons} from '@expo/vector-icons';
+import getMatchedUserInfo from '../lib/getMatchedUserInfo';
+import axios from 'axios';
+
 
 const MessageScreen = () => {
 
@@ -17,8 +20,6 @@ const MessageScreen = () => {
     const [ messages, setMessages ] = useState([])
     const { user } = useAuth();
     const navigation = useNavigation();
-    //pass matchedDetails into ChatHeader
-
 
     useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
         orderBy("timestamp", "desc")), (snapshot) => {
@@ -39,8 +40,21 @@ const MessageScreen = () => {
             message: input,
 
         })
-        setInput("");
         // setMessages([input,...messages]);
+
+        const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
+        const userName = user.displayName.split(" ")[0];
+
+        axios.post(`https://app.nativenotify.com/api/indie/notification`, {
+            subID: matchedUser[1].id,
+            appId: 6654,
+            appToken: 'A2FDEodxIsFgrMD1Mbvpll',
+            title: "New Message from "+userName,
+            message: input
+        });
+
+        setInput("");
+
     }
     
 

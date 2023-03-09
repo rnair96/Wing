@@ -14,22 +14,25 @@ const ChatHeader = ({matchedDetails}) => {
     const { user } = useAuth();
     const [modalVisible, setModalVisible] = useState(false);
     const [ secondModal, setSecondModal ] = useState(false);
+    const [ mute, setMute ] = useState(false);
 
     const matched_user = getMatchedUserInfo(matchedDetails.users, user.uid);
 
-    // messaging().setBackgroundMessageHandler(async remoteMessage => {
-    //     console.log('Received background message', remoteMessage);
-    //   });
+    //call useEffect to update Mute state
 
-    const setNotifications = () => {
-        // messaging()
-        //   .requestPermission()
-        //   .then(() => {
-        //     console.log('Permission granted');
-        //   })
-        //   .catch(error => {
-        //     console.log('Permission denied', error);
-        //   });
+
+    const editNotifications = () => {
+        if (mute){
+          console.log("Unmute")
+         //remove user from mute array in match document
+         setMute(false);
+         setModalVisible(!modalVisible)
+        } else {
+          console.log("Mute")
+          //add user.uid to mute array in match document
+          setMute(true);
+          setModalVisible(!modalVisible)
+        }
       };
 
     const deleteMatch = async () => {
@@ -91,10 +94,10 @@ const ChatHeader = ({matchedDetails}) => {
           <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                setNotifications();
+                editNotifications();
               }}
             >
-              <Text style={styles.textStyle}>Set Notifications</Text>
+              <Text style={styles.textStyle}>{mute?("Unmute Notifications"):("Mute Notifications")}</Text>
             </TouchableHighlight>
             {/* Unmatch function */}
             <TouchableHighlight

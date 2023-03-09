@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native';
+import React, { Component, useState } from 'react'
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation } from '@react-navigation/core';
@@ -11,6 +11,29 @@ import { db } from '../firebase';
 const SettingsScreen = () => {
     const { user, logout } = useAuth();
     const navigation = useNavigation();
+    const [notifications, setNotifications] = useState(true);
+    const [email, setEmail] = useState(user.email)
+
+    //create a useEffect to update notifications state and email state from db
+
+
+    const editNotifications = () => {
+        if(notifications){
+            console.log("Notifications set to false");
+            setNotifications(false);
+            
+        }else{
+            console.log("Notifications set to true");
+            setNotifications(true);
+
+        }
+        //update db for notifications of user
+    }
+
+    const updateEmail = () => {
+        console.log("update DB with new Email", email)
+        //update db with Email
+    }
 
 
     //deleting matches, passes and swipes, and user
@@ -105,8 +128,17 @@ const SettingsScreen = () => {
         <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
         
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Menu")}>
-        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Push Notifications</Text>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => editNotifications}>
+        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Edit Push Notifications</Text>
+        </TouchableOpacity>
+
+        <Text style = {{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Update Contact Email</Text>
+        <TextInput
+        value = {email}
+        onChangeText = {setEmail} 
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => updateEmail}>
+        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Update</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("PrivacyPolicy")}>
