@@ -9,6 +9,8 @@ import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
 import TagPicker from '../components/TagPicker';
 import { registerIndieID } from 'native-notify';
+import getLocation from '../lib/getLocation';
+
 
 const SetUp1Screen = () => {
   const { user } = useAuth();
@@ -20,6 +22,15 @@ const SetUp1Screen = () => {
   const [ gender, setGender ] = useState("male");
   const [ idealwing, setIdealWing ] = useState(null);
   const [ location, setLocation ] = useState(null);
+
+
+  useEffect(() => {
+    (async () => {
+      const geoLocation = await getLocation()
+      setLocation(geoLocation)
+    })();
+  }, []);
+
 
   // const { params } = useRoute();
   // const { user } = params? params: useAuth()
@@ -98,11 +109,16 @@ return (
 
         <View style={{padding:10, alignItems:"center"}}>
         <Text style={styles.formTitle}>Location</Text>
-        <TextInput
-        value = {location}
-        onChangeText = {setLocation} 
-        placeholder={'What area are you in? (City, State)'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        {location ? (
+          <Text>{location}</Text>
+        ):(
+          <TextInput
+          value = {location}
+          onChangeText = {setLocation} 
+          placeholder={'What area are you in? (City, State)'}
+          style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        )}
+        
         </View>
         </View>        
   

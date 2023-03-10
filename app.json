@@ -2,7 +2,7 @@
   "expo": {
     "name": "mission_partner",
     "slug": "mission_partner",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -25,7 +25,11 @@
         "UIApplicationSceneManifest": {
             "UIApplicationSupportsMultipleScenes": false,
               "UISceneConfigurations": {}
-          }
+          },
+          "NSLocationWhenInUseUsageDescription": "This app needs access to your location to function properly.",
+          "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location even when you’re not using the app."
+
+
           
       }
     },
@@ -37,7 +41,9 @@
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
       ],
       "package": "com.wingcommunity.wing"
     },
