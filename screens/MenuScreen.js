@@ -1,15 +1,11 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import useAuth from '../hooks/useAuth';
-import { collection, getDoc, onSnapshot, doc, query, limit, where } from 'firebase/firestore';
-import { db } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons} from '@expo/vector-icons';
 
 
 const  MenuScreen = () => {
-    const { user } = useAuth();
     const navigation = useNavigation();
     const { params } = useRoute();
     const profile = params;
@@ -22,19 +18,16 @@ const  MenuScreen = () => {
         <Ionicons name="pencil" size={30} color = "#00308F"/>
         </View>
         </TouchableOpacity>
-        <Text style={{fontSize:20, fontWeight: "bold"}}>{user.displayName}</Text>
+        <Text style={{fontSize:20, fontWeight: "bold"}}>{profile.displayName}</Text>
         <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Wing Member</Text>
         <MaterialCommunityIcons name="account-check" size={20} color="#32CD32" />
         </View>
-        {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("EditProfile", profile)}>
-        <Text style={{padding:10}}>Edit Profile</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
         <Text style={{padding:10, fontSize:15}}>Matching Prefences</Text>
         <Ionicons name="heart-outline" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Settings")}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Settings", profile)}>
         <Text style={{padding:10, fontSize:15}}>Settings</Text>
         <Ionicons name="settings-outline" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>

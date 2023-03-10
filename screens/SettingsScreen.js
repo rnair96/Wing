@@ -1,9 +1,9 @@
-import React, { Component, useState } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
+import React, { Component, useState, useEffect } from 'react'
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight,} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
-import { useNavigation } from '@react-navigation/core';
-import { deleteDoc, doc, getDocs, collection, writeBatch } from 'firebase/firestore';
+import { useNavigation, useRoute } from '@react-navigation/core';
+import { deleteDoc, doc, getDocs, collection, writeBatch, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 
@@ -11,28 +11,43 @@ import { db } from '../firebase';
 const SettingsScreen = () => {
     const { user, logout } = useAuth();
     const navigation = useNavigation();
-    const [notifications, setNotifications] = useState(true);
+    // const [notifications, setNotifications] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState(user.email)
+    const { params } = useRoute();
+    const profile = params;
 
-    //create a useEffect to update notifications state and email state from db
 
-
-    const editNotifications = () => {
-        if(notifications){
-            console.log("Notifications set to false");
-            setNotifications(false);
-            
-        }else{
-            console.log("Notifications set to true");
-            setNotifications(true);
-
+    useEffect(()=>{
+        if (profile) {
+            setEmail(profile.email);
         }
-        //update db for notifications of user
-    }
+
+    },[profile])
+
+
+    // const editNotifications = () => {
+    //     if(notifications){
+    //         console.log("Notifications set to false");
+    //         setNotifications(false);
+            
+    //     }else{
+    //         console.log("Notifications set to true");
+    //         setNotifications(true);
+
+    //     }
+    //     //update db for notifications of user
+    // }
 
     const updateEmail = () => {
-        console.log("update DB with new Email", email)
-        //update db with Email
+        updateDoc(doc(db, 'users',user.uid), {
+            email:email
+            }).then(()=> {
+            navigation.navigate("Home");
+            console.log("new email for user set to:", email)
+        }).catch((error) => {
+            alert(error.message)
+        });
     }
 
 
@@ -128,18 +143,19 @@ const SettingsScreen = () => {
         <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
         
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => editNotifications}>
+        {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => editNotifications}>
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Edit Push Notifications</Text>
-        </TouchableOpacity>
-
-        <Text style = {{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Update Contact Email</Text>
+        </TouchableOpacity> */}
+        <Text style = {{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Contact Email</Text>
+        <View style ={{flexDirection:"row"}}>
         <TextInput
         value = {email}
         onChangeText = {setEmail} 
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => updateEmail}>
-        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Update</Text>
+        <TouchableOpacity style={styles.savebuttonContainer} onPress={() => updateEmail()}>
+        <Text style={{textAlign:"center", fontSize: 12, fontWeight:"bold", color:"white"}}>Update</Text>
         </TouchableOpacity>
+        </View>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("PrivacyPolicy")}>
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Privacy Policy</Text>
@@ -161,16 +177,57 @@ const SettingsScreen = () => {
 
           <TouchableOpacity 
               style={[{width:200, height:50, padding:15, borderRadius:10}, {backgroundColor:"red"}]}
-              onPress = {deleteAll}>
+              onPress = {() => setModalVisible(true)}>
               <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Delete Account</Text>
           </TouchableOpacity>
 
             </View>
+
+            <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={{fontSize:14, textAlign:"center", paddingBottom:10}}>Are you sure you want to delete your account? All data will be permanantly lost</Text>
+            <TouchableHighlight
+              style={{ borderColor:"grey", borderWidth:2, padding:15, width:300}}
+              onPress={() => {
+                deleteAll();
+              }}
+            >
+              <Text style={styles.textStyle}>Yes</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={{ borderColor:"grey", borderWidth:2, padding:15, width:300}}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={styles.textStyle}>No</Text>
+            </TouchableHighlight>
+          </View>
+          </View>
+      </Modal>
+
           </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    savebuttonContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 100,
+        height: 40,
+        margin: 10,
+        borderRadius:10,
+        backgroundColor:"green"
+      },
     buttonContainer: {
       alignItems: 'center',
       justifyContent: 'center',
@@ -186,7 +243,31 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         borderColor:"#00BFFF",
         borderWidth: 2
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding:10,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      textStyle: {
+          color: 'black',
+          fontWeight: 'bold',
+          textAlign: 'center'
+        }
     });
 
 export default SettingsScreen

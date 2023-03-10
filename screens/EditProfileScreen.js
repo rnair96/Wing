@@ -26,6 +26,8 @@ const EditProfileScreen = () => {
   const [ location, setLocation ] = useState(null);
   const [ hobbies, setHobbies ] = useState(null);
   const [ incompleteForm, setIncompleteForm ] = useState(true);
+  const [ email, setEmail ] = useState(user.email);
+  const [ name, setName ] = useState(user.displayName.split(" ")[0])
 
 
   const { params } = useRoute();
@@ -43,7 +45,9 @@ const EditProfileScreen = () => {
         setLocation(profile.location);
         setHobbies(profile.hobbies);
         setIdealWing(profile.ideal_wing);
-        setMissionTag(profile.mission_tag)
+        setMissionTag(profile.mission_tag);
+        setEmail(profile.email);
+        setName(profile.displayName)
     }
 
   },[profile])
@@ -61,8 +65,8 @@ const EditProfileScreen = () => {
   const updateUserProfile = () => {
       setDoc(doc(db, 'users', user.uid), {
           id: user.uid,
-          displayName: user.displayName.split(" ")[0],
-          email: user.email,
+          displayName: name,
+          email: email,
           images: images,
           job: job,
           age: age,
