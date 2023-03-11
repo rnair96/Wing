@@ -10,6 +10,7 @@ import GenderPicker from '../components/GenderPicker';
 import TagPicker from '../components/TagPicker';
 import { registerIndieID } from 'native-notify';
 import getLocation from '../lib/getLocation';
+import BirthdayInput from '../components/BirthdayInput';
 
 
 const SetUp1Screen = () => {
@@ -81,11 +82,11 @@ return (
 
   
           
-      <View style ={{flexDirection:"row"}}>
+      <View style ={{flexDirection:"column"}}>
       <View style ={{alignItems:"center"}}>
-      <Text style={styles.formTitle}>Age</Text>
+      <Text style={styles.formTitle}>Enter Your BirthDate</Text>
       
-        <AgePicker age= {age} setAge={setAge} />
+        <BirthdayInput setAge={setAge} />
       
       </View>
       
