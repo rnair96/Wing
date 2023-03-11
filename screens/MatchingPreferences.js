@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
+import { Text, View, SafeAreaView, TextInput, TouchableOpacity,ScrollView } from 'react-native'
 import { doc, setDoc, addDoc, updateDoc } from 'firebase/firestore';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import Header from '../Header';
@@ -19,13 +19,9 @@ const MatchingPreferences = () => {
     const [ gender, setGender ] = useState("both");
     // const [ global, setGlobal ] = useState("true");
 
-    // const handleGenderChange = (option) => {
-    //   setGender(option);
-    // };
 
     const { params } = useRoute();
     const profile = params;
-    // console.log("profile",profile)
 
     const navigation = useNavigation();
 
@@ -62,84 +58,44 @@ const MatchingPreferences = () => {
 
 
     return (
-    <SafeAreaView>
+    <ScrollView style={{marginHorizontal:10}}>
 
+    <SafeAreaView style={{alignItems:"center"}}>
      {profile?.genderPreference ? 
      (
       <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
      ):(
-      <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/3"}/>
-     )} 
+      <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 4/4"}/>
+     )}
+    </SafeAreaView>
     <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
-    <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Choose Your Preferences</Text> 
+      <Text style={{fontSize:15, fontWeight: "bold", padding:40}}>Choose Your Wing Preferences</Text> 
 
-    <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
+      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
 
-    <View style ={{flexDirection:"row", alignItems:"center"}}>
-    <View style ={{padding:10}}>
-      {/* <TextInput
-      value = {ageMin}
-      onChangeText = {setAgeMin} 
-      placeholder={"Minimum age"}
-      maxLength={2}/> */}
-      <AgePicker age= {ageMin} setAge={setAgeMin} />
-      </View>
+      <View style ={{flexDirection:"row", alignItems:"center"}}>
+        <View style ={{padding:10}}>
+          <AgePicker age= {ageMin} setAge={setAgeMin} />
+        </View>
       
         <Text>-</Text>
 
-      <View style={{padding:10}}>
-      {/* <TextInput
-      value = {ageMax}
-      onChangeText = {setAgeMax} 
-      placeholder={"Maximum age"}/> */}
-      <AgePicker age= {ageMax} setAge={setAgeMax} />
-      </View>
+        <View style={{padding:10}}>
+      
+        <AgePicker age= {ageMax} setAge={setAgeMax} />
+        </View>
       </View>
 
 
-      <View 
-        style={{alignItems:"center", paddingBottom:30}}>
+      <View style={{alignItems:"center", paddingBottom:30}}>
         <Text style={{fontSize:15, top:40, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
-      {/* <Picker
-            style={{height:200, width:'40%'}}
-        selectedValue={gender}
-        onValueChange={handleGenderChange}
-        enabled='true'
-      >
-        <Picker.Item label="Both" value="both" />
-        <Picker.Item label="Male" value="male" />
-        <Picker.Item label="Female" value="female" />
-      </Picker> */}
-          <GenderPicker gender= {gender} setGender={setGender} both_boolean={true} />
-          </View>
+        <GenderPicker gender= {gender} setGender={setGender} both_boolean={true} />
+      </View>
 
-      {/* <Button onPress={} title="Radio" color="#00BFFF"/> */}
-
-      <View 
-        style={{alignItems:"center"}}>
+      <View style={{alignItems:"center", paddingBottom:60}}>
         <Text style={{top:40,fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission Category</Text>
-
-      {/* <Picker
-            style={{height:200, width:'40%'}}
-        selectedValue={gender}
-        onValueChange={handleGenderChange}
-        enabled='true'
-      >
-        <Picker.Item label="Both" value="both" />
-        <Picker.Item label="Male" value="male" />
-        <Picker.Item label="Female" value="female" />
-      </Picker> */}
-          <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
-
-
-
-
-
-      {/* <TextInput
-      value = {gender}
-      onChangeText = {setGender} 
-      placeholder={"What's Your Gender"}/> */}
+        <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
       </View>
 
       <TouchableOpacity 
@@ -149,7 +105,7 @@ const MatchingPreferences = () => {
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Preferences</Text>
       </TouchableOpacity>
       </View>
-      </SafeAreaView>
+      </ScrollView>
     )
 }
 

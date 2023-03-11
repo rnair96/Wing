@@ -21,7 +21,7 @@ const HomeScreen = () => {
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
-                    navigation.navigate("SetUp1", null);
+                    navigation.navigate("SetUp0");
                 } 
                 else {
                     const info = 

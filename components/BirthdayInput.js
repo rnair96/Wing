@@ -24,7 +24,7 @@ const BirthdayInput = ({setAge}) => {
   
     return (
       <View>
-        <TextInput placeholder="MM/DD/YYYY" value={birthday} onChangeText={handleBirthdayChange}/>
+        <TextInput placeholder="MM/DD/YYYY" value={birthday} style={{fontSize:15, alignItems:"center"}} onChangeText={handleBirthdayChange}/>
       </View>
     );
 }
