@@ -15,6 +15,7 @@ const SetUp0Screen = () => {
     const [ age, setAge ] = useState(null);
     const [ gender, setGender ] = useState("male");
     const [ location, setLocation ] = useState(null);
+    const [ birthdate, setBirthDate ] = useState(null);
 
     const navigation = useNavigation();
 
@@ -32,12 +33,15 @@ const SetUp0Screen = () => {
     const incompleteform = !gender||!age||!location||!job;
 
     const createUserProfile = () => {
+      console.log("birthdate", birthdate);
         setDoc(doc(db, 'users', user.uid), {
             id: user.uid,
             displayName: user.displayName.split(" ")[0],
             email: user.email,
             job: job,
             age: age,
+            birthdate: birthdate,
+            last_year_celebrated: 2022,
             gender: gender,
             location: location,
             timestamp: serverTimestamp()
@@ -60,7 +64,7 @@ const SetUp0Screen = () => {
         <View style ={{flexDirection:"column", alignItems:"center"}}>
         <Text style={styles.formTitle}>Enter Your BirthDate</Text>
         
-          <BirthdayInput setAge={setAge} />
+          <BirthdayInput setAge={setAge} birthdate={birthdate} setBirthDate={setBirthDate}/>
                 
         <Text style={styles.formTitle}>Gender</Text>
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />

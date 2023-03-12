@@ -5,9 +5,10 @@ import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp } from "firebase/firestore";
+import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import generateId from '../lib/generateId'
+import getLocation from '../lib/getLocation';
 
 
 const HomeScreen = () => {
@@ -34,6 +35,40 @@ const HomeScreen = () => {
             }
         )
         },[db]);
+
+    useEffect(()=>{
+        (async () => {
+            const location = await getLocation();
+            if(loggedProfile && location && loggedProfile?.location!== location){
+                console.log("Updating location")
+                updateDoc(doc(db, 'users', user.uid), {
+                    location: location
+                }).catch((error) => {
+                    console.log("could not refresh location");
+                });
+                }
+                })();
+    },[loggedProfile]);
+
+    useEffect(()=>{
+        if (loggedProfile && loggedProfile?.birthdate){
+            const currentDate = new Date();
+            const birthDate = new Date(loggedProfile.birthdate)
+
+            if(currentDate.getMonth() === birthDate.getMonth() 
+            && currentDate.getDate() === birthDate.getDate()
+            && currentDate.getFullYear() !== loggedProfile.last_year_celebrated){
+                console.log("Updating age on birthday")
+                const newage = loggedProfile.age + 1;
+                updateDoc(doc(db, 'users', user.uid), {
+                    age: newage,
+                    last_year_celebrated: currentDate.getFullYear()
+                }).catch((error) => {
+                    console.log("could not update age on birthday");
+                });
+            }
+        }
+    },[loggedProfile]);
 
     useEffect(()=>{
         let unsub;

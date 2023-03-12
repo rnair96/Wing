@@ -75,7 +75,6 @@ const EditProfileScreen = () => {
           accomplishments: accomplishments,
           skills: skills,
           ideal_wing: idealwing,
-          location: location,
           hobbies: hobbies,
           mission_tag: missiontag,
           timestamp: serverTimestamp()
@@ -129,6 +128,20 @@ return (
       </View>
 
     <View style={{flexDirection:"column", padding:10}}>
+   
+        <View style={{padding:10, alignItems:"center"}}>
+        <Text style={styles.formTitle}>Location</Text>
+        {!profile?.location ?
+        (<TextInput
+        value = {location}
+        onChangeText = {setLocation} 
+        placeholder={'What area are you in? (City, State)'}
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>)
+        :(
+          <Text>{location}</Text>
+        )}
+        </View>
+
         <View style={{padding:10, alignItems:"center"}}>
         <Text style={styles.formTitle}>Job</Text>
       <TextInput
@@ -136,16 +149,6 @@ return (
       onChangeText = {setJob} 
       placeholder={'What do you do?'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-        </View>
-   
-
-        <View style={{padding:10, alignItems:"center"}}>
-        <Text style={styles.formTitle}>Location</Text>
-        <TextInput
-        value = {location}
-        onChangeText = {setLocation} 
-        placeholder={'What area are you in? (City, State)'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         </View>
         </View>        
   
