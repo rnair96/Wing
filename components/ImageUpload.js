@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState} from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity  } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, Modal  } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { storage } from '../firebase';
@@ -8,6 +8,9 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase
 
 const ImageUpload = ({ images, index, setImages, user}) => {
     const [ image, setImage ]= useState(null);
+    const [ progress, setProgress] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+ 
 
     useEffect(()=>{
       if (images && images?.length > index) {
@@ -15,22 +18,37 @@ const ImageUpload = ({ images, index, setImages, user}) => {
       }
     },[images])
 
-    const uploadFirebase = (file) => {
-      // const metadata = {
-      //   contentType: 'image/jpeg',
-      // };
-      const storageRef = ref(storage, `/images/${file}`);
+    const uploadFirebase = (file, path) => {
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
+
+      const storageRef = ref(storage, `/images/${path}`);
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
   
         uploadTask.on(
           "state_changed",
-          (snapshot) => {},
+          (snapshot) => {
+            const progressbar = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            setProgress(progressbar);
+            setModalVisible(true);
+                    // progressBar.style.width = `${progress}%`;
+                    console.log('Upload is ' + progressbar + '% done');
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                    }
+          },
           (error) => {
             console.log(error);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                console.log("URL",url);
+                setModalVisible(false);
                 setImage(url);
 
                 if(images.length>index){
@@ -40,20 +58,12 @@ const ImageUpload = ({ images, index, setImages, user}) => {
                 } else {
                   setImages([...images,url])
                 }
-                //print out metadata to see full file size before upload and after
-              //   storageRef.getMetadata().then(function(metadata) {
-              //     console.log('File size: ' + metadata.size + ' bytes');
-              //   }).catch(function(error) {
-              //     console.error(error);
-              //   });
+          
               });
           }
         );
         
       }
-
-
-    //add a useeffect that instantiates image if there is already an existing image at the given index for images
 
     const selectImage = async () => {      
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -66,8 +76,15 @@ const ImageUpload = ({ images, index, setImages, user}) => {
         if (!result.canceled) {
           const path = result.assets[0].uri;
           const fileName = path.split("/").pop();
+
+
+          const response = await fetch(path);
+          const blob = await response.blob();
+          const imagefile = new File([blob], fileName);
+
+
           const fileNameFull = user.id+"/"+index+"/"+fileName
-          uploadFirebase(fileNameFull);
+          uploadFirebase(imagefile, fileNameFull);
           
         }
     };
@@ -121,6 +138,23 @@ const ImageUpload = ({ images, index, setImages, user}) => {
         </View>
         )}
 
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={{fontSize:18, textAlign:"center", paddingBottom:10, fontWeight:"bold"}}>Uploading Image</Text>
+            <Text style={{fontSize:14, textAlign:"center", fontWeight:"bold", color:"#00308F"}}>{progress}% Complete</Text>
+          </View>
+          </View>
+      </Modal>
+
+
     </View>
     )
 }
@@ -147,10 +181,30 @@ const styles = StyleSheet.create({
       borderColor: '#ccc',
       backgroundColor: '#eee'
     },
-    // image: {
-    //   width: '100%',
-    //   height: '100%'
-    // }
+     centeredView: {
+        flex: 1,
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding:10,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      textStyle: {
+          color: 'black',
+          fontWeight: 'bold',
+          textAlign: 'center'
+        }
   });
 
 export default ImageUpload;
