@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
-import useAuth from '../hooks/useAuth';
-import { setDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import Header from '../Header';
@@ -9,8 +8,8 @@ import ImageUpload from '../components/ImageUpload';
 
 
 
+
 const SetUp2Screen = () => {
-// const { user } = useAuth();
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
   const [ hobbies, setHobbies ] = useState(null);
@@ -21,8 +20,9 @@ const SetUp2Screen = () => {
   const user= params;
 
   const incompleteform = !images||(images && images.length < 3)||!accomplishments||!skills||!hobbies;
-  
+
   const updateUserProfile = () => {
+    console.log("images",images)
       updateDoc(doc(db, 'users', user.id), {
           images: images,
           accomplishments: accomplishments,
@@ -36,8 +36,7 @@ const SetUp2Screen = () => {
       });
   }
 
-
-  //Use Header
+  
     
 return (
   <View>
@@ -50,9 +49,9 @@ return (
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Define Yourself</Text>
 
         <View style ={{flexDirection:"row", padding:20}}>
-            <ImageUpload images = {images} index={0} setImages = {setImages}/>
-            <ImageUpload images = {images} index={1} setImages = {setImages}/>
-            <ImageUpload images = {images} index={2} setImages = {setImages}/>
+            <ImageUpload images = {images} index={0} setImages = {setImages} user={user}/>
+            <ImageUpload images = {images} index={1} setImages = {setImages} user={user}/>
+            <ImageUpload images = {images} index={2} setImages = {setImages} user={user}/>
             </View> 
       
 
