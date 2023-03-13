@@ -7,8 +7,6 @@ import Header from '../Header';
 import ImageUpload from '../components/ImageUpload';
 
 
-
-
 const SetUp2Screen = () => {
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
@@ -22,7 +20,6 @@ const SetUp2Screen = () => {
   const incompleteform = !images||(images && images.length < 3)||!accomplishments||!skills||!hobbies;
 
   const updateUserProfile = () => {
-    console.log("images",images)
       updateDoc(doc(db, 'users', user.id), {
           images: images,
           accomplishments: accomplishments,
@@ -36,7 +33,6 @@ const SetUp2Screen = () => {
       });
   }
 
-  
     
 return (
   <View>
