@@ -5,6 +5,8 @@ import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { deleteDoc, doc, getDocs, collection, writeBatch, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { storage } from '../firebase';
+import { deleteObject, ref, listAll} from "firebase/storage";
 
 
 
@@ -55,13 +57,17 @@ const SettingsScreen = () => {
 
     const deleteAll = async () => {
         await deleteInfo().then(()=> {
-            deleteUser();
+            console.log("All Info deleted")
         }).catch(error => {
             console.log('There was an error',);
-        })
+        }).finally(()=>{
+            deleteUser();
+        }
+        )
     }
 
     const deleteInfo = async () => {
+        // deleteStoredImages();
         deleteMatches();
         deleteSwipeHistory("swipes");
         deleteSwipeHistory("passes");
@@ -119,6 +125,30 @@ const SettingsScreen = () => {
             });
         }
         
+    }
+
+    const deleteStoredImages = async() => {
+          
+          const folderName = `images/${user.uid}/`
+      
+          const folderRef = ref(storage, folderName);
+
+          const folderList = await listAll(folderRef);
+
+          const deletePromises = folderList.items.map((itemRef) =>
+            deleteObject(itemRef)
+            );
+            await Promise.all(deletePromises);
+
+            // Delete the folder itself
+            await deleteObject(folderRef)
+            .then(() => {
+              console.log("Images deleted successfully.");
+            })
+            .catch((error) => {
+              console.error("Error deleting images: ", error);
+            });     
+      
     }
 
     // const deleteOthersHistory = async () => {

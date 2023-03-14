@@ -42,7 +42,7 @@ return (
             <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/4"}/>
           </SafeAreaView>
   
-        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Define Yourself</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Define Your Profile</Text>
 
         <View style ={{flexDirection:"row", padding:20}}>
             <ImageUpload images = {images} index={0} setImages = {setImages} user={user}/>
