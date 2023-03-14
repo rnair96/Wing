@@ -98,12 +98,14 @@ const MatchingPreferences = () => {
         <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
       </View>
 
+      <View style={{height:150}}>
       <TouchableOpacity 
           disabled = {incompleteform}
           style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
           onPress = {updatePreferences}>
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Preferences</Text>
       </TouchableOpacity>
+      </View>
       </View>
       </ScrollView>
     )

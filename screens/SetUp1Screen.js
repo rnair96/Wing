@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -37,7 +37,13 @@ const SetUp1Screen = () => {
   //Use Header
     
 return (
-  <View>
+  <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1}}
+            keyboardVerticalOffset={15}>
+        <TouchableWithoutFeedback 
+          // onPress={Keyboard.dismiss()}
+        >
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
@@ -80,7 +86,8 @@ return (
       </View>
       </View>
       </ScrollView>
-  </View>
+      </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
 )
 }
 

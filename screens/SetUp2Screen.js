@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -35,7 +35,13 @@ const SetUp2Screen = () => {
 
     
 return (
-  <View>
+  <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1}}
+            keyboardVerticalOffset={15}>
+        <TouchableWithoutFeedback 
+          // onPress={Keyboard.dismiss()}
+        >
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
@@ -89,7 +95,8 @@ return (
       </View>
       </View>
       </ScrollView>
-  </View>
+      </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
 )
 }
 

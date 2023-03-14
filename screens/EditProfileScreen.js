@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -89,7 +89,13 @@ const EditProfileScreen = () => {
   //Use Header
     
 return (
-  <View>
+  <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1}}
+            keyboardVerticalOffset={15}>
+        <TouchableWithoutFeedback 
+          // onPress={Keyboard.dismiss()}
+        >
       <ScrollView style={{marginHorizontal:10}}>
       <SafeAreaView style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly", right:"4%"}}>
             <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.goBack()}>
@@ -218,7 +224,8 @@ return (
       </View>
       </View>
       </ScrollView>
-  </View>
+      </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
 )
 }
 

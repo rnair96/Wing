@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { registerIndieID } from 'native-notify';
@@ -54,12 +54,18 @@ const SetUp0Screen = () => {
 
 
     return (
+      <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1}}
+            keyboardVerticalOffset={15}>
+        <TouchableWithoutFeedback 
+          // onPress={Keyboard.dismiss()}
+        >
         <ScrollView style={{marginHorizontal:10}}>
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
         <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/4</Text>
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
         </SafeAreaView>
-
 
         <View style ={{flexDirection:"column", alignItems:"center"}}>
         <Text style={styles.formTitle}>Enter Your BirthDate</Text>
@@ -93,6 +99,8 @@ const SetUp0Screen = () => {
             </View>
         </View>
         </ScrollView>
+        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
