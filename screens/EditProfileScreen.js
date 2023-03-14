@@ -154,9 +154,9 @@ return (
   
 
         <View style ={{flexDirection:"row", padding:20}}>
-            <ImageUpload images = {images} index={0} setImages = {setImages}/>
-            <ImageUpload images = {images} index={1} setImages = {setImages}/>
-            <ImageUpload images = {images} index={2} setImages = {setImages}/>
+            <ImageUpload images = {images} index={0} setImages = {setImages} user={user}/>
+            <ImageUpload images = {images} index={1} setImages = {setImages} user={user}/>
+            <ImageUpload images = {images} index={2} setImages = {setImages} user={user}/>
             </View> 
 
       <Text style={styles.formTitle}>Hobbies</Text>

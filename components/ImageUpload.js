@@ -32,16 +32,16 @@ const ImageUpload = ({ images, index, setImages, user}) => {
             const progressbar = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
             setProgress(progressbar);
             setModalVisible(true);
-                    // progressBar.style.width = `${progress}%`;
-                    console.log('Upload is ' + progressbar + '% done');
-                    switch (snapshot.state) {
-                        case 'paused':
-                            console.log('Upload is paused');
-                            break;
-                        case 'running':
-                            console.log('Upload is running');
-                            break;
-                    }
+            //         // progressBar.style.width = `${progress}%`;
+            //         console.log('Upload is ' + progressbar + '% done');
+            //         switch (snapshot.state) {
+            //             case 'paused':
+            //                 console.log('Upload is paused');
+            //                 break;
+            //             case 'running':
+            //                 console.log('Upload is running');
+            //                 break;
+            //         }
           },
           (error) => {
             console.log(error);
@@ -70,7 +70,7 @@ const ImageUpload = ({ images, index, setImages, user}) => {
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,
           aspect: [4, 3],
-          quality: 1,
+          quality: 0,
         });
     
         if (!result.canceled) {
@@ -80,11 +80,11 @@ const ImageUpload = ({ images, index, setImages, user}) => {
 
           const response = await fetch(path);
           const blob = await response.blob();
-          const imagefile = new File([blob], fileName);
+          // const imagefile = new File([blob], fileName);
 
 
           const fileNameFull = user.id+"/"+index+"/"+fileName
-          uploadFirebase(imagefile, fileNameFull);
+          uploadFirebase(blob, fileNameFull);
           
         }
     };
