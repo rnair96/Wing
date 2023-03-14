@@ -32,19 +32,20 @@ const ImageUpload = ({ images, index, setImages, user}) => {
             const progressbar = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
             setProgress(progressbar);
             setModalVisible(true);
-            //         // progressBar.style.width = `${progress}%`;
-            //         console.log('Upload is ' + progressbar + '% done');
-            //         switch (snapshot.state) {
-            //             case 'paused':
-            //                 console.log('Upload is paused');
-            //                 break;
-            //             case 'running':
-            //                 console.log('Upload is running');
-            //                 break;
-            //         }
+
+                    // progressBar.style.width = `${progress}%`;
+                    console.log('Upload is ' + progressbar + '% done');
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                    }
           },
           (error) => {
-            console.log(error);
+            console.log("error", error);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((url) => {

@@ -67,7 +67,7 @@ const SettingsScreen = () => {
     }
 
     const deleteInfo = async () => {
-        // deleteStoredImages();
+        deleteStoredImages();
         deleteMatches();
         deleteSwipeHistory("swipes");
         deleteSwipeHistory("passes");
@@ -128,27 +128,35 @@ const SettingsScreen = () => {
     }
 
     const deleteStoredImages = async() => {
-          
-          const folderName = `images/${user.uid}/`
-      
-          const folderRef = ref(storage, folderName);
+          console.log("Deleting images")
 
-          const folderList = await listAll(folderRef);
+          for(let i = 0; i < 3; i++){
+            const folderName = `images/${user.uid}/${i}/`      
+            const folderRef = ref(storage, folderName);
 
-          const deletePromises = folderList.items.map((itemRef) =>
-            deleteObject(itemRef)
-            );
-            await Promise.all(deletePromises);
+          listAll(folderRef)
+            .then((result) => {
+            // Loop through each file and delete it
+                result.items.forEach((fileRef) => {
+                deleteObject(fileRef).then(() => {
+                    console.log(`File ${fileRef.name} deleted successfully`);
+                }).catch((error) => {
+                    console.error(`Error deleting file ${fileRef.name}: ${error}`);
+                });
+                });
 
-            // Delete the folder itself
-            await deleteObject(folderRef)
-            .then(() => {
-              console.log("Images deleted successfully.");
+        // Once all files are deleted, delete the folder itself
+                // deleteObject(folderRef).then(() => {
+                //     console.log(`Folder ${folderName} deleted successfully`);
+                // }).catch((error) => {
+                //     console.error(`Error deleting folder ${folderName}: ${error}`);
+                // });
             })
             .catch((error) => {
-              console.error("Error deleting images: ", error);
-            });     
+                console.error(`Error listing files in folder ${folderName}: ${error}`);
+            }); 
       
+          }
     }
 
     // const deleteOthersHistory = async () => {
