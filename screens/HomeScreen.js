@@ -101,7 +101,7 @@ const HomeScreen = () => {
                 setProfiles(
                     snapshot.docs.filter((doc) => doc.id !== user.uid 
                     && (doc.data().gender === genderPreference || genderPreference === "both") 
-                    && (doc.data().tag === tagPreference || tagPreference === "All") 
+                    && (doc.data().mission_tag === tagPreference || tagPreference === "All") 
                     && (doc.data().age>=ageMin && doc.data().age<=ageMax)).map((doc) => (
                     {
                         id: doc.id,
