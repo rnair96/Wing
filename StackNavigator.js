@@ -19,6 +19,7 @@ import GuideScreen from './screens/GuideScreen';
 import SetUp1Screen from './screens/SetUp1Screen';
 import SetUp2Screen from './screens/SetUp2Screen';
 import SetUp0Screen from './screens/SetUp0Screen';
+import HelpScreen from './screens/HelpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,7 @@ const StackNavigator = () => {
             <Stack.Screen name="SetUp1" component={SetUp1Screen} />
             <Stack.Screen name="SetUp2" component={SetUp2Screen} />
             <Stack.Screen name="SetUp0" component={SetUp0Screen} />
+            <Stack.Screen name="Help" component={HelpScreen} />
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />

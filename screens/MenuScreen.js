@@ -31,7 +31,7 @@ const  MenuScreen = () => {
         <Text style={{padding:10, fontSize:15}}>Settings</Text>
         <Ionicons name="settings-outline" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Help", profile)}>
         <Text style={{padding:10, fontSize:15}}>Help</Text>
         <Ionicons name="help" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>
