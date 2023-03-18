@@ -8,7 +8,6 @@ import ImageUpload from '../components/ImageUpload';
 import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
 import { Ionicons} from '@expo/vector-icons';
-import Header from '../Header';
 import TagPicker from '../components/TagPicker';
 
 
