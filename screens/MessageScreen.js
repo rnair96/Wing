@@ -1,13 +1,12 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
-import React, { Component, useEffect, useState } from 'react'
-import { Text, SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Keyboard, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Keyboard, TouchableOpacity} from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, getDoc, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
 import { db } from '../firebase';
-import { Entypo, Ionicons} from '@expo/vector-icons';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import axios from 'axios';
 
@@ -87,11 +86,11 @@ const MessageScreen = () => {
             }
             />
         </TouchableWithoutFeedback>
-        <View style={{flexDirection:"row", justifyContent:"flex-end", bottom:10, padding:10}}>
+        {/* <View style={{flexDirection:"row", justifyContent:"flex-end", bottom:10, padding:10}}>
         <TouchableOpacity style={styles.missionControl} onPress={()=>navigation.navigate("MissionControl")}>
                 <Entypo name="aircraft-take-off" size={30} color="blue"/>
         </TouchableOpacity>
-    </View>
+    </View> */}
 
 
         <View 

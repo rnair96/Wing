@@ -23,7 +23,14 @@ const HomeScreen = () => {
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
                     navigation.navigate("SetUp0");
-                } 
+                } else if (!snapshot.data().mission){
+                    navigation.navigate("SetUp1");
+                } else if (!snapshot.data().accomplishments){
+                    navigation.navigate("SetUp2", {id: user.uid});
+                } else if (!snapshot.data().genderPreference){
+                    navigation.navigate("Preferences", {id: user.uid});
+                }
+
                 else {
                     const info = 
                         {

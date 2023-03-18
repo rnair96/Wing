@@ -15,7 +15,7 @@ const SetUp2Screen = () => {
 
   const navigation = useNavigation();
   const { params } = useRoute();
-  const user= params;
+  const user = params; 
 
   const incompleteform = !images||(images && images.length < 3)||!accomplishments||!skills||!hobbies;
 

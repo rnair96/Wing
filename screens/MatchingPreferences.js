@@ -1,6 +1,6 @@
-import React, { Component, useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TextInput, TouchableOpacity,ScrollView } from 'react-native'
-import { doc, setDoc, addDoc, updateDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from 'react'
+import { Text, View, SafeAreaView, TouchableOpacity,ScrollView } from 'react-native'
+import { doc, updateDoc } from 'firebase/firestore';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import Header from '../Header';
 import { db } from '../firebase';
