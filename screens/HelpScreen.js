@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import { Text, SafeAreaView, TouchableOpacity, TextInput, View, Modal, TouchableHighlight, StyleSheet} from 'react-native';
+import { Text, SafeAreaView, TouchableOpacity, TextInput, View, Modal, TouchableHighlight, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native';
 import emailjs from 'emailjs-com';
 import Header from '../Header';
 
@@ -44,10 +44,13 @@ function HelpScreen() {
 
   return (
     <SafeAreaView style={{margin:20}}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={15}>
     <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Help"}/>
     <View style={{height:"80%",justifyContent:"space-evenly", alignItems:"center"}}>
     <Text style={{fontSize:15, textAlign:"center"}}>
-        Submit this form on what issue you're experiencing. Our support team will reach out to you in 48 hours.
+        If you are experiencing an issue on this app or have any urgent questions, please submit this form. Our support team will reach out to you in 48 hours.
         </Text>
     <Text style={{fontWeight:'bold'}}>Subject:</Text>
     <TextInput
@@ -93,6 +96,8 @@ function HelpScreen() {
           </View>
       </Modal>
       </View>
+      {/* </TouchableWithoutFeedback> */}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
