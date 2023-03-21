@@ -10,15 +10,41 @@ const MatchScreen =()=> {
 
     const { loggedProfile, userSwiped } = params;
 
-    axios.post(`https://app.nativenotify.com/api/indie/notification`, {
-            subID: userSwiped.id,
-            appId: 6654,
-            appToken: 'A2FDEodxIsFgrMD1Mbvpll',
-            title: "New Wing!",
-            message: "You just matched with "+loggedProfile.displayName+"!"
-        });
 
-    
+    const sendPush = async(matchedUser, userName) => {
+
+        try {
+          const response = await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'accept-encoding': 'gzip, deflate',
+              'host': 'exp.host',
+              'accept': 'application/json',
+            },
+            body: JSON.stringify({
+              to: matchedUser.token,
+              title: "New Wing!",
+              body: "Say Hello to "+userName
+            }),
+          });
+      
+          const result = await response.json();
+      
+          if (result.errors) {
+            throw new Error(`Failed to send push notification: ${result.errors}`);
+          }
+      
+          return result.data;
+        } catch (error) {
+          console.error('Error sending push notification:', error);
+          return null;
+        }
+  }
+
+  sendPush(userSwiped, loggedProfile.displayName);
+
   
     return (
       <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly", backgroundColor:"#00BFFF", opacity:0.95}}>

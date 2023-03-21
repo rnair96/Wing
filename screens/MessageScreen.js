@@ -8,8 +8,6 @@ import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
 import { db } from '../firebase';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
-import axios from 'axios';
-
 
 const MessageScreen = () => {
 
@@ -18,7 +16,6 @@ const MessageScreen = () => {
     const [ input, setInput ] = useState();
     const [ messages, setMessages ] = useState([])
     const { user } = useAuth();
-    const navigation = useNavigation();
 
     useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
         orderBy("timestamp", "desc")), (snapshot) => {
@@ -43,20 +40,45 @@ const MessageScreen = () => {
 
         const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
         const userName = user.displayName.split(" ")[0];
-
-        axios.post(`https://app.nativenotify.com/api/indie/notification`, {
-            subID: matchedUser[1].id,
-            appId: 6654,
-            appToken: 'A2FDEodxIsFgrMD1Mbvpll',
-            title: "New Message from "+userName,
-            message: input
-        });
-
+        sendPush(matchedUser, userName);
         setInput("");
 
     }
-    
 
+    //use individualized push notification
+    const sendPush = async(matchedUser, userName) => {
+
+          try {
+            const response = await fetch('https://exp.host/--/api/v2/push/send', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'accept-encoding': 'gzip, deflate',
+                'host': 'exp.host',
+                'accept': 'application/json',
+              },
+              body: JSON.stringify({
+                to: matchedUser[1].token,
+                title: "New Message from "+userName,
+                body: input
+              }),
+            });
+        
+            const result = await response.json();
+        
+            if (result.errors) {
+              throw new Error(`Failed to send push notification: ${result.errors}`);
+            }
+        
+            return result.data;
+          } catch (error) {
+            console.error('Error sending push notification:', error);
+            return null;
+          }
+    }
+    
+    
     return (
       <SafeAreaView style={{flex:1}}>
         <ChatHeader matchedDetails={matchedDetails}/>
