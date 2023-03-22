@@ -30,7 +30,7 @@ const ChatList = () => {
 
 
     return matches.length > 0 ? (
-      <FlatList style={{height:150, width:400}}
+      <FlatList
       data = {matches}
       keyExtractor = {item => item.id}
       renderItem = {({item}) => <ChatRow matchedDetails = {item}/>

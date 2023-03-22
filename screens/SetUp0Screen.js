@@ -28,13 +28,11 @@ const SetUp0Screen = () => {
         (async () => {
           const geoLocation = await getLocation()
           setLocation(geoLocation)
+          const pushtoken = await registerForPushNotificationsAsync()
+          setToken(pushtoken)
         })();
       }, []);
 
-
-      useEffect(() => {
-        registerForPushNotificationsAsync().then(token => setToken(token));
-      }, []);
 
     
     async function registerForPushNotificationsAsync() {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import axios from 'axios';
 
 
 const MatchScreen =()=> {

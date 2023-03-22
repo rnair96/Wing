@@ -141,7 +141,6 @@ const HomeScreen = () => {
         getDoc(doc(db, 'users', userSwiped.id, "swipes", user.uid)).then(
             documentSnapshot => {
                 if (documentSnapshot.exists()){
-                    console.log("document snap", documentSnapshot);
                     //user matched, they swiped on you already
                     console.log("MATCHED with", userSwiped.displayName);
 

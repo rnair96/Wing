@@ -33,6 +33,7 @@ const ChatRow = ({ matchedDetails }) => {
 //create a loading value
     return ( 
         matchedUserInfo? (
+        <View style={{paddingBottom:10, width:"90%"}}>
         <TouchableOpacity style={styles.container} onPress={()=>navigator.navigate("Message",{
             matchedDetails
         })}>
@@ -42,8 +43,9 @@ const ChatRow = ({ matchedDetails }) => {
             <Text style={{paddingLeft:10}}>{lastMessage || "Say Hi!"}</Text>
          </View>
        </TouchableOpacity>
+       </View>
     ):(
-        <Text>Not Here!!!</Text>
+        <Text>Error: Match not appearing</Text>
     )
     )
 
