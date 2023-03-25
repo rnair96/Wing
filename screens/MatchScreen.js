@@ -13,21 +13,19 @@ const MatchScreen =()=> {
     const sendPush = async(matchedUser, userName) => {
 
         try {
+
           const response = await fetch('https://exp.host/--/api/v2/push/send', {
             method: 'POST',
             headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              'accept-encoding': 'gzip, deflate',
-              'host': 'exp.host',
-              'accept': 'application/json',
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               to: matchedUser.token,
               title: "New Wing!",
               body: "Say Hello to "+userName
-            }),
-          });
+            })
+          })
       
           const result = await response.json();
       

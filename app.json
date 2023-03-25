@@ -2,7 +2,7 @@
   "expo": {
     "name": "mission_partner",
     "slug": "mission_partner",
-    "version": "1.1.8",
+    "version": "1.2.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

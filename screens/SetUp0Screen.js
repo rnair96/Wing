@@ -10,6 +10,8 @@ import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import {applicationId} from "expo-application";
+
 
 
 const SetUp0Screen = () => {
@@ -36,8 +38,7 @@ const SetUp0Screen = () => {
 
     
     async function registerForPushNotificationsAsync() {
-      let token;
-    
+      let token;    
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync('default', {
           name: 'default',
@@ -58,8 +59,13 @@ const SetUp0Screen = () => {
           alert('Failed to get push token for push notification!');
           return;
         }
-        token = (await Notifications.getExpoPushTokenAsync()).data;
-        console.log("token",token);
+        token = (await Notifications.getExpoPushTokenAsync(
+          {
+          experienceId: '@rnair96/mission_partner',
+          development: false,
+          applicationId: applicationId || undefined,
+        }
+        )).data;
       } else {
         alert('Must use physical device for Push Notifications');
       }
