@@ -27,10 +27,12 @@ const HomeScreen = () => {
                     navigation.navigate("SetUp1");
                 } else if (!snapshot.data().accomplishments){
                     navigation.navigate("SetUp2", {id: user.uid});
-                } else if (!snapshot.data().genderPreference){
-                    navigation.navigate("Preferences", {id: user.uid});
-                }
-
+                } 
+                
+                // else if (!snapshot.data().genderPreference){
+                //     navigation.navigate("Preferences", {id: user.uid});
+                // } 
+                
                 else {
                     const info = 
                         {

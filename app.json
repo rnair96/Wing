@@ -2,7 +2,7 @@
   "expo": {
     "name": "mission_partner",
     "slug": "mission_partner",
-    "version": "1.2.7",
+    "version": "1.2.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -55,14 +55,7 @@
         }
       ],
       "expo-build-properties",
-      "expo-updates",
-      [
-      "expo-notifications",
-        {
-          "icon": "./images/logo2.jpg",
-          "color": "#00BFFF"
-        }
-      ]
+      "expo-updates"
     ],
     "extra": {
       "eas": {

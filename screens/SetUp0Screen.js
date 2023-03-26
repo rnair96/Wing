@@ -68,6 +68,7 @@ const SetUp0Screen = () => {
         )).data;
       } else {
         alert('Must use physical device for Push Notifications');
+        token="testing"
       }
     
       return token;
@@ -107,7 +108,7 @@ const SetUp0Screen = () => {
         >
         <ScrollView style={{marginHorizontal:10}}>
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/4</Text>
+        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
         </SafeAreaView>
 

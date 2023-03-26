@@ -23,10 +23,10 @@ const  MenuScreen = () => {
         <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Wing Member</Text>
         <MaterialCommunityIcons name="account-check" size={20} color="#32CD32" />
         </View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
+        {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
         <Text style={{padding:10, fontSize:15}}>Matching Prefences</Text>
         <Ionicons name="heart-outline" style={{padding:10}} size={30} color = "black"/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Settings", profile)}>
         <Text style={{padding:10, fontSize:15}}>Settings</Text>
         <Ionicons name="settings-outline" style={{padding:10}} size={30} color = "black"/>
