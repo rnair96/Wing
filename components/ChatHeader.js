@@ -64,6 +64,8 @@ const ChatHeader = ({matchedDetails}) => {
             }).catch((error) => {
                 console.error('Error deleting messages: ', error);
             });
+        } else {
+          deleteMatch();
         }
         
     }

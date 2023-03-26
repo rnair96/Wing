@@ -47,7 +47,7 @@ return (
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
-          <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 2/4"}/>
+          <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 2/3"}/>
           {/* <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 2/4</Text> */}
           </SafeAreaView>
 

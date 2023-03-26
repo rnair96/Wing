@@ -27,7 +27,8 @@ const SetUp2Screen = () => {
           hobbies: hobbies,
           timestamp: serverTimestamp()
       }).then(()=> {
-            navigation.navigate("Preferences", {id: user.id})
+            // navigation.navigate("Preferences", {id: user.id})
+            navigation.navigate("Home")
       }).catch((error) => {
           alert(error.message)
       });
@@ -45,7 +46,7 @@ return (
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
-            <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/4"}/>
+            <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/3"}/>
           </SafeAreaView>
   
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Define Your Profile</Text>

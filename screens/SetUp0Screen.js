@@ -8,6 +8,11 @@ import BirthdayInput from '../components/BirthdayInput';
 import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import {applicationId} from "expo-application";
+
+
 
 const SetUp0Screen = () => {
     const { user } = useAuth();
@@ -16,6 +21,8 @@ const SetUp0Screen = () => {
     const [ gender, setGender ] = useState("male");
     const [ location, setLocation ] = useState(null);
     const [ birthdate, setBirthDate ] = useState(null);
+    const [ token, setToken ] = useState(null);
+
 
     const navigation = useNavigation();
 
@@ -23,17 +30,54 @@ const SetUp0Screen = () => {
         (async () => {
           const geoLocation = await getLocation()
           setLocation(geoLocation)
+          const pushtoken = await registerForPushNotificationsAsync()
+          setToken(pushtoken)
         })();
       }, []);
 
-    
-    registerIndieID(user.uid, 6654, 'A2FDEodxIsFgrMD1Mbvpll');
 
+    
+    async function registerForPushNotificationsAsync() {
+      let token;    
+      if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+      }
+    
+      if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+          alert('Failed to get push token for push notification!');
+          return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync(
+          {
+          experienceId: '@rnair96/mission_partner',
+          development: false,
+          applicationId: applicationId || undefined,
+        }
+        )).data;
+      } else {
+        alert('Must use physical device for Push Notifications');
+        token="testing"
+      }
+    
+      return token;
+    }
+    
 
     const incompleteform = !gender||!age||!location||!job;
 
     const createUserProfile = () => {
-      console.log("birthdate", birthdate);
         setDoc(doc(db, 'users', user.uid), {
             id: user.uid,
             displayName: user.displayName.split(" ")[0],
@@ -44,6 +88,7 @@ const SetUp0Screen = () => {
             last_year_celebrated: 2022,
             gender: gender,
             location: location,
+            token: token,
             timestamp: serverTimestamp()
         }).then(()=> {
               navigation.navigate("SetUp1")
@@ -63,7 +108,7 @@ const SetUp0Screen = () => {
         >
         <ScrollView style={{marginHorizontal:10}}>
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/4</Text>
+        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
         </SafeAreaView>
 

@@ -2,7 +2,7 @@
   "expo": {
     "name": "mission_partner",
     "slug": "mission_partner",
-    "version": "1.1.7",
+    "version": "1.2.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,9 +28,6 @@
           },
           "NSLocationWhenInUseUsageDescription": "This app needs access to your location to function properly.",
           "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location even when you’re not using the app."
-
-
-          
       }
     },
     "android": {
