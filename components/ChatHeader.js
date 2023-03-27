@@ -93,14 +93,14 @@ const ChatHeader = ({matchedDetails}) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {/* Mute Notifications */}
-          <TouchableHighlight
+          {/* <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
                 editNotifications();
               }}
             >
               <Text style={styles.textStyle}>{mute?("Unmute Notifications"):("Mute Notifications")}</Text>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
             {/* Unmatch function */}
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}

@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React, { Component } from 'react'
+import React, { Component, useEffect, useRef } from 'react'
 import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -20,12 +20,43 @@ import SetUp1Screen from './screens/SetUp1Screen';
 import SetUp2Screen from './screens/SetUp2Screen';
 import SetUp0Screen from './screens/SetUp0Screen';
 import HelpScreen from './screens/HelpScreen';
+import * as Notifications from 'expo-notifications';
+import { useNavigation } from '@react-navigation/native';
+
 
 const Stack = createNativeStackNavigator();
 
 
 const StackNavigator = () => {
     const { user } = useAuth();
+    // const navigation = useNavigation();
+    // const responseListener = useRef();
+    // // const notificationListener = useRef();
+
+
+    // useEffect(() => {
+
+    //   // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+    //   //   console.log("are you here at all?")
+    //   // });
+    
+    //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+
+    //     if(response.notification.request.content.data.type === "message"){
+    //       const matchedUser = response.notification.request.content.data.message;
+    //       alert("matched user", matchedUser);
+    //       navigation.navigate("Home");
+    //       // console.log("matched user", matchedUser);
+    //     } else {
+    //       navigation.navigate("Chat");
+    //     }
+        
+    //   });
+    
+    //   return () => {
+    //     Notifications.removeNotificationSubscription(responseListener.current);
+    //   };
+    // }, []);
 
     return (
       <Stack.Navigator screenOptions={{

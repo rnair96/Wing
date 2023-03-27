@@ -9,6 +9,8 @@ import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, ser
 import { db } from '../firebase';
 import generateId from '../lib/generateId'
 import getLocation from '../lib/getLocation';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 
 const HomeScreen = () => {
@@ -47,6 +49,17 @@ const HomeScreen = () => {
 
     useEffect(()=>{
         (async () => {
+            if (Device.isDevice) {
+                const { status: existingStatus } = await Notifications.getPermissionsAsync();
+                let finalStatus = existingStatus;
+                console.log("status",finalStatus);
+                if (existingStatus !== 'granted') {
+                  const { status } = await Notifications.requestPermissionsAsync();
+                  finalStatus = status;
+                }
+            }
+
+
             const location = await getLocation();
             if(loggedProfile && location && loggedProfile?.location!== location){
                 console.log("Updating location")

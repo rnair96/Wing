@@ -59,6 +59,10 @@ const MessageScreen = () => {
                 to: matchedUser[1].token,
                 title: "New Message from "+userName,
                 body: input
+                // data: {
+                //   type: "message",
+                //   message: matchedUser 
+                // },
               }),
             });
 
@@ -68,7 +72,8 @@ const MessageScreen = () => {
             if (result.errors) {
               throw new Error(`Failed to send push notification: ${result.errors}`);
             }
-        
+            console.log("are you being sent?", result)
+
             return result.data;
           } catch (error) {
             console.error('Error sending push notification:', error);

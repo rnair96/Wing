@@ -24,6 +24,9 @@ const MatchScreen =()=> {
               to: matchedUser.token,
               title: "New Wing!",
               body: "Say Hello to "+userName
+              // data: { 
+              //   type: "match" 
+              // },
             })
           })
       
