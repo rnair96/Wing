@@ -158,6 +158,7 @@ const HomeScreen = () => {
                 if (documentSnapshot.exists()){
                     //user matched, they swiped on you already
                     console.log("MATCHED with", userSwiped.displayName);
+                    const timestamp = serverTimestamp();
 
                     setDoc(doc(db, 'matches', generateId(user.uid, userSwiped.id)), {
                         users: {
@@ -165,7 +166,8 @@ const HomeScreen = () => {
                             [userSwiped.id]: userSwiped
                         },
                         userMatched: [user.uid, userSwiped.id],
-                        timeStamped: serverTimestamp()
+                        match_timeStamped: timestamp,
+                        latestMessageTimeStamp: timestamp
                     });
 
                     navigation.navigate("Match", {loggedProfile, userSwiped});

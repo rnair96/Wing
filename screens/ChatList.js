@@ -29,10 +29,18 @@ const ChatList = () => {
   },[user]);
 
 
+  function sortByLatestTimestamp() {
+    return matches.sort((a, b) => new Date(b.latestMessageTimeStamp) - new Date(a.latestMessageTimeStamp));
+  }
+
+
+  console.log("matches",matches);
+
     return matches.length > 0 ? (
       <FlatList
-      data = {matches}
-      keyExtractor = {item => item.id}
+      data = {sortByLatestTimestamp()}
+      // data = {matches}
+      keyExtractor = {item => item.id}//order Flatlist by latest timestamp of last message
       renderItem = {({item}) => <ChatRow matchedDetails = {item}/>
     }/>
     ):

@@ -28,15 +28,19 @@ const MessageScreen = () => {
         ,[matchedDetails, db]);
 
     const sendMessage = () => {
+      const timestamp = serverTimestamp();
         addDoc(collection(db, "matches", matchedDetails.id, "messages"), {
-            timestamp: serverTimestamp(),
+            timestamp: timestamp,
             userId: user.uid,
             displayName: user.displayName,
             photoURL: matchedDetails.users[user.uid].images[0],
             message: input,
-
+            read: false
         })
-        // setMessages([input,...messages]);
+
+        updateDoc(doc(db, 'matches',matchedDetails.id), {
+          latestMessageTimeStamp: timestamp
+        })
 
         const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
         const userName = user.displayName.split(" ")[0];
