@@ -58,21 +58,19 @@ const MessageScreen = () => {
               body: JSON.stringify({
                 to: matchedUser[1].token,
                 title: "New Message from "+userName,
-                body: input
-                // data: {
-                //   type: "message",
-                //   message: matchedUser 
-                // },
+                body: input,
+                data: {
+                  type: "message",
+                  message: matchedDetails 
+                },
               }),
             });
-
         
             const result = await response.json();
         
             if (result.errors) {
               throw new Error(`Failed to send push notification: ${result.errors}`);
             }
-            console.log("are you being sent?", result)
 
             return result.data;
           } catch (error) {

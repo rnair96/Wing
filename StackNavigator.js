@@ -29,34 +29,26 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
     const { user } = useAuth();
-    // const navigation = useNavigation();
-    // const responseListener = useRef();
-    // // const notificationListener = useRef();
+    const navigation = useNavigation();
+    const responseListener = useRef();
 
-
-    // useEffect(() => {
-
-    //   // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-    //   //   console.log("are you here at all?")
-    //   // });
+    useEffect(() => {
     
-    //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
-    //     if(response.notification.request.content.data.type === "message"){
-    //       const matchedUser = response.notification.request.content.data.message;
-    //       alert("matched user", matchedUser);
-    //       navigation.navigate("Home");
-    //       // console.log("matched user", matchedUser);
-    //     } else {
-    //       navigation.navigate("Chat");
-    //     }
+        if(response.notification.request.content.data.type === "message"){
+          const matchedDetails = response.notification.request.content.data.message;
+          navigation.navigate("Message", { matchedDetails });
+        } else {
+          navigation.navigate("Chat");
+        }
         
-    //   });
+      });
     
-    //   return () => {
-    //     Notifications.removeNotificationSubscription(responseListener.current);
-    //   };
-    // }, []);
+      return () => {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }, []);
 
     return (
       <Stack.Navigator screenOptions={{
