@@ -1,6 +1,6 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
-import { onSnapshot, collection, query, where, doc } from 'firebase/firestore';
+import { onSnapshot, collection, query, where, doc, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import useAuth from "../hooks/useAuth";
 import ChatRow from './ChatRow';
@@ -15,7 +15,8 @@ const ChatList = () => {
     onSnapshot(
       query(
         collection(db, "matches"), 
-        where("userMatched", "array-contains", user.uid)),
+        where("userMatched", "array-contains", user.uid),
+        orderBy("latest_message_timestamp", "desc")),
         ( snapshot ) => 
           setMatches(
             snapshot.docs.map((doc)=>(
