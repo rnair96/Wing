@@ -1,11 +1,11 @@
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Keyboard, TouchableOpacity} from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 
@@ -16,6 +16,8 @@ const MessageScreen = () => {
     const [ input, setInput ] = useState();
     const [ messages, setMessages ] = useState([])
     const { user } = useAuth();
+    const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
+
 
     useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
         orderBy("timestamp", "desc")), (snapshot) => {
@@ -27,6 +29,14 @@ const MessageScreen = () => {
         })
         ,[matchedDetails, db]);
 
+    useEffect(()=>{
+      if(messages.length>0 && messages[0].userId !== user.uid && !(messages[0].read)){
+        updateDoc(doc(db, 'matches',matchedDetails.id, "messages", messages[0].id), {
+          read:true,
+        })
+      }
+    },[messages])
+
     const sendMessage = () => {
       const timestamp = serverTimestamp();
         addDoc(collection(db, "matches", matchedDetails.id, "messages"), {
@@ -35,14 +45,13 @@ const MessageScreen = () => {
             displayName: user.displayName,
             photoURL: matchedDetails.users[user.uid].images[0],
             message: input,
-            read: false
+            read: false,
         })
 
         updateDoc(doc(db, 'matches',matchedDetails.id), {
-          latestMessageTimeStamp: timestamp
+          latest_message_timestamp: timestamp
         })
 
-        const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
         const userName = user.displayName.split(" ")[0];
         sendPush(matchedUser, userName);
         setInput("");

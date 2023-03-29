@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import React, { Component } from 'react';
+import { Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 export const UnreadHighlighter= () => {
     return (
-      <View>
-        <Text> This Chat has an Unread Message </Text>
+      <View style={{marginHorizontal:"40%"}}>
+        <MaterialCommunityIcons name="alert-circle" size={30} color="#00BFFF" />
       </View>
     )
 }

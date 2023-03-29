@@ -1,9 +1,9 @@
 import React, {useLayoutEffect, useRef, useState, useEffect} from 'react'
-import { Button, View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ImageBackground, TurboModuleRegistry } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ImageBackground, TurboModuleRegistry } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AntDesign, Entypo, Ionicons} from '@expo/vector-icons';
+import { Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
 import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from '../firebase';
@@ -166,8 +166,8 @@ const HomeScreen = () => {
                             [userSwiped.id]: userSwiped
                         },
                         userMatched: [user.uid, userSwiped.id],
-                        match_timeStamped: timestamp,
-                        latestMessageTimeStamp: timestamp
+                        match_timestamp: timestamp,
+                        latest_message_timestamp: timestamp
                     });
 
                     navigation.navigate("Match", {loggedProfile, userSwiped});

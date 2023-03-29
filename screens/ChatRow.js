@@ -1,38 +1,49 @@
 import { useNavigation } from '@react-navigation/native'
 import { onSnapshot, orderBy, query, collection } from 'firebase/firestore';
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native'
 import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
+import UnreadHighlighter from '../components/UnreadHighlighter';
 
 const ChatRow = ({ matchedDetails }) => {
 
     const  { user } = useAuth();
     const [ matchedUserInfo, setMatchedUserInfo ] = useState(null);
     const [ lastMessage, setLastMessage ] = useState();
+    const [ read, setRead ] = useState();
+    const [ loading, setLoading ] = useState(true);
     const navigator = useNavigation();
    
 
     useEffect(()=>{
-        // console.log("are you here at least?")
         setMatchedUserInfo(getMatchedUserInfo(matchedDetails.users,user.uid));
-        // console.log("matched user", matchedUserInfo)
-        
     },[matchedDetails, user]);
 
+
+    const setVars = (data) => {
+        setLastMessage(data?.message);
+        if(data && data?.userId !== user.uid){
+            setRead(data.read);
+        } else if(data && data?.userId === user.uid){
+            setRead(true);
+        } else {
+            setRead(false);
+        }
+        setLoading(false);
+    }
 
     useEffect(()=>
     onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
         orderBy("timestamp", "desc")), (snapshot) => 
-        setLastMessage(snapshot.docs[0]?.data()?.message))
+        setVars(snapshot.docs[0]?.data())
+        )
         , [matchedDetails, db]);
     
 
-
-//create a loading value
     return ( 
-        matchedUserInfo? (
+        !loading && matchedUserInfo && (
         <View style={{paddingBottom:10, width:"90%"}}>
         <TouchableOpacity style={styles.container} onPress={()=>navigator.navigate("Message",{
             matchedDetails
@@ -42,10 +53,9 @@ const ChatRow = ({ matchedDetails }) => {
             <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5}}>{matchedUserInfo[1]?.displayName}</Text>
             <Text style={{paddingLeft:10}}>{lastMessage || "Say Hi!"}</Text>
          </View>
+         {!read && <UnreadHighlighter/>}
        </TouchableOpacity>
        </View>
-    ):(
-        <Text>Error: Match not appearing</Text>
     )
     )
 
@@ -61,8 +71,6 @@ const styles = StyleSheet.create({
         padding:5,
         shadowColor:"#000",
         borderRadius:15,
-        // borderBottomRightRadius:40,
-        // borderTopRightRadius:40,
         shadowOffset: {
             width: 0,
             height: 1
