@@ -36,7 +36,7 @@ const  MenuScreen = () => {
         <Ionicons name="help" style={{padding:10}} size={30} color = "black"/>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-        <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>        
+        <Image style={styles.iconcontainer} source={require("../images/logo.png")}/>        
         </TouchableOpacity>
         </SafeAreaView>
     )
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     iconcontainer: {
         height: 60,
         width: 60,
+        color:"white",
         borderRadius: 50,
         borderColor:"#00308F",
         borderWidth: 2

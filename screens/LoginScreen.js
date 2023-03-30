@@ -23,7 +23,7 @@ const LoginScreen = () => {
         <View style={{height:"30%", justifyContent:"center", alignItems:"center", justifyContent:"space-evenly"}}>
         <View style={{flexDirection:"row", justifyContent:"center"}}>
         <Text style={{fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman", color:"#00308F"}}>Wing</Text>
-        <Image style = {styles.iconcontainer} source={require("../images/logo2.jpg")}/>
+        <Image style = {styles.iconcontainer} source={require("../images/logo.png")}/>
         </View>
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"#00308F"}}>Find Your Wingman. Go On Missions.</Text>
         </View>
@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     },
     iconcontainer: {
         height:40, 
-        width:40, 
+        width:40,
+        color:"white", 
         borderRadius:50, 
         borderColor:"#00308F", 
         borderWidth:2

@@ -192,7 +192,7 @@ const HomeScreen = () => {
             <Ionicons name="person" size={30} color = "#00BFFF"/>
         </TouchableOpacity>
         <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu", loggedProfile)}>
-            <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
+            <Image style={styles.iconcontainer} source={require("../images/logo.png")}/>
         </TouchableOpacity>
         {/* right:20, top:10 */}
         <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
@@ -321,6 +321,7 @@ const styles = StyleSheet.create({
         width: 60,
         borderRadius: 50,
         bottom: 25,
+        backgroundColor: "white",
         borderColor:"#00BFFF",
         borderWidth: 2
     },
@@ -370,7 +371,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#32de84"
      },
      swipeButtonDown: {
-        // marginHorizontal:"45%",
         bottom: "30%",
         width: 60,
         height: 60,

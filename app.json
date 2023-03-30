@@ -1,16 +1,15 @@
 {
   "expo": {
-    "name": "mission_partner",
+    "name": "Wing",
     "slug": "mission_partner",
-    "version": "1.3.8",
+    "version": "1.4.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/wing_icon.png",
     "userInterfaceStyle": "light",
     "scheme": "com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splash_wing.png",
+      "resizeMode": "contain"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
