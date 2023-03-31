@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
         width: 60,
         borderRadius: 50,
         bottom: 25,
-        backgroundColor: "white",
-        borderColor:"#00BFFF",
+        backgroundColor: "#00BFFF",
+        borderColor:"white",
         borderWidth: 2
     },
     cardscontainer: {

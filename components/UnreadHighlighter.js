@@ -5,7 +5,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const UnreadHighlighter= () => {
     return (
-      <View style={{marginHorizontal:"40%"}}>
+      <View 
+      style={{position:"absolute",left:270}}
+      >
         <MaterialCommunityIcons name="alert-circle" size={30} color="#00BFFF" />
       </View>
     )

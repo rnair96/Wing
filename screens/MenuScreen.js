@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     iconcontainer: {
         height: 60,
         width: 60,
-        color:"white",
+        backgroundColor:"#00BFFF",
         borderRadius: 50,
         borderColor:"#00308F",
         borderWidth: 2

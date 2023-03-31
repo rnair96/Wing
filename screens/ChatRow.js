@@ -6,6 +6,7 @@ import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import UnreadHighlighter from '../components/UnreadHighlighter';
+import getTime from '../lib/getTime';
 
 const ChatRow = ({ matchedDetails }) => {
 
@@ -14,6 +15,7 @@ const ChatRow = ({ matchedDetails }) => {
     const [ lastMessage, setLastMessage ] = useState();
     const [ read, setRead ] = useState();
     const [ loading, setLoading ] = useState(true);
+    const [ timestamp, setTimeStamp ] = useState();
     const navigator = useNavigation();
    
 
@@ -23,7 +25,19 @@ const ChatRow = ({ matchedDetails }) => {
 
 
     const setVars = (data) => {
-        setLastMessage(data?.message);
+        if(data && data?.message?.length>15){
+            const message = data?.message?.slice(0,15)+"..."
+            setLastMessage(message);
+        } else{
+            setLastMessage(data?.message)
+        }
+
+        if(data && data?.timestamp){
+            let milliseconds = data?.timestamp.seconds * 1000 + Math.floor(data?.timestamp.nanoseconds / 1000000);
+            const time = getTime(new Date(milliseconds))
+            setTimeStamp(time);
+        }
+        
         if(data && data?.userId !== user.uid){
             setRead(data.read);
         } else if(data && data?.userId === user.uid){
@@ -48,12 +62,18 @@ const ChatRow = ({ matchedDetails }) => {
         <TouchableOpacity style={styles.container} onPress={()=>navigator.navigate("Message",{
             matchedDetails
         })}>
-         <Image style = {{height:60, width:60, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.images[0]}}/>
+        {/* {!read ? <UnreadHighlighter/>:<View style={{padding:15}}></View>} */}
+        <Image style = {{height:60, width:60, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.images[0]}}/>
+         <View style={{flexDirection:"row"}}>
          <View style={{padding:10}}>
             <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5}}>{matchedUserInfo[1]?.displayName}</Text>
-            <Text style={{paddingLeft:10}}>{lastMessage || "Say Hi!"}</Text>
+            <Text style={{paddingLeft:10}}>{lastMessage|| "Say Hi!"}</Text>
          </View>
-         {!read && <UnreadHighlighter/>}
+         <View style={{position:"absolute", left:190, top:20}}>
+         <Text style={{fontSize:10}}>{timestamp||"New Match"}</Text>
+        </View>
+        {!read && <UnreadHighlighter/>}
+         </View>
        </TouchableOpacity>
        </View>
     )

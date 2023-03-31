@@ -101,7 +101,7 @@ return (
             <Ionicons name="ios-arrow-back" size={30} color = "#00BFFF"/>
             </TouchableOpacity>
           <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Home")}>
-          <Image style={{height:50, width:50, borderRadius:50, borderColor:"#00308F", borderWidth:2}} source={require("../images/logo.png")}/>
+          <Image style={{height:50, width:50, borderRadius:50, backgroundColor:"#00BFFF", borderColor:"#00308F", borderWidth:2}} source={require("../images/logo.png")}/>
           </TouchableOpacity>
           </SafeAreaView>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
