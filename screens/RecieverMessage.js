@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { Text, View, Image } from 'react-native'
 import getTime from '../lib/getTime';
 
