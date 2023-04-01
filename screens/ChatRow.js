@@ -69,10 +69,10 @@ const ChatRow = ({ matchedDetails }) => {
             <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5}}>{matchedUserInfo[1]?.displayName}</Text>
             <Text style={{paddingLeft:10}}>{lastMessage|| "Say Hi!"}</Text>
          </View>
-         <View style={{position:"absolute", left:190, top:20}}>
+         <View style={{position:"absolute", left:190, top:20, flexDirection:"row"}}>
          <Text style={{fontSize:10}}>{timestamp||"New Match"}</Text>
+         {!read && <UnreadHighlighter/>}
         </View>
-        {!read && <UnreadHighlighter/>}
          </View>
        </TouchableOpacity>
        </View>
