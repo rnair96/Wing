@@ -20,7 +20,8 @@ const MessageScreen = () => {
 
 
     useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
-        orderBy("timestamp", "desc")), (snapshot) => {
+        orderBy("timestamp", "desc")), 
+        (snapshot) => {
             setMessages(snapshot.docs.map((doc)=>({
                 id: doc.id,
                 ...doc.data()
@@ -102,8 +103,6 @@ const MessageScreen = () => {
             style={{flex:1}}
             keyboardVerticalOffset={10}>
 
-
-        {/* must create messages for data */}
 
         <TouchableWithoutFeedback 
         // onPress={Keyboard.dismiss()}

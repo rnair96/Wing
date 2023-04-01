@@ -3,9 +3,22 @@ import { Text, View, Image } from 'react-native'
 import getTime from '../lib/getTime';
 
 const RecieverMessage = ({ message })  => {
-    let milliseconds = message.timestamp.seconds * 1000 + Math.floor(message.timestamp.nanoseconds / 1000000);
-    const time = getTime(new Date(milliseconds))
+    const [time, setTime ] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(()=>{
+    
+    if(message && message?.timestamp){
+      let milliseconds = message.timestamp.seconds * 1000 + Math.floor(message.timestamp.nanoseconds / 1000000);
+      setTime(getTime(new Date(milliseconds)));
+      setLoading(false);
+    }
+    
+  },[message])
+
+
     return (
+    !loading && (
     <View style={{ padding:5, maxWidth: 250, marginRight:"auto", alignSelf:"flex-start", flexDirection:"row"}}>
         <Image
             style = {{height: 50, width: 50, borderRadius:50}}
@@ -18,6 +31,8 @@ const RecieverMessage = ({ message })  => {
         <Text style={{fontSize:15, color:"grey"}}>{time}</Text>
         </View>
     </View>
+    )
+
     )
 }
 
