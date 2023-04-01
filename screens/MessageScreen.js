@@ -54,13 +54,16 @@ const MessageScreen = () => {
         })
 
         const userName = user.displayName.split(" ")[0];
-        sendPush(matchedUser, userName);
+
+        if(matchedUser[1]?.token && matchedUser[1]?.token!=="token"){
+          sendPush(userName);
+        }
+
         setInput("");
 
     }
 
-    //use individualized push notification
-    const sendPush = async(matchedUser, userName) => {
+    const sendPush = async(userName) => {
 
           try {
             const response = await fetch('https://exp.host/--/api/v2/push/send', {
