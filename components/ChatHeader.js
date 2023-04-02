@@ -21,19 +21,19 @@ const ChatHeader = ({matchedDetails}) => {
     //call useEffect to update Mute state
 
 
-    const editNotifications = () => {
-        if (mute){
-          console.log("Unmute")
-         //remove user from mute array in match document
-         setMute(false);
-         setModalVisible(!modalVisible)
-        } else {
-          console.log("Mute")
-          //add user.uid to mute array in match document
-          setMute(true);
-          setModalVisible(!modalVisible)
-        }
-      };
+    // const editNotifications = () => {
+    //     if (mute){
+    //       console.log("Unmute")
+    //      //remove user from mute array in match document
+    //      setMute(false);
+    //      setModalVisible(!modalVisible)
+    //     } else {
+    //       console.log("Mute")
+    //       //add user.uid to mute array in match document
+    //       setMute(true);
+    //       setModalVisible(!modalVisible)
+    //     }
+    //   };
 
     const deleteMatch = async () => {
         await deleteDoc(doc(db, 'matches', matchedDetails.id)).then(() => {

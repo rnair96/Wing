@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     iconcontainer: {
+        left:5,
         height:40, 
         width:40,
         backgroundColor:"#00BFFF", 

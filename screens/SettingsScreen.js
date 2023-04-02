@@ -14,6 +14,12 @@ const SettingsScreen = () => {
     const { user, logout } = useAuth();
     const navigation = useNavigation();
     // const [notifications, setNotifications] = useState(true);
+    const [ loadingImages, setLoadingImages ] = useState(false);
+    const [ loadingMatches, setLoadingMatches ] = useState(false);
+    const [ loadingSwipes, setLoadingSwipes ] = useState(false);
+    const [ loadingPasses, setLoadingPasses ] = useState(false);
+
+
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState(user.email)
     const { params } = useRoute();
@@ -57,16 +63,20 @@ const SettingsScreen = () => {
 
     const deleteAll = async () => {
         await deleteInfo().then(()=> {
-            console.log("All Info deleted")
+            if(!loadingImages && !loadingMatches && !loadingPasses && !loadingSwipes){
+                console.log("All Info deleted");
+                deleteUser();
+            }
         }).catch(error => {
-            console.log('There was an error',);
-        }).finally(()=>{
-            deleteUser();
-        }
-        )
+            console.error('There was an error',error);
+        })
     }
 
     const deleteInfo = async () => {
+        setLoadingImages(true);
+        setLoadingMatches(true);
+        setLoadingPasses(true);
+        setLoadingSwipes(true);
         deleteStoredImages();
         deleteMatches();
         deleteSwipeHistory("swipes");
@@ -93,6 +103,9 @@ const SettingsScreen = () => {
 
         if (matches.length>0){
             matches.map((matchID)=>{
+                // deleteMessages(matchID)
+                //make a function to delete messages collection!!
+
                 batch.delete(doc(db,'matches',matchID))
             })
     
@@ -102,8 +115,44 @@ const SettingsScreen = () => {
                 console.error('Error deleting matches: ', error);
             });
         }
+        setLoadingMatches(false);
         
     }
+
+    // const deleteMessages = async (matchedId) => {
+    //     const batch = writeBatch(db);
+    //     const messages =[]
+    //     await getDocs(collection(db,"matches", matchedId, "messages")).then((snapshot) => {
+    //         snapshot.docs.map((doc) => messages.push(doc.id))
+    //     })
+
+    //     if (messages.length>0){
+    //         messages.map((messageID)=>{
+    //             batch.delete(doc(db,'matches', matchedDetails.id, "messages", messageID))
+    //         })
+    
+    //         await batch.commit().then(() => {
+    //             console.log('Messages deleted successfully.');
+    //             deleteMatch();
+    //         }).catch((error) => {
+    //             console.error('Error deleting messages: ', error);
+    //         });
+    //     } else {
+    //       deleteMatch(matchedId);
+    //     }
+        
+    // }
+
+    // const deleteMatch = async (matchedId) => {
+    //     await deleteDoc(doc(db, 'matches', matchedId)).then(() => {
+    //        console.log("Match has been deleted successfully.")
+    //        navigator.navigate("Chat")
+            
+    //     })
+    //     .catch(error => {
+    //         console.log('Error deleting Match',error);
+    //     })
+    // }
 
     const deleteSwipeHistory = async (swipe_collection) => {
         const batch = writeBatch(db);
@@ -124,6 +173,8 @@ const SettingsScreen = () => {
                 console.error('Error deleting',swipe_collection,'history: ', error);
             });
         }
+
+        swipe_collection === "swipes" ? setLoadingSwipes(false): setLoadingPasses(false);
         
     }
 
@@ -155,8 +206,9 @@ const SettingsScreen = () => {
             .catch((error) => {
                 console.error(`Error listing files in folder ${folderName}: ${error}`);
             }); 
-      
+
           }
+          setLoadingImages(false);
     }
 
     // const deleteOthersHistory = async () => {
@@ -308,4 +360,4 @@ const styles = StyleSheet.create({
         }
     });
 
-export default SettingsScreen
+export default SettingsScreen;
