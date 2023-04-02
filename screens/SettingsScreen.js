@@ -102,10 +102,8 @@ const SettingsScreen = () => {
         })
 
         if (matches.length>0){
+            
             matches.map((matchID)=>{
-                // deleteMessages(matchID)
-                //make a function to delete messages collection!!
-
                 batch.delete(doc(db,'matches',matchID))
             })
     
@@ -116,43 +114,8 @@ const SettingsScreen = () => {
             });
         }
         setLoadingMatches(false);
-        
     }
 
-    // const deleteMessages = async (matchedId) => {
-    //     const batch = writeBatch(db);
-    //     const messages =[]
-    //     await getDocs(collection(db,"matches", matchedId, "messages")).then((snapshot) => {
-    //         snapshot.docs.map((doc) => messages.push(doc.id))
-    //     })
-
-    //     if (messages.length>0){
-    //         messages.map((messageID)=>{
-    //             batch.delete(doc(db,'matches', matchedDetails.id, "messages", messageID))
-    //         })
-    
-    //         await batch.commit().then(() => {
-    //             console.log('Messages deleted successfully.');
-    //             deleteMatch();
-    //         }).catch((error) => {
-    //             console.error('Error deleting messages: ', error);
-    //         });
-    //     } else {
-    //       deleteMatch(matchedId);
-    //     }
-        
-    // }
-
-    // const deleteMatch = async (matchedId) => {
-    //     await deleteDoc(doc(db, 'matches', matchedId)).then(() => {
-    //        console.log("Match has been deleted successfully.")
-    //        navigator.navigate("Chat")
-            
-    //     })
-    //     .catch(error => {
-    //         console.log('Error deleting Match',error);
-    //     })
-    // }
 
     const deleteSwipeHistory = async (swipe_collection) => {
         const batch = writeBatch(db);

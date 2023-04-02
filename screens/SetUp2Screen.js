@@ -49,7 +49,10 @@ return (
             <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/3"}/>
           </SafeAreaView>
   
-        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Define Your Profile</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Last Touches</Text>
+
+        <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
+        <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text>
 
         <View style ={{flexDirection:"row", padding:20}}>
             <ImageUpload images = {images} index={0} setImages = {setImages} user={user}/>
@@ -57,6 +60,7 @@ return (
             <ImageUpload images = {images} index={2} setImages = {setImages} user={user}/>
             </View> 
       
+      <Text style={{fontSize:13, fontWeight: "bold", padding:10}}>Your following answers will help Wings feel excited to work with you! Keep each answer 3 lines or less. {'(Don\'t worry, you can edit this later.)'}</Text>
 
       <Text style={styles.formTitle}>What Accomplishments Are You Most Proud Of?</Text>
       <TextInput
@@ -67,13 +71,13 @@ return (
       placeholder={"i.e Completing a marathon with a bad foot"}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={styles.formTitle}>What are some strengths you have?</Text>
+      <Text style={styles.formTitle}>How Would A Wing Benefit From Working With You?</Text>
       <TextInput
       value = {skills}
       multiline
       numberOfLines={3}
       onChangeText = {setSkills} 
-      placeholder={'i.e: Calculating calories and being consistent'}
+      placeholder={'i.e: I\'m consistent everyday and know how to push others to be their best'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
         <Text style={styles.formTitle}>What Do You Do For Fun?</Text>
@@ -82,7 +86,7 @@ return (
       multiline
       numberOfLines={3}
       onChangeText = {setHobbies} 
-      placeholder={'I.e: Trying out new restaurants!'}
+      placeholder={'I.e: Kayaking at a local river while drinking craft beer'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     
 
