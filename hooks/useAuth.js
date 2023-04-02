@@ -58,7 +58,6 @@ export const AuthProvider = ({children}) => {
             },
           }).then((response) => response.json());
       setUser(userData);
-      console.log("userData", userData)
 
       //signs in to firestore db
       const credential = GoogleAuthProvider.credential(idToken , accessToken)
@@ -87,9 +86,7 @@ export const AuthProvider = ({children}) => {
 
   const logout = () => {
     setUser(null);
-    // setLoadingInitial(true);
-    // setLoading(true);
-    signOut(auth).catch((error) => setError(error))
+    signOut(auth).catch((error) => console.error(error))
 }
 
 // const memoedValue = useMemo(
@@ -99,7 +96,7 @@ export const AuthProvider = ({children}) => {
 //     signInWithGoogle//pass error and loading too
 //   }),Hip
 //   [user]
-// );//caches the values
+// );
 
 
   return (

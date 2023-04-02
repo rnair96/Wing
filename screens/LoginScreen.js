@@ -29,7 +29,7 @@ const LoginScreen = () => {
         </View>
         <View style={{marginVertical:"20%",alignItems: 'center', height:"20%", justifyContent:"space-evenly"}}>
         <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
-            <Text style = {styles.textcontainer}>Sign In with Google</Text>
+            <Text style = {styles.textcontainer}>Sign In With Google</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity style={styles.opacitycontainer} onPress={navigation.navigate("SignUp")}>
             <Text style = {styles.textcontainer}>Sign Up Manually</Text>
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     iconcontainer: {
         height:40, 
         width:40,
-        color:"white", 
+        backgroundColor:"#00BFFF", 
         borderRadius:50, 
         borderColor:"#00308F", 
-        borderWidth:2
+        borderWidth:1
     }
 });
 
