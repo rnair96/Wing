@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import useAuth from '../hooks/useAuth';
-import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import ImageUpload from '../components/ImageUpload';
@@ -62,7 +62,7 @@ const EditProfileScreen = () => {
   
 
   const updateUserProfile = () => {
-      setDoc(doc(db, 'users', user.uid), {
+      updateDoc(doc(db, 'users', user.uid), {
           id: user.uid,
           displayName: name,
           email: email,
