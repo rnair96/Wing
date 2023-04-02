@@ -58,7 +58,7 @@ const ChatRow = ({ matchedDetails }) => {
 
     return ( 
         !loading && matchedUserInfo && (
-        <View style={{paddingBottom:10, width:"90%"}}>
+        <View style={{paddingBottom:10, width:"93%"}}>
         <TouchableOpacity style={styles.container} onPress={()=>navigator.navigate("Message",{
             matchedDetails
         })}>

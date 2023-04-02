@@ -28,7 +28,7 @@ const RecieverMessage = ({ message })  => {
         <View style={{left:5, backgroundColor:"#00BFFF", borderBottomLeftRadius:20, borderBottomRightRadius:20, borderTopRightRadius:20}}>
             <Text style={{color:"white", padding:10, fontSize:20}}> {message.message} </Text>
         </View>
-        <Text style={{fontSize:15, color:"grey"}}>{time}</Text>
+        <Text style={{fontSize:12, color:"grey"}}>{time}</Text>
         </View>
     </View>
     )

@@ -23,7 +23,7 @@ const SenderMessage = ({ message }) => {
         <View style={{backgroundColor:"#A9A9A9", borderTopRightRadius:20, borderBottomLeftRadius:20, borderTopLeftRadius:20}}>
           <Text style={{color:"white", padding:10, fontSize:20}}> {message.message} </Text>
         </View>
-        <Text style={{fontSize:15, color:"grey"}}>{time}</Text>
+        <Text style={{fontSize:12, color:"grey"}}>{time}</Text>
         </View>
       </View>
       )
