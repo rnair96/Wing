@@ -43,7 +43,9 @@ const MatchScreen =()=> {
         }
   }
 
-  sendPush(userSwiped, loggedProfile.displayName);
+  if(matchedUser.token && matchedUser.token!=="token"){
+    sendPush(userSwiped, loggedProfile.displayName);
+  }
 
   
     return (

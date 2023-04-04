@@ -57,7 +57,8 @@ const SetUp0Screen = () => {
         }
         if (finalStatus !== 'granted') {
           alert('Failed to get push token for push notification!');
-          return;
+          token = "testing"
+          return token;
         }
         token = (await Notifications.getExpoPushTokenAsync(
           {
