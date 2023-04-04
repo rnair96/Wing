@@ -121,7 +121,8 @@ const HomeScreen = () => {
             unsub = onSnapshot(query(collection(db,"users"), where("id","not-in", [...passedUIds, ...swipedUIds]) )
             ,(snapshot) =>{
                 setProfiles(
-                    snapshot.docs.filter((doc) => doc.id !== user.uid 
+                    snapshot.docs.filter((doc) => doc.id !== user.uid
+                    && (doc.data()?.images?.length > 3 && doc.data()?.mission && doc.data()?.job && doc.data()?.accomplishments) 
                     && (doc.data().gender === genderPreference || genderPreference === "both") 
                     && (doc.data().mission_tag === tagPreference || tagPreference === "All") 
                     && (doc.data().age>=ageMin && doc.data().age<=ageMax)).map((doc) => (
@@ -257,8 +258,7 @@ const HomeScreen = () => {
             // pass swiperef to profile swipe to include swipe function , swipeRef: swipeRef
             containerStyle={{backgroundColor:"transparent"}}
             renderCard={(card)=> {
-                if (card) {
-                
+                console.log("card",card);                
                     return (
                         <View key={card.id} style={styles.cardcontainer}>
                         <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}>
@@ -291,7 +291,6 @@ const HomeScreen = () => {
                     )
                 }
             }
-        }
         />
     </View>
     )}
