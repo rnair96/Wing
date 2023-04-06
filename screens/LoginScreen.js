@@ -2,6 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useLayoutEffect} from 'react'
 import {StyleSheet, ImageBackground, Text, View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import useAuth from '../hooks/useAuth';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 
 const LoginScreen = () => {

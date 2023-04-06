@@ -41,13 +41,16 @@ export const AuthProvider = ({children}) => {
         getUserData(response.authentication.idToken, response.authentication.accessToken);
       } else if (response?.type === 'cancel'){
         setLoading(false);
+        alert("Login incomplete. Please try again.");
+        
       }
       
   }, [response]);
 
 
   const getUserData = async (idToken, accessToken) => {
-    const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+    try{
+      const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -59,6 +62,10 @@ export const AuthProvider = ({children}) => {
       await signInWithCredential(auth, credential).then(()=>{
         setLoading(false);
       });
+    } catch(e){
+      console.log("There was an error")
+    }
+    
   }
     
     
@@ -67,8 +74,6 @@ export const AuthProvider = ({children}) => {
     try {
 
       //gets accesstokens for Google authenticaiton
-      // await WebBrowser.maybeCompleteAuthSession();
-
       await promptAsync({ showInRecents: true, projectNameForProxy:'@rnair96/mission_partner'})
       .then(()=> {
         setLoading(true);

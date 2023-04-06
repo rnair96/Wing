@@ -11,8 +11,9 @@ import generateId from '../lib/generateId'
 import getLocation from '../lib/getLocation';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import registerNotifications from '../lib/registerNotifications';
+import * as WebBrowser from 'expo-web-browser';
 
+WebBrowser.maybeCompleteAuthSession();
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -72,20 +73,6 @@ const HomeScreen = () => {
                 }
                 })();
     },[loggedProfile]);
-
-    //create token if user doesn't have one
-    // useEffect(()=>{
-    //     (async () => {
-    //         if (loggedProfile && (!loggedProfile?.token || (loggedProfile?.token && loggedProfile?.token==="token"))){
-    //             const token = await registerNotifications();
-    //             updateDoc(doc(db, 'users', user.uid), {
-    //                 token: token
-    //             }).catch((error) => {
-    //                 console.log("could not update push token");
-    //             });
-    //         }
-    //     })();
-    // },[loggedProfile])
 
     useEffect(()=>{//birthday checker
         if (loggedProfile && loggedProfile?.birthdate){
