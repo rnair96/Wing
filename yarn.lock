@@ -3951,6 +3951,13 @@ expo-error-recovery@~4.0.1:
   resolved "https://registry.npmjs.org/expo-error-recovery/-/expo-error-recovery-4.0.1.tgz"
   integrity sha512-wceptnRX+N3qCSVTNbIchUFu3GmY30onRH5L66OF8HMLpAIQfrZMLxJfz7SAMJTcr3jxsJ11vSa2l2RaPKgHsQ==
 
+expo-file-system@^15.2.2:
+  version "15.2.2"
+  resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-15.2.2.tgz#a1ddf8aabf794f93888a146c4f5187e2004683a3"
+  integrity sha512-LFkOLcWwlmnjkURxZ3/0ukS35OswX8iuQknLHRHeyk8mUA8fpRPPelD/a1lS+yclqfqavMJmTXVKM1Nsq5XVMA==
+  dependencies:
+    uuid "^3.4.0"
+
 expo-file-system@~15.1.0, expo-file-system@~15.1.1:
   version "15.1.1"
   resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-15.1.1.tgz"
@@ -3969,6 +3976,18 @@ expo-image-loader@~4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-4.0.0.tgz#a17e5f95a4c1671791168dd5dfc221bf2f88480c"
   integrity sha512-hVMhXagsO1cSng5s70IEjuJAuHy2hX/inu5MM3T0ecJMf7L/7detKf22molQBRymerbk6Tzu+20h11eU0n/3jQ==
+
+expo-image-loader@~4.1.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-4.1.1.tgz#efadbb17de1861106864820194900f336dd641b6"
+  integrity sha512-ciEHVokU0f6w0eTxdRxLCio6tskMsjxWIoV92+/ZD37qePUJYMfEphPhu1sruyvMBNR8/j5iyOvPFVGTfO8oxA==
+
+expo-image-manipulator@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-11.1.1.tgz#bb54df80e98abc9798876e3f70596a5b880168c9"
+  integrity sha512-W9LfJK/IL7EhhkkC1JQnEX/1S9B09rcGasJiQjXc2s1bEsrQnqXvXEv7shUW8b/L8rE+ynf+XvvDE+YIDL7oFg==
+  dependencies:
+    expo-image-loader "~4.1.0"
 
 expo-image-picker@~14.0.2:
   version "14.0.3"

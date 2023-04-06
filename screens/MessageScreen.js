@@ -55,7 +55,7 @@ const MessageScreen = () => {
 
         const userName = user.displayName.split(" ")[0];
 
-        if(matchedUser[1]?.token && matchedUser[1].token!=="token"){
+        if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
           sendPush(userName);
         }
 

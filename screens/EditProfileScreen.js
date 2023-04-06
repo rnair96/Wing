@@ -13,7 +13,6 @@ import TagPicker from '../components/TagPicker';
 
 const EditProfileScreen = () => {
   const { user } = useAuth();
-  const [ images, setImages ]= useState([]);
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
   const [ mission, setMission ] = useState(null);
@@ -27,6 +26,9 @@ const EditProfileScreen = () => {
   const [ incompleteForm, setIncompleteForm ] = useState(true);
   const [ email, setEmail ] = useState(user.email);
   const [ name, setName ] = useState(user.displayName.split(" ")[0])
+  const [ url1, setUrl1] = useState(null);
+  const [ url2, setUrl2] = useState(null);
+  const [ url3, setUrl3] = useState(null);
 
 
   const { params } = useRoute();
@@ -34,7 +36,9 @@ const EditProfileScreen = () => {
 
   useEffect(()=>{
     if (profile) {
-        setImages(profile.images);
+        setUrl1(profile.images[0]);
+        setUrl2(profile.images[1]);
+        setUrl3(profile.images[2]);
         setJob(profile.job);
         setAge(parseInt(profile.age));
         setMission(profile.mission);
@@ -55,10 +59,10 @@ const EditProfileScreen = () => {
   const navigation = useNavigation();
 
   useEffect(()=>{
-    const form = !images||(images && images.length < 3)||!gender||!age||!mission||!accomplishments||!skills||!idealwing||!location||!hobbies;
+    const form =  !url1||!url2||!url3||!gender||!age||!mission||!accomplishments||!skills||!idealwing||!location||!hobbies;
     setIncompleteForm(form);
 
-  },[images, images?.length ,gender, age,mission, accomplishments, skills, idealwing, location, hobbies])
+  },[url1, url2, url3 ,gender, age,mission, accomplishments, skills, idealwing, location, hobbies])
   
 
   const updateUserProfile = () => {
@@ -66,7 +70,7 @@ const EditProfileScreen = () => {
           id: user.uid,
           displayName: name,
           email: email,
-          images: images,
+          images: [url1, url2, url3],
           job: job,
           age: age,
           gender: gender,
@@ -159,9 +163,9 @@ return (
   
 
         <View style ={{flexDirection:"row", padding:20}}>
-            <ImageUpload images = {images} index={0} setImages = {setImages} user={user}/>
-            <ImageUpload images = {images} index={1} setImages = {setImages} user={user}/>
-            <ImageUpload images = {images} index={2} setImages = {setImages} user={user}/>
+            <ImageUpload url = {url1} setURL = {setUrl1} index={0} user={user}/>
+            <ImageUpload url = {url2} setURL = {setUrl2} index={1} user={user}/>
+            <ImageUpload url = {url3} setURL = {setUrl3} index={2} user={user}/>
             </View> 
 
       <Text style={styles.formTitle}>Hobbies</Text>

@@ -1,12 +1,7 @@
-import React, { createContext, useContext } from 'react'
-import { useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signOut }from "firebase/auth";
 import { auth } from '../firebase';
-import * as WebBrowser from 'expo-web-browser';
-
-
-WebBrowser.maybeCompleteAuthSession();//dismiss popup
 
 
 const AuthContext = createContext({});
@@ -15,7 +10,6 @@ const AuthContext = createContext({});
 export const AuthProvider = ({children}) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
-
 
 
     const [request, response, promptAsync] = Google.useAuthRequest({
@@ -33,13 +27,11 @@ export const AuthProvider = ({children}) => {
         if (authuser) {
           //logged in
           setUser(authuser);
-          // setLoadingInitial(false);
         } else {
           //Not logged in...
           setUser(null);
         }
 
-        // setLoadingInitial(false);
       });
     }, []);
 
@@ -47,7 +39,10 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
       if (!user && response?.type === 'success') {        
         getUserData(response.authentication.idToken, response.authentication.accessToken);
+      } else if (response?.type === 'cancel'){
+        setLoading(false);
       }
+      
   }, [response]);
 
 
@@ -72,6 +67,7 @@ export const AuthProvider = ({children}) => {
     try {
 
       //gets accesstokens for Google authenticaiton
+      // await WebBrowser.maybeCompleteAuthSession();
 
       await promptAsync({ showInRecents: true, projectNameForProxy:'@rnair96/mission_partner'})
       .then(()=> {
@@ -107,7 +103,6 @@ export const AuthProvider = ({children}) => {
       signInWithGoogle}}
        >
        {!loading && children}
-       {/* !loadingInitial &&  */}
     </AuthContext.Provider>
   )
 }

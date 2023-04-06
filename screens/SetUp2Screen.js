@@ -11,17 +11,21 @@ const SetUp2Screen = () => {
   const [ accomplishments, setAccomplishments ] = useState(null);
   const [ skills, setSkills ] = useState(null);
   const [ hobbies, setHobbies ] = useState(null);
-  const [ images, setImages ]= useState([]);
+  const [ url1, setUrl1] = useState(null);
+  const [ url2, setUrl2] = useState(null);
+  const [ url3, setUrl3] = useState(null);
+
 
   const navigation = useNavigation();
   const { params } = useRoute();
   const user = params; 
 
-  const incompleteform = !images||(images && images.length < 3)||!accomplishments||!skills||!hobbies;
+  const incompleteform = !url1||!url2||!url3||!accomplishments||!skills||!hobbies;
+
 
   const updateUserProfile = () => {
       updateDoc(doc(db, 'users', user.id), {
-          images: images,
+          images: [url1, url2, url3],
           accomplishments: accomplishments,
           skills: skills,
           hobbies: hobbies,
@@ -55,9 +59,9 @@ return (
         <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text>
 
         <View style ={{flexDirection:"row", padding:20}}>
-            <ImageUpload images = {images} index={0} setImages = {setImages} user={user}/>
-            <ImageUpload images = {images} index={1} setImages = {setImages} user={user}/>
-            <ImageUpload images = {images} index={2} setImages = {setImages} user={user}/>
+            <ImageUpload url = {url1 } setURL = {setUrl1} index={0} user={user}/>
+            <ImageUpload url = {url2 } setURL = {setUrl2} index={1} user={user}/>
+            <ImageUpload url = {url3 } setURL = {setUrl3} index={2} user={user}/>
             </View> 
       
       <Text style={{fontSize:13, fontWeight: "bold", padding:10}}>Your following answers will help Wings feel excited to work with you! Keep each answer 3 lines or less. {'(Don\'t worry, you can edit this later.)'}</Text>

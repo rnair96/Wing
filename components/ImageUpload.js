@@ -4,65 +4,67 @@ import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { storage } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase/storage";
+import * as FileSystem from 'expo-file-system';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 
-const ImageUpload = ({ images, index, setImages, user}) => {
-    const [ image, setImage ]= useState(null);
-    const [ progress, setProgress] = useState(null);
+const ImageUpload = ({ url, setURL, index, user}) => {
+    const [ image, setImage ]= useState(url);
+    // const [ progress, setProgress] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
  
 
     useEffect(()=>{
-      if (images && images?.length > index) {
-        setImage(images[index])
-      }
-    },[images])
+      setImage(url);
+    },[url])
 
     const uploadFirebase = (file, path) => {
-      const metadata = {
-        contentType: 'image/jpeg',
-      };
+      try{
 
-      const storageRef = ref(storage, `/images/${path}`);
-      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-  
+        const metadata = {
+          contentType: 'image/jpeg',
+        };
+
+        const storageRef = ref(storage, `/images/${path}`);
+        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
         uploadTask.on(
           "state_changed",
           (snapshot) => {
             const progressbar = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            setProgress(progressbar);
+            // setProgress(progressbar);
             setModalVisible(true);
 
                     // progressBar.style.width = `${progress}%`;
                     console.log('Upload is ' + progressbar + '% done');
                     switch (snapshot.state) {
                         case 'paused':
-                            console.log('Upload is paused');
-                            break;
+                          throw new Error('Paused during Image upload');
                         case 'running':
                             console.log('Upload is running');
                             break;
                     }
           },
           (error) => {
-            console.log("error", error);
+            throw new Error('Error uploading Image',error);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((url) => {
                 setModalVisible(false);
                 setImage(url);
+                setURL(url);
+                file.close();
 
-                if(images.length>index){
-                  const arr = images;
-                  arr.splice(index,0,url)
-                  setImages(arr);
-                } else {
-                  setImages([...images,url])
-                }
           
               });
           }
         );
+
+      }  catch (e) {
+        // setProgress(null);
+        setModalVisible(false);
+        alert("There was an error uploading your image. Please try again.")
+      }
         
       }
 
@@ -78,16 +80,70 @@ const ImageUpload = ({ images, index, setImages, user}) => {
           const path = result.assets[0].uri;
           const fileName = path.split("/").pop();
 
+          const maxSizeInBytes = 4 * 1024 * 1024; // 4 MB in bytes
 
-          const response = await fetch(path);
-          const blob = await response.blob();
-          // const imagefile = new File([blob], fileName);
+          try{
+
+            if (!(path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png'))) {
+              throw new Error("file-not-image");
+            }
+
+            const fileInfo = await FileSystem.getInfoAsync(path);
 
 
-          const fileNameFull = user.id+"/"+index+"/"+fileName
-          uploadFirebase(blob, fileNameFull);
-          
+            // console.log("image size",fileInfo.size);
+
+            let uri;
+  
+            if (fileInfo.size < maxSizeInBytes) {
+
+              uri = path;
+  
+            } else {
+  
+              const compression = maxSizeInBytes / fileInfo.size;
+  
+              // Compress the image again with the calculated compression level
+              const compressedImage = ImageManipulator.manipulateAsync(path, [], {
+                compress: compression,
+                // format: ImageManipulator.SaveFormat.PNG
+              });
+  
+              const compressedImageInfo = await FileSystem.getInfoAsync(
+                compressedImage.uri
+              );
+  
+              // console.log("compressed image size", compressedImageInfo.size)
+  
+  
+              // const imageResult = await compressImage(uri);
+              // const smallerThanMaxSize = await sizeIsLessThanMB(imageResult.uri, MAX_FILE_SIZE_MB);
+              if (compressedImageInfo.size > maxSizeInBytes) {
+                throw new Error('image-too-large');
+              }
+              // imageBlob = await getImageBlob(imageResult.uri);
+              uri = (await compressedImage).uri
+            }
+            
+
+            const response = await fetch(uri);
+            const blob = await response.blob();
+  
+            const fileNameFull = user.id+"/"+index+"/"+fileName
+            uploadFirebase(blob, fileNameFull);
+
+          }catch(e){
+            if(e.message.includes('image-too-large')){
+              alert("Image was too large");
+            }
+            else if(e.message.includes('file-not-image')) {
+              alert("Please upload only images")
+            }
+            // console.log("there was an error",e);
+          }
         }
+
+         
     };
 
     const getImageNameFromUrl = (imageUrl) => {
@@ -104,16 +160,13 @@ const ImageUpload = ({ images, index, setImages, user}) => {
 
     const imageRef = ref(storage, imageName);
 
-    // console.log("imageref", imageRef)
 
     // Delete the file
       await deleteObject(imageRef)
       .then(() => {
         console.log("File deleted successfully.");
         setImage(null);
-        const arr = images;
-        arr.splice(index,1);
-        setImages(arr);
+        setURL(null);
       })
       .catch((error) => {
         console.error("Error deleting file: ", error);
@@ -149,8 +202,8 @@ const ImageUpload = ({ images, index, setImages, user}) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{fontSize:18, textAlign:"center", paddingBottom:10, fontWeight:"bold"}}>Uploading Image</Text>
-            <Text style={{fontSize:14, textAlign:"center", fontWeight:"bold", color:"#00308F"}}>{progress}% Complete</Text>
+            <Text style={{fontSize:16, textAlign:"center", paddingBottom:10, fontWeight:"bold"}}>Uploading Image</Text>
+            {/* <Text style={{fontSize:14, textAlign:"center", fontWeight:"bold", color:"#00308F"}}>{progress}% Complete</Text> */}
           </View>
           </View>
       </Modal>

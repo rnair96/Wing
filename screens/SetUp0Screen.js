@@ -8,9 +8,7 @@ import BirthdayInput from '../components/BirthdayInput';
 import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
-import {applicationId} from "expo-application";
+import registerNotifications from '../lib/registerNotifications';
 
 
 
@@ -30,50 +28,12 @@ const SetUp0Screen = () => {
         (async () => {
           const geoLocation = await getLocation()
           setLocation(geoLocation)
-          const pushtoken = await registerForPushNotificationsAsync()
+          const pushtoken = await registerNotifications();
           setToken(pushtoken)
         })();
       }, []);
 
-
-    
-    async function registerForPushNotificationsAsync() {
-      let token;    
-      if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('default', {
-          name: 'default',
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#FF231F7C',
-        });
-      }
-    
-      if (Device.isDevice) {
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-          const { status } = await Notifications.requestPermissionsAsync();
-          finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-          alert('Failed to get push token for push notification!');
-          token = "testing"
-          return token;
-        }
-        token = (await Notifications.getExpoPushTokenAsync(
-          {
-          experienceId: '@rnair96/mission_partner',
-          development: false,
-          applicationId: applicationId || undefined,
-        }
-        )).data;
-      } else {
-        alert('Must use physical device for Push Notifications');
-        token="testing"
-      }
-    
-      return token;
-    }
+  
     
 
     const incompleteform = !gender||!age||!location||!job;
