@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useLayoutEffect} from 'react'
-import {StyleSheet, ImageBackground, Text, View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import React, { useLayoutEffect, useState } from 'react'
+import {StyleSheet, ImageBackground, Text, View, SafeAreaView, TouchableOpacity, Image, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import useAuth from '../hooks/useAuth';
 import * as WebBrowser from 'expo-web-browser';
 
@@ -8,7 +8,9 @@ WebBrowser.maybeCompleteAuthSession();
 
 
 const LoginScreen = () => {
-    const { signInWithGoogle } = useAuth();
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+    const { signInWithGoogle, logInManually } = useAuth();
     const navigation = useNavigation();
 
     useLayoutEffect(() => {
@@ -23,6 +25,9 @@ const LoginScreen = () => {
         resizeMode='cover'
         style = {[styles.container]} 
         source={require("../images/pilots2.jpeg")}>
+        <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
+        >
         <View style={{height:"30%", justifyContent:"center", alignItems:"center", justifyContent:"space-evenly"}}>
         <View style={{flexDirection:"row", justifyContent:"center"}}>
         <Text style={{fontWeight:"bold", fontSize:40, fontFamily:"Times New Roman", color:"#00308F"}}>Wing</Text>
@@ -30,17 +35,38 @@ const LoginScreen = () => {
         </View>
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"#00308F"}}>Find Your Wingman. Go On Missions.</Text>
         </View>
-        <View style={{marginVertical:"20%",alignItems: 'center', height:"20%", justifyContent:"space-evenly"}}>
-        <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
-            <Text style = {styles.textcontainer}>Sign In With Google</Text>
-        </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.opacitycontainer} onPress={navigation.navigate("SignUp")}>
-            <Text style = {styles.textcontainer}>Sign Up Manually</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.opacitycontainer}>
+        </TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{marginVertical:"10%", marginHorizontal:"20%", alignItems: 'center', height:"45%", justifyContent:"space-evenly", backgroundColor:"#00308F", opacity:0.8, borderRadius:20}}
+            keyboardVerticalOffset={15}> 
+        <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"white"}}>Email</Text>
+        <TextInput
+        value = {email}
+        onChangeText = {setEmail}
+        placeholder={'example@example.com'}
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white"}}/>
+        <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"white"}}>Password</Text>
+        <TextInput
+        value = {password}
+        onChangeText = {setPassword}
+        type='password'
+        placeholder={'*************'}
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white"}}/>
+        <TouchableOpacity style={styles.opacitycontainer} onPress={()=>logInManually(email, password)}>
             <Text style = {styles.textcontainer}>Log In</Text>
-        </TouchableOpacity> */}
-        </View>
+        </TouchableOpacity>
+        <Text style={{fontWeight:"bold", fontSize:15, fontFamily:"Times New Roman", color:"white"}}>Or</Text>
+        <TouchableOpacity style={styles.opacitycontainer} onPress={()=>navigation.navigate("SignUp")}>
+            <Text style = {styles.textcontainer}>Create New Account</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
+            <View style={{flexDirection:"row"}}>
+            <Image style={{height:20,width:20, right:10}} source={require("../images/google_icon.png")}/>
+            <Text style = {styles.textcontainer}>Sign In With Google</Text>
+            </View>
+        </TouchableOpacity>
+        </KeyboardAvoidingView>
         </ImageBackground>
     </SafeAreaView>
     )
@@ -52,7 +78,7 @@ const styles = StyleSheet.create({
     },
     opacitycontainer: {
         backgroundColor: "white",
-        padding: 5,
+        padding: 10,
         borderRadius: 10,
         width:200,
         alignItems:"center"

@@ -22,6 +22,7 @@ import SetUp0Screen from './screens/SetUp0Screen';
 import HelpScreen from './screens/HelpScreen';
 import * as Notifications from 'expo-notifications';
 import { useNavigation } from '@react-navigation/native';
+import SignUpScreen from './screens/SignUpScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -82,9 +83,10 @@ const StackNavigator = () => {
             </Stack.Group>
             </>
         ) : (
-
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false}}/>
         )}
+         <Stack.Screen name="SignUp" component={SignUpScreen}/>
+
         
       </Stack.Navigator>
     )

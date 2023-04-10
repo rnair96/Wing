@@ -9,12 +9,15 @@ import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
 import { Ionicons} from '@expo/vector-icons';
 import TagPicker from '../components/TagPicker';
+import registerNotifications from '../lib/registerNotifications';
 
 
 const EditProfileScreen = () => {
   const { user } = useAuth();
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
+  const [ oldtoken, setOldToken ] = useState(null);
+  const [ newtoken, setNewToken ] = useState(null);
   const [ mission, setMission ] = useState(null);
   const [ missiontag, setMissionTag ] = useState("Personal Growth");
   const [ gender, setGender ] = useState("male");
@@ -51,6 +54,7 @@ const EditProfileScreen = () => {
         setMissionTag(profile.mission_tag);
         setEmail(profile.email);
         setName(profile.displayName)
+        setOldToken(profile.token);
     }
 
   },[profile])
@@ -63,7 +67,15 @@ const EditProfileScreen = () => {
     setIncompleteForm(form);
 
   },[url1, url2, url3 ,gender, age,mission, accomplishments, skills, idealwing, location, hobbies])
-  
+
+  useEffect(()=>{
+    if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")){
+      const new_token = registerNotifications();
+      setNewToken(new_token);
+    }
+
+  },[oldtoken])
+
 
   const updateUserProfile = () => {
       updateDoc(doc(db, 'users', user.uid), {
@@ -80,7 +92,8 @@ const EditProfileScreen = () => {
           ideal_wing: idealwing,
           hobbies: hobbies,
           mission_tag: missiontag,
-          timestamp: serverTimestamp()
+          timestamp: serverTimestamp(),
+          token: newtoken
       }).then(()=> {
             navigation.navigate("Home");
       }).catch((error) => {

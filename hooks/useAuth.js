@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
-import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signOut }from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile }from "firebase/auth";
 import { auth } from '../firebase';
 
 
@@ -68,7 +68,6 @@ export const AuthProvider = ({children}) => {
     
   }
     
-    
 
   const signInWithGoogle = async () => {
     try {
@@ -82,6 +81,46 @@ export const AuthProvider = ({children}) => {
     }catch (e) {
       console.log("error with login", e)
     }
+  }
+
+
+  const signUpManually = async (email, password, name) => {
+    setLoading(true);
+
+    await createUserWithEmailAndPassword(auth, email, password)
+    .then(async(userCredential) => {
+      const user = userCredential.user;
+
+      await updateProfile(user, { displayName : name, password : password});
+      console.log("User created and display name updated:", user);
+    
+    setUser(user);
+
+    })
+    .catch((error) => {
+    const errorMessage = error.message;
+    console.log("error in sign up", errorMessage)
+  });
+  setLoading(false);
+}
+
+  const logInManually = async (email, password) => {
+    setLoading(true);
+
+    await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      console.log("user logged in",user)
+      setUser(user)
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      console.log("error in log in", errorMessage)
+
+    });
+
+    setLoading(false);
   }
       
 
@@ -105,7 +144,9 @@ export const AuthProvider = ({children}) => {
     value={{ 
       user,
       logout,
-      signInWithGoogle}}
+      signInWithGoogle,
+      signUpManually,
+      logInManually}}
        >
        {!loading && children}
     </AuthContext.Provider>

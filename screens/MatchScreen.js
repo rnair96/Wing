@@ -43,7 +43,7 @@ const MatchScreen =()=> {
         }
   }
 
-  if(matchedUser.token && matchedUser.token!=="token" && matchedUser.token!=="not_granted"){
+  if(userSwiped.token && userSwiped.token!=="token" && userSwiped.token!=="not_granted"){
     sendPush(userSwiped, loggedProfile.displayName);
   }
 

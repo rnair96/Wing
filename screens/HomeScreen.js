@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo, Ionicons} from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc } from "firebase/firestore";
+import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit } from "firebase/firestore";
 import { db } from '../firebase';
 import generateId from '../lib/generateId'
 import getLocation from '../lib/getLocation';
@@ -120,14 +120,18 @@ const HomeScreen = () => {
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
             const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
 
-            unsub = onSnapshot(query(collection(db,"users"), where("id","not-in", [...passedUIds, ...swipedUIds]) )
+            unsub = onSnapshot(query(collection(db,"users"), where("id","not-in", [...passedUIds, ...swipedUIds, ...[user.uid]]), limit(10))
             ,(snapshot) =>{
                 setProfiles(
-                    snapshot.docs.filter((doc) => doc.id !== user.uid
-                    && (doc.data()?.images?.length > 3 && doc.data()?.mission && doc.data()?.job && doc.data()?.accomplishments) 
+                    snapshot.docs
+                    .filter(
+                        (doc) => 
+                    (doc.data()?.images?.length > 2 && doc.data()?.mission && doc.data()?.job && doc.data()?.accomplishments) 
                     && (doc.data().gender === genderPreference || genderPreference === "both") 
                     && (doc.data().mission_tag === tagPreference || tagPreference === "All") 
-                    && (doc.data().age>=ageMin && doc.data().age<=ageMax)).map((doc) => (
+                    && (doc.data().age>=ageMin && doc.data().age<=ageMax)
+                    )
+                    .map((doc) => (
                     {
                         id: doc.id,
                         ...doc.data()
@@ -136,7 +140,6 @@ const HomeScreen = () => {
                     
                 )
             })
-
         }
 
         fetchCards();
@@ -260,7 +263,6 @@ const HomeScreen = () => {
             // pass swiperef to profile swipe to include swipe function , swipeRef: swipeRef
             containerStyle={{backgroundColor:"transparent"}}
             renderCard={(card)=> {
-                console.log("card",card);                
                     return (
                         <View key={card.id} style={styles.cardcontainer}>
                         <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}>
