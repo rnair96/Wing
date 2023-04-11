@@ -72,6 +72,8 @@ const EditProfileScreen = () => {
     if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")){
       const new_token = registerNotifications();
       setNewToken(new_token);
+    } else {
+      setNewToken(oldtoken);
     }
 
   },[oldtoken])
