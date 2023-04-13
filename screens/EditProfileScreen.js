@@ -17,7 +17,7 @@ const EditProfileScreen = () => {
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
   const [ oldtoken, setOldToken ] = useState(null);
-  const [ newtoken, setNewToken ] = useState(null);
+  const [ newtoken, setNewToken ] = useState("not_granted");
   const [ mission, setMission ] = useState(null);
   const [ missiontag, setMissionTag ] = useState("Personal Growth");
   const [ gender, setGender ] = useState("male");
@@ -69,12 +69,14 @@ const EditProfileScreen = () => {
   },[url1, url2, url3 ,gender, age,mission, accomplishments, skills, idealwing, location, hobbies])
 
   useEffect(()=>{
+    (async () => {
     if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")){
-      const new_token = registerNotifications();
+      const new_token = await registerNotifications();
       setNewToken(new_token);
     } else {
       setNewToken(oldtoken);
     }
+  })();
 
   },[oldtoken])
 
