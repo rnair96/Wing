@@ -36,10 +36,13 @@ const LoginScreen = () => {
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"#00308F"}}>Find Your Wingman. Go On Missions.</Text>
         </View>
         </TouchableWithoutFeedback>
+
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{marginVertical:"10%", marginHorizontal:"20%", alignItems: 'center', height:"45%", justifyContent:"space-evenly", backgroundColor:"#00308F", opacity:0.8, borderRadius:20}}
-            keyboardVerticalOffset={15}> 
+            style={{height:"50%"}}
+            keyboardVerticalOffset={5}
+            > 
+        <View style={{marginVertical:"10%", marginHorizontal:"20%", alignItems: 'center', height:"100%", justifyContent:"space-evenly", backgroundColor:"#00308F", opacity:0.8, borderRadius:20}}>
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"white"}}>Email</Text>
         <TextInput
         value = {email}
@@ -56,6 +59,7 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>logInManually(email, password)}>
             <Text style = {styles.textcontainer}>Log In</Text>
         </TouchableOpacity>
+        {/* </KeyboardAvoidingView> */}
         <Text style={{fontWeight:"bold", fontSize:15, fontFamily:"Times New Roman", color:"white"}}>Or</Text>
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>navigation.navigate("SignUp")}>
             <Text style = {styles.textcontainer}>Create New Account</Text>
@@ -66,6 +70,7 @@ const LoginScreen = () => {
             <Text style = {styles.textcontainer}>Sign In With Google</Text>
             </View>
         </TouchableOpacity>
+        </View>
         </KeyboardAvoidingView>
         </ImageBackground>
     </SafeAreaView>
