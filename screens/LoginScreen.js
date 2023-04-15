@@ -70,6 +70,12 @@ const LoginScreen = () => {
             <Text style = {styles.textcontainer}>Sign In With Google</Text>
             </View>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
+            <View style={{flexDirection:"row"}}>
+            <Image style={{height:20,width:20, right:10}} source={require("../images/google_icon.png")}/>
+            <Text style = {styles.textcontainer}>Sign In With Apple</Text>
+            </View>
+        </TouchableOpacity>
         </View>
         </KeyboardAvoidingView>
         </ImageBackground>

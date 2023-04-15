@@ -6,6 +6,7 @@ import { storage } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase/storage";
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
+import checkInappropriateContent from '../lib/checkInappropriateContent';
 
 
 const ImageUpload = ({ url, setURL, index, user}) => {
@@ -79,10 +80,15 @@ const ImageUpload = ({ url, setURL, index, user}) => {
         if (!result.canceled) {
           const path = result.assets[0].uri;
           const fileName = path.split("/").pop();
-
           const maxSizeInBytes = 4 * 1024 * 1024; // 4 MB in bytes
 
           try{
+            const isAppropriate = await checkInappropriateContent(path);
+              if (!isAppropriate) {
+                throw new Error("image-not-appropriate");
+                // alert('Inappropriate content detected. Please choose another image.');
+              // return;
+          }
 
             if (!(path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png'))) {
               throw new Error("file-not-image");
@@ -135,9 +141,14 @@ const ImageUpload = ({ url, setURL, index, user}) => {
           }catch(e){
             if(e.message.includes('image-too-large')){
               alert("Image was too large");
+              return;
             }
             else if(e.message.includes('file-not-image')) {
-              alert("Please upload only images")
+              alert("Please upload only images");
+              return;
+            } else if(e.message.includes('image-not-appropriate')){
+              alert('Inappropriate content detected. Please choose another image.');
+              return;
             }
             // console.log("there was an error",e);
           }
