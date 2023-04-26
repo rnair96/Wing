@@ -10,7 +10,7 @@ WebBrowser.maybeCompleteAuthSession();
 const LoginScreen = () => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
-    const { signInWithGoogle, logInManually } = useAuth();
+    const { signInWithGoogle, signInWithApple, logInManually } = useAuth();
     const navigation = useNavigation();
 
     useLayoutEffect(() => {
@@ -70,9 +70,9 @@ const LoginScreen = () => {
             <Text style = {styles.textcontainer}>Sign In With Google</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
+        <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithApple}>
             <View style={{flexDirection:"row"}}>
-            <Image style={{height:20,width:20, right:10}} source={require("../images/google_icon.png")}/>
+            <Image style={{height:20,width:20, right:12}} source={require("../images/appleicon.png")}/>
             <Text style = {styles.textcontainer}>Sign In With Apple</Text>
             </View>
         </TouchableOpacity>

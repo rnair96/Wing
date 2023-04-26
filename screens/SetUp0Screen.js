@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import useAuth from '../hooks/useAuth';
-import { useNavigation, useRoute } from '@react-navigation/core';
-import { registerIndieID } from 'native-notify';
+import { useNavigation } from '@react-navigation/core';
 import getLocation from '../lib/getLocation';
 import BirthdayInput from '../components/BirthdayInput';
 import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
-
-
 
 const SetUp0Screen = () => {
     const { user } = useAuth();
@@ -20,12 +17,15 @@ const SetUp0Screen = () => {
     const [ location, setLocation ] = useState(null);
     const [ birthdate, setBirthDate ] = useState(null);
     const [ token, setToken ] = useState(null);
-
+    const [ name, setName ] = useState(null);
+    const [ isnameNull, setNameNull] = useState(false);
 
     const navigation = useNavigation();
 
     useEffect(() => {
         (async () => {
+          const user_name = getName();
+          setName(user_name);
           const geoLocation = await getLocation()
           setLocation(geoLocation)
           const pushtoken = await registerNotifications();
@@ -33,15 +33,23 @@ const SetUp0Screen = () => {
         })();
       }, []);
 
-  
-    
+      const getName = () => {
+        if(user.displayName && user.displayName!=="" && user.displayName!=="null" && user.displayName!==null){
+          return user.displayName.split(" ")[0];
+        } else if (user?.providerData?.length > 0 && user?.providerData[0]?.displayName!== "" && user?.providerData[0]?.displayName!== "null" && user?.providerData[0]?.displayName!==null){
+          return user.providerData[0].displayName.split(" ")[0];
+        } else{
+          setNameNull(true);
+          return null;
+        }
+      }
 
-    const incompleteform = !gender||!age||!location||!job;
+    const incompleteform = !gender||!age||!location||!job||!name;
 
     const createUserProfile = () => {
         setDoc(doc(db, 'users', user.uid), {
             id: user.uid,
-            displayName: user.displayName.split(" ")[0],
+            displayName: name,
             email: user.email,
             job: job,
             age: age,
@@ -73,7 +81,19 @@ const SetUp0Screen = () => {
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
         </SafeAreaView>
 
+
         <View style ={{flexDirection:"column", alignItems:"center"}}>
+
+        {isnameNull && (
+          <View>
+          <Text style={styles.formTitle}>What's Your First Name?</Text>
+          <TextInput
+          onChangeText = {setName} 
+          placeholder={'John'}
+          style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/> 
+          </View>
+        )
+        }
         <Text style={styles.formTitle}>Enter Your BirthDate</Text>
         
           <BirthdayInput setAge={setAge} birthdate={birthdate} setBirthDate={setBirthDate}/>

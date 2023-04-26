@@ -83,12 +83,12 @@ const ImageUpload = ({ url, setURL, index, user}) => {
           const maxSizeInBytes = 4 * 1024 * 1024; // 4 MB in bytes
 
           try{
-            const isAppropriate = await checkInappropriateContent(path);
-              if (!isAppropriate) {
-                throw new Error("image-not-appropriate");
-                // alert('Inappropriate content detected. Please choose another image.');
-              // return;
-          }
+          //   const isAppropriate = await checkInappropriateContent(path);
+          //     if (!isAppropriate) {
+          //       throw new Error("image-not-appropriate");
+          //       // alert('Inappropriate content detected. Please choose another image.');
+          //     // return;
+          // }
 
             if (!(path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png'))) {
               throw new Error("file-not-image");
