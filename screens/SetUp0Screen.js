@@ -8,24 +8,27 @@ import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
+import EulaModal from '../components/EulaModal';
 
 const SetUp0Screen = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [ job, setJob ] = useState(null);
     const [ age, setAge ] = useState(null);
     const [ gender, setGender ] = useState("male");
     const [ location, setLocation ] = useState(null);
     const [ birthdate, setBirthDate ] = useState(null);
     const [ token, setToken ] = useState(null);
-    const [ name, setName ] = useState(null);
+    const [ name, setName ] = useState(user.displayName?.split(" ")[0]);
     const [ isnameNull, setNameNull] = useState(false);
+    const [eulaVisible, setEulaVisible] = useState(true);
 
     const navigation = useNavigation();
 
     useEffect(() => {
+      if(!user.displayName||user.displayName==="null"||user.displayName===""){
+        setNameNull(true);
+      }
         (async () => {
-          const user_name = getName();
-          setName(user_name);
           const geoLocation = await getLocation()
           setLocation(geoLocation)
           const pushtoken = await registerNotifications();
@@ -33,16 +36,18 @@ const SetUp0Screen = () => {
         })();
       }, []);
 
-      const getName = () => {
-        if(user.displayName && user.displayName!=="" && user.displayName!=="null" && user.displayName!==null){
-          return user.displayName.split(" ")[0];
-        } else if (user?.providerData?.length > 0 && user?.providerData[0]?.displayName!== "" && user?.providerData[0]?.displayName!== "null" && user?.providerData[0]?.displayName!==null){
-          return user.providerData[0].displayName.split(" ")[0];
-        } else{
-          setNameNull(true);
-          return null;
-        }
+      function handleAccept() {
+        // handle user acceptance of EULA
+        setEulaVisible(false); // hide the EULA modal after acceptance
       }
+
+      function handleReject() {
+        // handle user rejection of EULA
+        setEulaVisible(false); // hide the EULA modal after rejection
+        logout();
+
+      }
+
 
     const incompleteform = !gender||!age||!location||!job||!name;
 
@@ -79,6 +84,11 @@ const SetUp0Screen = () => {
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
         <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
+        <EulaModal
+        isVisible={eulaVisible}
+        handleAccept={handleAccept}
+        handleReject={handleReject}
+      />
         </SafeAreaView>
 
 

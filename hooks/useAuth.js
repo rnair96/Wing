@@ -134,7 +134,6 @@ export const AuthProvider = ({children}) => {
   const updateLocalUser = (user, fullName) => {
     const updatedUser = { ...user };
     updatedUser.displayName = `${fullName.givenName} ${fullName.familyName}`;
-    Sentry.captureMessage(`updated user name ${updatedUser.displayName}`);
     setUser(updatedUser);
   };
   
