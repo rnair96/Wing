@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo, Ionicons} from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Footer from '../components/Footer';
+import FlagModal from '../components/FlagModal';
+
 // import Container from '../components/Footer';
 
 
@@ -17,7 +16,9 @@ export const ProfileSwipeScreen = () => {
 
 
     const navigation = useNavigation();
-    const { user } = useAuth();
+
+    const [ flag_modal, setFlagModal ] = useState(false);
+    const [ flag_user, setFlagUser ] = useState(null);
 
     // const profileSwipeLeft = () => {
     //   navigation.navigate("Home");
@@ -37,9 +38,13 @@ export const ProfileSwipeScreen = () => {
         } else return "#018749";
     }
 
+    const reportUser = () => {
+        setFlagModal(true);
+        setFlagUser(card);
+    }
+
 
     return (
-      
 
       <View style={{flex:1}}>
       <FlatList
@@ -99,7 +104,7 @@ export const ProfileSwipeScreen = () => {
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text>
                     </View>
 
-                    <View style={{height:300}}>
+                    <View style={{height:400}}>
                     <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
                     <View style={{flexDirection:"row", padding: 10}}>
                     <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/>
@@ -110,6 +115,11 @@ export const ProfileSwipeScreen = () => {
                     <View style={{flexDirection:"column", padding: 10}}>
                     <Image style={{height: 40, width:40, alignSelf:"center"}} source={require("../images/location.jpeg")}/>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.location}</Text>
+                    </View>
+                    <View style={{padding:10}}>
+                    <TouchableOpacity style={{padding:10, backgroundColor:"#00BFFF", borderRadius:20}} onPress={reportUser}>
+                        <Text style={{color:"white"}}>Report User</Text>
+                    </TouchableOpacity>
                     </View>
                     </View>
                     </View>
@@ -132,6 +142,7 @@ export const ProfileSwipeScreen = () => {
     </TouchableOpacity>
     </View>
          {/* <Foo ter/> */}
+         <FlagModal other_user={flag_user} isVisible={flag_modal}/>
         </View>
         // </SafeAreaView>
         

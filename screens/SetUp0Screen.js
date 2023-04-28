@@ -8,10 +8,9 @@ import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
-import EulaModal from '../components/EulaModal';
 
 const SetUp0Screen = () => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const [ job, setJob ] = useState(null);
     const [ age, setAge ] = useState(null);
     const [ gender, setGender ] = useState("male");
@@ -20,7 +19,6 @@ const SetUp0Screen = () => {
     const [ token, setToken ] = useState(null);
     const [ name, setName ] = useState(user.displayName?.split(" ")[0]);
     const [ isnameNull, setNameNull] = useState(false);
-    const [eulaVisible, setEulaVisible] = useState(true);
 
     const navigation = useNavigation();
 
@@ -35,18 +33,6 @@ const SetUp0Screen = () => {
           setToken(pushtoken)
         })();
       }, []);
-
-      function handleAccept() {
-        // handle user acceptance of EULA
-        setEulaVisible(false); // hide the EULA modal after acceptance
-      }
-
-      function handleReject() {
-        // handle user rejection of EULA
-        setEulaVisible(false); // hide the EULA modal after rejection
-        logout();
-
-      }
 
 
     const incompleteform = !gender||!age||!location||!job||!name;
@@ -84,11 +70,6 @@ const SetUp0Screen = () => {
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
         <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
-        <EulaModal
-        isVisible={eulaVisible}
-        handleAccept={handleAccept}
-        handleReject={handleReject}
-      />
         </SafeAreaView>
 
 
