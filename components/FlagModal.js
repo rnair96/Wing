@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Modal, TouchableHighlight, StyleSheet } from 'react-native';
 import useAuth from '../hooks/useAuth';
-import { doc, updateDoc, serverTimestamp, arrayUnion} from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion} from 'firebase/firestore';
 import { db } from '../firebase';
+import { useNavigation } from '@react-navigation/core';
+import deleteMatchFull from '../lib/deleteMatchFull';
 
 
-const FlagModal = ({other_user, isVisible}) => {
+const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
     const { user } = useAuth();
-    const [modalVisible, setModalVisible] = useState(null);
 
-    useEffect(()=>{
-        setModalVisible(isVisible);
-    },[isVisible])
-
+    const navigation = useNavigation();
 
     const flagUserProfile = (flag) => {
         updateDoc(doc(db, 'users', other_user.id), {
@@ -21,9 +19,12 @@ const FlagModal = ({other_user, isVisible}) => {
                 reported_by: user.uid,
                 status: "unresolved"
             })
-        }).then(()=> {
+        }).then(async ()=> {
                 alert("Your report has been submitted.");
-                setModalVisible(!modalVisible);
+                setIsVisible(!isVisible);
+                if(matchedID){
+                  await deleteMatchFull(matchedID, navigation);
+                }
         }).catch((error) => {
             alert(error.message)
         });
@@ -34,14 +35,14 @@ const FlagModal = ({other_user, isVisible}) => {
         <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={isVisible}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
+          setIsVisible(!isVisible);
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>Flag Profile</Text>
+            <Text>Flag User</Text>
 
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
@@ -55,17 +56,33 @@ const FlagModal = ({other_user, isVisible}) => {
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                flagUserProfile("Fake/Scam Account");
+                flagUserProfile("Fake/Stolen Account");
               }}
             >
-              <Text style={styles.textStyle}>Fake/Scam Account</Text>
+              <Text style={styles.textStyle}>Fake or Stolen Account</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              onPress={() => {
+                flagUserProfile("Abusive Behavior/Messaging");
+              }}
+            >
+              <Text style={styles.textStyle}>Abusive Behavior/Messaging</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              onPress={() => {
+                flagUserProfile("Spam/Selling Something");
+              }}
+            >
+              <Text style={styles.textStyle}>Spam or Selling Something</Text>
             </TouchableHighlight>
 
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                flagUserProfile("Other");
-                //FlagModalscreen to take text input and submit
+                setIsVisible(!isVisible);
+                navigation.navigate("ReportOther", {other_user, matchedID});
               }}
             >
               <Text style={styles.textStyle}>Other</Text>
@@ -75,15 +92,15 @@ const FlagModal = ({other_user, isVisible}) => {
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                setModalVisible(!modalVisible);
+                setIsVisible(!isVisible);
               }}
             >
               <Text style={styles.textStyle}>Hide</Text>
             </TouchableHighlight>
-
           </View>
           </View>
       </Modal>
+      
     )
 }
 

@@ -1,8 +1,7 @@
 import React, { Component, useState } from 'react';
 import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import useAuth from '../hooks/useAuth';
-import { Entypo, Ionicons} from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import FlagModal from '../components/FlagModal';
 
 // import Container from '../components/Footer';
@@ -142,7 +141,7 @@ export const ProfileSwipeScreen = () => {
     </TouchableOpacity>
     </View>
          {/* <Foo ter/> */}
-         <FlagModal other_user={flag_user} isVisible={flag_modal}/>
+         <FlagModal other_user={flag_user} isVisible={flag_modal} setIsVisible={setFlagModal} matchedID={null}/>
         </View>
         // </SafeAreaView>
         

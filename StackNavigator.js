@@ -24,6 +24,7 @@ import * as Notifications from 'expo-notifications';
 import { useNavigation } from '@react-navigation/native';
 import SignUpScreen from './screens/SignUpScreen';
 import FlaggedScreen from './screens/FlaggedScreen';
+import ReportOtherScreen from './screens/ReportOtherScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,7 @@ const StackNavigator = () => {
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
             <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen}/>
             <Stack.Screen name="Flagged" component={FlaggedScreen}/>
+            <Stack.Screen name="ReportOther" component={ReportOtherScreen}/>
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "transparentModal" }}>
               <Stack.Screen name="Match" component={MatchScreen} />
