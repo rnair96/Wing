@@ -19,7 +19,7 @@ const FlaggedScreen =()=> {
         <View style={{alignItems:"center", justifyContent:'space-evenly', margin:10}}>
             {flag_number < 3 ?(
                 <View>
-                <Text style={styles.boldtext}>You will not be able to continue use of Wing and until you've resolved this flag: {flag.type}</Text>
+                <Text style={styles.boldtext}>You will not be able to continue use of Wing until you've resolved this flag: {flag.type}</Text>
                 <Text style={styles.textstyle}>Please email support@wing.community for assistance on this matter.</Text>
                 <Text style={styles.textstyle}>In the email, provide email address and name associated with this account as well as the type of flag raised on your account.</Text>
                 <Text style={styles.textstyle}>As a reminder, we at Wing do not allow any type of NSFW/adult content, inappropriate behavior, harrasment and the like.</Text>

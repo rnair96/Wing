@@ -2,7 +2,7 @@
   "expo": {
     "name": "Wing",
     "slug": "mission_partner",
-    "version": "1.8.9",
+    "version": "1.9.3",
     "orientation": "portrait",
     "icon": "./assets/wing_icon.png",
     "userInterfaceStyle": "light",

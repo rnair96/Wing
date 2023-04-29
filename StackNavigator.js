@@ -42,8 +42,10 @@ const StackNavigator = () => {
         if(response.notification.request.content.data.type === "message"){
           const matchedDetails = response.notification.request.content.data.message;
           navigation.navigate("Message", { matchedDetails });
-        } else {
+        } else if (response.notification.request.content.data.type === "match"){
           navigation.navigate("Chat");
+        } else {
+          navigation.navigate("Home");
         }
         
       });

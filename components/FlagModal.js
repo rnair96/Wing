@@ -5,6 +5,7 @@ import { doc, updateDoc, arrayUnion} from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigation } from '@react-navigation/core';
 import deleteMatchFull from '../lib/deleteMatchFull';
+import sendPush from '../lib/sendPush';
 
 
 const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
@@ -20,11 +21,14 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
                 status: "unresolved"
             })
         }).then(async ()=> {
-                alert("Your report has been submitted.");
+                sendPush(other_user.token, "You've Been Flagged","Tap to Learn More",{type:"flagged"})
                 setIsVisible(!isVisible);
                 if(matchedID){
                   await deleteMatchFull(matchedID, navigation);
+                } else {
+                  navigation.navigate("Home");
                 }
+                alert("Your report has been submitted.");
         }).catch((error) => {
             alert(error.message)
         });
