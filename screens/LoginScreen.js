@@ -48,16 +48,19 @@ const LoginScreen = () => {
         value = {email}
         onChangeText = {setEmail}
         placeholder={'example@example.com'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white"}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:"70%"}}/>
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"white"}}>Password</Text>
         <TextInput
         value = {password}
         onChangeText = {setPassword}
         type='password'
-        placeholder={'*************'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white"}}/>
+        secureTextEntry
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:"70%"}}/>
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>logInManually(email, password)}>
             <Text style = {styles.textcontainer}>Log In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={{ color: 'white', textDecorationLine: 'underline' }}>Forgot Password?</Text>
         </TouchableOpacity>
         {/* </KeyboardAvoidingView> */}
         <Text style={{fontWeight:"bold", fontSize:15, fontFamily:"Times New Roman", color:"white"}}>Or</Text>

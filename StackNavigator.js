@@ -25,6 +25,8 @@ import { useNavigation } from '@react-navigation/native';
 import SignUpScreen from './screens/SignUpScreen';
 import FlaggedScreen from './screens/FlaggedScreen';
 import ReportOtherScreen from './screens/ReportOtherScreen';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import ChangePasswordScreen from './screens/ChangePasswordScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -77,6 +79,7 @@ const StackNavigator = () => {
             <Stack.Screen name="SetUp2" component={SetUp2Screen} />
             <Stack.Screen name="SetUp0" component={SetUp0Screen} />
             <Stack.Screen name="Help" component={HelpScreen} />
+            <Stack.Screen name="ChangePassword" component={ChangePasswordScreen}/>
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
@@ -92,6 +95,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false}}/>
         )}
          <Stack.Screen name="SignUp" component={SignUpScreen}/>
+         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}/>
+
 
         
       </Stack.Navigator>

@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile }from "firebase/auth";
+import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail ,updatePassword, reauthenticateWithCredential, EmailAuthProvider }from "firebase/auth";
 import { auth } from '../firebase';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db } from '../firebase';
 
 
@@ -170,12 +170,72 @@ export const AuthProvider = ({children}) => {
       setUser(user)
     })
     .catch((error) => {
+      const errorCode = error.code;
       const errorMessage = error.message;
-      console.log("error in log in", errorMessage)
+      console.log("error in log in", errorMessage);
+
+      if (errorCode === 'auth/wrong-password' || errorCode === 'auth/user-not-found'||errorCode === 'auth/invalid-email') {
+        alert("Login was incorrect. Please try again.");
+      } else {
+        alert(errorMessage);
+      }
 
     });
 
     setLoading(false);
+  }
+
+  const resetPassword = async (email) => {
+    setLoading(true);
+  
+    try {
+  
+      // Update user password in Firestore
+      const userSnapshot = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
+      if (userSnapshot.empty) {
+        alert('No user found with this email address.');
+        setLoading(false);
+        return;
+      }
+  
+      const userDoc = userSnapshot.docs[0];
+      console.log("user id", userDoc.id);
+      await sendPasswordResetEmail(auth, email);
+  
+      alert('An email was sent to reset your password.');
+      setLoading(false);
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      alert('An error occurred. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  const updateUserPassword = async(currentPassword, newPassword) =>{
+    try {
+      // Create a credential with the email and current password
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  
+      // Re-authenticate the user with the credential
+      await reauthenticateWithCredential(user, credential);
+  
+      // Update the password
+      await updatePassword(user, newPassword).then(()=>{return true;})
+
+    } catch (error) {
+      // Handle error messages for incorrect password or other issues
+      if (error.code === 'auth/wrong-password') {
+        alert('Incorrect current password. Please try again.');
+        return false;
+      } else if (error.code === "auth/too-many-requests") {
+        alert('Too many failed attempts. Please try again later or reset password at Login screen.');
+        return false;
+      } else {
+        console.log("error",error)
+        alert('An error occurred. Please try again.');
+        return false;
+      }
+    }
   }
       
 
@@ -202,7 +262,9 @@ export const AuthProvider = ({children}) => {
       signInWithGoogle,
       signInWithApple,
       signUpManually,
-      logInManually}}
+      logInManually,
+      resetPassword,
+      updateUserPassword}}
        >
        {!loading && children}
     </AuthContext.Provider>
