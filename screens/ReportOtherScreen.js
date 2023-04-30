@@ -5,6 +5,7 @@ import { doc, updateDoc, arrayUnion} from 'firebase/firestore';
 import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
 import deleteMatchFull from '../lib/deleteMatchFull';
+import sendPush from '../lib/sendPush';
 
 
 const ReportOtherScreen = () => {
