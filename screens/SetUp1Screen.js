@@ -6,14 +6,16 @@ import { db } from '../firebase';
 import { useNavigation } from '@react-navigation/core';
 import TagPicker from '../components/TagPicker';
 import Header from '../Header';
-
+import EulaModal from '../components/EulaModal';
 
 
 const SetUp1Screen = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [ mission, setMission ] = useState(null);
   const [ missiontag, setMissionTag ] = useState("Personal Growth");
   const [ idealwing, setIdealWing ] = useState(null);
+  const [eulaVisible, setEulaVisible] = useState(true);
+
 
   const navigation = useNavigation();
 
@@ -32,6 +34,17 @@ const SetUp1Screen = () => {
       });
   }
 
+  function handleAccept() {
+    // handle user acceptance of EULA
+    setEulaVisible(false); // hide the EULA modal after acceptance
+  }
+
+  function handleReject() {
+    // handle user rejection of EULA
+    setEulaVisible(false); // hide the EULA modal after rejection
+    logout();
+
+  }
 
   //Use Header
     
@@ -48,6 +61,11 @@ return (
           <SafeAreaView>
           <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 2/3"}/>
           {/* <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 2/4</Text> */}
+          <EulaModal
+        isVisible={eulaVisible}
+        handleAccept={handleAccept}
+        handleReject={handleReject}
+      />
           </SafeAreaView>
 
           <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Mission</Text>

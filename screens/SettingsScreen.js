@@ -210,6 +210,12 @@ const SettingsScreen = () => {
         </TouchableOpacity>
         </View>
 
+        {/* should actually cycle through all providerData for potential password authentication */}
+        {user.providerData[0].providerId === "password" && (<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("ChangePassword")}>
+        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Change Password</Text>
+        </TouchableOpacity>)}
+        
+
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("PrivacyPolicy")}>
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Privacy Policy</Text>
         </TouchableOpacity>

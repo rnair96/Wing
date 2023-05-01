@@ -4,17 +4,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import useAuth from '../hooks/useAuth';
-import { deleteDoc, doc, writeBatch, collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
-// import messaging from '@react-native-firebase/messaging';
-
+import FlagModal from './FlagModal';
+import deleteMatchFull from '../lib/deleteMatchFull';
 
 const ChatHeader = ({matchedDetails}) => {
     const navigator = useNavigation();
     const { user } = useAuth();
     const [modalVisible, setModalVisible] = useState(false);
     const [ secondModal, setSecondModal ] = useState(false);
-    const [ mute, setMute ] = useState(false);
+    const [ flag_modal, setFlagModal ] = useState(false);
+    // const [ mute, setMute ] = useState(false);
 
     const matched_user = getMatchedUserInfo(matchedDetails.users, user.uid);
 
@@ -35,40 +34,6 @@ const ChatHeader = ({matchedDetails}) => {
     //     }
     //   };
 
-    const deleteMatch = async () => {
-        await deleteDoc(doc(db, 'matches', matchedDetails.id)).then(() => {
-           console.log("Match has been deleted successfully.")
-           navigator.navigate("Chat")
-            
-        })
-        .catch(error => {
-            console.log('Error deleting Match',error);
-        })
-    }
-
-    const deleteMessages = async () => {
-        const batch = writeBatch(db);
-        const messages =[]
-        await getDocs(collection(db,"matches", matchedDetails.id, "messages")).then((snapshot) => {
-            snapshot.docs.map((doc) => messages.push(doc.id))
-        })
-
-        if (messages.length>0){
-            messages.map((messageID)=>{
-                batch.delete(doc(db,'matches', matchedDetails.id, "messages", messageID))
-            })
-    
-            await batch.commit().then(() => {
-                console.log('Messages deleted successfully.');
-                deleteMatch();
-            }).catch((error) => {
-                console.error('Error deleting messages: ', error);
-            });
-        } else {
-          deleteMatch();
-        }
-        
-    }
 
     return (
       <View style={{flexDirection:"row", justifyContent:'space-evenly'}}>
@@ -115,10 +80,20 @@ const ChatHeader = ({matchedDetails}) => {
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
                 setModalVisible(!modalVisible);
+                setFlagModal(true);
+              }}
+            >
+              <Text style={styles.textStyle}>Report & Block User</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              onPress={() => {
+                setModalVisible(!modalVisible);
               }}
             >
               <Text style={styles.textStyle}>Hide</Text>
             </TouchableHighlight>
+            
           </View>
           </View>
       </Modal>
@@ -138,7 +113,7 @@ const ChatHeader = ({matchedDetails}) => {
         <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                deleteMessages();
+                deleteMatchFull(matchedDetails.id);
               }}
             >
               <Text style={styles.textStyle}>Yes</Text>
@@ -156,6 +131,7 @@ const ChatHeader = ({matchedDetails}) => {
 
 
       </Modal>
+      <FlagModal other_user={matched_user[1]} isVisible={flag_modal} setIsVisible={setFlagModal} matchedID={matchedDetails.id}/>
       </View>
     )
 }

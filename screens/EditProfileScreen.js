@@ -28,7 +28,7 @@ const EditProfileScreen = () => {
   const [ hobbies, setHobbies ] = useState(null);
   const [ incompleteForm, setIncompleteForm ] = useState(true);
   const [ email, setEmail ] = useState(user.email);
-  const [ name, setName ] = useState(user.displayName.split(" ")[0])
+  const [ name, setName ] = useState(null);
   const [ url1, setUrl1] = useState(null);
   const [ url2, setUrl2] = useState(null);
   const [ url3, setUrl3] = useState(null);

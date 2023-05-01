@@ -8,6 +8,7 @@ import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
+import sendPush from '../lib/sendPush';
 
 const MessageScreen = () => {
 
@@ -56,45 +57,46 @@ const MessageScreen = () => {
         const userName = user.displayName.split(" ")[0];
 
         if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
-          sendPush(userName);
+          // sendPush(userName);
+          sendPush(matchedUser[1].token,`New Message from ${userName}`,input,{type : "message", message : matchedDetails})
         }
 
         setInput("");
 
     }
 
-    const sendPush = async(userName) => {
+    // const sendPush = async(userName) => {
 
-          try {
-            const response = await fetch('https://exp.host/--/api/v2/push/send', {
-            method: 'POST',
-            headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-            },
-              body: JSON.stringify({
-                to: matchedUser[1].token,
-                title: "New Message from "+userName,
-                body: input,
-                data: {
-                  type: "message",
-                  message: matchedDetails 
-                },
-              }),
-            });
+    //       try {
+    //         const response = await fetch('https://exp.host/--/api/v2/push/send', {
+    //         method: 'POST',
+    //         headers: {
+    //               'Accept': 'application/json',
+    //               'Content-Type': 'application/json'
+    //         },
+    //           body: JSON.stringify({
+    //             to: matchedUser[1].token,
+    //             title: "New Message from "+userName,
+    //             body: input,
+    //             data: {
+    //               type: "message",
+    //               message: matchedDetails 
+    //             },
+    //           }),
+    //         });
         
-            const result = await response.json();
+    //         const result = await response.json();
         
-            if (result.errors) {
-              throw new Error(`Failed to send push notification: ${result.errors}`);
-            }
+    //         if (result.errors) {
+    //           throw new Error(`Failed to send push notification: ${result.errors}`);
+    //         }
 
-            return result.data;
-          } catch (error) {
-            console.error('Error sending push notification:', error);
-            return null;
-          }
-    }
+    //         return result.data;
+    //       } catch (error) {
+    //         console.error('Error sending push notification:', error);
+    //         return null;
+    //       }
+    // }
     
     
     return (

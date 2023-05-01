@@ -10,7 +10,7 @@ WebBrowser.maybeCompleteAuthSession();
 const LoginScreen = () => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
-    const { signInWithGoogle, logInManually } = useAuth();
+    const { signInWithGoogle, signInWithApple, logInManually } = useAuth();
     const navigation = useNavigation();
 
     useLayoutEffect(() => {
@@ -48,16 +48,19 @@ const LoginScreen = () => {
         value = {email}
         onChangeText = {setEmail}
         placeholder={'example@example.com'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white"}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:"70%"}}/>
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"white"}}>Password</Text>
         <TextInput
         value = {password}
         onChangeText = {setPassword}
-        type='password'
+        secureTextEntry
         placeholder={'*************'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white"}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:"70%"}}/>
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>logInManually(email, password)}>
             <Text style = {styles.textcontainer}>Log In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={{ color: 'white', textDecorationLine: 'underline' }}>Forgot Password?</Text>
         </TouchableOpacity>
         {/* </KeyboardAvoidingView> */}
         <Text style={{fontWeight:"bold", fontSize:15, fontFamily:"Times New Roman", color:"white"}}>Or</Text>
@@ -68,6 +71,12 @@ const LoginScreen = () => {
             <View style={{flexDirection:"row"}}>
             <Image style={{height:20,width:20, right:10}} source={require("../images/google_icon.png")}/>
             <Text style = {styles.textcontainer}>Sign In With Google</Text>
+            </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithApple}>
+            <View style={{flexDirection:"row"}}>
+            <Image style={{height:20,width:20, right:12}} source={require("../images/appleicon.png")}/>
+            <Text style = {styles.textcontainer}>Sign In With Apple</Text>
             </View>
         </TouchableOpacity>
         </View>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import sendPush from '../lib/sendPush';
 
 
 const MatchScreen =()=> {
@@ -9,42 +10,43 @@ const MatchScreen =()=> {
 
     const { loggedProfile, userSwiped } = params;
 
+  //   const sendPush = async(matchedUser, userName) => {
 
-    const sendPush = async(matchedUser, userName) => {
+  //       try {
 
-        try {
-
-          const response = await fetch('https://exp.host/--/api/v2/push/send', {
-            method: 'POST',
-            headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              to: matchedUser.token,
-              title: "New Wing!",
-              body: "Say Hello to "+userName,
-              data: { 
-                type: "match" 
-              },
-            })
-          })
+  //         const response = await fetch('https://exp.host/--/api/v2/push/send', {
+  //           method: 'POST',
+  //           headers: {
+  //                 'Accept': 'application/json',
+  //                 'Content-Type': 'application/json'
+  //           },
+  //           body: JSON.stringify({
+  //             to: matchedUser.token,
+  //             title: "New Wing!",
+  //             body: "Say Hello to "+userName,
+  //             data: { 
+  //               type: "match" 
+  //             },
+  //           })
+  //         })
       
-          const result = await response.json();
+  //         const result = await response.json();
       
-          if (result.errors) {
-            throw new Error(`Failed to send push notification: ${result.errors}`);
-          }
+  //         if (result.errors) {
+  //           throw new Error(`Failed to send push notification: ${result.errors}`);
+  //         }
       
-          return result.data;
-        } catch (error) {
-          console.error('Error sending push notification:', error);
-          return null;
-        }
-  }
+  //         return result.data;
+  //       } catch (error) {
+  //         console.error('Error sending push notification:', error);
+  //         return null;
+  //       }
+  // }
 
   if(userSwiped.token && userSwiped.token!=="token" && userSwiped.token!=="not_granted"){
-    sendPush(userSwiped, loggedProfile.displayName);
+    // sendPush(userSwiped, loggedProfile.displayName);
+    sendPush(userSwiped.token,"New Wing!",`Say Hello to ${loggedProfile.displayName}`, {type: "match"})
+
   }
 
   

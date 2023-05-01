@@ -12,6 +12,7 @@ import getLocation from '../lib/getLocation';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import * as WebBrowser from 'expo-web-browser';
+import checkFlagged from '../lib/checkFlagged';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -21,7 +22,6 @@ const HomeScreen = () => {
     const swipeRef = useRef(null);
     const [ profiles, setProfiles ] = useState([]);
     const [ loggedProfile, setLoggedProfile ] = useState(null);
-
 
     useLayoutEffect(()=>{
             onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
@@ -74,7 +74,21 @@ const HomeScreen = () => {
                 })();
     },[loggedProfile]);
 
-    useEffect(()=>{//birthday checker
+    useEffect(()=>{    
+        //check if user has any unresolved flags
+        if(loggedProfile && loggedProfile?.flags) {
+            const check = checkFlagged(loggedProfile.flags);
+            if(check){
+                const index = loggedProfile.flags.length - 1;
+                const flag = loggedProfile.flags[index];
+                const flag_number = index+1;
+                //trigger modal screen
+                navigation.navigate("Flagged",{flag, flag_number});
+            }
+
+        }
+        
+        //birthday checker
         if (loggedProfile && loggedProfile?.birthdate){
             const currentDate = new Date();
             const birthDate = new Date(loggedProfile.birthdate)
@@ -93,6 +107,7 @@ const HomeScreen = () => {
             }
         }
     },[loggedProfile]);
+
 
     useEffect(()=>{
         let unsub;
@@ -130,6 +145,7 @@ const HomeScreen = () => {
                     && (doc.data().gender === genderPreference || genderPreference === "both") 
                     && (doc.data().mission_tag === tagPreference || tagPreference === "All") 
                     && (doc.data().age>=ageMin && doc.data().age<=ageMax)
+                    && (!doc.data()?.flags||!checkFlagged(doc.data().flags))//function to check that user has no unresolved flags
                     )
                     .map((doc) => (
                     {
@@ -206,6 +222,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
     </View>
     {/* End of Header */}
+    {/* <FlagModal other_user={flag_user} isVisible={flag_modal}/> */}
     {/* Cards */}
     {profiles.length === 0 ? (
         <View style={[styles.emptycardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
@@ -298,13 +315,14 @@ const HomeScreen = () => {
         />
     </View>
     )}
-    
-    
 
     <View style={{flexDirection:"row", justifyContent:"space-evenly"}}>
         <TouchableOpacity style={styles.swipeButtonCross} onPress={()=> swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft(): console.log("no action")}>
                 <Entypo name="cross" size={24} color="red"/>
         </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.ButtonFlag} onPress={()=> swipeRef && swipeRef?.current ? console.log("user is", swipeRef.current): console.log("no action")}>
+                            <Entypo name="flag" size={17} color="#CD7F32"/>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.swipeButtonHeart} onPress={()=>swipeRef && swipeRef?.current ? swipeRef.current.swipeRight(): console.log("no action")}>
                 <Entypo name="heart" size={24} color="green"/>
         </TouchableOpacity>
@@ -373,6 +391,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "#32de84"
      },
+    //  ButtonFlag:{
+    //     bottom: "40%",
+    //     width: 40,
+    //     height: 40,
+    //     borderRadius: 50,
+    //     alignItems: "center",
+    //     justifyContent: "center",
+    //     backgroundColor: "#FFBF00"
+    //  },
      swipeButtonDown: {
         bottom: "30%",
         width: 60,
