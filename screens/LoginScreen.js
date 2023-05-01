@@ -53,8 +53,8 @@ const LoginScreen = () => {
         <TextInput
         value = {password}
         onChangeText = {setPassword}
-        type='password'
         secureTextEntry
+        placeholder={'*************'}
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:"70%"}}/>
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>logInManually(email, password)}>
             <Text style = {styles.textcontainer}>Log In</Text>

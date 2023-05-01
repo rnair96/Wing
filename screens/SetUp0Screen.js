@@ -18,14 +18,10 @@ const SetUp0Screen = () => {
     const [ birthdate, setBirthDate ] = useState(null);
     const [ token, setToken ] = useState(null);
     const [ name, setName ] = useState(user.displayName?.split(" ")[0]);
-    const [ isnameNull, setNameNull] = useState(false);
 
     const navigation = useNavigation();
 
     useEffect(() => {
-      if(!user.displayName||user.displayName==="null"||user.displayName===""){
-        setNameNull(true);
-      }
         (async () => {
           const geoLocation = await getLocation()
           setLocation(geoLocation)
@@ -75,7 +71,7 @@ const SetUp0Screen = () => {
 
         <View style ={{flexDirection:"column", alignItems:"center"}}>
 
-        {isnameNull && (
+        {(!user.displayName||user.displayName==="null"||user.displayName==="") && (
           <View>
           <Text style={styles.formTitle}>What's Your First Name?</Text>
           <TextInput

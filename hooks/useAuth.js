@@ -3,8 +3,12 @@ import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail ,updatePassword, reauthenticateWithCredential, EmailAuthProvider }from "firebase/auth";
 import { auth } from '../firebase';
-import { getDoc, doc, updateDoc, getDocs, collection, where, query } from 'firebase/firestore';
+import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db } from '../firebase';
+// import { v4 as uuidv4 } from 'uuid';
+// import 'react-native-get-random-values';
+// import * as Sentry from "@sentry/react";
+
 
 
 const AuthContext = createContext({});
@@ -89,7 +93,14 @@ export const AuthProvider = ({children}) => {
     }
   }
 
+  // const generateNonce = () => {
+  //   return uuidv4();
+  // };
+
   const signInWithApple = async () => {
+
+    // Generate the nonce
+    // const nonce = generateNonce();
 
     try {
       setLoading(true);
@@ -98,24 +109,32 @@ export const AuthProvider = ({children}) => {
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
+        // nonce,
       });
   
       const { identityToken, fullName } = appleAuthRequestResponse;
+
   
       if (identityToken) {
         
         const appleProvider = new OAuthProvider("apple.com");
-        const credential = appleProvider.credential({ idToken: identityToken });
+        const credential = appleProvider.credential({ idToken: identityToken});//, rawNonce: nonce
+        // Sentry.captureMessage(`credential returned ${credential}`);
+
         await signInWithCredential(auth, credential).then(async(result)=>{
           const signedInUser = result.user;
           const userDocRef = doc(db, 'users', signedInUser.uid);
+          // Sentry.captureMessage(`credential signed in ${signedInUser.uid}`)
           const userDocSnapshot = await getDoc(userDocRef);
 
         if (!userDocSnapshot.exists()) {
           // If the user data does not exist in Firestore, it's a new user
+          // Sentry.captureMessage(`snapshot doesn't exist ${fullName.givenName} ${fullName.familyName}`)
           updateLocalUser(signedInUser, fullName);
         } else {
           // If the user data exists in Firestore, it's an existing user
+          // Sentry.captureMessage(`snapshot exists`)
+
           setUser(signedInUser);
         }
           setLoading(false);
@@ -220,7 +239,8 @@ export const AuthProvider = ({children}) => {
       await reauthenticateWithCredential(user, credential);
   
       // Update the password
-      await updatePassword(user, newPassword).then(()=>{return true;})
+      await updatePassword(user, newPassword)
+      return true;
 
     } catch (error) {
       // Handle error messages for incorrect password or other issues
