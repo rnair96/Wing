@@ -3,6 +3,8 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import { Text, SafeAreaView, TouchableOpacity, TextInput, View, Modal, TouchableHighlight, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native';
 import emailjs from 'emailjs-com';
 import Header from '../Header';
+import Constants from 'expo-constants';
+
 
 function HelpScreen() {
   const { params } = useRoute();
@@ -11,6 +13,8 @@ function HelpScreen() {
   const [message, setMessage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+
+  const {EMAILJS_KEY, EMAILJS_SERVICE, EMAILJS_TEMPLATE} = Constants.manifest.extra
 
 
   const incompleteForm = !subject||!message;
@@ -28,13 +32,13 @@ function HelpScreen() {
       message: message,
     };
 
-    emailjs.init('OFYWf9ijhfAbfplHv');//save keys somewhere private
+    emailjs.init(EMAILJS_KEY);//save keys somewhere private
 
     emailjs.send(
-      'service_ryc1b9q',
-      'template_qj7dpppi',
+      EMAILJS_SERVICE,
+      EMAILJS_TEMPLATE,
       templateParams,
-      'OFYWf9ijhfAbfplHv'
+      EMAILJS_KEY
     );
 
     setSubject('');

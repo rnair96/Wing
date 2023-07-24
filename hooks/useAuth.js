@@ -5,6 +5,7 @@ import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCreden
 import { auth } from '../firebase';
 import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db } from '../firebase';
+import Constants from 'expo-constants';
 // import { v4 as uuidv4 } from 'uuid';
 // import 'react-native-get-random-values';
 // import * as Sentry from "@sentry/react";
@@ -18,11 +19,13 @@ export const AuthProvider = ({children}) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
 
+  const {ANDROID_CLIENT_ID, IOS_CLIENT_ID, EXPO_CLIENT_ID} = Constants.manifest.extra
+
 
     const [request, response, promptAsync] = Google.useAuthRequest({
-      androidClientId:'597753804912-bihmb3jepe4gviklnp2ohk5dnrnse0o7.apps.googleusercontent.comm',
-      iosClientId:'597753804912-dspeqvn4dblne96m842pgfiu4a66kha2.apps.googleusercontent.com',
-      expoClientId:'597753804912-594mab8ne94m8t38ek14oustpimdf35o.apps.googleusercontent.com',
+      androidClientId: ANDROID_CLIENT_ID,
+      iosClientId: IOS_CLIENT_ID,
+      expoClientId: EXPO_CLIENT_ID,
       scopes: ["profile", "email"]
     });
     
@@ -82,7 +85,7 @@ export const AuthProvider = ({children}) => {
     try {
 
       //gets accesstokens for Google authenticaiton
-      await promptAsync({ showInRecents: true, projectNameForProxy:'@rnair96/mission_partner'})
+      await promptAsync({ showInRecents: true, projectNameForProxy: PROJECT_NAME})
       .then(()=> {
         setLoading(true);
       })

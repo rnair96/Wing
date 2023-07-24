@@ -5,6 +5,8 @@ import axios from 'axios';
 import SenderMC from './SenderMC';
 import RecieverMC from './RecieverMC';
 import { Picker } from '@react-native-picker/picker';
+import Constants from 'expo-constants';
+
 
 
 const MissionControlScreen = () => {
@@ -13,9 +15,11 @@ const MissionControlScreen = () => {
         "What's a good icebreaker line to someone who does online marketing?",
         "What's a weekly goal to attain for two guys who want to build an online relationship business together?"
     ]
-    const [userText, setUserText] = useState(inputs[0]);
+
+    const {CHATGPT_KEY} = Constants.manifest.extra
+    // const [userText, setUserText] = useState(inputs[0]);
     const [data, setData] = useState([]);
-    const apiKey = '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'
+    const apiKey = CHATGPT_KEY
     const apiURL = 'https://api.openai.com/v1/completions'
     const [count, setCount] = useState(0);
     const [selectedOption, setSelectedOption] = useState(inputs[0]);

@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import Constants from 'expo-constants';
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -11,14 +12,17 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const {FIREBASE_API_KEY, FIREBASE_AUTHDOMAIN, FIREBASE_PROJECTID, 
+  FIREBASE_STORAGEBUCKET, FIREBASE_MESSENGERSENDERID, FIREBASE_APPID, FIREBASE_MEASUREMENTID} = Constants.manifest.extra
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDQM8bDhjRzZiPYmHSHWRM0DQ2J4oEzDN0",
-  authDomain: "mission-partner-app.firebaseapp.com",
-  projectId: "mission-partner-app",
-  storageBucket: "mission-partner-app.appspot.com",
-  messagingSenderId: "597753804912",
-  appId: "1:597753804912:web:4d56fdbf0b769d55975cb5",
-  measurementId: "G-P3G9DE9FWP"
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTHDOMAIN,
+  projectId: FIREBASE_PROJECTID,
+  storageBucket: FIREBASE_STORAGEBUCKET,
+  messagingSenderId: FIREBASE_MESSENGERSENDERID,
+  appId: FIREBASE_APPID,
+  measurementId: FIREBASE_MEASUREMENTID
 };
 
 // Initialize Firebase
