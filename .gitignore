@@ -11,7 +11,7 @@ npm-debug.*
 web-build/
 GoogleService-info.plist
 google-services.json
-keys/
+keys/google-cloud-api.json
 .env
 
 # macOS
