@@ -48,12 +48,19 @@ const ChatRow = ({ matchedDetails }) => {
         setLoading(false);
     }
 
-    useEffect(()=>
-    onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
-        orderBy("timestamp", "desc")), (snapshot) => 
-        setVars(snapshot.docs[0]?.data())
-        )
-        , [matchedDetails, db]);
+    useEffect(()=>{
+
+        const unsub = onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
+            orderBy("timestamp", "desc")), (snapshot) => 
+            setVars(snapshot.docs[0]?.data())
+            )
+
+        return () => {
+            unsub();
+        };
+        
+    }, [matchedDetails, db]);
+        
     
 
     return ( 

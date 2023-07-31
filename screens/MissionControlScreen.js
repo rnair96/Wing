@@ -16,10 +16,10 @@ const MissionControlScreen = () => {
         "What's a weekly goal to attain for two guys who want to build an online relationship business together?"
     ]
 
-    const {CHATGPT_KEY} = Constants.manifest.extra
+    const {chatGptKey} = Constants.manifest.extra
     // const [userText, setUserText] = useState(inputs[0]);
     const [data, setData] = useState([]);
-    const apiKey = CHATGPT_KEY
+    const apiKey = chatGptKey
     const apiURL = 'https://api.openai.com/v1/completions'
     const [count, setCount] = useState(0);
     const [selectedOption, setSelectedOption] = useState(inputs[0]);

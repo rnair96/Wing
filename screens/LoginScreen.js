@@ -13,6 +13,7 @@ const LoginScreen = () => {
     const { signInWithGoogle, signInWithApple, logInManually } = useAuth();
     const navigation = useNavigation();
 
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false

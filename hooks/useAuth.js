@@ -19,13 +19,22 @@ export const AuthProvider = ({children}) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
 
-  const {ANDROID_CLIENT_ID, IOS_CLIENT_ID, EXPO_CLIENT_ID} = Constants.manifest.extra
+  const {androidClientId, iosClientId, expoClientId, projectName} = Constants.manifest.extra
 
+  let dbusers;
+
+  if (__DEV__) {
+    console.log('dev user signin');
+    dbusers = 'users_test';
+  } else {
+    console.log('prod user signin');
+    dbusers = 'users';
+  }
 
     const [request, response, promptAsync] = Google.useAuthRequest({
-      androidClientId: ANDROID_CLIENT_ID,
-      iosClientId: IOS_CLIENT_ID,
-      expoClientId: EXPO_CLIENT_ID,
+      androidClientId: androidClientId,
+      iosClientId: iosClientId,
+      expoClientId: expoClientId,
       scopes: ["profile", "email"]
     });
     
@@ -85,7 +94,7 @@ export const AuthProvider = ({children}) => {
     try {
 
       //gets accesstokens for Google authenticaiton
-      await promptAsync({ showInRecents: true, projectNameForProxy: PROJECT_NAME})
+      await promptAsync({ showInRecents: true, projectNameForProxy: projectName})
       .then(()=> {
         setLoading(true);
       })
@@ -126,7 +135,7 @@ export const AuthProvider = ({children}) => {
 
         await signInWithCredential(auth, credential).then(async(result)=>{
           const signedInUser = result.user;
-          const userDocRef = doc(db, 'users', signedInUser.uid);
+          const userDocRef = doc(db, dbusers, signedInUser.uid);
           // Sentry.captureMessage(`credential signed in ${signedInUser.uid}`)
           const userDocSnapshot = await getDoc(userDocRef);
 
@@ -213,7 +222,7 @@ export const AuthProvider = ({children}) => {
     try {
   
       // Update user password in Firestore
-      const userSnapshot = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
+      const userSnapshot = await getDocs(query(collection(db, dbusers), where('email', '==', email)));
       if (userSnapshot.empty) {
         alert('No user found with this email address.');
         setLoading(false);

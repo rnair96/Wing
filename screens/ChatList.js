@@ -12,7 +12,7 @@ const ChatList = () => {
 
 
   useEffect(()=>{
-    onSnapshot(
+    const unsub = onSnapshot(
       query(
         collection(db, "matches"), 
         where("userMatched", "array-contains", user.uid),
@@ -27,6 +27,10 @@ const ChatList = () => {
             ))
     )
     )
+
+    return () => {
+      unsub();
+    };
   },[user]);
 
 

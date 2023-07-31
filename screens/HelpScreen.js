@@ -14,7 +14,7 @@ function HelpScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
-  const {EMAILJS_KEY, EMAILJS_SERVICE, EMAILJS_TEMPLATE} = Constants.manifest.extra
+  const {emailJsKey, emailJsService, emailJsTemplate} = Constants.manifest.extra
 
 
   const incompleteForm = !subject||!message;
@@ -32,13 +32,13 @@ function HelpScreen() {
       message: message,
     };
 
-    emailjs.init(EMAILJS_KEY);//save keys somewhere private
+    emailjs.init(emailJsKey);
 
     emailjs.send(
-      EMAILJS_SERVICE,
-      EMAILJS_TEMPLATE,
+      emailJsService,
+      emailJsTemplate,
       templateParams,
-      EMAILJS_KEY
+      emailJsKey
     );
 
     setSubject('');

@@ -20,7 +20,8 @@ const MessageScreen = () => {
     const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
 
 
-    useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
+    useEffect(()=> {
+      const unsub = onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
         orderBy("timestamp", "desc")), 
         (snapshot) => {
             setMessages(snapshot.docs.map((doc)=>({
@@ -29,7 +30,12 @@ const MessageScreen = () => {
             })
             ))
         })
-        ,[matchedDetails, db]);
+      
+      return () => {
+        unsub();
+      };
+
+      },[matchedDetails, db]);
 
     useEffect(()=>{
       if(messages.length>0 && messages[0].userId !== user.uid && !(messages[0].read)){

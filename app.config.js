@@ -80,7 +80,11 @@ export default {
       firebaseMessagingSenderId: process.env.FIREBASE_MESSENGINGSENDERID,
       firebaseMeasurementId: process.env.FIREBASE_MEASUREMENTID,
       firebaseProjectId: process.env.FIREBASE_PROJECTID,
-      firebaseStorageBucket: process.env.FIREBASE_STORAGEBUCKET
+      firebaseStorageBucket: process.env.FIREBASE_STORAGEBUCKET,
+      prodUsers: process.env.PROD_USERS,
+      devUsers: process.env.DEV_USERS,
+      prodMatches: process.env.PROD_MATCHES,
+      devMatches: process.env.DEV_MATCHES
     }
   }
 };
