@@ -50,7 +50,7 @@ const ChatRow = ({ matchedDetails }) => {
 
     useEffect(()=>{
 
-        const unsub = onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
+        const unsub = onSnapshot(query(collection(db,global.matches,matchedDetails.id,"messages"), 
             orderBy("timestamp", "desc")), (snapshot) => 
             setVars(snapshot.docs[0]?.data())
             )

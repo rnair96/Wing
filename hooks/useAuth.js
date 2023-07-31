@@ -19,16 +19,17 @@ export const AuthProvider = ({children}) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
 
-  const {androidClientId, iosClientId, expoClientId, projectName} = Constants.manifest.extra
+  const {androidClientId, iosClientId, expoClientId, projectName, prodUsers, devUsers, prodMatches, devMatches} = Constants.manifest.extra
 
-  let dbusers;
 
   if (__DEV__) {
-    console.log('dev user signin');
-    dbusers = 'users_test';
+    console.log('dev user signin, setting dev environment');
+    global.users = devUsers;
+    global.matches = devMatches;
   } else {
-    console.log('prod user signin');
-    dbusers = 'users';
+    console.log('prod user signin, setting prod environment');
+    global.users = prodUsers;
+    global.matches = prodMatches;
   }
 
     const [request, response, promptAsync] = Google.useAuthRequest({
@@ -135,7 +136,7 @@ export const AuthProvider = ({children}) => {
 
         await signInWithCredential(auth, credential).then(async(result)=>{
           const signedInUser = result.user;
-          const userDocRef = doc(db, dbusers, signedInUser.uid);
+          const userDocRef = doc(db, global.users, signedInUser.uid);
           // Sentry.captureMessage(`credential signed in ${signedInUser.uid}`)
           const userDocSnapshot = await getDoc(userDocRef);
 
@@ -222,7 +223,7 @@ export const AuthProvider = ({children}) => {
     try {
   
       // Update user password in Firestore
-      const userSnapshot = await getDocs(query(collection(db, dbusers), where('email', '==', email)));
+      const userSnapshot = await getDocs(query(collection(db, global.users), where('email', '==', email)));
       if (userSnapshot.empty) {
         alert('No user found with this email address.');
         setLoading(false);

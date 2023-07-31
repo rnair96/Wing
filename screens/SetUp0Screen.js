@@ -34,7 +34,7 @@ const SetUp0Screen = () => {
     const incompleteform = !gender||!age||!location||!job||!name;
 
     const createUserProfile = () => {
-        setDoc(doc(db, 'users', user.uid), {
+        setDoc(doc(db, global.users, user.uid), {
             id: user.uid,
             displayName: name,
             email: user.email,

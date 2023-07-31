@@ -23,19 +23,8 @@ const HomeScreen = () => {
     const [ profiles, setProfiles ] = useState([]);
     const [ loggedProfile, setLoggedProfile ] = useState(null);
 
-    let dbusers;
-
-        if (__DEV__) {
-            console.log('dev users');
-            dbusers = 'users_test';
-        } else {
-            console.log('prod users');
-            dbusers = 'users';
-        }
-    
-
     useLayoutEffect(()=>{
-            const unsub = onSnapshot(doc(db, dbusers, user?.uid), (snapshot) => {
+            const unsub = onSnapshot(doc(db, global.users, user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
                     navigation.navigate("SetUp0");
                 } else if (!snapshot.data().mission){
@@ -81,7 +70,7 @@ const HomeScreen = () => {
             const location = await getLocation();
             if(loggedProfile && location && loggedProfile?.location!== location){
                 console.log("Updating location")
-                updateDoc(doc(db, dbusers, user.uid), {
+                updateDoc(doc(db, global.users, user.uid), {
                     location: location
                 }).catch((error) => {
                     console.log("could not refresh location");
@@ -114,7 +103,7 @@ const HomeScreen = () => {
             && currentDate.getFullYear() !== loggedProfile.last_year_celebrated){
                 console.log("Updating age on birthday")
                 const newage = loggedProfile.age + 1;
-                updateDoc(doc(db, dbusers, user.uid), {
+                updateDoc(doc(db, global.users, user.uid), {
                     age: newage,
                     last_year_celebrated: currentDate.getFullYear()
                 }).catch((error) => {
@@ -131,12 +120,12 @@ const HomeScreen = () => {
         const fetchCards = async() => {
 
             const passedIds = [];
-            await getDocs(collection(db,dbusers,user.uid,"passes")).then((snapshot) => {
+            await getDocs(collection(db,global.users,user.uid,"passes")).then((snapshot) => {
                 snapshot.docs.map((doc) => passedIds.push(doc.id))
             });
 
             const swipedIds = [];
-            await getDocs(collection(db,dbusers,user.uid,"swipes")).then((snapshot) => {
+            await getDocs(collection(db,global.users,user.uid,"swipes")).then((snapshot) => {
                 snapshot.docs.map((doc) => swipedIds.push(doc.id))
             });
 
@@ -151,7 +140,7 @@ const HomeScreen = () => {
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
             const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
 
-            unsub = onSnapshot(query(collection(db, dbusers), where("id","not-in", [...passedUIds, ...swipedUIds, ...[user.uid]]), limit(10))
+            unsub = onSnapshot(query(collection(db, global.users), where("id","not-in", [...passedUIds, ...swipedUIds, ...[user.uid]]), limit(10))
             ,(snapshot) =>{
                 setProfiles(
                     snapshot.docs
@@ -183,7 +172,7 @@ const HomeScreen = () => {
         if (!profiles[cardIndex]){ return;}
 
         console.log("you swiped left on", profiles[cardIndex].displayName);
-        setDoc(doc(db, dbusers, user.uid, "passes", profiles[cardIndex].id), profiles[cardIndex]);
+        setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), profiles[cardIndex]);
     }
 
     const swipeRight = async (cardIndex) => {
@@ -191,14 +180,14 @@ const HomeScreen = () => {
 
         const userSwiped = profiles[cardIndex]
 
-        getDoc(doc(db, dbusers, userSwiped.id, "swipes", user.uid)).then(
+        getDoc(doc(db, global.users, userSwiped.id, "swipes", user.uid)).then(
             documentSnapshot => {
                 if (documentSnapshot.exists()){
                     //user matched, they swiped on you already
                     console.log("MATCHED with", userSwiped.displayName);
                     const timestamp = serverTimestamp();
 
-                    setDoc(doc(db, 'matches', generateId(user.uid, userSwiped.id)), {
+                    setDoc(doc(db, global.matches, generateId(user.uid, userSwiped.id)), {
                         users: {
                             [user.uid]: loggedProfile,
                             [userSwiped.id]: userSwiped
@@ -215,7 +204,7 @@ const HomeScreen = () => {
                     console.log("you swiped right on",  userSwiped.displayName);
 
                 }
-                setDoc(doc(db, dbusers, user.uid, "swipes",  userSwiped.id),  userSwiped);
+                setDoc(doc(db, global.users, user.uid, "swipes",  userSwiped.id),  userSwiped);
             }
             
         );

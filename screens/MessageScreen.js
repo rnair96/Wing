@@ -21,7 +21,7 @@ const MessageScreen = () => {
 
 
     useEffect(()=> {
-      const unsub = onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
+      const unsub = onSnapshot(query(collection(db,global.matches,matchedDetails.id,"messages"), 
         orderBy("timestamp", "desc")), 
         (snapshot) => {
             setMessages(snapshot.docs.map((doc)=>({
@@ -39,7 +39,7 @@ const MessageScreen = () => {
 
     useEffect(()=>{
       if(messages.length>0 && messages[0].userId !== user.uid && !(messages[0].read)){
-        updateDoc(doc(db, 'matches',matchedDetails.id, "messages", messages[0].id), {
+        updateDoc(doc(db, global.matches,matchedDetails.id, "messages", messages[0].id), {
           read:true,
         })
       }
@@ -47,7 +47,7 @@ const MessageScreen = () => {
 
     const sendMessage = () => {
       const timestamp = serverTimestamp();
-        addDoc(collection(db, "matches", matchedDetails.id, "messages"), {
+        addDoc(collection(db, global.matches, matchedDetails.id, "messages"), {
             timestamp: timestamp,
             userId: user.uid,
             displayName: user.displayName,
@@ -56,7 +56,7 @@ const MessageScreen = () => {
             read: false,
         })
 
-        updateDoc(doc(db, 'matches',matchedDetails.id), {
+        updateDoc(doc(db, global.matches,matchedDetails.id), {
           latest_message_timestamp: timestamp
         })
 

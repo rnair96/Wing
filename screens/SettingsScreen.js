@@ -48,7 +48,7 @@ const SettingsScreen = () => {
     // }
 
     const updateEmail = () => {
-        updateDoc(doc(db, 'users',user.uid), {
+        updateDoc(doc(db, global.users,user.uid), {
             email:email
             }).then(()=> {
             navigation.navigate("Home");
@@ -85,7 +85,7 @@ const SettingsScreen = () => {
     }
 
     const deleteUser = async () => {
-        await deleteDoc(doc(db, 'users', user.uid)).then(() => {
+        await deleteDoc(doc(db, global.users, user.uid)).then(() => {
             logout();
             console.log("User has been deleted successfully.")
         })
@@ -97,14 +97,14 @@ const SettingsScreen = () => {
     const deleteMatches = async () => {
         const batch = writeBatch(db);
         const matches =[]
-        await getDocs(collection(db,"matches")).then((snapshot) => {
+        await getDocs(collection(db,global.matches)).then((snapshot) => {
             snapshot.docs.filter((doc)=> doc.id.includes(user.uid)).map((doc) => matches.push(doc.id))
         })
 
         if (matches.length>0){
             
             matches.map((matchID)=>{
-                batch.delete(doc(db,'matches',matchID))
+                batch.delete(doc(db,global.matches,matchID))
             })
     
             await batch.commit().then(() => {
@@ -120,14 +120,14 @@ const SettingsScreen = () => {
     const deleteSwipeHistory = async (swipe_collection) => {
         const batch = writeBatch(db);
         const history =[]
-        await getDocs(collection(db, "users", user.uid, swipe_collection)).then((snapshot) => {
+        await getDocs(collection(db, global.users, user.uid, swipe_collection)).then((snapshot) => {
             snapshot.docs.map((doc) => history.push(doc.id))
         })
 
 
         if (history.length>0){
             history.map((historyID)=>{
-                batch.delete(doc(db,'users',user.uid, swipe_collection, historyID))
+                batch.delete(doc(db,global.users,user.uid, swipe_collection, historyID))
             })
     
             await batch.commit().then(() => {
@@ -176,9 +176,9 @@ const SettingsScreen = () => {
 
     // const deleteOthersHistory = async () => {
     //     const history =[]
-    //     await getDocs(collection(db, "users")).then((snapshot) => {
+    //     await getDocs(collection(db, global.users)).then((snapshot) => {
     //         snapshot.docs.filter((doc) => 
-    //         await getDocs(collection(db, 'users', doc.id, "swipes").then((swipesnapshot) =>{
+    //         await getDocs(collection(db, global.users, doc.id, "swipes").then((swipesnapshot) =>{
     //             swipesnapshot.docs.filter((swipe) => swipe.id === user.uid).map((swipe) => {
     //                 history.push[doc.id]
     //             })

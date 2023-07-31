@@ -41,7 +41,7 @@ const MatchingPreferences = () => {
 
 
     const updatePreferences = () => {
-      updateDoc(doc(db, 'users',profile.id), {
+      updateDoc(doc(db, global.users,profile.id), {
             ageMin: ageMin,
             ageMax: ageMax,
             // matchRadius: matchRadius,

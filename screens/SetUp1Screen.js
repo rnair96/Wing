@@ -22,7 +22,7 @@ const SetUp1Screen = () => {
   const incompleteform = !mission||!idealwing;
 
   const updateUserProfile = () => {
-      updateDoc(doc(db, 'users', user.uid), {
+      updateDoc(doc(db, global.users, user.uid), {
           mission: mission,
           ideal_wing: idealwing,
           mission_tag: missiontag,

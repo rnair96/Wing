@@ -14,7 +14,7 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
     const navigation = useNavigation();
 
     const flagUserProfile = (flag) => {
-        updateDoc(doc(db, 'users', other_user.id), {
+        updateDoc(doc(db, global.users, other_user.id), {
             flags: arrayUnion({
                 type: flag,
                 reported_by: user.uid,

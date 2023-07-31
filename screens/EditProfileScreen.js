@@ -82,7 +82,7 @@ const EditProfileScreen = () => {
 
 
   const updateUserProfile = () => {
-      updateDoc(doc(db, 'users', user.uid), {
+      updateDoc(doc(db, global.users, user.uid), {
           id: user.uid,
           displayName: name,
           email: email,

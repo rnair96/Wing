@@ -24,7 +24,7 @@ const SetUp2Screen = () => {
 
 
   const updateUserProfile = () => {
-      updateDoc(doc(db, 'users', user.id), {
+      updateDoc(doc(db, global.users, user.id), {
           images: [url1, url2, url3],
           accomplishments: accomplishments,
           skills: skills,

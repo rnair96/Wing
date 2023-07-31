@@ -14,7 +14,7 @@ const ChatList = () => {
   useEffect(()=>{
     const unsub = onSnapshot(
       query(
-        collection(db, "matches"), 
+        collection(db, global.matches), 
         where("userMatched", "array-contains", user.uid),
         orderBy("latest_message_timestamp", "desc")),
         ( snapshot ) => 
