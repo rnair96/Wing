@@ -13,6 +13,7 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import * as WebBrowser from 'expo-web-browser';
 import checkFlagged from '../lib/checkFlagged';
+import { RankBadge } from '../lib/RankBadge';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -290,8 +291,9 @@ const HomeScreen = () => {
                         <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}>
                         <View style={{alignItems:"center"}}>
                         <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
+                        <Image style={{height:30, width:50, padding:10}} source={RankBadge.getBadge(card?.rank)}/>
                         </View>   
-                        <Image style={{height:"75%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
+                        <Image style={{top:10, height:"75%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
                         <View style={styles.infocontainer}>
                             <View>
                                 <Text style={{fontWeight:"bold", fontSize:20}}>

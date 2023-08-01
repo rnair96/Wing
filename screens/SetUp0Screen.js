@@ -44,6 +44,7 @@ const SetUp0Screen = () => {
             last_year_celebrated: 2022,
             gender: gender,
             location: location,
+            rank: "Airman",
             token: token,
             timestamp: serverTimestamp()
         }).then(()=> {
