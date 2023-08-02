@@ -45,6 +45,8 @@ const SetUp0Screen = () => {
             gender: gender,
             location: location,
             rank: "Airman",
+            points: 0,
+            recently_promoted: true,
             token: token,
             timestamp: serverTimestamp()
         }).then(()=> {

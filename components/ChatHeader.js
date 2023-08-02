@@ -6,6 +6,7 @@ import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import useAuth from '../hooks/useAuth';
 import FlagModal from './FlagModal';
 import deleteMatchFull from '../lib/deleteMatchFull';
+import RatingModal from './RatingModal';
 
 const ChatHeader = ({matchedDetails}) => {
     const navigator = useNavigation();
@@ -13,6 +14,8 @@ const ChatHeader = ({matchedDetails}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [ secondModal, setSecondModal ] = useState(false);
     const [ flag_modal, setFlagModal ] = useState(false);
+    const [ rating_modal, setRatingModal ] = useState(false);
+
     // const [ mute, setMute ] = useState(false);
 
     const matched_user = getMatchedUserInfo(matchedDetails.users, user.uid);
@@ -67,6 +70,15 @@ const ChatHeader = ({matchedDetails}) => {
               <Text style={styles.textStyle}>{mute?("Unmute Notifications"):("Mute Notifications")}</Text>
             </TouchableHighlight> */}
             {/* Unmatch function */}
+            <TouchableHighlight
+              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+                setRatingModal(true);
+              }}
+            >
+              <Text style={styles.textStyle}>Rate Wing</Text>
+            </TouchableHighlight>
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
@@ -132,6 +144,7 @@ const ChatHeader = ({matchedDetails}) => {
 
       </Modal>
       <FlagModal other_user={matched_user[1]} isVisible={flag_modal} setIsVisible={setFlagModal} matchedID={matchedDetails.id}/>
+      <RatingModal other_user={matched_user[1]} isVisible={rating_modal} matched={matchedDetails} onClose={() => setRatingModal(false)}/>
       </View>
     )
 }

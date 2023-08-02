@@ -112,6 +112,13 @@ const HomeScreen = () => {
                 });
             }
         }
+
+        if(loggedProfile && loggedProfile?.recently_promoted) {
+            console.log("Promotion screen!");
+            // console.log("does logged profile have a rank", loggedProfile?.rank)
+            navigation.navigate("Promotion", loggedProfile?.rank)
+        }
+        
     },[loggedProfile]);
 
 

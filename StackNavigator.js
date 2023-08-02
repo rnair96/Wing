@@ -27,6 +27,7 @@ import FlaggedScreen from './screens/FlaggedScreen';
 import ReportOtherScreen from './screens/ReportOtherScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
+import PromotionScreen from './screens/PromotionScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -41,7 +42,7 @@ const StackNavigator = () => {
     
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
-        if(response.notification.request.content.data.type === "message"){
+        if(response.notification.request.content.data.type === "message" || response.notification.request.content.data.type === "rated"){
           const matchedDetails = response.notification.request.content.data.message;
           navigation.navigate("Message", { matchedDetails });
         } else if (response.notification.request.content.data.type === "match"){
@@ -89,6 +90,7 @@ const StackNavigator = () => {
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "transparentModal" }}>
               <Stack.Screen name="Match" component={MatchScreen} />
+              <Stack.Screen name="Promotion" component={PromotionScreen} />
             </Stack.Group>
             </>
         ) : (
