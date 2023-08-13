@@ -62,9 +62,9 @@ export const ProfileSwipeScreen = () => {
                     {/* <Image style={styles.iconcontainer} source={require("../images/mission.jpeg")}/> */}
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.mission}</Text>
-                    <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.mission_tag)}}>
+                    {/* <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.mission_tag)}}>
                     <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{card.item.mission_tag}</Text>
-                    </View>
+                    </View> */}
                     <Image style={styles.imagecontainer} source={{uri: card.item.images[0]}}/>
                     </View>
                     <View style={styles.infocontainer}>

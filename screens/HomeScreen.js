@@ -425,9 +425,9 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        textShadowColor: 'rgba(0, 0, 0, 1)', // Shadow color
-        textShadowOffset: { width: -10, height: 10 },
-        textShadowRadius: 30
+        textShadowColor: 'rgba(0, 0, 0, 0.9)', // Shadow color
+        textShadowOffset: { width: -1, height: 1 },
+        textShadowRadius: 9
       },
     swipeButtonCross:{
        bottom: 10,
