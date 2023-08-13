@@ -14,6 +14,8 @@ import * as Notifications from 'expo-notifications';
 import * as WebBrowser from 'expo-web-browser';
 import checkFlagged from '../lib/checkFlagged';
 import { RankBadge } from '../lib/RankBadge';
+// import LinearGradient from 'react-native-linear-gradient';
+
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -296,30 +298,36 @@ const HomeScreen = () => {
                     return (
                         <View key={card.id} style={styles.cardcontainer}>
                         <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}>
-                        <View style={{alignItems:"center"}}>
-                        <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
-                        <Image style={{height:30, width:50, padding:10}} source={RankBadge.getBadge(card?.rank)}/>
+                        {/* <View style={{alignItems:"center"}}>
+                        <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.mission}</Text>
                         </View>   
-                        <Image style={{top:10, height:"75%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
+                        <Image style={{top:10, height:"75%" ,maxWidth:400}} source={{uri: card?.images[0]}}/> */}
+                        {/* <View style={styles.container}> */}
+                            <Image source={{uri: card?.images[0]}} style={styles.image} resizeMode="cover"/>
+                            {/* <LinearGradient colors={['rgba(0,0,0,0.6)', 'transparent']} style={styles.gradient}/> */}
+                            <Text style={styles.text}>{card.mission}</Text>
+                        {/* </View> */}
                         <View style={styles.infocontainer}>
                             <View>
-                                <Text style={{fontWeight:"bold", fontSize:20}}>
+                                <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>
                                     {card.displayName}
                                 </Text>
-                                <Text>
+                                <Text style={{color:"white"}}>
                                 {card.job}
                                 </Text>
                             </View>
                             <View>
-                            <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
-                            <Text>{card.location}</Text>
+                            <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>{card.age}</Text>
+                            <Text style={{color:"white"}}>{card.location}</Text>
                             </View>
                         </View>
                         </TouchableOpacity>
                         <View style={{flexDirection:"row", justifyContent:'center'}}>
                         <TouchableOpacity style={styles.swipeButtonDown} onPress={()=>navigation.navigate("ProfileSwipe", {card: card})}>
-                                <Entypo name="arrow-bold-down" size={30} color="white"/>
+                                {/* <Entypo name="arrow-bold-down" size={30} color="white"/> */}
+                                <Image style={{height:30, width:50}} source={RankBadge.getBadge(card?.rank)}/>
                         </TouchableOpacity>
+
                         </View>
                         
                     </View>
@@ -365,7 +373,7 @@ const styles = StyleSheet.create({
         marginTop:-30,
     },
     cardcontainer: {
-        backgroundColor: "white",
+        backgroundColor: "#00308F",
         height:"75%",
         borderRadius: 20,
         shadowColor:"#000",
@@ -381,12 +389,46 @@ const styles = StyleSheet.create({
         height:"75%",
     },
     infocontainer: {
-        backgroundColor:"white",
+        backgroundColor:"#00308F",
         paddingTop: 15, 
         flexDirection:"row",
         justifyContent: "space-between",
         paddingHorizontal: 30
     },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+      },
+      image: {
+        // top:5,
+        height:"85%" ,
+        maxWidth:400,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        overflow: 'hidden'
+      },
+      gradient: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '20%',
+      },
+      text: {
+        position: 'absolute', 
+        top: 10,  // This will place the text near the top of the image
+        left: 0,
+        right: 0,
+        color: 'white',
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        textShadowColor: 'rgba(0, 0, 0, 1)', // Shadow color
+        textShadowOffset: { width: -10, height: 10 },
+        textShadowRadius: 30
+      },
     swipeButtonCross:{
        bottom: 10,
        width: 50,
@@ -405,25 +447,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "#32de84"
      },
-    //  ButtonFlag:{
-    //     bottom: "40%",
-    //     width: 40,
-    //     height: 40,
-    //     borderRadius: 50,
-    //     alignItems: "center",
-    //     justifyContent: "center",
-    //     backgroundColor: "#FFBF00"
-    //  },
      swipeButtonDown: {
         bottom: "30%",
         width: 60,
         height: 60,
         borderRadius: 50,
         borderWidth:2,
-        borderColor:"white",
+        borderColor:"#00BFFF",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#00BFFF"
+        backgroundColor: "white"
       }
 });
 

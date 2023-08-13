@@ -3,6 +3,7 @@ import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, TouchableWit
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { Entypo } from '@expo/vector-icons';
 import FlagModal from '../components/FlagModal';
+import { RankBadge } from '../lib/RankBadge';
 
 // import Container from '../components/Footer';
 
@@ -53,14 +54,14 @@ export const ProfileSwipeScreen = () => {
       renderItem = {(card) =>
         (
                 <View style={{backgroundColor:"black"}}>
-                    <View style={{backgroundColor:"white", margin:10, borderRadius:20}}>
+                    <View style={{backgroundColor:"#00308F", margin:10, borderRadius:20}}>
                     <View style={{alignItems:"center"}}>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={styles.iconcontainer} source={require("../images/reverse_mission.jpeg")}/>
-                    <Text style = {{padding: 10}}>Mission</Text>
-                    <Image style={styles.iconcontainer} source={require("../images/mission.jpeg")}/>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/reverse_mission.jpeg")}/> */}
+                    <Text style = {{padding: 10, color:"white"}}>Mission</Text>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/mission.jpeg")}/> */}
                     </View>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.mission}</Text>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.mission}</Text>
                     <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.mission_tag)}}>
                     <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{card.item.mission_tag}</Text>
                     </View>
@@ -68,55 +69,66 @@ export const ProfileSwipeScreen = () => {
                     </View>
                     <View style={styles.infocontainer}>
                         <View>
-                            <Text style={{fontWeight:"bold", fontSize:20}}>
+                            <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>
                                 {card.item.displayName}
                             </Text>
-                            <Text>
+                            <Text style={{color:"white"}}>
                             {card.item.job}
                             </Text>
                         </View>
-                        <Text style={{fontWeight:"bold", fontSize:20}}>{card.item.age}</Text>
+                        <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>{card.item.age}</Text>
                     </View>
                     </View>
-                    <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center", paddingBottom:10}}>
+                    <View style={{backgroundColor:"#00308F", margin:10, borderRadius:20, alignItems:"center", paddingBottom:10}}>
+                    {/* <View style={{flexDirection:"row", padding: 10}}> */}
+                    {/* <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/> */}
+                    <Text style = {{padding: 10, color:"white"}}>Rank</Text>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/> */}
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={styles.iconcontainer} source={require("../images/reverselogo.jpg")}/>
-                    <Text style = {{padding: 10}}>My Ideal Wing</Text>
-                    <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/>
+                    <Image style={{height:50, width:70, borderRadius:50}} source={RankBadge.getBadge(card.item.rank)}/>
+                    <Text style = {{padding: 10, fontSize: 25, color:"white", fontWeight:"bold"}}>{card.item.rank}</Text>
+                    {/* </View> */}
                     </View>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.ideal_wing}</Text>
+                    </View>
+                    <View style={{backgroundColor:"#00308F", margin:10, borderRadius:20, alignItems:"center", paddingBottom:10}}>
+                    <View style={{flexDirection:"row", padding: 10}}>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/reverselogo.jpg")}/> */}
+                    <Text style = {{padding: 10, color:"white"}}>Ideal Wing</Text>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/logo2.jpg")}/> */}
+                    </View>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.ideal_wing}</Text>
                     <Image style={styles.imagecontainer} source={{uri: card.item.images[1]}}/>
                     </View>
-                    <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
+                    <View style={{backgroundColor:"#00308F", margin:10, borderRadius:20, alignItems:"center"}}>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={styles.iconcontainer} source={require("../images/reverse_biceps.jpg")}/>
-                    <Text style = {{padding: 10}}>Strengths</Text>
-                    <Image style={styles.iconcontainer} source={require("../images/bicep.jpg")}/>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/reverse_biceps.jpg")}/> */}
+                    <Text style = {{padding: 10, color:"white"}}>Medals</Text>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/bicep.jpg")}/> */}
                     </View>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.skills}</Text>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.skills}</Text>
                     <Image style={styles.imagecontainer} source={{uri: card.item.images[2]}}/>
                     <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/>
+                    {/* <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/>
                     <Text style = {{padding: 10}}>Medals</Text>
-                    <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/>
+                    <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/> */}
                     </View>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text>
+                    {/* <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text> */}
                     </View>
 
-                    <View style={{height:400}}>
-                    <View style={{backgroundColor:"white", margin:10, borderRadius:20, alignItems:"center"}}>
-                    <View style={{flexDirection:"row", padding: 10}}>
+                    <View style={{height:300}}>
+                    <View style={{backgroundColor:"#00308F", margin:10, borderRadius:20, alignItems:"center"}}>
+                    {/* <View style={{flexDirection:"row", padding: 10}}>
                     <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/>
                     <Text style = {{padding: 10}}>Hobbies</Text>
                     <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/>
-                    </View>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.hobbies}</Text>
+                    </View> */}
+                    {/* <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.hobbies}</Text> */}
                     <View style={{flexDirection:"column", padding: 10}}>
-                    <Image style={{height: 40, width:40, alignSelf:"center"}} source={require("../images/location.jpeg")}/>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.location}</Text>
+                    <Image style={{height: 40, width:40, alignSelf:"center", borderRadius:50}} source={require("../images/location.jpeg")}/>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.location}</Text>
                     </View>
                     <View style={{padding:10}}>
-                    <TouchableOpacity style={{padding:10, backgroundColor:"#00BFFF", borderRadius:20}} onPress={reportUser}>
+                    <TouchableOpacity style={{padding:10, backgroundColor:"#00BFFF", borderRadius:20, borderWidth:2, borderColor:"white"}} onPress={reportUser}>
                         <Text style={{color:"white"}}>Report User</Text>
                     </TouchableOpacity>
                     </View>
