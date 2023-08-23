@@ -72,7 +72,7 @@ const MatchingPreferences = () => {
 
       <Text style={{fontSize:15, fontWeight: "bold", padding:40}}>Choose Your Wing Preferences</Text> 
 
-      <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
+      {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
 
       <View style ={{flexDirection:"row", alignItems:"center"}}>
         <View style ={{padding:10}}>
@@ -85,7 +85,7 @@ const MatchingPreferences = () => {
       
         <AgePicker age= {ageMax} setAge={setAgeMax} />
         </View>
-      </View>
+      </View> */}
 
 
       <View style={{alignItems:"center", paddingBottom:30}}>

@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import { Entypo } from '@expo/vector-icons';
 import FlagModal from '../components/FlagModal';
 import { RankBadge } from '../lib/RankBadge';
+import tagColor from '../lib/colorTag';
 
 // import Container from '../components/Footer';
 
@@ -30,13 +31,6 @@ export const ProfileSwipeScreen = () => {
     //   swipeRef.current.swipeRight()
     // }
 
-    const tagColor = (tag) => {
-        if (tag === "Career-Focused") {
-           return "#FF033E";
-        } else if (tag === "Personal Growth") {
-            return "#002D62";
-        } else return "#018749";
-    }
 
     const reportUser = () => {
         setFlagModal(true);
@@ -62,9 +56,9 @@ export const ProfileSwipeScreen = () => {
                     {/* <Image style={styles.iconcontainer} source={require("../images/mission.jpeg")}/> */}
                     </View>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.mission}</Text>
-                    {/* <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.mission_tag)}}>
+                    <View style={{margin:10, padding:10, borderRadius:50, backgroundColor: tagColor(card.item.mission_tag)}}>
                     <Text style={{fontWeight:"bold", fontSize:12, color:"white"}}>{card.item.mission_tag}</Text>
-                    </View> */}
+                    </View>
                     <Image style={styles.imagecontainer} source={{uri: card.item.images[0]}}/>
                     </View>
                     <View style={styles.infocontainer}>
@@ -105,24 +99,24 @@ export const ProfileSwipeScreen = () => {
                     <Text style = {{padding: 10, color:"white"}}>Medals</Text>
                     {/* <Image style={styles.iconcontainer} source={require("../images/bicep.jpg")}/> */}
                     </View>
-                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.skills}</Text>
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.medals}</Text>
                     <Image style={styles.imagecontainer} source={{uri: card.item.images[2]}}/>
                     <View style={{flexDirection:"row", padding: 10}}>
+                    <Text style = {{padding: 10, color:"white"}}>A Bit About Me</Text>
                     {/* <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/>
                     <Text style = {{padding: 10}}>Medals</Text>
                     <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/> */}
                     </View>
-                    {/* <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text> */}
+                    <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.bio}</Text>
+
                     </View>
 
-                    <View style={{height:300}}>
+                    <View style={{height:400}}>
                     <View style={{backgroundColor:"#00308F", margin:10, borderRadius:20, alignItems:"center"}}>
-                    {/* <View style={{flexDirection:"row", padding: 10}}>
-                    <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/>
-                    <Text style = {{padding: 10}}>Hobbies</Text>
-                    <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/>
-                    </View> */}
-                    {/* <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.hobbies}</Text> */}
+                    {/* <View style={{flexDirection:"row", padding: 10}}> */}
+                    {/* <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/> */}
+                    {/* <Image style={styles.iconcontainer} source={require("../images/smile.jpeg")}/> */}
+                    {/* </View> */}
                     <View style={{flexDirection:"column", padding: 10}}>
                     <Image style={{height: 40, width:40, alignSelf:"center", borderRadius:50}} source={require("../images/location.jpeg")}/>
                     <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.location}</Text>

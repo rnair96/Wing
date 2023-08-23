@@ -43,7 +43,7 @@ const RatingModal = ({ other_user, isVisible, matched, onClose }) => {
             promotion = true;
         }
 
-        const message = "This Wing has rated you "+rating+" out of 5 Stars."
+        const message = "This Wing has given you "+rating+" Stars."
     
         // Update the user's points with the rating
         await updateDoc(doc(db, global.users, other_user.id), {

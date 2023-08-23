@@ -1,43 +1,17 @@
-import React, { Component } from 'react';
-import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/core';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Entypo, Ionicons} from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import getMatchedUserInfo from '../lib/getMatchedUserInfo';
-import useAuth from '../hooks/useAuth';
+import React from 'react';
+import { View, ScrollView, Text, SafeAreaView, Image, StyleSheet, FlatList} from 'react-native';
 import { RankBadge } from '../lib/RankBadge';
 import tagColor from '../lib/colorTag';
 
 
-export const ProfileViewScreen = () => {
-    const { params } = useRoute();
-    const { user } = useAuth();
-
-
-    const {matchedDetails} = params;
-
-    const matched_user = getMatchedUserInfo(matchedDetails.users, user.uid);
-
-    const card = matched_user[1]
-
-
-    const navigation = useNavigation();
-
-
-
-    return (
+const ViewProfileScreen = ({profile}) => {
+    
+return (
       <SafeAreaView style={{flex:1}}>
-      {/* <View> */}
-    <View style={{justifyContent:"center", alignItems:"center", padding: 10}}>
-        <TouchableOpacity onPress={() => navigation.navigate("Message",{matchedDetails})}>
-            <Ionicons name="arrow-down" size={30} color = "#00BFFF"/>
-        </TouchableOpacity>
-    </View>
 
-      <View>
+    <View>
       <FlatList
-      data = {[card]}
+      data = {[profile]}
       keyExtractor={(card) => card.id}
       contentContainerStyle={{ flexGrow: 0 }}
       renderItem = {(card) =>
@@ -102,7 +76,7 @@ export const ProfileViewScreen = () => {
             <Text style = {{padding: 10}}>Medals</Text>
             <Image style={styles.iconcontainer} source={require("../images/medal.jpg")}/> */}
             </View>
-            <Text style={{fontWeight:"bold", fontSize:15, padding: 10,  color:"white"}}>{card.item.bio}</Text>
+            <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"white"}}>{card.item.bio}</Text>
             {/* <Text style={{fontWeight:"bold", fontSize:15, padding: 10}}>{card.item.accomplishments}</Text> */}
             </View>
 
@@ -122,51 +96,56 @@ export const ProfileViewScreen = () => {
       )
     }
         />
-         {/* <Foo ter/> */}
         </View>
         </SafeAreaView>
-        
-    )
+          
+)
 }
 
 const styles = StyleSheet.create({
-    imagecontainer: {
-        height:440,
-        width:"90%", 
-        borderRadius:20
-       },
-   iconcontainer: {
-       height: 60,
-       width: 60,
-       borderRadius: 50,
-       bottom: 25,
-       borderColor:"#00BFFF",
-       borderWidth: 2
+  formTitle :{
+    fontSize:15, 
+    fontWeight: "bold", 
+    color:"#00308F", 
+    padding:20
+  },
+  imagecontainer: {
+    height:440,
+    width:"90%", 
+    borderRadius:20
    },
-   cardscontainer: {
-      //  flex: 1,
-      //  marginTop:-30,
+iconcontainer: {
+   height: 60,
+   width: 60,
+   borderRadius: 50,
+   bottom: 25,
+   borderColor:"#00BFFF",
+   borderWidth: 2
+},
+cardscontainer: {
+  //  flex: 1,
+  //  marginTop:-30,
+},
+cardcontainer: {
+   backgroundColor: "white",
+  //  height:500,
+   borderRadius: 20,
+   shadowColor:"#000",
+   shadowOffset: {
+       width: 0,
+       height: 1
    },
-   cardcontainer: {
-       backgroundColor: "white",
-      //  height:500,
-       borderRadius: 20,
-       shadowColor:"#000",
-       shadowOffset: {
-           width: 0,
-           height: 1
-       },
-       shadowOpacity: 0.2,
-       shadowRadius: 1.41,
-       elevation:2
-   },
-   infocontainer: {
-      //  bottom:70 ,
-       paddingVertical: 15, 
-       flexDirection:"row",
-       justifyContent: "space-between",
-       paddingHorizontal: 30
-   }
-});
+   shadowOpacity: 0.2,
+   shadowRadius: 1.41,
+   elevation:2
+},
+infocontainer: {
+  //  bottom:70 ,
+   paddingVertical: 15, 
+   flexDirection:"row",
+   justifyContent: "space-between",
+   paddingHorizontal: 30
+}
+})
 
-export default ProfileViewScreen;
+export default ViewProfileScreen;

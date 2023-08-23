@@ -3,39 +3,34 @@ import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacit
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useNavigation, useRoute } from '@react-navigation/core';
 import ImageUpload from '../components/ImageUpload';
-import AgePicker from '../components/AgePicker';
-import GenderPicker from '../components/GenderPicker';
-import { Ionicons} from '@expo/vector-icons';
-import TagPicker from '../components/TagPicker';
 import registerNotifications from '../lib/registerNotifications';
+import { useNavigation } from '@react-navigation/core';
+import TagPicker from '../components/TagPicker';
+ 
 
 
-const EditProfileScreen = () => {
+const EditProfileScreen = ({profile}) => {
   const { user } = useAuth();
   const [ job, setJob ] = useState(null);
   const [ age, setAge ] = useState(18);
   const [ oldtoken, setOldToken ] = useState(null);
   const [ newtoken, setNewToken ] = useState("not_granted");
   const [ mission, setMission ] = useState(null);
-  const [ missiontag, setMissionTag ] = useState("Personal Growth");
+  const [ missiontag, setMissionTag ] = useState("Social");
   const [ gender, setGender ] = useState("male");
-  const [ accomplishments, setAccomplishments ] = useState(null);
-  const [ skills, setSkills ] = useState(null);
+  const [ medals, setMedals ] = useState(null);
+  const [ bio, setBio ] = useState(null);
   const [ idealwing, setIdealWing ] = useState(null);
   const [ location, setLocation ] = useState(null);
-  const [ hobbies, setHobbies ] = useState(null);
   const [ incompleteForm, setIncompleteForm ] = useState(true);
-  const [ email, setEmail ] = useState(user.email);
-  const [ name, setName ] = useState(null);
   const [ url1, setUrl1] = useState(null);
   const [ url2, setUrl2] = useState(null);
   const [ url3, setUrl3] = useState(null);
+  const navigation = useNavigation();
 
 
-  const { params } = useRoute();
-  const profile = params;
+ 
 
   useEffect(()=>{
     if (profile) {
@@ -46,27 +41,23 @@ const EditProfileScreen = () => {
         setAge(parseInt(profile.age));
         setMission(profile.mission);
         setGender(profile.gender);
-        setAccomplishments(profile.accomplishments);
-        setSkills(profile.skills);
+        setMedals(profile.medals);
+        setBio(profile.bio);
         setLocation(profile.location);
-        setHobbies(profile.hobbies);
         setIdealWing(profile.ideal_wing);
         setMissionTag(profile.mission_tag);
-        setEmail(profile.email);
-        setName(profile.displayName)
         setOldToken(profile.token);
     }
 
   },[profile])
 
 
-  const navigation = useNavigation();
 
   useEffect(()=>{
-    const form =  !url1||!url2||!url3||!gender||!age||!mission||!accomplishments||!skills||!idealwing||!location||!hobbies;
+    const form =  !url1||!url2||!url3||!mission||!medals||!idealwing||!location||!bio;
     setIncompleteForm(form);
 
-  },[url1, url2, url3 ,gender, age,mission, accomplishments, skills, idealwing, location, hobbies])
+  },[url1, url2, url3 ,mission, medals, idealwing, location, bio])
 
   useEffect(()=>{
     (async () => {
@@ -80,24 +71,20 @@ const EditProfileScreen = () => {
 
   },[oldtoken])
 
+    
+
 
   const updateUserProfile = () => {
       updateDoc(doc(db, global.users, user.uid), {
-          id: user.uid,
-          displayName: name,
-          email: email,
           images: [url1, url2, url3],
           job: job,
-          age: age,
-          gender: gender,
           mission: mission,
-          accomplishments: accomplishments,
-          skills: skills,
-          ideal_wing: idealwing,
-          hobbies: hobbies,
           mission_tag: missiontag,
-          timestamp: serverTimestamp(),
-          token: newtoken
+          medals: medals,
+          ideal_wing: idealwing,
+          location: location,
+          token: newtoken,
+          bio: bio
       }).then(()=> {
             navigation.navigate("Home");
       }).catch((error) => {
@@ -117,39 +104,32 @@ return (
           // onPress={Keyboard.dismiss()}
         >
       <ScrollView style={{marginHorizontal:10}}>
-      <SafeAreaView style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly", right:"4%"}}>
-            <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.goBack()}>
-            <Ionicons name="ios-arrow-back" size={30} color = "#00BFFF"/>
-            </TouchableOpacity>
-          <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Home")}>
-          <Image style={{height:50, width:50, borderRadius:50, backgroundColor:"#00BFFF", borderColor:"#00308F", borderWidth:2}} source={require("../images/logo.png")}/>
-          </TouchableOpacity>
-          </SafeAreaView>
-        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-          
 
+        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
+
+          
       
       <View style ={{flexDirection:"row"}}>
       <View style ={{alignItems:"center"}}>
       <Text style={styles.formTitle}>Age</Text>
       
-      {!profile?.age ? (
+      {/* {!profile?.age ? (
         <AgePicker age= {age} setAge={setAge} />
-      ):(
+      ):( */}
         <Text>{age}</Text>
-      )}
+      {/* )} */}
       
       </View>
       
       <View style={{alignItems:"center"}}>
       <Text style={styles.formTitle}>Gender</Text>
       
-      {!profile?.gender ? (
+      {/* {!profile?.gender ? (
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
-      ):(
+      ):( */}
         <Text>{gender}</Text>
-      )}
+      {/* )} */}
       </View>
       </View>
 
@@ -168,8 +148,9 @@ return (
         )}
         </View>
 
-        <View style={{padding:10, alignItems:"center"}}>
-        <Text style={styles.formTitle}>Job</Text>
+
+      <View style={{padding:10, alignItems:"center"}}>
+      <Text style={styles.formTitle}>Job</Text>
       <TextInput
       value = {job}
       onChangeText = {setJob} 
@@ -185,31 +166,23 @@ return (
             <ImageUpload url = {url3} setURL = {setUrl3} index={2} user={user}/>
             </View> 
 
-      <Text style={styles.formTitle}>Hobbies</Text>
+      <Text style={styles.formTitle}>Bio</Text>
       <TextInput
-      value = {hobbies}
+      value = {bio}
       multiline
       numberOfLines={3}
-      onChangeText = {setHobbies} 
-      placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}
+      onChangeText = {setBio} 
+      placeholder={'Share a bit about you i.e: Papa Johns is the key to my heart.'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+
 
       <Text style={styles.formTitle}>Medals</Text>
       <TextInput
-      value = {accomplishments}
+      value = {medals}
       multiline
       numberOfLines={3}
-      onChangeText = {setAccomplishments} 
-      placeholder={"What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-
-      <Text style={styles.formTitle}>Strengths</Text>
-      <TextInput
-      value = {skills}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setSkills} 
-      placeholder={'What are you good at? i.e: Calculating calories and being consistent'}
+      onChangeText = {setMedals} 
+      placeholder={"What makes you a solid Wing? i.e: I'm fun and always pumped to train"}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     
 
@@ -228,7 +201,7 @@ return (
       multiline
       numberOfLines={3}
       onChangeText = {setMission} 
-      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
+      placeholder={'What goal do you want a Wing to assist you on? i.e Lose 10 pounds'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
       <Text style={styles.formTitle}>Mission Category</Text>

@@ -10,7 +10,7 @@ import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
 
 const SetUp0Screen = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [ job, setJob ] = useState(null);
     const [ age, setAge ] = useState(null);
     const [ gender, setGender ] = useState("male");
@@ -67,8 +67,11 @@ const SetUp0Screen = () => {
         >
         <ScrollView style={{marginHorizontal:10}}>
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
+        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/4</Text>
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
+        <TouchableOpacity onPress={logout}>
+          <Text>Logout</Text>
+        </TouchableOpacity>
         </SafeAreaView>
 
 

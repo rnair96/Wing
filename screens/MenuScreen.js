@@ -1,8 +1,9 @@
 import React, { Component, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons} from '@expo/vector-icons';
+import { RankBadge } from '../lib/RankBadge';
+import ProgressBar from '../components/ProgressBar';
 
 
 const  MenuScreen = () => {
@@ -10,9 +11,13 @@ const  MenuScreen = () => {
     const { params } = useRoute();
     const profile = params;
 
+    const currentPoints = profile.points; // Retrieve the user's current points
+    const nextRankPoints = RankBadge.pointsToNextRank(currentPoints, profile.rank);
+    const total = nextRankPoints + currentPoints;
+
     return (
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <TouchableOpacity style={{flexDirection:"row", alignItems:"center"}} onPress={() => navigation.navigate("EditProfile", profile)}>
+        <TouchableOpacity style={{flexDirection:"row", alignItems:"center"}} onPress={() => navigation.navigate("ToggleProfile", profile)}>
         <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2, left:20}} source={{uri: profile? profile?.images[0]: '../images/account.jpeg'}}/>
         <View style={{padding:2, backgroundColor:"white", borderRadius:20, borderWidth:1,borderColor:"#989898"}}>
         <Ionicons name="pencil" size={30} color = "#00308F"/>
@@ -20,13 +25,18 @@ const  MenuScreen = () => {
         </TouchableOpacity>
         <Text style={{fontSize:20, fontWeight: "bold"}}>{profile.displayName}</Text>
         <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Wing Member</Text>
-        <MaterialCommunityIcons name="account-check" size={20} color="#32CD32" />
+            <Text style={{fontSize:13, fontWeight: "bold", color:"#00308F", paddingRight:10}}>Wing Rank:</Text>
+            <Text style={{fontSize:18, fontWeight: "bold", color:"#00308F"}}>{profile.rank}</Text>
+            <Image style={{height:50, width:70, borderRadius:50}} source={RankBadge.getBadge(profile.rank)}/>
         </View>
-        {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
+        <View style={{width:"70%", alignItems:"center"}}>
+            <ProgressBar progress={currentPoints} total={total} style={{ margin: 10 }} />
+            <Text style={{fontSize:13, fontWeight: "bold", color:"#00308F"}}>Stars needed to reach {RankBadge.promote(profile.rank)}: {nextRankPoints}</Text>
+        </View>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
         <Text style={{padding:10, fontSize:15}}>Matching Prefences</Text>
         <Ionicons name="heart-outline" style={{padding:10}} size={30} color = "black"/>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Settings", profile)}>
         <Text style={{padding:10, fontSize:15}}>Settings</Text>
         <Ionicons name="settings-outline" style={{padding:10}} size={30} color = "black"/>

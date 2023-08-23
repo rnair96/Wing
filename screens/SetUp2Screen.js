@@ -8,9 +8,8 @@ import ImageUpload from '../components/ImageUpload';
 
 
 const SetUp2Screen = () => {
-  const [ accomplishments, setAccomplishments ] = useState(null);
-  const [ skills, setSkills ] = useState(null);
-  const [ hobbies, setHobbies ] = useState(null);
+  const [ medals, setMedals ] = useState(null);
+  const [ bio, setBio ] = useState(null);
   const [ url1, setUrl1] = useState(null);
   const [ url2, setUrl2] = useState(null);
   const [ url3, setUrl3] = useState(null);
@@ -20,19 +19,18 @@ const SetUp2Screen = () => {
   const { params } = useRoute();
   const user = params; 
 
-  const incompleteform = !url1||!url2||!url3||!accomplishments||!skills||!hobbies;
+  const incompleteform = !url1||!url2||!url3||!medals;
 
 
   const updateUserProfile = () => {
       updateDoc(doc(db, global.users, user.id), {
           images: [url1, url2, url3],
-          accomplishments: accomplishments,
-          skills: skills,
-          hobbies: hobbies,
+          medals: medals,
+          bio: bio,
           timestamp: serverTimestamp()
       }).then(()=> {
-            // navigation.navigate("Preferences", {id: user.id})
-            navigation.navigate("Home")
+            navigation.navigate("Preferences", {id: user.id})
+            // navigation.navigate("Home")
       }).catch((error) => {
           alert(error.message)
       });
@@ -50,13 +48,13 @@ return (
       <ScrollView style={{marginHorizontal:10}}>
         <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
           <SafeAreaView>
-            <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/3"}/>
+            <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/4"}/>
           </SafeAreaView>
   
         <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Last Touches</Text>
 
         <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
-        <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text>
+        {/* <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text> */}
 
         <View style ={{flexDirection:"row", padding:20}}>
             <ImageUpload url = {url1 } setURL = {setUrl1} index={0} user={user}/>
@@ -64,33 +62,24 @@ return (
             <ImageUpload url = {url3 } setURL = {setUrl3} index={2} user={user}/>
             </View> 
       
-      <Text style={{fontSize:13, fontWeight: "bold", padding:10}}>Your following answers will help Wings feel excited to work with you! Keep each answer 3 lines or less. {'(Don\'t worry, you can edit this later.)'}</Text>
+      {/* <Text style={{fontSize:13, fontWeight: "bold", padding:10}}>Your following answers will help Wings feel excited to work with you! Keep each answer 3 lines or less. {'(Don\'t worry, you can edit this later.)'}</Text> */}
 
-      <Text style={styles.formTitle}>What Accomplishments Are You Most Proud Of?</Text>
+      <Text style={styles.formTitle}>Bragging Time. What Makes You Stand Out?</Text>
       <TextInput
-      value = {accomplishments}
+      value = {medals}
       multiline
       numberOfLines={3}
-      onChangeText = {setAccomplishments} 
-      placeholder={"i.e Completing a marathon with a bad foot"}
+      onChangeText = {setMedals} 
+      placeholder={'i.e: I never quit. I finished a marathon with a broken foot.'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={styles.formTitle}>How Would A Wing Benefit From Working With You?</Text>
+        <Text style={styles.formTitle}>Share something fun about yourself</Text>
       <TextInput
-      value = {skills}
+      value = {bio}
       multiline
       numberOfLines={3}
-      onChangeText = {setSkills} 
-      placeholder={'i.e: I\'m consistent everyday and know how to push others to be their best'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-
-        <Text style={styles.formTitle}>What Do You Do For Fun?</Text>
-      <TextInput
-      value = {hobbies}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setHobbies} 
-      placeholder={'I.e: Kayaking at a local river while drinking craft beer'}
+      onChangeText = {setBio} 
+      placeholder={'I.e: I love kayaking at a local river while drinking craft beer'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     
 

@@ -28,6 +28,8 @@ import ReportOtherScreen from './screens/ReportOtherScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
 import PromotionScreen from './screens/PromotionScreen';
+import ViewProfileScreen from './screens/ViewProfileScreen';
+import ToggleProfileScreen from './screens/ToggleProfileScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -73,6 +75,7 @@ const StackNavigator = () => {
             <Stack.Screen name="Preferences" component={MatchingPreferences} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen}/>
+            <Stack.Screen name="ViewProfile" component={ViewProfileScreen}/>
             <Stack.Screen name="PrivacyPolicy" component={PolicyScreen} />
             <Stack.Screen name="Terms" component={TermsScreen} />
             <Stack.Screen name="Guidelines" component={GuideScreen} />
@@ -81,6 +84,7 @@ const StackNavigator = () => {
             <Stack.Screen name="SetUp0" component={SetUp0Screen} />
             <Stack.Screen name="Help" component={HelpScreen} />
             <Stack.Screen name="ChangePassword" component={ChangePasswordScreen}/>
+            <Stack.Screen name="ToggleProfile" component={ToggleProfileScreen}/>
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
