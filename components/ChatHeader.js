@@ -70,7 +70,7 @@ const ChatHeader = ({matchedDetails}) => {
               <Text style={styles.textStyle}>{mute?("Unmute Notifications"):("Mute Notifications")}</Text>
             </TouchableHighlight> */}
             {/* Unmatch function */}
-            <TouchableHighlight
+            {/* <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
                 setModalVisible(!modalVisible);
@@ -78,7 +78,8 @@ const ChatHeader = ({matchedDetails}) => {
               }}
             >
               <Text style={styles.textStyle}>Rate Wing</Text>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
+
             <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {

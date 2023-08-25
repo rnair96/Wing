@@ -115,11 +115,11 @@ const HomeScreen = () => {
             }
         }
 
-        if(loggedProfile && loggedProfile?.recently_promoted) {
-            console.log("Promotion screen!");
-            // console.log("does logged profile have a rank", loggedProfile?.rank)
-            navigation.navigate("Promotion", loggedProfile?.rank)
-        }
+        // if(loggedProfile && loggedProfile?.recently_promoted) {
+        //     console.log("Promotion screen!");
+        //     // console.log("does logged profile have a rank", loggedProfile?.rank)
+        //     navigation.navigate("Promotion", loggedProfile?.rank)
+        // }
         
     },[loggedProfile]);
 
@@ -143,7 +143,8 @@ const HomeScreen = () => {
             
             const ageMax = loggedProfile?.ageMax ? loggedProfile.ageMax : 100;
 
-            const genderPreference = loggedProfile?.genderPreference ? loggedProfile.genderPreference : "both";
+            // const genderPreference = loggedProfile?.genderPreference ? loggedProfile.genderPreference : "both";
+            const genderPreference = loggedProfile?.gender;
 
             const tagPreference = loggedProfile?.tagPreference ? loggedProfile.tagPreference : "All";
 
@@ -157,7 +158,7 @@ const HomeScreen = () => {
                     .filter(
                         (doc) => 
                     (doc.data()?.images?.length > 2 && doc.data()?.mission && doc.data()?.job && doc.data()?.medals) 
-                    && (doc.data().gender === genderPreference || genderPreference === "both") 
+                    && (doc.data().gender === genderPreference) 
                     && (doc.data().mission_tag === tagPreference || tagPreference === "All") 
                     && (doc.data().age>=ageMin && doc.data().age<=ageMax)
                     && (!doc.data()?.flags||!checkFlagged(doc.data().flags))//function to check that user has no unresolved flags
@@ -299,6 +300,7 @@ const HomeScreen = () => {
                         <View key={card.id} style={styles.cardcontainer}>
                         <TouchableOpacity style={{justifyContent:"space-evenly", height:"100%", width:"100%"}} onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}>
                         <View style={{alignItems:"center", bottom:20}}>
+                        <Text style={{color:"white"}}>Mission: </Text>
                         <Text style={styles.text}>{card.mission}</Text>
                         </View>
                         <View style={{justifyContent:"space-evenly", height:"65%", width:"100%", backgroundColor:"#002D62"}}>
@@ -310,9 +312,6 @@ const HomeScreen = () => {
                             <Text style={{color:"white", fontSize:15}}>{card.job}</Text>
                         </View>
                         </View>
-                        {/* <View style={{flexDirection:"row", justifyContent:"center"}}> */}
-                        {/* <View style={{justifyContent:"center", alignItems:"center", width:"100%"}}> */}
-                        {/* <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>Accomplishments</Text> */}
                             <View style={{flexDirection:"column"}}>
                                 <View style={{flexDirection:"row", padding:10}}>
                                     <Image style={{height:25, width:20, right:3}} source={require("../images/medals_white.png")}></Image>
@@ -326,7 +325,6 @@ const HomeScreen = () => {
                                     <Image style={{height:25, width:20, right:3}} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{card.medals[2]}</Text>
                                 </View>
-                            {/* </View> */}
                             </View>
                             <View style={{flexDirection:"row", justifyContent:"space-evenly"}}>
                                 <Text style={{borderWidth:0.5, borderColor:"white", borderRadius:10, color:"white", padding:5}}>{card.values[0]}</Text>

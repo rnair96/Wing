@@ -16,7 +16,7 @@ const MatchingPreferences = () => {
     const [ ageMax, setAgeMax ] = useState(50);
     const [ tag, setTag ] = useState("All")
     // const [ matchRadius, setMatchRadius ] = useState(100);
-    const [ gender, setGender ] = useState("both");
+    // const [ gender, setGender ] = useState("both");
     // const [ global, setGlobal ] = useState("true");
 
 
@@ -27,17 +27,17 @@ const MatchingPreferences = () => {
 
 
     useEffect(()=>{
-        if (profile && profile?.ageMin && profile?.ageMax && profile?.genderPreference && profile?.tagPreference) {
+        if (profile && profile?.ageMin && profile?.ageMax && profile?.tagPreference) {
             setAgeMax(profile.ageMax);
             setAgeMin(profile.ageMin);
-            setGender(profile.genderPreference);
+            // setGender(profile.genderPreference);
             setTag(profile.tagPreference);
 
         }
     
       },[profile])
 
-    const incompleteform = !ageMin||!gender||!ageMax||!tag
+    const incompleteform = !ageMin||!ageMax||!tag
 
 
     const updatePreferences = () => {
@@ -45,7 +45,7 @@ const MatchingPreferences = () => {
             ageMin: ageMin,
             ageMax: ageMax,
             // matchRadius: matchRadius,
-            genderPreference: gender,
+            // genderPreference: gender,
             tagPreference: tag
             // globalMatchingBoolean: global
             }).then(()=> {
@@ -61,12 +61,12 @@ const MatchingPreferences = () => {
     <ScrollView style={{marginHorizontal:10}}>
 
     <SafeAreaView style={{alignItems:"center"}}>
-     {profile?.genderPreference ? 
-     (
+     {/* {profile?.genderPreference ? 
+     ( */}
       <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
-     ):(
+     {/* ):(
       <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 4/4"}/>
-     )}
+     )} */}
     </SafeAreaView>
     <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
@@ -88,10 +88,10 @@ const MatchingPreferences = () => {
       </View> */}
 
 
-      <View style={{alignItems:"center", paddingBottom:30}}>
+      {/* <View style={{alignItems:"center", paddingBottom:30}}>
         <Text style={{fontSize:15, top:40, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={true} />
-      </View>
+      </View> */}
 
       <View style={{alignItems:"center", paddingBottom:60}}>
         <Text style={{top:40,fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission Category</Text>

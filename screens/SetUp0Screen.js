@@ -94,13 +94,13 @@ const SetUp0Screen = () => {
         <Text style={styles.formTitle}>Gender</Text>
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
 
-          <Text style={styles.formTitle}>Provide Occupation</Text>
+          {/* <Text style={styles.formTitle}>Provide Occupation</Text>
           <Text style={{fontSize:10, fontWeight: "bold", color:"#00308F", padding:5}}>{'(If Student, Provide Field & Level)'}</Text>
         <TextInput
         value = {job}
         onChangeText = {setJob} 
         placeholder={'Law Student, Freshman'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/> */}
      
             <Text style={styles.formTitle}>Set Location</Text>
             <TextInput

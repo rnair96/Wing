@@ -11,9 +11,9 @@ const  MenuScreen = () => {
     const { params } = useRoute();
     const profile = params;
 
-    const currentPoints = profile.points; // Retrieve the user's current points
-    const nextRankPoints = RankBadge.pointsToNextRank(currentPoints, profile.rank);
-    const total = nextRankPoints + currentPoints;
+    // const currentPoints = profile.points; // Retrieve the user's current points
+    // const nextRankPoints = RankBadge.pointsToNextRank(currentPoints, profile.rank);
+    // const total = nextRankPoints + currentPoints;
 
     return (
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
@@ -24,7 +24,7 @@ const  MenuScreen = () => {
         </View>
         </TouchableOpacity>
         <Text style={{fontSize:20, fontWeight: "bold"}}>{profile.displayName}</Text>
-        <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
+        {/* <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
             <Text style={{fontSize:13, fontWeight: "bold", color:"#00308F", paddingRight:10}}>Wing Rank:</Text>
             <Text style={{fontSize:18, fontWeight: "bold", color:"#00308F"}}>{profile.rank}</Text>
             <Image style={{height:50, width:70, borderRadius:50}} source={RankBadge.getBadge(profile.rank)}/>
@@ -32,7 +32,7 @@ const  MenuScreen = () => {
         <View style={{width:"70%", alignItems:"center"}}>
             <ProgressBar progress={currentPoints} total={total} style={{ margin: 10 }} />
             <Text style={{fontSize:13, fontWeight: "bold", color:"#00308F"}}>Stars needed to reach {RankBadge.promote(profile.rank)}: {nextRankPoints}</Text>
-        </View>
+        </View> */}
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
         <Text style={{padding:10, fontSize:15}}>Matching Prefences</Text>
         <Ionicons name="heart-outline" style={{padding:10}} size={30} color = "black"/>
