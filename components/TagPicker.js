@@ -14,19 +14,19 @@ const TagPicker = ({tag, setTag, all_boolean}) => {
           onValueChange={setTag}
         >
           <Picker.Item label="All" value="All" />
-          <Picker.Item label="Let's Have Fun (Social)" value="Social Outings & Adventures" />
-          <Picker.Item label="Let's Train (Fitness)" value="Sports & Fitness" />
-          <Picker.Item label="Let's Build Something (Passions)" value="Passions & Pursuits" />
+          <Picker.Item label="Let's Have Fun (Social)" value="Let's Have Fun" />
+          <Picker.Item label="Let's Train (Fitness)" value="Let's Train" />
+          <Picker.Item label="Let's Build Something (Passions)" value="Let's Build Something" />
         </Picker>
         ):(
           <Picker
           style={{width:450, height:150}}
-          selectedValue={tag ? tag : "Social Outings & Adventures"}
+          selectedValue={tag ? tag : "Let's Have Fun"}
           onValueChange={setTag}
         >
-          <Picker.Item label="Let's Have Fun (Social)" value="Social Outings & Adventures" />
-          <Picker.Item label="Let's Train (Fitness)" value="Sports & Fitness" />
-          <Picker.Item label="Let's Build Something (Passions)" value="Passions & Pursuits" />
+          <Picker.Item label="Let's Have Fun (Social)" value="Let's Have Fun" />
+          <Picker.Item label="Let's Train (Fitness)" value="Let's Train" />
+          <Picker.Item label="Let's Build Something (Passions)" value="Let's Build Something" />
         </Picker>
         )}
         

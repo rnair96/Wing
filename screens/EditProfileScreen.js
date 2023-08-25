@@ -7,6 +7,7 @@ import ImageUpload from '../components/ImageUpload';
 import registerNotifications from '../lib/registerNotifications';
 import { useNavigation } from '@react-navigation/core';
 import TagPicker from '../components/TagPicker';
+import ValuesList from '../components/ValuesList';
  
 
 
@@ -19,14 +20,17 @@ const EditProfileScreen = ({profile}) => {
   const [ mission, setMission ] = useState(null);
   const [ missiontag, setMissionTag ] = useState("Social");
   const [ gender, setGender ] = useState("male");
-  const [ medals, setMedals ] = useState(null);
+  const [ medal1, setMedal1 ] = useState(null);
+  const [ medal2, setMedal2 ] = useState(null);
+  const [ medal3, setMedal3 ] = useState(null);
   const [ bio, setBio ] = useState(null);
-  const [ idealwing, setIdealWing ] = useState(null);
+  // const [ idealwing, setIdealWing ] = useState(null);
   const [ location, setLocation ] = useState(null);
   const [ incompleteForm, setIncompleteForm ] = useState(true);
   const [ url1, setUrl1] = useState(null);
   const [ url2, setUrl2] = useState(null);
   const [ url3, setUrl3] = useState(null);
+  const [values, setValues] = useState([])
   const navigation = useNavigation();
 
 
@@ -41,10 +45,13 @@ const EditProfileScreen = ({profile}) => {
         setAge(parseInt(profile.age));
         setMission(profile.mission);
         setGender(profile.gender);
-        setMedals(profile.medals);
+        setMedal1(profile.medals[0]);
+        setMedal2(profile.medals[1]);
+        setMedal3(profile.medals[2]);
         setBio(profile.bio);
         setLocation(profile.location);
-        setIdealWing(profile.ideal_wing);
+        setValues(profile.values)
+        // setIdealWing(profile.ideal_wing);
         setMissionTag(profile.mission_tag);
         setOldToken(profile.token);
     }
@@ -54,10 +61,10 @@ const EditProfileScreen = ({profile}) => {
 
 
   useEffect(()=>{
-    const form =  !url1||!url2||!url3||!mission||!medals||!idealwing||!location||!bio;
+    const form =  !url1||!url2||!url3||!mission||!medal1||!medal2||!medal3||!location||!bio||!values;
     setIncompleteForm(form);
 
-  },[url1, url2, url3 ,mission, medals, idealwing, location, bio])
+  },[url1, url2, url3 ,mission, medal1, medal2, medal3, location, bio, values])
 
   useEffect(()=>{
     (async () => {
@@ -80,8 +87,8 @@ const EditProfileScreen = ({profile}) => {
           job: job,
           mission: mission,
           mission_tag: missiontag,
-          medals: medals,
-          ideal_wing: idealwing,
+          medals: [medal1, medal2, medal3],
+          values: values,
           location: location,
           token: newtoken,
           bio: bio
@@ -176,24 +183,55 @@ return (
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
 
-      <Text style={styles.formTitle}>Medals</Text>
+      <Text style={styles.formTitle}>Accomplishments</Text>
+      <View style={{justifyContent:"flex-start", flexDirection:"column"}}>
+      <View style={{flexDirection:"row", alignItems:"center", marginTop:10, marginBottom:10}}>
+      <Text>1.</Text>
       <TextInput
-      value = {medals}
+      value = {medal1}
       multiline
-      numberOfLines={3}
-      onChangeText = {setMedals} 
-      placeholder={"What makes you a solid Wing? i.e: I'm fun and always pumped to train"}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-    
+      numberOfLines={2}
+      onChangeText = {setMedal1} 
+      placeholder={"I completed a marathon."}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
+      </View>
 
-      <Text style={styles.formTitle}>The Ideal Wing</Text>
+      <View style={{flexDirection:"row", alignItems:"center", marginTop:10, marginBottom:10}}>
+      <Text>2.</Text>
+      <TextInput
+      value = {medal2}
+      multiline
+      numberOfLines={2}
+      onChangeText = {setMedal2} 
+      placeholder={"I won a hotdog eating contest"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
+      </View>
+
+    <View style={{flexDirection:"row", alignItems:"center", marginTop:10, marginBottom:10}}>
+    <Text>3.</Text>
+    <TextInput
+      value = {medal3}
+      multiline
+      numberOfLines={2}
+      onChangeText = {setMedal3} 
+      placeholder={"I have a Youtube channel with 3k subscribers."}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
+    </View>
+    </View>
+
+
+    <Text style={styles.formTitle}>{`Values (Pick 3)`}</Text>
+    <ValuesList selectedValues={values} setSelectedValues={setValues} />
+
+  
+      {/* <Text style={styles.formTitle}>The Ideal Wing</Text>
       <TextInput
       value = {idealwing}
       multiline
       numberOfLines={3}
       onChangeText = {setIdealWing}
       placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/> */}
 
       <Text style={styles.formTitle}>Mission</Text>
       <TextInput
