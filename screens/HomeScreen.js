@@ -30,10 +30,14 @@ const HomeScreen = () => {
             const unsub = onSnapshot(doc(db, global.users, user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
                     navigation.navigate("SetUp0");
-                } else if (!snapshot.data().mission){
+                } else if (!snapshot.data().college && !snapshot.data().occupation){
                     navigation.navigate("SetUp1");
-                } else if (!snapshot.data().medals){
-                    navigation.navigate("SetUp2", {id: user.uid});
+                } else if (!snapshot.data().mission){
+                    navigation.navigate("SetUp3", {id: user.uid});
+                } else if (!snapshot.data().values){
+                    navigation.navigate("SetUp4", {id: user.uid});
+                } else if (!snapshot.data().images){
+                    navigation.navigate("SetUp5", {id: user.uid});
                 } 
                 
                 // else if (!snapshot.data().genderPreference){

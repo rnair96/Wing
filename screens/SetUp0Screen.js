@@ -11,7 +11,7 @@ import registerNotifications from '../lib/registerNotifications';
 
 const SetUp0Screen = () => {
     const { user, logout } = useAuth();
-    const [ job, setJob ] = useState(null);
+    // const [ job, setJob ] = useState(null);
     const [ age, setAge ] = useState(null);
     const [ gender, setGender ] = useState("male");
     const [ location, setLocation ] = useState(null);
@@ -31,22 +31,22 @@ const SetUp0Screen = () => {
       }, []);
 
 
-    const incompleteform = !gender||!age||!location||!job||!name;
+    const incompleteform = !gender||!age||!location||!name;//!job||
 
     const createUserProfile = () => {
         setDoc(doc(db, global.users, user.uid), {
             id: user.uid,
             displayName: name,
             email: user.email,
-            job: job,
+            // job: job,
             age: age,
             birthdate: birthdate,
             last_year_celebrated: 2022,
             gender: gender,
             location: location,
-            rank: "Airman",
-            points: 0,
-            recently_promoted: true,
+            // rank: "Airman",
+            // points: 0,
+            // recently_promoted: true,
             token: token,
             timestamp: serverTimestamp()
         }).then(()=> {
@@ -58,21 +58,18 @@ const SetUp0Screen = () => {
 
 
     return (
-      <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{flex:1}}
-            keyboardVerticalOffset={15}>
-        <TouchableWithoutFeedback 
-          // onPress={Keyboard.dismiss()}
-        >
-        <ScrollView style={{marginHorizontal:10}}>
+      // <KeyboardAvoidingView
+      //       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      //       style={{flex:1}}
+      //       keyboardVerticalOffset={15}>
+      //   <TouchableWithoutFeedback 
+      //     // onPress={Keyboard.dismiss()}
+      //   >
+        // <ScrollView style={{marginHorizontal:10}}>
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 1/4</Text>
-        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Basics</Text>
-        <TouchableOpacity onPress={logout}>
-          <Text>Logout</Text>
-        </TouchableOpacity>
-        </SafeAreaView>
+
+          {/* header with logout and title for Account Setup 1/5 */}
+      
 
 
         <View style ={{flexDirection:"column", alignItems:"center"}}>
@@ -91,7 +88,7 @@ const SetUp0Screen = () => {
         
           <BirthdayInput setAge={setAge} birthdate={birthdate} setBirthDate={setBirthDate}/>
                 
-        <Text style={styles.formTitle}>Gender</Text>
+        <Text style={styles.formTitle}>Select Gender</Text>
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
 
           {/* <Text style={styles.formTitle}>Provide Occupation</Text>
@@ -118,9 +115,11 @@ const SetUp0Screen = () => {
             </TouchableOpacity>
             </View>
         </View>
-        </ScrollView>
+        {/* </ScrollView>
         </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView> */}
+        </SafeAreaView>
+
     )
 }
 
