@@ -7,14 +7,17 @@ import { db } from '../firebase';
 import AgePicker from '../components/AgePicker';
 import GenderPicker from '../components/GenderPicker';
 import TagPicker from '../components/TagPicker';
+import YNRadioButton from '../components/YNRadioButton';
 
 
 
 
 const MatchingPreferences = () => {
-    const [ ageMin, setAgeMin ] = useState(18);
-    const [ ageMax, setAgeMax ] = useState(50);
-    const [ tag, setTag ] = useState("All")
+    // const [ ageMin, setAgeMin ] = useState(18);
+    // const [ ageMax, setAgeMax ] = useState(100);
+    const [ tag, setTag ] = useState("All");
+    const [ activeStudent, setActiveStudent ] = useState(false);
+    const [ wingUni, setWingUni ] = useState("Yes")
     // const [ matchRadius, setMatchRadius ] = useState(100);
     // const [ gender, setGender ] = useState("both");
     // const [ global, setGlobal ] = useState("true");
@@ -27,33 +30,60 @@ const MatchingPreferences = () => {
 
 
     useEffect(()=>{
-        if (profile && profile?.ageMin && profile?.ageMax && profile?.tagPreference) {
-            setAgeMax(profile.ageMax);
-            setAgeMin(profile.ageMin);
+        if (profile) {
+            // setAgeMax(profile.ageMax);
+            // setAgeMin(profile.ageMin);
             // setGender(profile.genderPreference);
-            setTag(profile.tagPreference);
+            if(profile?.tagPreference){
+              setTag(profile.tagPreference);
+            }
 
+            if(profile?.university_student && profile.university_student.status==="active"){
+              setActiveStudent(true);
+            }
+
+
+            if(profile?.universityPreference){
+              setWingUni(profile.universityPreference)
+            }
         }
     
       },[profile])
 
-    const incompleteform = !ageMin||!ageMax||!tag
+    const incompleteform = !tag//!ageMin||!ageMax||
 
 
     const updatePreferences = () => {
-      updateDoc(doc(db, global.users,profile.id), {
-            ageMin: ageMin,
-            ageMax: ageMax,
-            // matchRadius: matchRadius,
-            // genderPreference: gender,
-            tagPreference: tag
-            // globalMatchingBoolean: global
-            }).then(()=> {
-              //must trigger a refresh upon entering home screen
-            navigation.navigate("Home")
-        }).catch((error) => {
-            alert(error.message)
-        });
+      if (activeStudent){
+        updateDoc(doc(db, global.users,profile.id), {
+          // ageMin: ageMin,
+          // ageMax: ageMax,
+          // matchRadius: matchRadius,
+          // genderPreference: gender,
+          tagPreference: tag,
+          universityPreference: wingUni
+          // globalMatchingBoolean: global
+          }).then(()=> {
+            //must trigger a refresh upon entering home screen
+          navigation.navigate("Home")
+      }).catch((error) => {
+          alert(error.message)
+      });
+      } else {
+        updateDoc(doc(db, global.users,profile.id), {
+          // ageMin: ageMin,
+          // ageMax: ageMax,
+          // matchRadius: matchRadius,
+          // genderPreference: gender,
+          tagPreference: tag
+          // globalMatchingBoolean: global
+          }).then(()=> {
+            //must trigger a refresh upon entering home screen
+          navigation.navigate("Home")
+      }).catch((error) => {
+          alert(error.message)
+      });
+      }
     }
 
 
@@ -97,6 +127,13 @@ const MatchingPreferences = () => {
         <Text style={{top:40,fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission Category</Text>
         <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
       </View>
+
+      {activeStudent && (
+        <View style={{alignItems:"center", padding:10}}>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", padding:20}}>Match in Wing University?</Text>
+        <YNRadioButton selectedOption={wingUni} setSelectedOption={setWingUni}/>
+      </View>
+      )}
 
       <View style={{height:150}}>
       <TouchableOpacity 

@@ -59,26 +59,66 @@ export const ProfileViewScreen = () => {
                     <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>
                         {card.item.displayName}
                     </Text>
-                    <Text style={{color:"white"}}>
-                    {card.item.job}
-                    </Text>
                 </View>
                 <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>{card.item.age}</Text>
             </View>
             </View>
 
             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10 }}>
-                            {/* <Text style = {{padding: 10, color:"white"}}>Rank</Text>
+                                {/* <Text style = {{padding: 10, color:"white"}}>Rank</Text>
                     <View style={{flexDirection:"row", padding: 10}}>
                     <Image style={{height:50, width:70, borderRadius:50}} source={RankBadge.getBadge(card.item.rank)}/>
                     <Text style = {{padding: 10, fontSize: 25, color:"white", fontWeight:"bold"}}>{card.item.rank}</Text>
                     </View> */}
-                            <View style={{ flexDirection: "row", padding: 10 }}>
-                                <Text style={{ padding: 10, color: "white" }}>A Bit About Me</Text>
+                                <View style={{ padding: 10 }}>
+                                    <Text style={{ padding: 10, color: "white" }}>A Bit About Me</Text>
+                                </View>
+                                <View style={{ width: "95%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 20, flexDirection: "column", borderRadius: 10 }}>
+                                    {card.item?.university_student && card.item.university_student.status === "active" ?
+                                        (
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                                <Image style={{ height: 25, width: 25 }} source={require("../images/book.png")} />
+                                                <View style={{ flexDirection: "row" }}>
+                                                    <Text style={{ color: "white" }}>{card.item.university_student.class_level}, </Text>
+                                                    <Text style={{ color: "white" }}>Class of {card.item.university_student.grad_year}</Text>
+                                                </View>
+                                            </View>
+                                        ) : (
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                                <Image style={{ height: 25, width: 25 }} source={require("../images/suitcase.png")} />
+                                                <View style={{ flexDirection: "row" }}>
+                                                {card.item?.job ?
+                                                (
+                                                    <Text style={{ color: "white" }}>{card.item.job}</Text>
+                                                ) : (
+                                                    <Text style={{ color: "white" }}>-- --</Text>
+                                                )}
+                                                   {card.item?.company && <Text style={{ color: "white" }}> at {card.item.company}</Text>}
+                                                </View>
+                                            </View>
+                                        )}
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                        <Image style={{ height: 20, width: 25 }} source={require("../images/grad_hat.png")} />
+                                        {card.item?.school ?
+                                            (
+                                                <Text style={{ color: "white" }}>{card.item.school}</Text>
+                                            ) : (
+                                                <Text style={{ color: "white" }}>-- --</Text>
+                                            )}
+                                    </View>
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                        <Image style={{ height: 25, width: 25 }} source={require("../images/house.png")} />
+                                        {card.item?.hometown ?
+                                            (
+                                                <Text style={{ color: "white" }}>{card.item.hometown}</Text>
+                                            ) : (
+                                                <Text style={{ color: "white" }}>-- --</Text>
+                                            )}
+                                    </View>
+                                </View>
+                                <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text>
+
                             </View>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text> 
-                           
-                        </View>
 
                         <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10 }}>
                             <View style={{ flexDirection: "row", padding: 10 }}>

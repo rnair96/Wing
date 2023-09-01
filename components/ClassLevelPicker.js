@@ -12,10 +12,10 @@ const ClassLevelPicker = ({selectedLevel, setSelectedLevel}) => {
         onValueChange={(itemValue) => setSelectedLevel(itemValue)}
         style={styles.picker}
       >
-        <Picker.Item label="Undergraduate" value="undergraduate" />
-        <Picker.Item label="Graduate" value="graduate" />
-        <Picker.Item label="Masters" value="masters" />
-        <Picker.Item label="PhD" value="phd" />
+        <Picker.Item label="Undergraduate" value="Undergraduate" />
+        <Picker.Item label="Graduate" value="Graduate" />
+        <Picker.Item label="Masters" value="Masters" />
+        <Picker.Item label="PhD" value="PhD" />
       </Picker>
     </View>
   );
@@ -23,7 +23,7 @@ const ClassLevelPicker = ({selectedLevel, setSelectedLevel}) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingBottom: 100,
   },
   picker: {
     height: 50,

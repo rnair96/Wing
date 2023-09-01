@@ -9,18 +9,18 @@ import Header from '../Header';
 
 const SetUp2Screen = () => {
     const { user } = useAuth();
-    const [occupation, setOccupation] = useState(null);
+    const [job, setJob] = useState(null);
     const [company, setCompany] = useState(null);
 
 
-    const incompleteform = !occupation;
+    const incompleteform = !job;
 
 
     const navigation = useNavigation();
 
     const updateUserProfile = () => {
         updateDoc(doc(db, global.users, user.uid), {
-            occupation: occupation,
+            job: job,
             company: company,
         }).then(() => {
 
@@ -40,8 +40,8 @@ const SetUp2Screen = () => {
 
             <Text style={styles.formTitle}>Add Job Title</Text>
             <TextInput
-                value={occupation}
-                onChangeText={setOccupation}
+                value={job}
+                onChangeText={setJob}
                 placeholder={'I.e Lawyer'}
                 style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
             

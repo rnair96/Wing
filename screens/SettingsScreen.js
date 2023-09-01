@@ -22,6 +22,7 @@ const SettingsScreen = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState(user.email)
+    const [activeStudent, setActiveStudent] = useState(false);
     const { params } = useRoute();
     const profile = params;
 
@@ -29,6 +30,10 @@ const SettingsScreen = () => {
     useEffect(()=>{
         if (profile) {
             setEmail(profile.email);
+
+            if(profile?.university_student && profile.university_student.status==="active"){
+                setActiveStudent(true);
+            }
         }
 
     },[profile])
@@ -214,6 +219,15 @@ const SettingsScreen = () => {
         {user.providerData[0].providerId === "password" && (<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("ChangePassword")}>
         <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Change Password</Text>
         </TouchableOpacity>)}
+
+        {/* {activeStudent && (
+            <View>
+                <Text>Turn off </Text>
+            </View>
+        )} */}
+
+        {/* create a tab for Account, then give options there to update email address, change password, delete account or logout, 
+        Turn Off Student Options for Profile (Doing so will remove you from Wing University)*/}
         
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("PrivacyPolicy")}>

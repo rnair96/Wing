@@ -30,7 +30,7 @@ const HomeScreen = () => {
             const unsub = onSnapshot(doc(db, global.users, user?.uid), (snapshot) => {
                 if (!snapshot.exists()){
                     navigation.navigate("SetUp0");
-                } else if (!snapshot.data().college && !snapshot.data().occupation){
+                } else if (!snapshot.data().university_student && !snapshot.data().job){
                     navigation.navigate("SetUp1");
                 } else if (!snapshot.data().mission){
                     navigation.navigate("SetUp3", {id: user.uid});
@@ -150,6 +150,8 @@ const HomeScreen = () => {
             // const genderPreference = loggedProfile?.genderPreference ? loggedProfile.genderPreference : "both";
             const genderPreference = loggedProfile?.gender;
 
+            const universityPreference = loggedProfile?.universityPreference ? loggedProfile.universityPreference : "No";
+
             const tagPreference = loggedProfile?.tagPreference ? loggedProfile.tagPreference : "All";
 
             const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
@@ -161,9 +163,10 @@ const HomeScreen = () => {
                     snapshot.docs
                     .filter(
                         (doc) => 
-                    (doc.data()?.images?.length > 2 && doc.data()?.mission && doc.data()?.job && doc.data()?.medals) 
+                    (doc.data()?.images?.length > 2 && doc.data()?.mission && doc.data()?.medals) 
                     && (doc.data().gender === genderPreference) 
-                    && (doc.data().mission_tag === tagPreference || tagPreference === "All") 
+                    && (doc.data().mission_tag === tagPreference || tagPreference === "All")
+                    && (universityPreference === "No" || (universityPreference === "Yes" && doc.data()?.university_student && doc.data().university_student.status==="active")) 
                     && (doc.data().age>=ageMin && doc.data().age<=ageMax)
                     && (!doc.data()?.flags||!checkFlagged(doc.data().flags))//function to check that user has no unresolved flags
                     )
@@ -181,7 +184,7 @@ const HomeScreen = () => {
         fetchCards();
         return unsub;
 
-    },[db, loggedProfile?.ageMin, loggedProfile?.ageMax, loggedProfile?.genderPreference, loggedProfile?.tagPreference]);
+    },[db, loggedProfile?.ageMin, loggedProfile?.ageMax, loggedProfile, loggedProfile?.tagPreference]);
 
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]){ return;}
@@ -242,7 +245,6 @@ const HomeScreen = () => {
         </TouchableOpacity>
     </View>
     {/* End of Header */}
-    {/* <FlagModal other_user={flag_user} isVisible={flag_modal}/> */}
     {/* Cards */}
     {profiles.length === 0 ? (
         <View style={[styles.emptycardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
@@ -308,13 +310,17 @@ const HomeScreen = () => {
                         <Text style={styles.text}>{card.mission}</Text>
                         </View>
                         <View style={{justifyContent:"space-evenly", height:"65%", width:"100%", backgroundColor:"#002D62"}}>
-                        <View style={{flexDirection:'row', justifyContent:"space-evenly", alignItems:"center"}}>
-                        <Text  style={{fontWeight:"bold", fontSize:20, color:"white"}}>{card.displayName}</Text>
-                        <Image style={{height:120 ,width:120, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source={{uri: card?.images[0]}}/>
+                        <View style={{flexDirection:'row', justifyContent:"space-evenly", alignItems:"center"}}>                        
                         <View style={{flexDirection:"column"}}>
-                            <Text style={{color:"white", fontSize:15}}>{card.age},</Text>
-                            <Text style={{color:"white", fontSize:15}}>{card.job}</Text>
+                        <Text  style={{fontWeight:"bold", fontSize:20, color:"white", paddingBottom:5}}>{card.displayName}</Text>
+                            <Text style={{color:"white", fontSize:15}}>{card.age}</Text>
+                            {card?.university_student && card.university_student.status==="active" ?(
+                                <Text style={{color:"white", fontSize:13}}>{card.school}</Text>
+                            ):(
+                                <Text style={{color:"white", fontSize:15}}>{card.job}</Text>
+                            )}
                         </View>
+                        <Image style={{height:120 ,width:120, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source={{uri: card?.images[0]}}/>
                         </View>
                             <View style={{flexDirection:"column"}}>
                                 <View style={{flexDirection:"row", padding:10}}>

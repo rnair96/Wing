@@ -15,7 +15,7 @@ const UniversityPicker =({university_chosen, setUniversity}) => {
   return (
     <View>
       <Picker
-            style={{width:400, height:150}}
+            style={{width:400, height:150, paddingBottom:100}}
           selectedValue={university_chosen ? university_chosen : ""}
           onValueChange={setUniversity}>
         {universities.map((university, index) => (
