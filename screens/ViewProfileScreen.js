@@ -65,7 +65,7 @@ const ViewProfileScreen = ({ profile }) => {
                                         <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.item.values[2]}</Text>
                                     </View>
                                 </View>
-                                <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", top: 10 }}>
+                                <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding:20 }}>
                                     <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
                                     <Text style={{ color: "white", fontSize: 15, left: 5 }}>{card.item.location}</Text>
                                 </View>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     },
     cardcontainer: {
         backgroundColor: "#00308F",
-        height: 600,
+        // height: 600,
         borderRadius: 20,
         borderColor: "#002D62",
         borderWidth: 5,

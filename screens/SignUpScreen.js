@@ -58,15 +58,15 @@ const SignUpScreen = () => {
         <TextInput
         value = {password}
         onChangeText = {setPassword}
-        type='password'
         placeholder={'*************'}
+        secureTextEntry
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         <Text style={styles.formTitle}> Confirm Password </Text>
         <TextInput
         value = {confirmpassword}
         onChangeText = {setConfirmPassword}
-        type='password'
         placeholder={'*************'}
+        secureTextEntry
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
         <TouchableOpacity 
