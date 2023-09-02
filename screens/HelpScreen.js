@@ -54,7 +54,7 @@ function HelpScreen() {
     <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Help"}/>
     <View style={{height:"80%",justifyContent:"space-evenly", alignItems:"center"}}>
     <Text style={{fontSize:15, textAlign:"center"}}>
-        If you are experiencing an issue on this app or have any urgent questions, please submit this form. Our support team will reach out to you in 48 hours.
+        If you are experiencing an issue on this app or have any urgent questions, please submit this form. Our support team will reach out to you within 3 business days.
         </Text>
     <Text style={{fontWeight:'bold'}}>Subject:</Text>
     <TextInput

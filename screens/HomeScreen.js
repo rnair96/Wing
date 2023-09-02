@@ -315,7 +315,10 @@ const HomeScreen = () => {
                         <Text  style={{fontWeight:"bold", fontSize:20, color:"white", paddingBottom:5}}>{card.displayName}</Text>
                             <Text style={{color:"white", fontSize:15}}>{card.age}</Text>
                             {card?.university_student && card.university_student.status==="active" ?(
+                                <View style={{flexDirection:"column"}}>
                                 <Text style={{color:"white", fontSize:13}}>{card.school}</Text>
+                                <Text style={{color:"#00BFFF", fontWeight:"800", fontSize:15}}>WING-U</Text>
+                                </View>
                             ):(
                                 <Text style={{color:"white", fontSize:15}}>{card.job}</Text>
                             )}
@@ -347,35 +350,7 @@ const HomeScreen = () => {
                             <Image style={{height:25, width:10}} source={require("../images/droppin_white.png")}></Image>
                             <Text style={{color:"white", fontSize:15, left:5}}>{card.location}</Text>
                         </View>
-
-                        {/* <View style={styles.container}> */}
-                            {/* <Image source={{uri: card?.images[0]}} style={styles.image} resizeMode="cover"/> */}
-                            {/* <LinearGradient colors={['rgba(0,0,0,0.6)', 'transparent']} style={styles.gradient}/> */}
-                            {/* <Text style={styles.text}>{card.mission}</Text> */}
-                        {/* </View> */}
-                        {/* <View style={styles.infocontainer}>
-                            <View>
-                                <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>
-                                    {card.displayName}
-                                </Text>
-                                <Text style={{color:"white"}}>
-                                {card.job}
-                                </Text>
-                            </View>
-                            <View>
-                            <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>{card.age}</Text>
-                            <Text style={{color:"white"}}>{card.location}</Text>
-                            </View>
-                        </View> */}
                         </TouchableOpacity>
-                        {/* <View style={{flexDirection:"row", justifyContent:'center'}}>
-                        <TouchableOpacity style={styles.swipeButtonDown} onPress={()=>navigation.navigate("ProfileSwipe", {card: card})}>
-                                <Entypo name="arrow-bold-down" size={30} color="white"/> */}
-                                {/* <Image style={{height:30, width:50}} source={RankBadge.getBadge(card?.rank)}/> */}
-                        {/* </TouchableOpacity>
-
-                        </View> */}
-                        
                     </View>
                     )
                 }

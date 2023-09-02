@@ -113,7 +113,7 @@ const EditProfileScreen = ({ profile }) => {
 
 
   const updateUserProfile = () => {
-    if(activeStudent){
+    if(activeStudent){ // change to one call of update doc, with different docs sent
       updateDoc(doc(db, global.users, user.uid), {
         images: [url1, url2, url3],
         university_student: {
@@ -228,9 +228,13 @@ const EditProfileScreen = ({ profile }) => {
               {activeStudent ?
                 (
                   <View style={{ flexDirection: "column", padding: 10 }}>
-                    <View style={{margin:10, padding:10, justifyContent:"center"}}>
-                  <Text style={{fontSize:12}} numberOfLines={2}>{`(To turn off student options in profile, go to Settings in Menu Page.)`}</Text>
-                  </View>
+                    <View style={{justifyContent:"center", alignItems:'center', flexDirection:"row"}}>
+                      <View style={{width:"30%", backgroundColor:"#00BFFF", height:2}}/>
+                    <Text style={{color:"#00BFFF", fontWeight:"800", fontSize:25}}>WING-U</Text>
+                    <View style={{width:"30%", backgroundColor:"#00BFFF", height:2}}/>
+
+                    </View>
+
 
                     <View style={{ padding: 20, alignItems: "center" }}>
                       <Text style={styles.formTitle}>Class Level</Text>
@@ -238,15 +242,19 @@ const EditProfileScreen = ({ profile }) => {
                     </View>
 
                     <View style={{ padding: 20, alignItems: "center" }}>
-                      <Text style={styles.formTitle}>Grad Year</Text>
+                      <Text style={styles.formTitle}>Graduation Year</Text>
                       <GradYearPicker selectedYear={parseInt(grad_year, 10)} setSelectedYear={setGradYear}/>
                     </View>
 
-                    <View style={{ padding: 20, alignItems: "center" }}>
+                    <View style={{ paddingBottom: 40, alignItems: "center" }}>
                       <Text style={styles.formTitle}>School Currently Attending</Text>
                       <UniversityPicker university_chosen={school} setUniversity={setSchool}/>
                     </View>
                     
+                    <View style={{margin:20, padding:10, justifyContent:"center", alignItems:"center"}}>
+                  <Text style={{fontSize:13, textAlign:"center", padding:10}} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
+                  <View style={{width:"90%", backgroundColor:"#00BFFF", height:2}}/>
+                  </View>
 
                   </View>
                 ):(

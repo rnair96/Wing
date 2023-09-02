@@ -34,6 +34,7 @@ import StudentSetupScreen from './screens/StudentSetupScreen';
 import SetUp3Screen from './screens/SetUp3Screen';
 import SetUp4Screen from './screens/SetUp4Screen';
 import SetUp5Screen from './screens/SetUp5Screen';
+import AccountScreen from './screens/AccountScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -93,6 +94,7 @@ const StackNavigator = () => {
             <Stack.Screen name="SetUp3" component={SetUp3Screen}/>
             <Stack.Screen name="SetUp4" component={SetUp4Screen}/>
             <Stack.Screen name="SetUp5" component={SetUp5Screen}/>
+            <Stack.Screen name="Account" component={AccountScreen}/>
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />

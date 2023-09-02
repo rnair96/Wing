@@ -228,8 +228,8 @@ const styles = StyleSheet.create({
     imageContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: 100,
-      height: 100,
+      width: 105,
+      height: 105,
       margin: 10,
       borderWidth: 3,
       borderColor: "",
@@ -239,8 +239,8 @@ const styles = StyleSheet.create({
     emptyImageContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: 100,
-      height: 100,
+      width: 105,
+      height: 105,
       margin: 10,
       borderWidth: 1,
       borderColor: '#ccc',

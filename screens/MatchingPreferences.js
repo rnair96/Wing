@@ -130,7 +130,8 @@ const MatchingPreferences = () => {
 
       {activeStudent && (
         <View style={{alignItems:"center", padding:10}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", padding:20}}>Match in Wing University?</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", padding:5}}>Only See Users In Wing-U?</Text>
+        <Text style={{fontSize:12, padding:20}}>{`(Exclusively university students)`}</Text>
         <YNRadioButton selectedOption={wingUni} setSelectedOption={setWingUni}/>
       </View>
       )}

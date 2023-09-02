@@ -17,6 +17,66 @@ const ViewProfileScreen = ({ profile }) => {
                     renderItem={(card) =>
                     (
                         <View style={{ backgroundColor: "black" }}>
+
+                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20 }}>
+                                <View style={{ alignItems: "center", padding: 10 }}>
+                                    <Text style={{ color: "white" }}>Profile View On Swipe:</Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.cardcontainer}>
+                                <View style={{ alignItems: "center", padding: 20 }}>
+                                    <Text style={{ color: "white" }}>Mission: </Text>
+                                    <Text style={styles.text}>{card.item.mission}</Text>
+                                </View>
+                                <View style={{ justifyContent: "space-evenly", height: 450, width: "100%", backgroundColor: "#002D62" }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
+                                        <View style={{ flexDirection: "column" }}>
+                                            <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{card.item.displayName}</Text>
+                                            <Text style={{ color: "white", fontSize: 15 }}>{card.item.age}</Text>
+                                            {card.item?.university_student && card.item.university_student.status === "active" ? (
+                                                <View style={{ flexDirection: "column" }}>
+                                                    <Text style={{ color: "white", fontSize: 13 }}>{card.item.school}</Text>
+                                                    <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
+                                                </View>
+                                            ) : (
+                                                <Text style={{ color: "white", fontSize: 15 }}>{card.item.job}</Text>
+                                            )}
+                                        </View>
+                                        <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card.item?.images[0] }} />
+                                    </View>
+                                    <View style={{ flexDirection: "column" }}>
+                                        <View style={{ flexDirection: "row", padding: 10 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.medals[0]}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", padding: 10 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.medals[1]}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", padding: 10 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.medals[2]}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                                        <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.item.values[0]}</Text>
+                                        <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.item.values[1]}</Text>
+                                        <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.item.values[2]}</Text>
+                                    </View>
+                                </View>
+                                <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", top: 10 }}>
+                                    <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
+                                    <Text style={{ color: "white", fontSize: 15, left: 5 }}>{card.item.location}</Text>
+                                </View>
+                            </View>
+
+                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20 }}>
+                                <View style={{ alignItems: "center", padding: 10 }}>
+                                    <Text style={{ color: "white" }}>Expanded Profile View:</Text>
+                                </View>
+                            </View>
+
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20 }}>
                                 <View style={{ alignItems: "center" }}>
                                     <View style={{ flexDirection: "row", padding: 10 }}>
@@ -63,20 +123,20 @@ const ViewProfileScreen = ({ profile }) => {
                                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
                                                 <Image style={{ height: 25, width: 25 }} source={require("../images/suitcase.png")} />
                                                 <View style={{ flexDirection: "row" }}>
-                                                {card.item?.job && card.item.job !== null && card.item.job !=="" ?
-                                                (
-                                                    <Text style={{ color: "white" }}>{card.item.job}</Text>
-                                                ) : (
-                                                    <Text style={{ color: "white" }}>-- --</Text>
-                                                )}
-                                                   {card.item?.company && card.item.company !== null && card.item.company !=="" && 
-                                                   <Text style={{ color: "white" }}> at {card.item.company}</Text>}
+                                                    {card.item?.job && card.item.job !== null && card.item.job !== "" ?
+                                                        (
+                                                            <Text style={{ color: "white" }}>{card.item.job}</Text>
+                                                        ) : (
+                                                            <Text style={{ color: "white" }}>-- --</Text>
+                                                        )}
+                                                    {card.item?.company && card.item.company !== null && card.item.company !== "" &&
+                                                        <Text style={{ color: "white" }}> at {card.item.company}</Text>}
                                                 </View>
                                             </View>
                                         )}
                                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
                                         <Image style={{ height: 20, width: 25 }} source={require("../images/grad_hat.png")} />
-                                        {card.item?.school && card.item.school !== null && card.item.school !==""?
+                                        {card.item?.school && card.item.school !== null && card.item.school !== "" ?
                                             (
                                                 <Text style={{ color: "white" }}>{card.item.school}</Text>
                                             ) : (
@@ -85,7 +145,7 @@ const ViewProfileScreen = ({ profile }) => {
                                     </View>
                                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
                                         <Image style={{ height: 25, width: 25 }} source={require("../images/house.png")} />
-                                        {card.item?.hometown && card.item.hometown !== null && card.item.hometown !==""?
+                                        {card.item?.hometown && card.item.hometown !== null && card.item.hometown !== "" ?
                                             (
                                                 <Text style={{ color: "white" }}>{card.item.hometown}</Text>
                                             ) : (
@@ -174,9 +234,11 @@ const styles = StyleSheet.create({
         //  marginTop:-30,
     },
     cardcontainer: {
-        backgroundColor: "white",
-        //  height:500,
+        backgroundColor: "#00308F",
+        height: 600,
         borderRadius: 20,
+        borderColor: "#002D62",
+        borderWidth: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -184,7 +246,8 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.2,
         shadowRadius: 1.41,
-        elevation: 2
+        elevation: 2,
+        margin: 10
     },
     infocontainer: {
         //  bottom:70 ,
@@ -197,6 +260,19 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 15,
         fontWeight: "bold"
+    },
+    text: {
+        // position: 'absolute', 
+        top: 10,  // This will place the text near the top of the image
+        // left: 0,
+        // right: 0,
+        color: "white",
+        fontSize: 24,
+        fontWeight: 'bold',
+        // textAlign: 'center',
+        // textShadowColor: 'rgba(0, 0, 0, 0.9)', // Shadow color
+        // textShadowOffset: { width: -1, height: 1 },
+        // textShadowRadius: 9
     }
 })
 
