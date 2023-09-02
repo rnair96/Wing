@@ -204,8 +204,8 @@ const AccountScreen = () => {
                 grad_year: profile.university_student.grad_year
             },
         }).then(() => {
-            navigation.navigate("ToggleProfile",profile)
-            alert("Congrats on graduating to Wing Professional! Please update your profile to optimize matching.")
+            navigation.navigate("Home")
+            alert("Congrats on graduating to Wing Professional! Make sure to update your profile to optimize matching.")
         }).catch((error) => {
             alert(error.message)
         });
