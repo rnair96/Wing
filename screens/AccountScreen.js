@@ -227,7 +227,7 @@ const AccountScreen = () => {
                 <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Leave Wing-U?</Text>
                 <Text style={{fontSize:12, margin:10}}>Graduate Wing University and upgrade your profile and matching as a Professional!</Text>
                 <TouchableOpacity style={{...styles.savebuttonContainer, width:200}} onPress={() =>updateUniversitySetting()}>
-                    <Text style={{textAlign:"center", fontSize: 12, fontWeight:"bold", color:"white"}}>Yes, Graduate Me</Text>
+                    <Text style={{textAlign:"center", fontSize: 12, fontWeight:"bold", color:"white"}}>Yes, Upgrade to Professional</Text>
                 </TouchableOpacity>
             </View>
         )}

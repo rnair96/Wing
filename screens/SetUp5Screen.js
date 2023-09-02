@@ -8,8 +8,8 @@ import ImageUpload from '../components/ImageUpload';
 
 
 const SetUp5Screen = () => {
-//   const [ medals, setMedals ] = useState(null);
   const [ bio, setBio ] = useState(null);
+  const [ hometown, setHometown ] = useState(null);
   const [ url1, setUrl1] = useState(null);
   const [ url2, setUrl2] = useState(null);
   const [ url3, setUrl3] = useState(null);
@@ -26,10 +26,11 @@ const SetUp5Screen = () => {
       updateDoc(doc(db, global.users, user.id), {
           images: [url1, url2, url3],
           bio: bio,
+          hometown: hometown,
           timestamp: serverTimestamp()
       }).then(()=> {
             // navigation.navigate("Preferences", {id: user.id})
-            navigation.navigate("Home")//create a Welcome screen that shows the user's profile and gives the option to start swiping
+            navigation.navigate("Home")//create a Welcome screen that gives option to start swiping
       }).catch((error) => {
           alert(error.message)
       });
@@ -65,9 +66,20 @@ return (
       <TextInput
       value = {bio}
       multiline
-      numberOfLines={3}
+      numberOfLines={4}
+      maxLength={200}
       onChangeText = {setBio} 
       placeholder={'I.e: I love kayaking at a local river while drinking craft beer'}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+
+      <Text style={styles.formTitle}>Add your Hometown {`(Optional)`}</Text>
+      <TextInput
+      value = {hometown}
+      multiline
+      numberOfLines={1}
+      maxLength={50}
+      onChangeText = {setHometown} 
+      placeholder={'I.e: Washington, DC'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     
 

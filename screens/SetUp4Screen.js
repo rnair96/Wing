@@ -62,6 +62,7 @@ return (
       value = {medal1}
       multiline
       numberOfLines={2}
+      maxLength={50}
       onChangeText = {setMedal1} 
       placeholder={"I completed a marathon."}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
@@ -73,6 +74,7 @@ return (
       value = {medal2}
       multiline
       numberOfLines={2}
+      maxLength={50}
       onChangeText = {setMedal2} 
       placeholder={"I won a hotdog eating contest"}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
@@ -84,6 +86,7 @@ return (
       value = {medal3}
       multiline
       numberOfLines={2}
+      maxLength={50}
       onChangeText = {setMedal3} 
       placeholder={"I have a Youtube channel with 3k subscribers."}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>

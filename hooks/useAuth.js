@@ -186,7 +186,16 @@ export const AuthProvider = ({children}) => {
     })
     .catch((error) => {
     const errorMessage = error.message;
+    const errorCode = error.code;
+
     console.log("error in sign up", errorMessage)
+
+    if (errorCode === 'auth/email-already-in-use') {
+      alert('This email is already associated with an existing account.');
+  } else {
+      // Handle other possible errors or display a general error message
+      alert('An error occurred during sign up. Please try again.');
+  }
   });
   setLoading(false);
 }

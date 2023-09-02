@@ -71,7 +71,7 @@ return (
           {/* <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>The Mission</Text> */}
      
 
-      <Text style={styles.formTitle}>Define Your Mission {`(50 char max)`}</Text>
+      <Text style={styles.formTitle}>Define Your Mission {`(40 char max)`}</Text>
       <Text style={{fontSize:12, margin:20}}>Hint: Think of a specific goal you want to achieve or a problem you want to solve.</Text>
       <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly"}}>
       <Text style={styles.formTitle}>I Want To: </Text>
@@ -79,8 +79,9 @@ return (
       value = {mission}
       multiline
       numberOfLines={2}
+      maxLength={40}
       onChangeText = {setMission} 
-      placeholder={'I.e Lose 10 pounds'}
+      placeholder={'Lose 10 pounds'}
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
       </View>
 

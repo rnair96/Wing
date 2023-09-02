@@ -135,15 +135,15 @@ export const ProfileViewScreen = () => {
                         <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10 }}>
                             <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
                             <View style={{ flexDirection: "column" }}>
-                                <View style={{ flexDirection: "row", padding: 10 }}>
+                                <View style={{ flexDirection: "row", padding: 10, margin:10 }}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{card.item.medals[0]}</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", padding: 10 }}>
+                                <View style={{ flexDirection: "row", padding: 10, margin:10 }}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{card.item.medals[1]}</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", padding: 10 }}>
+                                <View style={{ flexDirection: "row", padding: 10, margin:10 }}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{card.item.medals[2]}</Text>
                                 </View>
