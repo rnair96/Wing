@@ -46,6 +46,7 @@ const SignUpScreen = () => {
         <TextInput
         value = {name}
         onChangeText = {setName}
+        maxLength={50}
         placeholder={'John Doe'}
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         <Text style={styles.formTitle}> Email </Text>
@@ -53,12 +54,14 @@ const SignUpScreen = () => {
         value = {email}
         onChangeText = {setEmail}
         placeholder={'example@example.com'}
+        maxLength={50}
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         <Text style={styles.formTitle}> Password </Text>
         <TextInput
         value = {password}
         onChangeText = {setPassword}
         placeholder={'*************'}
+        maxLength={30}
         secureTextEntry
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
         <Text style={styles.formTitle}> Confirm Password </Text>
@@ -66,6 +69,7 @@ const SignUpScreen = () => {
         value = {confirmpassword}
         onChangeText = {setConfirmPassword}
         placeholder={'*************'}
+        maxLength={30}
         secureTextEntry
         style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 

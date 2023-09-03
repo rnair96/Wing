@@ -29,8 +29,8 @@ const SetUp5Screen = () => {
           hometown: hometown,
           timestamp: serverTimestamp()
       }).then(()=> {
-            // navigation.navigate("Preferences", {id: user.id})
-            navigation.navigate("Home")//create a Welcome screen that gives option to start swiping
+            navigation.navigate("Home")
+            navigation.navigate("WelcomeScreen")
       }).catch((error) => {
           alert(error.message)
       });
@@ -88,7 +88,7 @@ return (
           disabled = {incompleteform}
           style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
           onPress = {updateUserProfile}>
-          <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Start Swiping!</Text>
+          <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Complete Setup!</Text>
       </TouchableOpacity>
       </View>
       </View>

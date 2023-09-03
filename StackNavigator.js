@@ -27,7 +27,6 @@ import FlaggedScreen from './screens/FlaggedScreen';
 import ReportOtherScreen from './screens/ReportOtherScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
-import PromotionScreen from './screens/PromotionScreen';
 import ViewProfileScreen from './screens/ViewProfileScreen';
 import ToggleProfileScreen from './screens/ToggleProfileScreen';
 import StudentSetupScreen from './screens/StudentSetupScreen';
@@ -35,6 +34,7 @@ import SetUp3Screen from './screens/SetUp3Screen';
 import SetUp4Screen from './screens/SetUp4Screen';
 import SetUp5Screen from './screens/SetUp5Screen';
 import AccountScreen from './screens/AccountScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -104,7 +104,7 @@ const StackNavigator = () => {
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "transparentModal" }}>
               <Stack.Screen name="Match" component={MatchScreen} />
-              <Stack.Screen name="Promotion" component={PromotionScreen} />
+              <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
             </Stack.Group>
             </>
         ) : (

@@ -72,7 +72,7 @@ return (
      
 
       <Text style={styles.formTitle}>Define Your Mission {`(40 char max)`}</Text>
-      <Text style={{fontSize:12, margin:20}}>Hint: Think of a specific goal you want to achieve or a problem you want to solve.</Text>
+      <Text style={{fontSize:12, margin:20}}>Hint: Think of a specific goal you want to achieve or activity you'd like to do with your Wing.</Text>
       <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly"}}>
       <Text style={styles.formTitle}>I Want To: </Text>
       <TextInput

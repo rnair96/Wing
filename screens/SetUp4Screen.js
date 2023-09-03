@@ -24,14 +24,10 @@ const SetUp4Screen = () => {
 
   const updateUserProfile = () => {
       updateDoc(doc(db, global.users, user.id), {
-          // images: [url1, url2, url3],
           medals: [medal1, medal2, medal3],
           values: values
-          // bio: bio,
-          // timestamp: serverTimestamp()
       }).then(()=> {
-            // navigation.navigate("Preferences", {id: user.id})
-            navigation.navigate("SetUp5")
+            navigation.navigate("SetUp5", {id: user.id})
       }).catch((error) => {
           alert(error.message)
       });

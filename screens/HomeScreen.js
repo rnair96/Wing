@@ -38,7 +38,7 @@ const HomeScreen = () => {
                     navigation.navigate("SetUp4", {id: user.uid});
                 } else if (!snapshot.data().images){
                     navigation.navigate("SetUp5", {id: user.uid});
-                } 
+                }
                 
                 // else if (!snapshot.data().genderPreference){
                 //     navigation.navigate("Preferences", {id: user.uid});

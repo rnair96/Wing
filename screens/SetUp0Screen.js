@@ -103,7 +103,7 @@ const SetUp0Screen = () => {
             <TextInput
             value = {location}
             onChangeText = {setLocation} 
-            placeholder={'(City, State)'}
+            placeholder='City, State'
             style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>     
 
             <View style={{height:150}}>
