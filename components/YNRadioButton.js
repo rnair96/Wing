@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 5,
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+    color:"white"
   },
 });
 

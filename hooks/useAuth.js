@@ -307,13 +307,30 @@ export const AuthProvider = ({ children }) => {
     }
 }
 
-  const deleteAll = async (ispass, password) => {
-    if(ispass){
+  const authenticateUserForDelete = async(password) => {
+    try{
       const credential = EmailAuthProvider.credential(user.email, password);
 
       // Re-authenticate the user with the credential
-      await reauthenticateWithCredential(user, credential);
+      await reauthenticateWithCredential(user, credential).then(()=>{
+        return true;
+      });
+
+      // return true;
+    }catch (error) {
+      if (error.code === 'auth/wrong-password') {
+        alert('Incorrect current password. Please try again.');
+        return false;
+      } else {
+        console.log("error", error)
+        alert('An error occurred. Please try again.');
+        return false;
+      }
     }
+  }
+
+  const deleteAll = async (ispass, password) => {
+    if(ispass && authenticateUserForDelete(password)){
     await deleteInfo().then(() => {
       if (!loadingImages && !loadingMatches && !loadingPasses && !loadingSwipes && !loadingUser) {
         console.log("All Info deleted");
@@ -322,6 +339,7 @@ export const AuthProvider = ({ children }) => {
     }).catch(error => {
       console.error('There was an error', error);
     })
+    }
   }
 
   const deleteInfo = async () => {

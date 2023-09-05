@@ -66,7 +66,7 @@ const EditProfileScreen = ({ profile }) => {
       setOldToken(profile.token);
       setSchool(profile.school);
       setHometown(profile.hometown);
-      if(profile.university_student && profile.university_student.status==="active"){
+      if (profile.university_student && profile.university_student.status === "active") {
         setClassLevel(profile.university_student.class_level)
         setGradYear(profile.university_student.grad_year)
         setActiveStudent(true)
@@ -86,8 +86,8 @@ const EditProfileScreen = ({ profile }) => {
 
     let form;
 
-    if (activeStudent){
-      form = !url1 || !url2 || !url3 || !mission || !medal1 || !medal2 || !medal3 || !location || !bio || !values || !class_level ||!grad_year||!school
+    if (activeStudent) {
+      form = !url1 || !url2 || !url3 || !mission || !medal1 || !medal2 || !medal3 || !location || !bio || !values || !class_level || !grad_year || !school
     } else {
       form = !url1 || !url2 || !url3 || !mission || !medal1 || !medal2 || !medal3 || !location || !bio || !values;
 
@@ -113,7 +113,7 @@ const EditProfileScreen = ({ profile }) => {
 
 
   const updateUserProfile = () => {
-    if(activeStudent){ // change to one call of update doc, with different docs sent
+    if (activeStudent) { // change to one call of update doc, with different docs sent
       updateDoc(doc(db, global.users, user.uid), {
         images: [url1, url2, url3],
         university_student: {
@@ -135,7 +135,7 @@ const EditProfileScreen = ({ profile }) => {
       }).catch((error) => {
         alert(error.message)
       });
-    } else{
+    } else {
       updateDoc(doc(db, global.users, user.uid), {
         images: [url1, url2, url3],
         job: job,
@@ -155,7 +155,7 @@ const EditProfileScreen = ({ profile }) => {
         alert(error.message)
       });
     }
-    
+
   }
 
 
@@ -171,8 +171,8 @@ const EditProfileScreen = ({ profile }) => {
       >
         <ScrollView style={{ marginHorizontal: 10 }}>
 
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly" }}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", padding: 20 }}>Edit Your Profile</Text>
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", backgroundColor:"black" }}>
+            <Text style={{ fontSize: 15, fontWeight: "bold", padding: 20, color:"#00BFFF" }}>Edit Your Profile</Text>
 
 
 
@@ -183,7 +183,7 @@ const EditProfileScreen = ({ profile }) => {
                 {/* {!profile?.age ? (
         <AgePicker age= {age} setAge={setAge} />
       ):( */}
-                <Text>{age}</Text>
+                <Text style={{color:"white"}}>{age}</Text>
                 {/* )} */}
 
               </View>
@@ -194,7 +194,7 @@ const EditProfileScreen = ({ profile }) => {
                 {/* {!profile?.gender ? (
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
       ):( */}
-                <Text>{gender}</Text>
+                <Text style={{color:"white"}}>{gender}</Text>
                 {/* )} */}
               </View>
             </View>
@@ -208,9 +208,10 @@ const EditProfileScreen = ({ profile }) => {
                     value={location}
                     onChangeText={setLocation}
                     placeholder={'What area are you in? (City, State)'}
-                    style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />)
+                    placeholderTextColor="#888888" 
+                    style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />)
                   : (
-                    <Text>{location}</Text>
+                    <Text style={{color:"white"}}>{location}</Text>
                   )}
               </View>
 
@@ -220,73 +221,83 @@ const EditProfileScreen = ({ profile }) => {
                   value={hometown}
                   onChangeText={setHometown}
                   placeholder={'Washington, DC'}
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
-              </View>
-              </View>
-
-              
-              {activeStudent ?
-                (
-                  <View style={{ flexDirection: "column", padding: 10 }}>
-                    <View style={{justifyContent:"center", alignItems:'center', flexDirection:"row"}}>
-                      <View style={{width:"30%", backgroundColor:"#00BFFF", height:2}}/>
-                    <Text style={{color:"#00BFFF", fontWeight:"800", fontSize:25}}>WING-U</Text>
-                    <View style={{width:"30%", backgroundColor:"#00BFFF", height:2}}/>
-
-                    </View>
-
-
-                    <View style={{ padding: 20, alignItems: "center" }}>
-                      <Text style={styles.formTitle}>Class Level</Text>
-                        <ClassLevelPicker selectedLevel={class_level} setSelectedLevel={setClassLevel}/>
-                    </View>
-
-                    <View style={{ padding: 20, alignItems: "center" }}>
-                      <Text style={styles.formTitle}>Graduation Year</Text>
-                      <GradYearPicker selectedYear={parseInt(grad_year, 10)} setSelectedYear={setGradYear}/>
-                    </View>
-
-                    <View style={{ paddingBottom: 40, alignItems: "center" }}>
-                      <Text style={styles.formTitle}>School Currently Attending</Text>
-                      <UniversityPicker university_chosen={school} setUniversity={setSchool}/>
-                    </View>
-                    
-                    <View style={{margin:20, padding:10, justifyContent:"center", alignItems:"center"}}>
-                  <Text style={{fontSize:13, textAlign:"center", padding:10}} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
-                  <View style={{width:"90%", backgroundColor:"#00BFFF", height:2}}/>
-                  </View>
-
-                  </View>
-                ):(
-              <View style={{ flexDirection: "column", padding: 10 }}>
-              <View style={{ padding: 10, alignItems: "center" }}>
-                <Text style={styles.formTitle}>Job</Text>
-                <TextInput
-                  value={job}
-                  onChangeText={setJob}
-                  placeholder={'What do you do?'}
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
-              </View>
-
-            <View style={{ padding: 10, alignItems: "center" }}>
-                <Text style={styles.formTitle}>Company</Text>
-                <TextInput
-                  value={company}
-                  onChangeText={setCompany}
-                  placeholder={'What do you do?'}
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
-              </View>
-
-            <View style={{ padding: 10, alignItems: "center" }}>
-                <Text style={styles.formTitle}>School Graduated From or Last Attended</Text>
-                <TextInput
-                  value={school}
-                  onChangeText={setSchool}
-                  placeholder={'What do you do?'}
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+                  placeholderTextColor="#888888" 
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
               </View>
             </View>
-                )}
+
+
+            {activeStudent ?
+              (
+                <View style={{ flexDirection: "column", padding: 10 }}>
+                  <View style={{ justifyContent: "center", alignItems: 'center', flexDirection: "row" }}>
+                    <View style={{ width: "30%", backgroundColor: "#00BFFF", height: 2 }} />
+                    <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 25 }}>WING-U</Text>
+                    <View style={{ width: "30%", backgroundColor: "#00BFFF", height: 2 }} />
+
+                  </View>
+
+
+                  <View style={{ padding: 20, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Class Level</Text>
+                    <ClassLevelPicker selectedLevel={class_level} setSelectedLevel={setClassLevel} />
+                  </View>
+
+                  <View style={{ padding: 20, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Graduation Year</Text>
+                    <GradYearPicker selectedYear={parseInt(grad_year, 10)} setSelectedYear={setGradYear} />
+                  </View>
+
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>University Currently Attending</Text>
+                    {/* <UniversityPicker university_chosen={school} setUniversity={setSchool}/> */}
+                    <TextInput
+                      value={school}
+                      onChangeText={setSchool}
+                      placeholder={'i.e American University'}
+                      placeholderTextColor="#888888" 
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
+                  </View>
+
+                  <View style={{ margin: 20, padding: 10, justifyContent: "center", alignItems: "center" }}>
+                    <Text style={{ fontSize: 13, textAlign: "center", padding: 10, color:"white" }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
+                    <View style={{ width: "90%", backgroundColor: "#00BFFF", height: 2 }} />
+                  </View>
+
+                </View>
+              ) : (
+                <View style={{ flexDirection: "column", padding: 10 }}>
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Job</Text>
+                    <TextInput
+                      value={job}
+                      onChangeText={setJob}
+                      placeholder={'What do you do?'}
+                      placeholderTextColor="#888888" 
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
+                  </View>
+
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Company</Text>
+                    <TextInput
+                      value={company}
+                      onChangeText={setCompany}
+                      placeholder={'Some Company Name'}
+                      placeholderTextColor="#888888" 
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
+                  </View>
+
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>School Graduated From or Last Attended</Text>
+                    <TextInput
+                      value={school}
+                      onChangeText={setSchool}
+                      placeholder={'i.e American University'}
+                      placeholderTextColor="#888888" 
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
+                  </View>
+                </View>
+              )}
 
 
             <View style={{ flexDirection: "row", padding: 20 }}>
@@ -299,45 +310,53 @@ const EditProfileScreen = ({ profile }) => {
             <TextInput
               value={bio}
               multiline
-              numberOfLines={3}
+              numberOfLines={4}
+              maxLength={200}
               onChangeText={setBio}
               placeholder={'Share a bit about you i.e: Papa Johns is the key to my heart.'}
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+              placeholderTextColor="#888888" 
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
 
 
             <Text style={styles.formTitle}>Accomplishments</Text>
             <View style={{ justifyContent: "flex-start", flexDirection: "column" }}>
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text>1.</Text>
+                <Text style={{color:"white"}}>1.</Text>
                 <TextInput
                   value={medal1}
                   multiline
                   numberOfLines={2}
+                  maxLength={50}
                   onChangeText={setMedal1}
                   placeholder={"I completed a marathon."}
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10 }} />
+                  placeholderTextColor="#888888" 
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10, color:"white" }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text>2.</Text>
+                <Text style={{color:"white"}}>2.</Text>
                 <TextInput
                   value={medal2}
                   multiline
                   numberOfLines={2}
+                  maxLength={50}
                   onChangeText={setMedal2}
                   placeholder={"I won a hotdog eating contest"}
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10 }} />
+                  placeholderTextColor="#888888" 
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10, color:"white" }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text>3.</Text>
+                <Text style={{color:"white"}}>3.</Text>
                 <TextInput
                   value={medal3}
                   multiline
                   numberOfLines={2}
+                  maxLength={50}
                   onChangeText={setMedal3}
                   placeholder={"I have a Youtube channel with 3k subscribers."}
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10 }} />
+                  placeholderTextColor="#888888" 
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10, color:"white" }} />
               </View>
             </View>
 
@@ -359,10 +378,12 @@ const EditProfileScreen = ({ profile }) => {
             <TextInput
               value={mission}
               multiline
-              numberOfLines={3}
+              numberOfLines={2}
+              maxLength={40}
               onChangeText={setMission}
-              placeholder={'What goal do you want a Wing to assist you on? i.e Lose 10 pounds'}
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+              placeholder={'What goal/activity do you want a Wing to assist you on? i.e Lose 10 pounds'}
+              placeholderTextColor="#888888" 
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
 
             <Text style={styles.formTitle}>Mission Category</Text>
             <TagPicker tag={missiontag} setTag={setMissionTag} />
@@ -386,7 +407,9 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#00308F",
+    // color: "#00308F",
+    // color:"#00BFFF",
+    color:"white",
     padding: 20
   }
 })

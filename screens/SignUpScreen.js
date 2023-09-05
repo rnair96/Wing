@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from 'react'
 import { Text, TextInput, View, TouchableOpacity, SafeAreaView, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
+import Header from '../Header';
 
 
 
@@ -32,14 +33,15 @@ const SignUpScreen = () => {
     return (
       <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{flex:1}}
+            style={{flex:1, backgroundColor:"black"}}
             keyboardVerticalOffset={10}>
-      <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly", marginHorizontal:10}}>
+      <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
       <TouchableWithoutFeedback 
           onPress={Keyboard.dismiss}
         >
         <View style={{alignItems:"center"}}>
-        <Text style={{fontSize:20, fontWeight: "bold", padding:20}}> Sign Up </Text>
+        <Header title={"Sign Up"} />
+        {/* <Text style={{fontSize:20, fontWeight: "bold", padding:20, color:"#00BFFF"}}> Sign Up </Text> */}
         <Text style={styles.formTitle}> First and Last Name </Text>
         </View>
         </TouchableWithoutFeedback>
@@ -48,30 +50,34 @@ const SignUpScreen = () => {
         onChangeText = {setName}
         maxLength={50}
         placeholder={'John Doe'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        placeholderTextColor={"grey"}
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>
         <Text style={styles.formTitle}> Email </Text>
         <TextInput
         value = {email}
         onChangeText = {setEmail}
         placeholder={'example@example.com'}
+        placeholderTextColor={"grey"}
         maxLength={50}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>
         <Text style={styles.formTitle}> Password </Text>
         <TextInput
         value = {password}
         onChangeText = {setPassword}
         placeholder={'*************'}
+        placeholderTextColor={"grey"}
         maxLength={30}
         secureTextEntry
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>
         <Text style={styles.formTitle}> Confirm Password </Text>
         <TextInput
         value = {confirmpassword}
         onChangeText = {setConfirmPassword}
         placeholder={'*************'}
+        placeholderTextColor={"grey"}
         maxLength={30}
         secureTextEntry
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>
 
         <TouchableOpacity 
           disabled = {incompleteForm}
@@ -90,7 +96,7 @@ const styles = StyleSheet.create({
   formTitle :{
     fontSize:15, 
     fontWeight: "bold", 
-    color:"#00308F", 
+    color:"white", 
     padding:20
   }
 })

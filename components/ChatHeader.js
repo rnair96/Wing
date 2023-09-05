@@ -41,14 +41,14 @@ const ChatHeader = ({matchedDetails}) => {
     return (
       <View style={{flexDirection:"row", justifyContent:'space-evenly'}}>
         <TouchableOpacity onPress={() => navigator.goBack()} style={{padding: 2}}>
-            <Ionicons name="chevron-back-outline" size={34} color="#00308F"/>
+            <Ionicons name="chevron-back-outline" size={34} color="#00BFFF"/>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigator.navigate("ProfileView", {matchedDetails})} style={{paddingHorizontal:30, paddingVertical: 2, flexDirection:"row"}}>
-            <Image style = {{height:35, width:35, borderRadius:50}} source = {{uri: matched_user[1]?.images[0]}}/>
+        <TouchableOpacity onPress={() => navigator.navigate("ProfileView", {matchedDetails})} style={{paddingVertical: 2, flexDirection:"row", marginHorizontal:"25%", left:"7%"}}>
+            <Image style = {{height:45, width:45, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source = {{uri: matched_user[1]?.images[0]}}/>
             <Text style={{padding:10, fontWeight:"bold", fontSize:12}}> {matched_user[1]?.displayName} </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={{padding: 2, flexDirection:"row"}}>
-        <Ionicons name="menu" size={34} color="#00308F"/>
+        <Ionicons name="menu" size={34} color="#00BFFF"/>
         </TouchableOpacity>
         <Modal
         animationType="slide"

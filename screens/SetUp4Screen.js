@@ -37,7 +37,7 @@ const SetUp4Screen = () => {
 return (
   <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{flex:1}}
+            style={{flex:1, backgroundColor:"black"}}
             keyboardVerticalOffset={15}>
         <TouchableWithoutFeedback 
           // onPress={Keyboard.dismiss()}
@@ -48,12 +48,12 @@ return (
             <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 4/5"}/>
           </SafeAreaView>
   
-        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Nearly There...</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", padding:20, color:"white"}}>Nearly There...</Text>
 
         <Text style={styles.formTitle}>Time to Brag. Briefly List Accomplishments You Are Most Proud Of {`(50 characters max each)`}</Text>
       <View style={{justifyContent:"flex-start", flexDirection:"column"}}>
       <View style={{flexDirection:"row", alignItems:"center", marginTop:10, marginBottom:10}}>
-      <Text>1.</Text>
+      <Text style={{color:"white"}}>1.</Text>
       <TextInput
       value = {medal1}
       multiline
@@ -61,11 +61,12 @@ return (
       maxLength={50}
       onChangeText = {setMedal1} 
       placeholder={"I completed a marathon."}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
+      placeholderTextColor={"grey"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10, color:"white"}}/>
       </View>
 
       <View style={{flexDirection:"row", alignItems:"center", marginTop:10, marginBottom:10}}>
-      <Text>2.</Text>
+      <Text style={{color:"white"}}>2.</Text>
       <TextInput
       value = {medal2}
       multiline
@@ -73,11 +74,12 @@ return (
       maxLength={50}
       onChangeText = {setMedal2} 
       placeholder={"I won a hotdog eating contest"}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
+      placeholderTextColor={"grey"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10, color:"white"}}/>
       </View>
 
     <View style={{flexDirection:"row", alignItems:"center", marginTop:10, marginBottom:10}}>
-    <Text>3.</Text>
+    <Text style={{color:"white"}}>3.</Text>
     <TextInput
       value = {medal3}
       multiline
@@ -85,7 +87,8 @@ return (
       maxLength={50}
       onChangeText = {setMedal3} 
       placeholder={"I have a Youtube channel with 3k subscribers."}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10}}/>
+      placeholderTextColor={"grey"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, margin:10, color:"white"}}/>
     </View>
     </View>
 
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
   formTitle :{
     fontSize:15, 
     fontWeight: "bold", 
-    color:"#00308F", 
+    color:"white", 
     padding:20
   }
 })

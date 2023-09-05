@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 3,
+    backgroundColor:"black"
   },
   toggleIcons: {
     flexDirection: 'row',

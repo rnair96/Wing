@@ -40,7 +40,7 @@ const SetUp5Screen = () => {
 return (
   <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{flex:1}}
+            style={{flex:1, backgroundColor:"black"}}
             keyboardVerticalOffset={15}>
         <TouchableWithoutFeedback 
           // onPress={Keyboard.dismiss()}
@@ -51,7 +51,7 @@ return (
             <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 5/5"}/>
           </SafeAreaView>
   
-        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Last Touches</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", padding:20, color:"white"}}>Last Touches</Text>
 
         <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
         {/* <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text> */}
@@ -70,7 +70,8 @@ return (
       maxLength={200}
       onChangeText = {setBio} 
       placeholder={'I.e: I love kayaking at a local river while drinking craft beer'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+      placeholderTextColor={"grey"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>
 
       <Text style={styles.formTitle}>Add your Hometown {`(Optional)`}</Text>
       <TextInput
@@ -80,7 +81,8 @@ return (
       maxLength={50}
       onChangeText = {setHometown} 
       placeholder={'I.e: Washington, DC'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+      placeholderTextColor={"grey"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>
     
 
         <View style={{height:150}}>
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
   formTitle :{
     fontSize:15, 
     fontWeight: "bold", 
-    color:"#00308F", 
+    color:"white", 
     padding:20
   }
 })

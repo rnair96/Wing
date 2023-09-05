@@ -88,19 +88,19 @@ const MatchingPreferences = () => {
 
 
     return (
-    <ScrollView style={{marginHorizontal:10}}>
+    <ScrollView style={{backgroundColor:"black"}}>
 
     <SafeAreaView style={{alignItems:"center"}}>
      {/* {profile?.genderPreference ? 
      ( */}
-      <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Matching Preferences"}/>
+      <Header style={{fontSize:20, fontWeight: "bold"}} title={"Matching Preferences"}/>
      {/* ):(
       <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 4/4"}/>
      )} */}
     </SafeAreaView>
     <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
-      <Text style={{fontSize:15, fontWeight: "bold", padding:40}}>Choose Your Wing Preferences</Text> 
+      <Text style={{fontSize:15, fontWeight: "bold", padding:40, color:"white"}}>Choose Your Wing Preferences</Text> 
 
       {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
 
@@ -124,14 +124,14 @@ const MatchingPreferences = () => {
       </View> */}
 
       <View style={{alignItems:"center", paddingBottom:60}}>
-        <Text style={{top:40,fontSize:15, fontWeight: "bold", color:"#00308F"}}>Mission Category</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"white", padding:10}}>Mission Category</Text>
         <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
       </View>
 
       {activeStudent && (
         <View style={{alignItems:"center", padding:10}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F", padding:5}}>Only See Users In Wing-U?</Text>
-        <Text style={{fontSize:12, padding:20}}>{`(Exclusively university students)`}</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"white", padding:5}}>Only See Users In Wing-U?</Text>
+        <Text style={{fontSize:12, padding:20, color:"white"}}>{`(Exclusively university students)`}</Text>
         <YNRadioButton selectedOption={wingUni} setSelectedOption={setWingUni}/>
       </View>
       )}

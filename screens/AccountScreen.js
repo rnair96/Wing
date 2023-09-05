@@ -221,8 +221,10 @@ const AccountScreen = () => {
 
 
     return (
-        <SafeAreaView>
+        <View style={{backgroundColor:"black", height:"100%"}}>
+            <SafeAreaView>
             <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account"} />
+            </SafeAreaView>
             <View style={{ height: "90%", width: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
 
 
@@ -232,20 +234,20 @@ const AccountScreen = () => {
 
                 {activeStudent && (
                     <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "30%", width: "100%" }}>
-                        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Leave Wing-U?</Text>
-                        <Text style={{ fontSize: 12, margin: 10 }}>Graduate Wing University and upgrade your profile and matching as a Professional!</Text>
+                        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Leave Wing-U?</Text>
+                        <Text style={{ fontSize: 12, margin: 10, color:"white" }}>Graduate Wing University and upgrade your profile and matching as a Professional!</Text>
                         <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200 }} onPress={() => updateUniversitySetting()}>
                             <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Yes, Upgrade to Professional</Text>
                         </TouchableOpacity>
                     </View>
                 )}
 
-                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Contact Email</Text>
+                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white"}}>Contact Email</Text>
                 <View style={{ flexDirection: "row" }}>
                     <TextInput
                         value={email}
                         onChangeText={setEmail}
-                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
                     <TouchableOpacity style={styles.savebuttonContainer} onPress={() => updateEmail()}>
                         <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Update</Text>
                     </TouchableOpacity>
@@ -253,14 +255,14 @@ const AccountScreen = () => {
 
                 {/* should actually cycle through all providerData for potential password authentication */}
                 {user.providerData[0].providerId === "password" && (<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("ChangePassword")}>
-                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Change Password</Text>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Change Password</Text>
                 </TouchableOpacity>)}
 
                 {/* create a tab for Account, then give options there to update email address, change password, delete account or logout, 
         Turn Off Student Options for Profile (Doing so will remove you from Wing University)*/}
 
                 <TouchableOpacity
-                    style={[{ width: 200, height: 50, padding: 15, borderRadius: 10 }, { backgroundColor: "#00308F" }]}
+                    style={{ width: 200, height: 50, padding: 15, borderRadius: 10 , backgroundColor: "#00308F" }}
                     onPress={logout}>
                     <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Logout</Text>
                 </TouchableOpacity>
@@ -338,7 +340,7 @@ const AccountScreen = () => {
                 </View>
             </Modal>
 
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -358,8 +360,10 @@ const styles = StyleSheet.create({
         width: 200,
         height: 50,
         margin: 10,
-        borderWidth: 1,
-        borderColor: '#ccc'
+        borderRadius:10,
+        // borderWidth: 1,
+        // borderColor: '#ccc',
+        backgroundColor: "#00308F"
     },
     iconcontainer: {
         height: 60,

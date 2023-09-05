@@ -49,15 +49,15 @@ const SetUp3Screen = () => {
   //Use Header
     
 return (
-  // <KeyboardAvoidingView
-  //           behavior={Platform.OS === "ios" ? "padding" : "height"}
-  //           style={{flex:1}}
-  //           keyboardVerticalOffset={15}>
-  //       <TouchableWithoutFeedback 
-  //         // onPress={Keyboard.dismiss()}
-  //       >
-  //     <ScrollView style={{marginHorizontal:10}}>
-        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+  <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1, backgroundColor:"black"}}
+            keyboardVerticalOffset={5}>
+        <TouchableWithoutFeedback 
+          // onPress={Keyboard.dismiss()}
+        >
+       <ScrollView style={{marginHorizontal:10}}>
+        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly", backgroundColor:"black"}}>
           <SafeAreaView>
           <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 3/5"}/>
           {/* <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 2/4</Text> */}
@@ -72,7 +72,7 @@ return (
      
 
       <Text style={styles.formTitle}>Define Your Mission {`(40 char max)`}</Text>
-      <Text style={{fontSize:12, margin:20}}>Hint: Think of a specific goal you want to achieve or activity you'd like to do with your Wing.</Text>
+      <Text style={{fontSize:12, margin:20, color:"white"}}>Hint: Think of a specific goal you want to achieve or activity you'd like to do with your Wing.</Text>
       <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly"}}>
       <Text style={styles.formTitle}>I Want To: </Text>
       <TextInput
@@ -82,11 +82,12 @@ return (
       maxLength={40}
       onChangeText = {setMission} 
       placeholder={'Lose 10 pounds'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+      placeholderTextColor={"grey"}
+      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>
       </View>
 
       <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>
-      <Text style={{fontSize:12, margin:20}}>This will help to optimize matching you with the best Wing to assist your Mission.</Text>
+      <Text style={{fontSize:12, margin:2, color:"white", padding:15}}>This will help to optimize matching you with the best Wing to assist your Mission.</Text>
       <TagPicker tag={missiontag} setTag={setMissionTag}/>
     
 
@@ -99,9 +100,9 @@ return (
       </TouchableOpacity>
       </View>
       </View>
-      // </ScrollView>
-      // </TouchableWithoutFeedback>
-      //   </KeyboardAvoidingView>
+      </ScrollView>
+      </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
 )
 }
 
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   formTitle :{
     fontSize:15, 
     fontWeight: "bold", 
-    color:"#00308F", 
+    color:"white", 
     padding:20
   }
 })

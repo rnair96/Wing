@@ -25,7 +25,9 @@ const GradYearPicker = ({selectedYear, setSelectedYear}) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom:100
+    paddingBottom:100,
+    backgroundColor:"white",
+    borderRadius:20
   },
   picker: {
     width: 200,

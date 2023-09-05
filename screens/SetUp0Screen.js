@@ -8,6 +8,7 @@ import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
+import Header from '../Header';
 
 const SetUp0Screen = () => {
     const { user, logout } = useAuth();
@@ -58,15 +59,19 @@ const SetUp0Screen = () => {
 
 
     return (
-      // <KeyboardAvoidingView
-      //       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      //       style={{flex:1}}
-      //       keyboardVerticalOffset={15}>
-      //   <TouchableWithoutFeedback 
-      //     // onPress={Keyboard.dismiss()}
-      //   >
-        // <ScrollView style={{marginHorizontal:10}}>
+      <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1, backgroundColor:"black"}}
+            keyboardVerticalOffset={15}>
+        <TouchableWithoutFeedback 
+          // onPress={Keyboard.dismiss()}
+        >
+        {/* // <ScrollView style={{marginHorizontal:10}}> */}
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+          <Text style={{color:"#00BFFF", fontSize:20, fontWeight:"bold"}}>Account Setup 1/5</Text>
+        {/* <Header title={"Account Setup 1/5"} /> */}
+        {/* style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} */}
+
 
           {/* header with logout and title for Account Setup 1/5 */}
       
@@ -104,7 +109,8 @@ const SetUp0Screen = () => {
             value = {location}
             onChangeText = {setLocation} 
             placeholder='City, State'
-            style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>     
+            placeholderTextColor={"grey"}
+            style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, color:"white"}}/>     
 
             <View style={{height:150}}>
             <TouchableOpacity 
@@ -115,10 +121,10 @@ const SetUp0Screen = () => {
             </TouchableOpacity>
             </View>
         </View>
-        {/* </ScrollView>
-        </TouchableWithoutFeedback>
-        </KeyboardAvoidingView> */}
+        {/* </ScrollView> */}
         </SafeAreaView>
+        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
 
     )
 }
@@ -127,7 +133,7 @@ const styles = StyleSheet.create({
     formTitle :{
       fontSize:15, 
       fontWeight: "bold", 
-      color:"#00308F", 
+      color:"white", 
       padding:20
     }
   })

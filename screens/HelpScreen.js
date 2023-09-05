@@ -47,28 +47,32 @@ function HelpScreen() {
   };
 
   return (
-    <SafeAreaView style={{margin:20}}>
+    <View style={{backgroundColor:"black", height:"100%"}}>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={15}>
+    <SafeAreaView style={{margin:20}}>
     <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Help"}/>
+    </SafeAreaView>
     <View style={{height:"80%",justifyContent:"space-evenly", alignItems:"center"}}>
-    <Text style={{fontSize:15, textAlign:"center"}}>
+    <Text style={{fontSize:15, textAlign:"center", color:"white"}}>
         If you are experiencing an issue on this app or have any urgent questions, please submit this form. Our support team will reach out to you within 3 business days.
         </Text>
-    <Text style={{fontWeight:'bold'}}>Subject:</Text>
+    <Text style={{fontWeight:'bold', color:"white"}}>Subject:</Text>
     <TextInput
       value = {subject}
       onChangeText = {setSubject} 
       placeholder={'What is the Issue?'}
+      placeholderTextColor="#888888"
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-    <Text style={{fontWeight:'bold'}}>Message:</Text>
+    <Text style={{fontWeight:'bold', color:"white"}}>Message:</Text>
     <TextInput
       value = {message}
       multiline
       numberOfLines={3}
       onChangeText = {setMessage} 
       placeholder={'Describe in detail the issue you are experiencing.'}
+      placeholderTextColor="#888888"
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     <TouchableOpacity 
           disabled = {incompleteForm}
@@ -102,7 +106,7 @@ function HelpScreen() {
       </View>
       {/* </TouchableWithoutFeedback> */}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 

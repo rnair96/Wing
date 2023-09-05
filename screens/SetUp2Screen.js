@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
@@ -35,7 +35,16 @@ const SetUp2Screen = () => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly" }}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{flex:1, backgroundColor:"black"}}
+            keyboardVerticalOffset={10}>
+
+
+        <TouchableWithoutFeedback 
+        // onPress={Keyboard.dismiss()}
+        >
+        <SafeAreaView style={{flex:1, alignItems: "center", justifyContent: "space-evenly"}}>
 
             <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account Setup 2/5"} />
 
@@ -45,21 +54,24 @@ const SetUp2Screen = () => {
                 value={job}
                 onChangeText={setJob}
                 placeholder={'I.e Lawyer'}
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+                placeholderTextColor={"grey"}
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white"}} />
 
             <Text style={styles.formTitle}>Add Company You Work At {`(Optional)`} </Text>
             <TextInput
                 value={company}
                 onChangeText={setCompany}
                 placeholder={'I.e Some Company Name'}
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+                placeholderTextColor={"grey"}
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
 
             <Text style={styles.formTitle}>Add The School You Graduated From or Last Attended {`(Optional)`} </Text>
             <TextInput
                 value={school}
                 onChangeText={setSchool}
                 placeholder={'I.e American University'}
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+                placeholderTextColor={"grey"}
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white"}} />
 
             <TouchableOpacity
                 disabled={incompleteform}
@@ -69,6 +81,8 @@ const SetUp2Screen = () => {
             </TouchableOpacity>
 
         </SafeAreaView>
+        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -76,7 +90,7 @@ const styles = StyleSheet.create({
     formTitle: {
         fontSize: 15,
         fontWeight: "bold",
-        color: "#00308F",
+        color: "white",
         padding: 20
     },
     button: {

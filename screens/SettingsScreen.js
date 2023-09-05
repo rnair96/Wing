@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight} from 'react-native';
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, ScrollView} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -18,29 +18,33 @@ const SettingsScreen = () => {
 
 
     return (
+        // <ScrollView style={{backgroundColor:"black"}}>
+        <View style={{backgroundColor:"black"}}>
         <SafeAreaView>
-        <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Settings"}/>
+        <Header style={{fontSize:20, fontWeight: "bold"}} title={"Settings"}/>
+        </SafeAreaView> 
         <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Account", profile)}>
-        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Account</Text>
+        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold", color:"white"}}>Account</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("PrivacyPolicy")}>
-        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Privacy Policy</Text>
+        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold", color:"white"}}>Privacy Policy</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Terms")}>
-        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Terms of Service</Text>
+        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold", color:"white"}}>Terms of Service</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Guidelines")}>
-        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Community Guidelines</Text>
+        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold", color:"white"}}>Community Guidelines</Text>
         </TouchableOpacity>
 
             </View>
 
-          </SafeAreaView>
+          </View>
+        //   </ScrollView>
     )
 }
 
@@ -52,7 +56,8 @@ const styles = StyleSheet.create({
       height: 50,
       margin: 10,
       borderWidth: 1,
-      borderColor: '#ccc'
+    //   borderColor: '#ccc'
+      backgroundColor:"#00308F"
     },
     iconcontainer: {
         height: 60,

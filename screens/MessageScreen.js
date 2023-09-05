@@ -106,7 +106,7 @@ const MessageScreen = () => {
     
     
     return (
-      <SafeAreaView style={{flex:1}}>
+      <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
         <ChatHeader matchedDetails={matchedDetails}/>
 
         <KeyboardAvoidingView
@@ -140,12 +140,13 @@ const MessageScreen = () => {
 
 
         <View 
-        style={{flexDirection:"row", borderColor:"#E0E0E0", borderWidth:2, alignItems:"center"}}>
+        style={{flexDirection:"row", borderColor:"#E0E0E0", borderWidth:2, borderRadius:10, alignItems:"center"}}>
             <TextInput
-            style={{height:50, width: 300, fontSize:15, padding:10}}
+            style={{height:50, width: "80%", fontSize:15, padding:10, color:"white"}}
             placeholder = "Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}
+            placeholderTextColor={"#E0E0E0"}
             value={input}
             />
             <Button onPress={sendMessage} title="Send" color="#00BFFF"/>

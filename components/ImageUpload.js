@@ -7,6 +7,7 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import checkInappropriateContent from '../lib/checkInappropriateContent';
+import { Entypo, Ionicons} from '@expo/vector-icons';
 
 
 const ImageUpload = ({ url, setURL, index, user}) => {
@@ -197,8 +198,10 @@ const ImageUpload = ({ url, setURL, index, user}) => {
         ):(
         <View style={styles.emptyImageContainer}>
         <TouchableOpacity onPress={selectImage}>
-        <MaterialCommunityIcons name="image-multiple" size={50} color="#ccc" />
-        <Text>Select Image</Text>
+        <Ionicons name="person" size={50} color = "#ccc"/>
+        {/* <MaterialCommunityIcons name="image-multiple" size={50} color="#ccc" /> */}
+        
+        {/* <Text>Select Image</Text> */}
         </TouchableOpacity>
         </View>
         )}
@@ -243,6 +246,7 @@ const styles = StyleSheet.create({
       height: 105,
       margin: 10,
       borderWidth: 1,
+      borderRadius: 20,
       borderColor: '#ccc',
       backgroundColor: '#eee'
     },

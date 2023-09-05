@@ -2,8 +2,8 @@ import React, { Component, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { Ionicons} from '@expo/vector-icons';
-import { RankBadge } from '../lib/RankBadge';
-import ProgressBar from '../components/ProgressBar';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 
 const  MenuScreen = () => {
@@ -16,14 +16,15 @@ const  MenuScreen = () => {
     // const total = nextRankPoints + currentPoints;
 
     return (
-        <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
+        <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly", backgroundColor:"black"}}>
         <TouchableOpacity style={{flexDirection:"row", alignItems:"center"}} onPress={() => navigation.navigate("ToggleProfile", profile)}>
-        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00308F", borderWidth:2, left:20}} source={{uri: profile? profile?.images[0]: '../images/account.jpeg'}}/>
+        <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00BFFF", borderWidth:2, left:20}} source={{uri: profile? profile?.images[0]: '../images/account.jpeg'}}/>
+        {/* borderColor:"#00308F" */}
         <View style={{padding:2, backgroundColor:"white", borderRadius:20, borderWidth:1,borderColor:"#989898"}}>
         <Ionicons name="pencil" size={30} color = "#00308F"/>
         </View>
         </TouchableOpacity>
-        <Text style={{fontSize:20, fontWeight: "bold"}}>{profile.displayName}</Text>
+        <Text style={{fontSize:20, fontWeight: "bold", color:"white"}}>{profile.displayName}</Text>
         {/* <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
             <Text style={{fontSize:13, fontWeight: "bold", color:"#00308F", paddingRight:10}}>Wing Rank:</Text>
             <Text style={{fontSize:18, fontWeight: "bold", color:"#00308F"}}>{profile.rank}</Text>
@@ -33,17 +34,21 @@ const  MenuScreen = () => {
             <ProgressBar progress={currentPoints} total={total} style={{ margin: 10 }} />
             <Text style={{fontSize:13, fontWeight: "bold", color:"#00308F"}}>Stars needed to reach {RankBadge.promote(profile.rank)}: {nextRankPoints}</Text>
         </View> */}
+        <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
+        <Text style={{fontSize:15, fontWeight: "bold", color:"#00BFFF"}}>Wing Member</Text>
+        <MaterialCommunityIcons name="account-check" size={20} color="#32CD32"/>
+        </View>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Preferences", profile)}>
-        <Text style={{padding:10, fontSize:15}}>Matching Prefences</Text>
-        <Ionicons name="heart-outline" style={{padding:10}} size={30} color = "black"/>
+        <Text style={{padding:10, fontSize:15, color:"white"}}>Matching Prefences</Text>
+        <Ionicons name="heart-outline" style={{padding:10}} size={30} color = "white"/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Settings", profile)}>
-        <Text style={{padding:10, fontSize:15}}>Settings</Text>
-        <Ionicons name="settings-outline" style={{padding:10}} size={30} color = "black"/>
+        <Text style={{padding:10, fontSize:15, color:"white"}}>Settings</Text>
+        <Ionicons name="settings-outline" style={{padding:10}} size={30} color = "white"/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Help", profile)}>
-        <Text style={{padding:10, fontSize:15}}>Help</Text>
-        <Ionicons name="help" style={{padding:10}} size={30} color = "black"/>
+        <Text style={{padding:10, fontSize:15, color:"white"}}>Help</Text>
+        <Ionicons name="help" style={{padding:10}} size={30} color = "white"/>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <Image style={styles.iconcontainer} source={require("../images/logo.png")}/>        
@@ -62,15 +67,18 @@ const styles = StyleSheet.create({
       margin: 10,
       borderWidth: 1,
       borderRadius: 10,
-      borderColor: '#ccc'
+    //   borderColor: '#ccc',
+      backgroundColor: "#00308F"
+    // borderColor:"#00BFFF"
     },
     iconcontainer: {
         height: 60,
         width: 60,
         backgroundColor:"#00BFFF",
         borderRadius: 50,
-        borderColor:"#00308F",
-        borderWidth: 2
+        // borderColor:"#00308F",
+        // borderColor:"white",
+        // borderWidth: 2
     }
     });
 

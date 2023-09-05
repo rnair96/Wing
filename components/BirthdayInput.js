@@ -24,7 +24,12 @@ const BirthdayInput = ({setAge, birthdate, setBirthDate}) => {
   
     return (
       <View>
-        <TextInput placeholder="MM/DD/YYYY" value={birthdate} style={{fontSize:15, alignItems:"center"}} onChangeText={handleBirthdayChange}/>
+        <TextInput 
+          placeholder="MM/DD/YYYY" 
+          value={birthdate} 
+          style={{fontSize:15, alignItems:"center", borderWidth:2, borderColor:"grey", padding:10, borderRadius:15, color:"white"}}
+          placeholderTextColor={"grey"} 
+          onChangeText={handleBirthdayChange}/>
       </View>
     );
 }

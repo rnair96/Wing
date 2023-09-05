@@ -65,19 +65,23 @@ const ChatRow = ({ matchedDetails }) => {
 
     return ( 
         !loading && matchedUserInfo && (
-        <View style={{paddingBottom:10, width:"93%"}}>
+        <View style={{padding:10, width:"95%"}}>
         <TouchableOpacity style={styles.container} onPress={()=>navigator.navigate("Message",{
             matchedDetails
         })}>
         {/* {!read ? <UnreadHighlighter/>:<View style={{padding:15}}></View>} */}
-        <Image style = {{height:60, width:60, borderRadius:50}} source = {{uri:matchedUserInfo[1]?.images[0]}}/>
+        <Image style = {{height:60, width:60, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source = {{uri:matchedUserInfo[1]?.images[0]}}/>
          <View style={{flexDirection:"row"}}>
          <View style={{padding:10}}>
-            <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5}}>{matchedUserInfo[1]?.displayName}</Text>
-            <Text style={{paddingLeft:10}}>{lastMessage|| "Say Hi!"}</Text>
+            <Text style={{fontWeight:"bold", fontSize:20, paddingLeft:10, paddingBottom:5, color:"white"}}>{matchedUserInfo[1]?.displayName}</Text>
+            {!read? (
+                <Text style={{paddingLeft:10, color:"white", fontWeight:"bold"}}>{lastMessage|| "Say Hi!"}</Text>
+            ):(
+                <Text style={{paddingLeft:10, color:"white"}}>{lastMessage|| "Say Hi!"}</Text>
+            )}
          </View>
          <View style={{position:"absolute", left:190, top:20, flexDirection:"row"}}>
-         <Text style={{fontSize:10}}>{timestamp||"New Match"}</Text>
+         <Text style={{fontSize:10, color:"white"}}>{timestamp||"New Match"}</Text>
          {!read && <UnreadHighlighter/>}
         </View>
          </View>
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
     container:{
         left:15,
         flexDirection:"row",
-        backgroundColor:"white",
+        backgroundColor:"#00308F",
         alignItems:"center",
         padding:5,
         shadowColor:"#000",

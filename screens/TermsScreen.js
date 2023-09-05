@@ -5,44 +5,57 @@ import Header from '../Header'
 
 const TermsScreen = () => {
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor:"black"}}>
         <View style ={{flex:1, padding:10}}>
           <SafeAreaView>
           <Header title = "Terms of Service"/>
           </SafeAreaView>
-        <Text style={{padding:10}}>These Terms of Service ("Terms") govern your use of the Wing app and any related services provided by Wing Community, LLC ("Wing", "we", "us", or "our"). By using the Wing app, you agree to these Terms.
-1. Description of the Service
+        <Text style={{padding:10, color:"white"}}>
+          These Terms of Service ("Terms") govern your use of the Wing app and any related services provided by Wing Community, LLC ("Wing", "we", "us", or "our"). By using the Wing app, you agree to these Terms.
+          </Text>
+          <Text style={{padding:10, color:"white"}}>1. Description of the Service
 Wing is a social networking app that allows users to create a profile with their name, age, and location in order to connect with other users on the app. The app is free to download from the App Store, with potential purchasable add-ons in the future. The app operates in a manner that is similar to other social networking apps, such as Tinder.
-2. Eligibility
+</Text>
+<Text style={{padding:10, color:"white"}}>2. Eligibility
 You must be at least 18 years old to use the Wing app. By using the app, you represent and warrant that you are at least 18 years old and have the legal capacity to enter into these Terms.
-3. User Content
+</Text>
+<Text style={{padding:10, color:"white"}}>3. User Content
 You are solely responsible for any content that you post, upload, or transmit through the Wing app ("User Content"). You retain all ownership rights in your User Content, but by posting, uploading, or transmitting User Content through the app, you grant us a non-exclusive, transferable, sub-licensable, royalty-free, worldwide license to use, display, reproduce, and distribute your User Content in connection with the operation of the app and our business.
 You agree that you will not post, upload, or transmit any User Content that is illegal, defamatory, abusive, obscene, or otherwise objectionable. We reserve the right to remove any User Content that violates these Terms or our policies.
-4. Payment and Refunds
+</Text>
+<Text style={{padding:10, color:"white"}}>4. Payment and Refunds
 The Wing app is free to download, but we may offer purchasable add-ons or services in the future. If you choose to purchase any add-ons or services, you agree to pay the applicable fees and taxes.
 We may offer refunds for add-ons or services purchased through the app, but we reserve the right to refuse refunds in our sole discretion.
-5. Intellectual Property
+</Text>
+<Text style={{padding:10, color:"white"}}>5. Intellectual Property
 The Wing app and its content, including but not limited to text, graphics, logos, images, and software, are owned by Wing or its licensors and are protected by copyright, trademark, and other intellectual property laws.
 You may not copy, modify, distribute, sell, or otherwise exploit the Wing app or its content without our prior written consent.
-6. Disclaimers and Limitations of Liability
+</Text>
+<Text style={{padding:10, color:"white"}}>6. Disclaimers and Limitations of Liability
 THE WING APP AND ITS CONTENT ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
 WE MAKE NO REPRESENTATIONS OR WARRANTIES THAT THE WING APP WILL BE UNINTERRUPTED, ERROR-FREE, OR SECURE, OR THAT ANY USER CONTENT WILL BE ACCURATE OR COMPLETE. WE WILL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING FROM YOUR USE OF THE WING APP, INCLUDING BUT NOT LIMITED TO DIRECT, INDIRECT, INCIDENTAL, PUNITIVE, AND CONSEQUENTIAL DAMAGES.
-7. Indemnification
+</Text>
+<Text style={{padding:10, color:"white"}}>7. Indemnification
 You agree to indemnify and hold harmless Wing and its affiliates, officers, directors, employees, and agents from and against any and all claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees and costs, arising out of or in any way connected with your use of the Wing app or your violation of these Terms.
-8. Changes to These Terms
+</Text>
+<Text style={{padding:10, color:"white"}}>8. Changes to These Terms
 We may update these Terms from time to time by posting a revised version on our website. Your continued use of the Wing app after the effective date of the revised Terms constitutes your acceptance of the terms.
-9. Termination
+</Text>
+<Text style={{padding:10, color:"white"}}>9. Termination
 We may terminate your access to the Wing app at any time, for any reason or no reason, without notice or liability to you. You may also terminate your account at any time by contacting us at support@wing.community.
 Upon termination, all licenses and rights granted to you in these Terms will immediately terminate, and you must cease all use of the Wing app.
-10. Governing Law and Dispute Resolution
+</Text>
+<Text style={{padding:10, color:"white"}}>10. Governing Law and Dispute Resolution
 These Terms and your use of the Wing app will be governed by and construed in accordance with the laws of the State of California, without giving effect to any principles of conflicts of law.
 Any dispute arising out of or relating to these Terms or the Wing app will be resolved through binding arbitration, rather than in court, except that you may assert claims in small claims court if your claims qualify.
-11. Miscellaneous
+</Text>
+<Text style={{padding:10, color:"white"}}>11. Miscellaneous
 These Terms constitute the entire agreement between you and Wing with respect to the Wing app and supersede all prior or contemporaneous communications and proposals, whether oral or written, between you and Wing.
 If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions will remain in full force and effect.
 Our failure to enforce any right or provision of these Terms will not be deemed a waiver of such right or provision.
 We may assign these Terms or any of our rights or obligations under these Terms without your consent. You may not assign these Terms or any of your rights or obligations under these Terms without our prior written consent.
-12. Contact Us
+</Text>
+<Text style={{padding:10, color:"white"}}>12. Contact Us
 If you have any questions about these Terms or the Wing app, please contact us at support@wing.community.
 </Text>
         </View>
