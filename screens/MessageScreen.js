@@ -7,17 +7,16 @@ import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import sendPush from '../lib/sendPush';
 
 const MessageScreen = () => {
 
     const { params } = useRoute();
-    const { matchedDetails } = params;
+    const { matchedDetails, profile } = params;
     const [ input, setInput ] = useState();
     const [ messages, setMessages ] = useState([])
     const { user } = useAuth();
-    const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
+    // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
 
 
     useEffect(()=> {
@@ -51,7 +50,7 @@ const MessageScreen = () => {
             timestamp: timestamp,
             userId: user.uid,
             displayName: user.displayName,
-            photoURL: matchedDetails.users[user.uid].images[0],
+            photoURL: matchedDetails.users[user.uid].profile_pic,
             message: input,
             read: false,
         })
@@ -62,9 +61,13 @@ const MessageScreen = () => {
 
         const userName = user.displayName.split(" ")[0];
 
-        if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
+        if(profile.token && profile.token!=="token" && profile.token!=="not_granted"){
+          const messageDetails = {"match": matchedDetails, "profile": profile}
+        // if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
           // sendPush(userName);
-          sendPush(matchedUser[1].token,`New Message from ${userName}`,input,{type : "message", message : matchedDetails})
+          // sendPush(matchedUser[1].token,`New Message from ${userName}`,input,{type : "message", message : matchedDetails})
+          sendPush(profile.token,`New Message from ${userName}`,input,{type : "message", message : messageDetails})
+
         }
 
         setInput("");
@@ -107,7 +110,7 @@ const MessageScreen = () => {
     
     return (
       <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
-        <ChatHeader matchedDetails={matchedDetails}/>
+        <ChatHeader matchedDetails={matchedDetails} profile={profile}/>
 
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}

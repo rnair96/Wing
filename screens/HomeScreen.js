@@ -206,10 +206,21 @@ const HomeScreen = () => {
                     const timestamp = serverTimestamp();
 
                     setDoc(doc(db, global.matches, generateId(user.uid, userSwiped.id)), {
-                        users: {
-                            [user.uid]: loggedProfile,
-                            [userSwiped.id]: userSwiped
-                        },
+                        // users: {
+                        //     [user.uid]: {
+                        //         id: loggedProfile.id,
+                        //         name: loggedProfile.displayName,
+                        //         profile_pic: loggedProfile.images[0],
+                        //         token: loggedProfile.token
+                        //     },
+                        //     [userSwiped.id]: {
+                        //         id: userSwiped.id,
+                        //         name: userSwiped.displayName,
+                        //         profile_pic: userSwiped.images[0],
+                        //         token: userSwiped.token
+                                
+                        //     }
+                        // },
                         userMatched: [user.uid, userSwiped.id],
                         match_timestamp: timestamp,
                         latest_message_timestamp: timestamp

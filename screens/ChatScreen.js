@@ -6,14 +6,14 @@ import Header from '../Header';
 const ChatScreen = () => {
 
   return (
-    <View style={{flex:1, backgroundColor:"black"}}>
-      <SafeAreaView>
+    // <View style={{flex:1, backgroundColor:"black"}}>
+      <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
         <Header title= "Matches"/>
-        </SafeAreaView>
 
 
         <ChatList/>
-    </View>
+        </SafeAreaView>
+    // </View>
 
   )
 }

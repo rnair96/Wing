@@ -2,23 +2,19 @@ import React, { Component, useState } from 'react';
 import { Text, TouchableOpacity, View, Image, Modal, TouchableHighlight, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import useAuth from '../hooks/useAuth';
 import FlagModal from './FlagModal';
 import deleteMatchFull from '../lib/deleteMatchFull';
 import RatingModal from './RatingModal';
 
-const ChatHeader = ({matchedDetails}) => {
+const ChatHeader = ({matchedDetails, profile}) => {
     const navigator = useNavigation();
-    const { user } = useAuth();
     const [modalVisible, setModalVisible] = useState(false);
     const [ secondModal, setSecondModal ] = useState(false);
     const [ flag_modal, setFlagModal ] = useState(false);
-    const [ rating_modal, setRatingModal ] = useState(false);
+    // const [ rating_modal, setRatingModal ] = useState(false);
 
     // const [ mute, setMute ] = useState(false);
-
-    const matched_user = getMatchedUserInfo(matchedDetails.users, user.uid);
 
     //call useEffect to update Mute state
 
@@ -43,10 +39,19 @@ const ChatHeader = ({matchedDetails}) => {
         <TouchableOpacity onPress={() => navigator.goBack()} style={{padding: 2}}>
             <Ionicons name="chevron-back-outline" size={34} color="#00BFFF"/>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigator.navigate("ProfileView", {matchedDetails})} style={{paddingVertical: 2, flexDirection:"row", marginHorizontal:"25%", left:"7%"}}>
-            <Image style = {{height:45, width:45, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source = {{uri: matched_user[1]?.images[0]}}/>
-            <Text style={{padding:10, fontWeight:"bold", fontSize:12}}> {matched_user[1]?.displayName} </Text>
+        {profile? (
+          <TouchableOpacity onPress={() => navigator.navigate("ProfileView", {matchedDetails, profile})} style={{paddingVertical: 2, flexDirection:"row", marginHorizontal:"25%", left:"4%"}}>
+            <Image style = {{height:40, width:40, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source = {{uri: profile.images[0]}}/>
+            <Text style={{padding:10, fontWeight:"bold", fontSize:12, color:"white"}}> {profile.displayName} </Text>
+          </TouchableOpacity>
+        ):(
+          <TouchableOpacity onPress={() => alert("Can't open empty user profile. Try again later.")} style={{paddingVertical: 2, flexDirection:"row", marginHorizontal:"25%", left:"4%"}}>
+            <Image style = {{height:40, width:40, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source = {require("../images/account.jpeg")}/>
+            <Text style={{padding:10, fontWeight:"bold", fontSize:12, color:"white"}}> Account User</Text>
         </TouchableOpacity>
+        )}
+        
+        
         <TouchableOpacity onPress={() => setModalVisible(true)} style={{padding: 2, flexDirection:"row"}}>
         <Ionicons name="menu" size={34} color="#00BFFF"/>
         </TouchableOpacity>
@@ -126,7 +131,7 @@ const ChatHeader = ({matchedDetails}) => {
         <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                deleteMatchFull(matchedDetails.id);
+                deleteMatchFull(profile.id);
               }}
             >
               <Text style={styles.textStyle}>Yes</Text>
@@ -144,8 +149,8 @@ const ChatHeader = ({matchedDetails}) => {
 
 
       </Modal>
-      <FlagModal other_user={matched_user[1]} isVisible={flag_modal} setIsVisible={setFlagModal} matchedID={matchedDetails.id}/>
-      <RatingModal other_user={matched_user[1]} isVisible={rating_modal} matched={matchedDetails} onClose={() => setRatingModal(false)}/>
+      <FlagModal other_user={profile} isVisible={flag_modal} setIsVisible={setFlagModal} matchedID={matchedDetails.id}/>
+      {/* <RatingModal other_user={profile} isVisible={rating_modal} matched={matchedDetails} onClose={() => setRatingModal(false)}/> */}
       </View>
     )
 }
