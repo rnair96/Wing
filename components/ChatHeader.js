@@ -12,6 +12,7 @@ const ChatHeader = ({matchedDetails, profile}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [ secondModal, setSecondModal ] = useState(false);
     const [ flag_modal, setFlagModal ] = useState(false);
+
     // const [ rating_modal, setRatingModal ] = useState(false);
 
     // const [ mute, setMute ] = useState(false);
@@ -131,7 +132,7 @@ const ChatHeader = ({matchedDetails, profile}) => {
         <TouchableHighlight
               style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
               onPress={() => {
-                deleteMatchFull(profile.id);
+                deleteMatchFull(matchedDetails.id, navigator);
               }}
             >
               <Text style={styles.textStyle}>Yes</Text>

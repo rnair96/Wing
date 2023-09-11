@@ -159,7 +159,7 @@ export const ProfileSwipeScreen = () => {
                             <Image style={{margin:10,...styles.imagecontainer}} source={{ uri: card.item.images[2] }} />
                         </View>
 
-                        <View style={{ height: 400 }}>
+                        <View style={{ height: 200 }}>
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center" }}>
                                 <View style={{ flexDirection: "column", padding: 10 }}>
                                     <Image style={{ height: 20, width: 10, alignSelf: "center" }} source={require("../images/droppin_white.png")} />
@@ -185,11 +185,11 @@ export const ProfileSwipeScreen = () => {
         </TouchableOpacity>
     </View> */}
 
-            <View style={{ flexDirection: "row", justifyContent: "center", bottom: 100 }}>
+            {/* <View style={{ flexDirection: "row", justifyContent: "center", bottom: 100 }}>
                 <TouchableOpacity style={styles.swipeButtonUp} onPress={() => navigation.goBack()}>
                     <Entypo name="arrow-bold-up" size={30} color="white" />
                 </TouchableOpacity>
-            </View>
+            </View> */}
             {/* <Foo ter/> */}
             <FlagModal other_user={flag_user} isVisible={flag_modal} setIsVisible={setFlagModal} matchedID={null} />
         </View>

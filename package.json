@@ -44,7 +44,7 @@
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-config": "^1.5.1",
-    "react-native-deck-swiper": "^2.0.12",
+    "react-native-deck-swiper": "^2.0.16",
     "react-native-get-random-values": "^1.8.0",
     "react-native-image-picker": "^5.0.1",
     "react-native-linear-gradient": "^2.8.2",

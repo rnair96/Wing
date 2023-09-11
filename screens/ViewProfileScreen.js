@@ -18,11 +18,11 @@ const ViewProfileScreen = ({ profile }) => {
                     (
                         <View style={{ backgroundColor: "black" }}>
 
-                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20 }}>
+                            {/* <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20 }}>
                                 <View style={{ alignItems: "center", padding: 10 }}>
                                     <Text style={{ color: "white" }}>Profile View On Swipe:</Text>
                                 </View>
-                            </View>
+                            </View> */}
 
                             <View style={styles.cardcontainer}>
                                 <View style={{ alignItems: "center", padding: 20 }}>

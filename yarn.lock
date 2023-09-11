@@ -7029,10 +7029,10 @@ react-native-config@^1.5.1:
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.5.1.tgz#73c94f511493e9b7ff9350cdf351d203a1b05acc"
   integrity sha512-g1xNgt1tV95FCX+iWz6YJonxXkQX0GdD3fB8xQtR1GUBEqweB9zMROW77gi2TygmYmUkBI7LU4pES+zcTyK4HA==
 
-react-native-deck-swiper@^2.0.12:
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/react-native-deck-swiper/-/react-native-deck-swiper-2.0.13.tgz#ccbb72db8b2e4a70705b221771ee9636c612bc46"
-  integrity sha512-JsasOVQcyYvWAPNfhNOG+SKeoYTyfIip67Qq477EkpA2yJQs0mC25C5PeIbGohVi55OsGgOlxf7/W+gz3lmeYg==
+react-native-deck-swiper@^2.0.16:
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/react-native-deck-swiper/-/react-native-deck-swiper-2.0.16.tgz#74e385564ff1fb75fdacd1d34bf3b7b0e8baedf4"
+  integrity sha512-uXUe0uua6B6hwMzyB7Q34bebhAgrw2EqF6z2uNoxlT1HJ6igy6eXUR34ON48BYXP+yPFFBdBE5R7nCuBezUhrQ==
   dependencies:
     prop-types "15.5.10"
 

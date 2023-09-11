@@ -100,7 +100,8 @@ const ChatRow = ({ matchedDetails }) => {
         })}>
         {/* {!read ? <UnreadHighlighter/>:<View style={{padding:15}}></View>} */}
         {profilePic ?(
-            <Image style = {{height:60, width:60, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source = {{uri:profilePic}}/>
+            <Image style = {{height:60, width:60, borderRadius:50, borderWidth:!read? 3:1, borderColor:"#00BFFF"}} 
+            source = {{uri:profilePic}}/>
         ):(
             <Image style = {{height:60, width:60, borderRadius:50, borderWidth:1, borderColor:"#00BFFF"}} source = {require("../images/account.jpeg")}/>
         )
@@ -116,7 +117,7 @@ const ChatRow = ({ matchedDetails }) => {
                 <Text style={{paddingLeft:10, color:"white"}}>{lastMessage|| "Say Hi!"}</Text>
             )}
          </View>
-         <View style={{position:"absolute", left:190, top:20, flexDirection:"row"}}>
+         <View style={{position:"absolute",left:180, top:20, flexDirection:"row"}}>
          <Text style={{fontSize:10, color:"white"}}>{timestamp||"New Match"}</Text>
          {!read && <UnreadHighlighter/>}
         </View>
