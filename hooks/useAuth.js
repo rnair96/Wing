@@ -7,6 +7,7 @@ import {  deleteDoc, writeBatch, getDoc, doc, getDocs, collection, where, query 
 import { db, storage } from '../firebase';
 import Constants from 'expo-constants';
 import { deleteObject, ref, listAll} from "firebase/storage";
+import { ImageBackground } from 'react-native';
 // import { v4 as uuidv4 } from 'uuid';
 // import 'react-native-get-random-values';
 // import * as Sentry from "@sentry/react";
@@ -473,6 +474,12 @@ export const AuthProvider = ({ children }) => {
         deleteAll
       }}
     >
+      {loading && 
+      <ImageBackground
+        resizeMode='cover'
+        style = {{flex:1}} 
+        source={require("../assets/splash_wing.png")}
+      />}
       {!loading && children}
     </AuthContext.Provider>
   )

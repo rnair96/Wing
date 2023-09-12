@@ -38,12 +38,12 @@ const LoginScreen = () => {
         </View>
         </TouchableWithoutFeedback>
 
+        <View style={{marginVertical:"10%", marginHorizontal:"20%", alignItems: 'center', height:"60%", justifyContent:"space-evenly", backgroundColor:"#00308F", opacity:0.8, borderRadius:20, bottom:"7%"}}>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{height:"50%"}}
+            style={{alignItems:"center", justifyContent:"space-evenly", height:"50%"}}
             keyboardVerticalOffset={5}
-            > 
-        <View style={{marginVertical:"10%", marginHorizontal:"20%", alignItems: 'center', height:"100%", justifyContent:"space-evenly", backgroundColor:"#00308F", opacity:0.8, borderRadius:20}}>
+            >
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"white"}}>Email</Text>
         <TextInput
         value = {email}
@@ -60,10 +60,11 @@ const LoginScreen = () => {
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>logInManually(email, password)}>
             <Text style = {styles.textcontainer}>Log In</Text>
         </TouchableOpacity>
+        </KeyboardAvoidingView>
         <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={{ color: 'white', textDecorationLine: 'underline' }}>Forgot Password?</Text>
         </TouchableOpacity>
-        {/* </KeyboardAvoidingView> */}
+
         <Text style={{fontWeight:"bold", fontSize:15, fontFamily:"Times New Roman", color:"white"}}>Or</Text>
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>navigation.navigate("SignUp")}>
             <Text style = {styles.textcontainer}>Create New Account</Text>
@@ -81,7 +82,7 @@ const LoginScreen = () => {
             </View>
         </TouchableOpacity>
         </View>
-        </KeyboardAvoidingView>
+        {/* </KeyboardAvoidingView> */}
         </ImageBackground>
     </SafeAreaView>
     )
@@ -89,7 +90,7 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
     container: { 
-      flex: 1,
+      flex: 1
     },
     opacitycontainer: {
         backgroundColor: "white",
