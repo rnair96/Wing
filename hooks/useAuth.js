@@ -331,7 +331,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const deleteAll = async (ispass, password) => {
-    if(ispass && authenticateUserForDelete(password)){
+    if((ispass && authenticateUserForDelete(password))|| !ispass){
     await deleteInfo().then(() => {
       if (!loadingImages && !loadingMatches && !loadingPasses && !loadingSwipes && !loadingUser) {
         console.log("All Info deleted");

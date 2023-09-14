@@ -28,6 +28,9 @@ const MessageScreen = () => {
           ...doc.data()
         })
         ))
+      },
+      (error) => {
+        console.log("there was an error in message screen snapshot", error)
       })
 
     return () => {

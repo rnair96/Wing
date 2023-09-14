@@ -25,7 +25,10 @@ const ChatList = () => {
               ...doc.data(),
           }
             ))
-    )
+    ),
+    (error) => {
+      console.log("there was an error in chatlist snapshot", error)
+    }
     )
 
     return () => {

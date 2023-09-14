@@ -63,136 +63,6 @@ const AccountScreen = () => {
     }
 
 
-    //deleting matches, passes and swipes, and user
-
-    // const deleteAll = async () => {
-    //     await deleteInfo().then(()=> {
-    //         if(!loadingImages && !loadingMatches && !loadingPasses && !loadingSwipes){
-    //             console.log("All Info deleted");
-    //             deleteUser();
-    //         }
-    //     }).catch(error => {
-    //         console.error('There was an error',error);
-    //     })
-    // }
-
-    // const deleteInfo = async () => {
-    //     setLoadingImages(true);
-    //     setLoadingMatches(true);
-    //     setLoadingPasses(true);
-    //     setLoadingSwipes(true);
-    //     deleteStoredImages();
-    //     deleteMatches();
-    //     deleteSwipeHistory("swipes");
-    //     deleteSwipeHistory("passes");
-    //     // deleteOthersHistory();
-    // }
-
-    // const deleteUser = async () => {
-    //     await deleteDoc(doc(db, global.users, user.uid)).then(() => {
-    //         logout();
-    //         console.log("User has been deleted successfully.")
-    //     })
-    //     .catch(error => {
-    //         console.log('Error deleting user',error);
-    //     })
-    // }
-
-    // const deleteMatches = async () => {
-    //     const batch = writeBatch(db);
-    //     const matches =[]
-    //     await getDocs(collection(db,global.matches)).then((snapshot) => {
-    //         snapshot.docs.filter((doc)=> doc.id.includes(user.uid)).map((doc) => matches.push(doc.id))
-    //     })
-
-    //     if (matches.length>0){
-
-    //         matches.map((matchID)=>{
-    //             batch.delete(doc(db,global.matches,matchID))
-    //         })
-
-    //         await batch.commit().then(() => {
-    //             console.log('Matches deleted successfully.');
-    //         }).catch((error) => {
-    //             console.error('Error deleting matches: ', error);
-    //         });
-    //     }
-    //     setLoadingMatches(false);
-    // }
-
-
-    // const deleteSwipeHistory = async (swipe_collection) => {
-    //     const batch = writeBatch(db);
-    //     const history =[]
-    //     await getDocs(collection(db, global.users, user.uid, swipe_collection)).then((snapshot) => {
-    //         snapshot.docs.map((doc) => history.push(doc.id))
-    //     })
-
-
-    //     if (history.length>0){
-    //         history.map((historyID)=>{
-    //             batch.delete(doc(db,global.users,user.uid, swipe_collection, historyID))
-    //         })
-
-    //         await batch.commit().then(() => {
-    //             console.log(swipe_collection, 'History deleted successfully.');
-    //         }).catch((error) => {
-    //             console.error('Error deleting',swipe_collection,'history: ', error);
-    //         });
-    //     }
-
-    //     swipe_collection === "swipes" ? setLoadingSwipes(false): setLoadingPasses(false);
-
-    // }
-
-    // const deleteStoredImages = async() => {
-    //       console.log("Deleting images")
-
-    //       for(let i = 0; i < 3; i++){
-    //         const folderName = `images/${user.uid}/${i}/`      
-    //         const folderRef = ref(storage, folderName);
-
-    //       listAll(folderRef)
-    //         .then((result) => {
-    //         // Loop through each file and delete it
-    //             result.items.forEach((fileRef) => {
-    //             deleteObject(fileRef).then(() => {
-    //                 console.log(`File ${fileRef.name} deleted successfully`);
-    //             }).catch((error) => {
-    //                 console.error(`Error deleting file ${fileRef.name}: ${error}`);
-    //             });
-    //             });
-
-    //     // Once all files are deleted, delete the folder itself
-    //             // deleteObject(folderRef).then(() => {
-    //             //     console.log(`Folder ${folderName} deleted successfully`);
-    //             // }).catch((error) => {
-    //             //     console.error(`Error deleting folder ${folderName}: ${error}`);
-    //             // });
-    //         })
-    //         .catch((error) => {
-    //             console.error(`Error listing files in folder ${folderName}: ${error}`);
-    //         }); 
-
-    //       }
-    //       setLoadingImages(false);
-    // }
-
-    // const deleteOthersHistory = async () => {
-    //     const history =[]
-    //     await getDocs(collection(db, global.users)).then((snapshot) => {
-    //         snapshot.docs.filter((doc) => 
-    //         await getDocs(collection(db, global.users, doc.id, "swipes").then((swipesnapshot) =>{
-    //             swipesnapshot.docs.filter((swipe) => swipe.id === user.uid).map((swipe) => {
-    //                 history.push[doc.id]
-    //             })
-    //         }
-
-    //         ))
-    //         )}
-    //         )
-    // }
-
     const updateUniversitySetting = async () => {
 
         await updateDoc(doc(db, global.users, user.uid), {
@@ -216,6 +86,7 @@ const AccountScreen = () => {
         setpwdModalVisible(true);
        } else {
         deleteAll(false);
+        navigation.navigate("Login");
        }
     }
 
@@ -263,7 +134,10 @@ const AccountScreen = () => {
 
                 <TouchableOpacity
                     style={{ width: 200, height: 50, padding: 15, borderRadius: 10 , backgroundColor: "#00308F" }}
-                    onPress={logout}>
+                    onPress={()=>{
+                        navigation.navigate("WelcomeScreen");
+                        logout();
+                    }}>
                     <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Logout</Text>
                 </TouchableOpacity>
 
@@ -324,6 +198,7 @@ const AccountScreen = () => {
                             style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             onPress={() => {
                                 deleteAll(true, password);
+                                navigation.navigate("Login")
                             }}
                         >
                             <Text style={styles.textStyle}>Delete Account</Text>
