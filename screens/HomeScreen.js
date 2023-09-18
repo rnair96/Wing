@@ -217,7 +217,7 @@ const HomeScreen = () => {
                 const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
                 const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
 
-                unsub = onSnapshot(query(collection(db, global.users), where("id", "not-in", [...passedUIds, ...swipedUIds, ...[user.uid]]), limit(10))
+                unsub = onSnapshot(query(collection(db, global.users), where("id", "not-in", [...passedUIds, ...swipedUIds, ...requestIds, ...[user.uid]]), limit(10))
                     , (snapshot) => {
                         setProfiles(
                             snapshot.docs
@@ -377,7 +377,7 @@ const HomeScreen = () => {
                     <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
                 </TouchableOpacity>
                 {/* right:20, top:10 */}
-                <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
+                <TouchableOpacity onPress={() => navigation.navigate("ToggleChat")}>
                     <Ionicons name="chatbubbles-sharp" size={30} color="#00BFFF" />
                 </TouchableOpacity>
             </View>

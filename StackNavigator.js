@@ -35,6 +35,8 @@ import SetUp4Screen from './screens/SetUp4Screen';
 import SetUp5Screen from './screens/SetUp5Screen';
 import AccountScreen from './screens/AccountScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
+import ToggleChatScreen from './screens/ToggleChatScreen';
+import RequestMessageScreen from './screens/RequestMessageScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -93,11 +95,13 @@ const StackNavigator = () => {
             <Stack.Screen name="Help" component={HelpScreen} />
             <Stack.Screen name="ChangePassword" component={ChangePasswordScreen}/>
             <Stack.Screen name="ToggleProfile" component={ToggleProfileScreen}/>
+            <Stack.Screen name="ToggleChat" component={ToggleChatScreen}/>
             <Stack.Screen name="StudentSetup" component={StudentSetupScreen}/>
             <Stack.Screen name="SetUp3" component={SetUp3Screen}/>
             <Stack.Screen name="SetUp4" component={SetUp4Screen}/>
             <Stack.Screen name="SetUp5" component={SetUp5Screen}/>
             <Stack.Screen name="Account" component={AccountScreen}/>
+            <Stack.Screen name="RequestMessage" component={RequestMessageScreen}/>
             </Stack.Group>
             <Stack.Group screenOptions = {{presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
