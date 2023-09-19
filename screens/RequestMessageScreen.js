@@ -96,21 +96,25 @@ const RequestMessageScreen = () => {
                 batch.set(messageRefTwo, messageTwo);
             }
 
-            const matchedDetails = {id: requestDetails.id, ...matchDoc}
 
 
             await batch.commit().then(()=>{
                 console.log("Added match, swipe doc and deleted request doc and messages to match doc");
+                const matchedDetails = {id: requestDetails.id, ...matchDoc}
+
                 navigation.navigate("Message",{matchedDetails, profile});
+                //ensure messages are loaded to screen upon navigation
+                //use timeout?
+
+                const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
+
+
+                const userName = user.displayName.split(" ")[0];
+    
+    
+                sendPush(profile.token, `${userName} has Matched and Messaged you!`, input, { type: "message", message: messageDetails })
+                
             });
-
-            const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
-
-
-            const userName = user.displayName.split(" ")[0];
-
-
-            sendPush(profile.token, `${userName} has Matched and Messaged you!`, input, { type: "message", message: messageDetails })
 
 
         } catch (error) {
