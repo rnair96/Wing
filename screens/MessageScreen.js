@@ -16,6 +16,7 @@ const MessageScreen = () => {
   const [input, setInput] = useState();
   const [messages, setMessages] = useState([])
   const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
   // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
 
 
@@ -32,6 +33,8 @@ const MessageScreen = () => {
       (error) => {
         console.log("there was an error in message screen snapshot", error)
       })
+
+    setLoading(false);
 
     return () => {
       unsub();
@@ -64,7 +67,7 @@ const MessageScreen = () => {
     const userName = user.displayName.split(" ")[0];
 
     if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
-      const messageDetails = { "match": matchedDetails, "profile": profile }
+      const messageDetails = { "maatchedDetails": matchedDetails, "profile": profile }
       // if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
       // sendPush(userName);
       // sendPush(matchedUser[1].token,`New Message from ${userName}`,input,{type : "message", message : matchedDetails})
@@ -119,31 +122,34 @@ const MessageScreen = () => {
         style={{ flex: 1 }}
         keyboardVerticalOffset={10}>
 
+        {!loading &&
+          <TouchableWithoutFeedback
+          // onPress={Keyboard.dismiss()}
+          >
 
-        <TouchableWithoutFeedback
-        // onPress={Keyboard.dismiss()}
-        >
-          <FlatList
-            data={messages}
-            style={{}}
-            inverted={-1}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item: message }) =>
-              message.userId === user.uid ? (
-                <SenderMessage key={message.id} message={message} />
-              ) : (
-                <View style={{ padding:10, maxWidth: 250, marginRight:"auto", alignSelf:"flex-start", flexDirection:"row"}}>
-                  <Image
-                    style={{ height: 50, width: 50, borderRadius: 50 }}
-                    source={{ uri: profile.images[0] }}
-                  />
-                  <RecieverMessage key={message.id} message={message} />
+            <FlatList
+              data={messages}
+              style={{}}
+              inverted={-1}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item: message }) =>
+                message.userId === user.uid ? (
+                  <SenderMessage key={message.id} message={message} />
+                ) : (
+                  <View style={{ padding: 10, maxWidth: 250, marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
+                    <Image
+                      style={{ height: 50, width: 50, borderRadius: 50 }}
+                      source={{ uri: profile.images[0] }}
+                    />
+                    <RecieverMessage key={message.id} message={message} />
 
-                </View>
-              )
-            }
-          />
-        </TouchableWithoutFeedback>
+                  </View>
+                )
+              }
+            />
+
+          </TouchableWithoutFeedback>
+        }
         {/* <View style={{flexDirection:"row", justifyContent:"flex-end", bottom:10, padding:10}}>
         <TouchableOpacity style={styles.missionControl} onPress={()=>navigation.navigate("MissionControl")}>
                 <Entypo name="aircraft-take-off" size={30} color="blue"/>

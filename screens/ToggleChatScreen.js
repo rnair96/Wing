@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import ChatScreen from './ChatScreen'
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation} from '@react-navigation/core';
 import RequestsScreen from './RequestsScreen';
 
 
 const ToggleChatScreen = () => {
+
   const [showMatches, setShowMatches] = useState(true);
 
   const navigation = useNavigation();

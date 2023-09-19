@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal } from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
@@ -16,13 +16,17 @@ const RequestMessageScreen = () => {
     const { params } = useRoute();
     const { requestDetails, profile } = params;
     const { user } = useAuth();
+    const [isMessageModalVisible, setMessageModalVisible] = useState(false);
+    const [secondModal, setSecondModal] = useState(false);
+    const [message, setMessage] = useState(null);
     const navigation = useNavigation();
+    const batch = writeBatch(db);
+
 
     const matchThenMove = async () => {
         const id = generateId(user.uid, requestDetails.id)
         const timestamp = serverTimestamp();
         const matchDoc = {
-            id: id,
             userMatched: [user.uid, requestDetails.id],
             match_timestamp: timestamp,
             latest_message_timestamp: timestamp
@@ -30,38 +34,87 @@ const RequestMessageScreen = () => {
 
         const swipedRef = doc(db, global.users, user.uid, "swipes", requestDetails.id)
         const swipeDoc = {
-            id:requestDetails.id
+            id: requestDetails.id
         }
-        const batch = writeBatch(db);
 
         try {
-        
-            batch.set(doc(db, global.matches, id),matchDoc);
+
+            batch.set(doc(db, global.matches, id), matchDoc);
 
             batch.set(swipedRef, swipeDoc);
 
             batch.delete(doc(db, global.users, user.uid, "requests", requestDetails.id))
 
-            await batch.commit().then(()=>{
-                console.log("Added match and swipe doc and deleted request doc")
-            })
+            // await batch.commit().then(() => {
+            //     console.log("Added match and swipe doc and deleted request doc")
+            // })
 
-            await addDoc(collection(db, global.matches, id, "messages"), {
+
+            const messageRefOne = doc(collection(db, global.matches, id, "messages"));
+
+            const messageOne = {
                 timestamp: requestDetails.timestamp,
                 userId: requestDetails.id,
                 displayName: profile.displayName,
                 message: requestDetails.message,
                 read: true,
-            }).then(() => {
-                console.log("Message has been moved over to match.")
-            })
+            }
 
-            //send push notification
+            batch.set(messageRefOne, messageOne);
 
-            navigation.navigate("Message", { matchDoc, profile });
+
+            // await addDoc(collection(db, global.matches, id, "messages"), {
+            //     timestamp: requestDetails.timestamp,
+            //     userId: requestDetails.id,
+            //     displayName: profile.displayName,
+            //     message: requestDetails.message,
+            //     read: true,
+            // }).then(() => {
+            //     console.log("Message has been moved over to match.")
+            // })
+
+            if (message && message !== "") {
+                const messageRefTwo = doc(collection(db, global.matches, id, "messages"));
+
+                const messageTwo = {
+                    timestamp: timestamp,
+                    userId: user.uid,
+                    displayName: user.displayName,
+                    message: message,
+                    read: false,
+                }
+
+                // await addDoc(collection(db, global.matches, id, "messages"), {
+                //     timestamp: timestamp,
+                //     userId: user.uid,
+                //     displayName: user.displayName,
+                //     message: message,
+                //     read: false,
+                // }).then(() => {
+                //     console.log("User message has been added over to match as well.")
+                // })
+                batch.set(messageRefTwo, messageTwo);
+            }
+
+            const matchedDetails = {id: requestDetails.id, ...matchDoc}
+
+
+            await batch.commit().then(()=>{
+                console.log("Added match, swipe doc and deleted request doc and messages to match doc");
+                navigation.navigate("Message",{matchedDetails, profile});
+            });
+
+            const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
+
+
+            const userName = user.displayName.split(" ")[0];
+
+
+            sendPush(profile.token, `${userName} has Matched and Messaged you!`, input, { type: "message", message: messageDetails })
+
 
         } catch (error) {
-            console.log("ERROR, there was an error in moving this request to Match", error)
+            console.log("ERROR, there was an error in moving this request and messages to Match", error)
         }
 
     }
@@ -70,15 +123,25 @@ const RequestMessageScreen = () => {
         // delete doc from Request
         //add id to passedIds containing just id
         try {
-            await deleteDoc(doc(db, global.users, user.uid, "requests", requestDetails.id)).then(() => {
-                console.log("Request has been deleted successfully from DB.")
+            batch.delete(doc(db, global.users, user.uid, "requests", requestDetails.id));
+
+
+            batch.set(doc(db, global.users, user.uid, "passes", requestDetails.id),{
+                id: requestDetails.id
             })
 
-            await setDoc(doc(db, global.users, user.uid, "passes", requestDetails.id), {
-                id: requestDetails.id
-            }).then(() => {
-                console.log("Requesting user has been moved to passed collection.")
-            });
+            await batch.commit().then(()=>{
+                console.log("Request has been deleted from db and user has been moved to passed collection.")
+            })
+            // await deleteDoc(doc(db, global.users, user.uid, "requests", requestDetails.id)).then(() => {
+            //     console.log("Request has been deleted successfully from DB.")
+            // })
+
+            // await setDoc(doc(db, global.users, user.uid, "passes", requestDetails.id), {
+            //     id: requestDetails.id
+            // }).then(() => {
+            //     console.log("Requesting user has been moved to passed collection.")
+            // });
 
             navigation.navigate("ToggleChat");
 
@@ -151,19 +214,90 @@ const RequestMessageScreen = () => {
                 </View>
             </TouchableOpacity>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-evenly", bottom:20 }}>
                 <View
-                    style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 20, bottom: 10, backgroundColor: "red", width: "50%" }}>
-                    <TouchableOpacity onPress={deleteRequest}>
+                    style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "red", width: "50%" }}>
+                    <TouchableOpacity onPress={()=> setSecondModal(true)}>
                         <Text style={{ color: "white" }}>Delete</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 20, bottom: 10, backgroundColor: "#00BFFF", width: "50%" }}>
-                    <TouchableOpacity onPress={matchThenMove}>
-                        <Text style={{ color: "white" }}>Match & Respond</Text>
+                <View style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#00BFFF", width: "50%" }}>
+                    <TouchableOpacity onPress={() => setMessageModalVisible(true)}>
+                        <Text style={{ color: "white" }}>Respond & Match</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isMessageModalVisible}
+                onRequestClose={() => {
+                    setMessageModalVisible(!isMessageModalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, color: "white" }}>Send a Message:</Text>
+                        <TextInput
+                            value={message}
+                            onChangeText={setMessage}
+                            placeholder={'I love your mission! How can I help?'}
+                            multiline={2}
+                            placeholderTextColor={"grey"}
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: 250 }} />
+                        <TouchableHighlight
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            onPress={() => {
+                                matchThenMove();
+                                setMessageModalVisible(!isMessageModalVisible);
+                            }}
+                        >
+                            <Text>Match</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            onPress={() => {
+                                setMessageModalVisible(!isMessageModalVisible);
+                            }}
+                        >
+                            <Text>Cancel</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={secondModal}
+                onRequestClose={() => {
+                    setSecondModal(!secondModal);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, color: "white" }}>Are You Sure You Want To Delete? User will not be shown again.</Text>
+                        <TouchableHighlight
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            onPress={() => {
+                                setSecondModal(!secondModal);
+                                deleteRequest();
+                            }}
+                        >
+                            <Text>Yes</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            onPress={() => {
+                                setSecondModal(!secondModal);
+                            }}
+                        >
+                            <Text>No</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+
+
+            </Modal>
         </SafeAreaView>
     )
 }
@@ -231,6 +365,29 @@ const styles = StyleSheet.create({
         // textShadowColor: 'rgba(0, 0, 0, 0.9)', // Shadow color
         // textShadowOffset: { width: -1, height: 1 },
         // textShadowRadius: 9
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    modalView: {
+        height: 200,
+        maxHeight: 400,
+        maxWidth: "90%",
+        backgroundColor: '#00BFFF',
+        borderRadius: 20,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     }
 })
 
