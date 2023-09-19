@@ -84,7 +84,10 @@ export default {
       prodUsers: process.env.PROD_USERS,
       devUsers: process.env.DEV_USERS,
       prodMatches: process.env.PROD_MATCHES,
-      devMatches: process.env.DEV_MATCHES
+      devMatches: process.env.DEV_MATCHES,
+      masterAccount: process.env.MASTER_ACCOUNT,
+      masterAccount2: process.env.MASTER_ACCOUNT2
+
     }
   }
 };

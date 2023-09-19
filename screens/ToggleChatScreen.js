@@ -4,6 +4,7 @@ import { Ionicons} from '@expo/vector-icons';
 import ChatScreen from './ChatScreen'
 import { useNavigation} from '@react-navigation/core';
 import RequestsScreen from './RequestsScreen';
+import AnnouncementRow from './AnnouncementRow';
 
 
 const ToggleChatScreen = () => {

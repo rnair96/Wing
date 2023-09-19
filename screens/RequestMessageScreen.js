@@ -100,9 +100,11 @@ const RequestMessageScreen = () => {
 
             await batch.commit().then(() => {
                 console.log("Added match, swipe doc and deleted request doc and messages to match doc");
-                const matchedDetails = { id: requestDetails.id, ...matchDoc }
+                const matchedDetails = { id: requestDetails.id, ...matchDoc };
 
-                navigation.navigate("Message", { matchedDetails, profile });
+
+                navigation.navigate("ToggleChat");
+                // navigation.navigate("Message", { matchedDetails, profile });
                 //ensure messages are loaded to screen upon navigation
                 //use timeout?
 
@@ -140,15 +142,6 @@ const RequestMessageScreen = () => {
             await batch.commit().then(() => {
                 console.log("Request has been deleted from db and user has been moved to passed collection.")
             })
-            // await deleteDoc(doc(db, global.users, user.uid, "requests", requestDetails.id)).then(() => {
-            //     console.log("Request has been deleted successfully from DB.")
-            // })
-
-            // await setDoc(doc(db, global.users, user.uid, "passes", requestDetails.id), {
-            //     id: requestDetails.id
-            // }).then(() => {
-            //     console.log("Requesting user has been moved to passed collection.")
-            // });
 
             navigation.navigate("ToggleChat");
 
