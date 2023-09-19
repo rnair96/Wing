@@ -98,22 +98,25 @@ const RequestMessageScreen = () => {
 
 
 
-            await batch.commit().then(()=>{
+            await batch.commit().then(() => {
                 console.log("Added match, swipe doc and deleted request doc and messages to match doc");
-                const matchedDetails = {id: requestDetails.id, ...matchDoc}
+                const matchedDetails = { id: requestDetails.id, ...matchDoc }
 
-                navigation.navigate("Message",{matchedDetails, profile});
+                navigation.navigate("Message", { matchedDetails, profile });
                 //ensure messages are loaded to screen upon navigation
                 //use timeout?
 
-                const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
+                if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
+
+                    const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
 
 
-                const userName = user.displayName.split(" ")[0];
-    
-    
-                sendPush(profile.token, `${userName} has Matched and Messaged you!`, input, { type: "message", message: messageDetails })
-                
+                    const userName = user.displayName.split(" ")[0];
+
+
+                    sendPush(profile.token, `${userName} has Matched and Messaged you!`, input, { type: "message", message: messageDetails })
+                }
+
             });
 
 
@@ -130,11 +133,11 @@ const RequestMessageScreen = () => {
             batch.delete(doc(db, global.users, user.uid, "requests", requestDetails.id));
 
 
-            batch.set(doc(db, global.users, user.uid, "passes", requestDetails.id),{
+            batch.set(doc(db, global.users, user.uid, "passes", requestDetails.id), {
                 id: requestDetails.id
             })
 
-            await batch.commit().then(()=>{
+            await batch.commit().then(() => {
                 console.log("Request has been deleted from db and user has been moved to passed collection.")
             })
             // await deleteDoc(doc(db, global.users, user.uid, "requests", requestDetails.id)).then(() => {
@@ -218,10 +221,10 @@ const RequestMessageScreen = () => {
                 </View>
             </TouchableOpacity>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-evenly", bottom:20 }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-evenly", bottom: 20 }}>
                 <View
                     style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "red", width: "50%" }}>
-                    <TouchableOpacity onPress={()=> setSecondModal(true)}>
+                    <TouchableOpacity onPress={() => setSecondModal(true)}>
                         <Text style={{ color: "white" }}>Delete</Text>
                     </TouchableOpacity>
                 </View>
