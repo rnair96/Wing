@@ -299,7 +299,8 @@ export const AuthProvider = ({ children }) => {
       try {
         await user.delete(); // `user` is from your state, assuming it's the currently logged-in user.
         console.log("User deleted from Firebase Auth successfully");
-        logout();
+        setUser(null);
+        // logout();
     } catch (error) {
         console.error("Error deleting user from Firebase Auth:", error);
     }
@@ -332,14 +333,20 @@ export const AuthProvider = ({ children }) => {
 
   const deleteAll = async (ispass, password) => {
     if((ispass && authenticateUserForDelete(password))|| !ispass){
-    await deleteInfo().then(() => {
+      // console.log("successfully authenticad user for delete")
+    try{
+    await deleteInfo()
+    // .then(() => {
+      //make sure loading is done to call delete user auth
       if (!loadingImages && !loadingMatches && !loadingPasses && !loadingSwipes && !loadingUser) {
         console.log("All Info deleted");
-        deleteUserAuth();
-      }
-    }).catch(error => {
+        await deleteUserAuth();
+      } else {
+        console.error("Some deletions are still in progress.");
+    }
+    } catch(error) {
       console.error('There was an error', error);
-    })
+    }
     }
   }
 
@@ -348,12 +355,21 @@ export const AuthProvider = ({ children }) => {
     setLoadingMatches(true);
     setLoadingPasses(true);
     setLoadingSwipes(true);
-    setLoadingUser(true)
-    deleteStoredImages();
-    deleteMatches();
-    deleteSwipeHistory("swipes");
-    deleteSwipeHistory("passes");
-    deleteUser()
+    setLoadingUser(true);
+
+    await Promise.all([
+      deleteStoredImages(),
+      deleteMatches(),
+      deleteSwipeHistory("swipes"),
+      deleteSwipeHistory("passes"),
+      //add delete for requests
+      deleteUser()
+  ]);
+    // deleteStoredImages();
+    // deleteMatches();
+    // deleteSwipeHistory("swipes");
+    // deleteSwipeHistory("passes");
+    // deleteUser()
     // deleteOthersHistory();
   }
 

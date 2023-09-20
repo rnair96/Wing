@@ -198,7 +198,7 @@ const AccountScreen = () => {
                             style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             onPress={() => {
                                 deleteAll(true, password);
-                                navigation.navigate("Login")
+                                // navigation.navigate("Login")
                             }}
                         >
                             <Text style={styles.textStyle}>Delete Account</Text>
