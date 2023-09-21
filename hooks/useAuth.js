@@ -3,10 +3,10 @@ import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { auth } from '../firebase';
-import {  deleteDoc, writeBatch, getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
+import { deleteDoc, writeBatch, getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import Constants from 'expo-constants';
-import { deleteObject, ref, listAll} from "firebase/storage";
+import { deleteObject, ref, listAll } from "firebase/storage";
 import { ImageBackground } from 'react-native';
 // import { v4 as uuidv4 } from 'uuid';
 // import 'react-native-get-random-values';
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   const [loadingMatches, setLoadingMatches] = useState(false);
   const [loadingSwipes, setLoadingSwipes] = useState(false);
   const [loadingPasses, setLoadingPasses] = useState(false);
+  const [loadingRequests, setLoadingRequests] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
 
   const { androidClientId, iosClientId, expoClientId, projectName, prodUsers, devUsers, prodMatches, devMatches } = Constants.manifest.extra
@@ -295,31 +296,33 @@ export const AuthProvider = ({ children }) => {
   }
 
   const deleteUserAuth = async () => {
-    if(user){
+    if (user && !loadingUser) {
       try {
         await user.delete(); // `user` is from your state, assuming it's the currently logged-in user.
         console.log("User deleted from Firebase Auth successfully");
         setUser(null);
         // logout();
-    } catch (error) {
+      } catch (error) {
         console.error("Error deleting user from Firebase Auth:", error);
-    }
-    } else {
+      }
+    } else if (loadingUser){
+      console.log("not finished deleting doc, delay");
+      await delay(3000);
+      deleteUserAuth();
+    }else {
       console.log("no user found");
     }
-}
+  }
 
-  const authenticateUserForDelete = async(password) => {
-    try{
+  const authenticateUserForDelete = async (password) => {
+    try {
       const credential = EmailAuthProvider.credential(user.email, password);
 
       // Re-authenticate the user with the credential
-      await reauthenticateWithCredential(user, credential).then(()=>{
-        return true;
-      });
+      await reauthenticateWithCredential(user, credential);
 
-      // return true;
-    }catch (error) {
+      return true;
+    } catch (error) {
       if (error.code === 'auth/wrong-password') {
         alert('Incorrect current password. Please try again.');
         return false;
@@ -331,22 +334,29 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   const deleteAll = async (ispass, password) => {
-    if((ispass && authenticateUserForDelete(password))|| !ispass){
-      // console.log("successfully authenticad user for delete")
-    try{
-    await deleteInfo()
-    // .then(() => {
-      //make sure loading is done to call delete user auth
-      if (!loadingImages && !loadingMatches && !loadingPasses && !loadingSwipes && !loadingUser) {
+    let isauthenticated = false;
+    if (ispass) {
+      console.log("authenticating...")
+      isauthenticated = await authenticateUserForDelete(password);
+      console.log("authenticated", isauthenticated);
+    }
+    if ((ispass && isauthenticated) || !ispass) {
+      console.log("successfully authenticad user for delete")
+      try {
+        setLoading(true);
+        await deleteInfo()
+        
         console.log("All Info deleted");
-        await deleteUserAuth();
-      } else {
-        console.error("Some deletions are still in progress.");
-    }
-    } catch(error) {
-      console.error('There was an error', error);
-    }
+        setLoading(false);
+        
+      } catch (error) {
+        console.error('There was an error', error);
+      }
     }
   }
 
@@ -355,6 +365,7 @@ export const AuthProvider = ({ children }) => {
     setLoadingMatches(true);
     setLoadingPasses(true);
     setLoadingSwipes(true);
+    setLoadingRequests(true);
     setLoadingUser(true);
 
     await Promise.all([
@@ -362,30 +373,34 @@ export const AuthProvider = ({ children }) => {
       deleteMatches(),
       deleteSwipeHistory("swipes"),
       deleteSwipeHistory("passes"),
-      //add delete for requests
+      deleteSwipeHistory("requests"),
       deleteUser()
-  ]);
-    // deleteStoredImages();
-    // deleteMatches();
-    // deleteSwipeHistory("swipes");
-    // deleteSwipeHistory("passes");
-    // deleteUser()
-    // deleteOthersHistory();
+    ]);
+
+    deleteUserAuth()
   }
 
   const deleteUser = async () => {
-    await deleteDoc(doc(db, global.users, user.uid)).then(() => {
-      // deleteUserAuth();
-      console.log("User has been deleted successfully from DB.")
-    })
-      .catch(error => {
-        console.log('Error deleting user', error);
+    console.log("loading vars", loadingMatches, loadingPasses, loadingSwipes, loadingImages)
+    if (!loadingMatches && !loadingPasses && !loadingSwipes && !loadingImages) {
+      await deleteDoc(doc(db, global.users, user.uid)).then(() => {
+        // deleteUserAuth();
+        console.log("User has been deleted successfully from DB.")
       })
-    
-    setLoadingUser(false);
+        .catch(error => {
+          console.log('Error deleting user', error);
+        })
+
+      setLoadingUser(false);
+    } else {
+      console.log("must delay to finish delete for user");
+      await delay(3000);
+      deleteUser();
+    }
   }
 
   const deleteMatches = async () => {
+    console.log("deleting matches");
     const batch = writeBatch(db);
     const matches = []
     await getDocs(collection(db, global.matches)).then((snapshot) => {
@@ -409,6 +424,7 @@ export const AuthProvider = ({ children }) => {
 
 
   const deleteSwipeHistory = async (swipe_collection) => {
+    console.log("deleting ", swipe_collection, " history")
     const batch = writeBatch(db);
     const history = []
     await getDocs(collection(db, global.users, user.uid, swipe_collection)).then((snapshot) => {
@@ -428,7 +444,19 @@ export const AuthProvider = ({ children }) => {
       });
     }
 
-    swipe_collection === "swipes" ? setLoadingSwipes(false) : setLoadingPasses(false);
+    if (swipe_collection === "swipes") {
+
+      setLoadingSwipes(false);
+
+    } else if (swipe_collection === "passes") {
+
+      setLoadingPasses(false);
+
+    } else {
+
+      setLoadingRequests(false);
+
+    }
 
   }
 
@@ -490,12 +518,12 @@ export const AuthProvider = ({ children }) => {
         deleteAll
       }}
     >
-      {loading && 
-      <ImageBackground
-        resizeMode='cover'
-        style = {{flex:1}} 
-        source={require("../assets/splash_wing.png")}
-      />}
+      {loading &&
+        <ImageBackground
+          resizeMode='cover'
+          style={{ flex: 1 }}
+          source={require("../assets/splash_wing.png")}
+        />}
       {!loading && children}
     </AuthContext.Provider>
   )

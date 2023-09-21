@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight } from 'react-native';
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, ImageBackground } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -11,10 +11,6 @@ const AccountScreen = () => {
     const { user, deleteAll, logout } = useAuth();
     const navigation = useNavigation();
     // const [notifications, setNotifications] = useState(true);
-    // const [ loadingImages, setLoadingImages ] = useState(false);
-    // const [ loadingMatches, setLoadingMatches ] = useState(false);
-    // const [ loadingSwipes, setLoadingSwipes ] = useState(false);
-    // const [ loadingPasses, setLoadingPasses ] = useState(false);
 
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -85,8 +81,9 @@ const AccountScreen = () => {
         setModalVisible(false);
         setpwdModalVisible(true);
        } else {
+        setModalVisible(false);
         deleteAll(false);
-        navigation.navigate("Login");
+        // navigation.navigate("Login");
        }
     }
 
@@ -129,13 +126,10 @@ const AccountScreen = () => {
                     <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Change Password</Text>
                 </TouchableOpacity>)}
 
-                {/* create a tab for Account, then give options there to update email address, change password, delete account or logout, 
-        Turn Off Student Options for Profile (Doing so will remove you from Wing University)*/}
-
                 <TouchableOpacity
                     style={{ width: 200, height: 50, padding: 15, borderRadius: 10 , backgroundColor: "#00308F" }}
                     onPress={()=>{
-                        navigation.navigate("WelcomeScreen");
+                        navigation.navigate("Login");
                         logout();
                     }}>
                     <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Logout</Text>
@@ -197,8 +191,9 @@ const AccountScreen = () => {
                         <TouchableHighlight
                             style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             onPress={() => {
+                                setpwdModalVisible(false)
                                 deleteAll(true, password);
-                                // navigation.navigate("Login")
+                                navigation.navigate("Login");
                             }}
                         >
                             <Text style={styles.textStyle}>Delete Account</Text>
