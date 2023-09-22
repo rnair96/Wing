@@ -240,7 +240,8 @@ const RequestMessageScreen = () => {
                             value={message}
                             onChangeText={setMessage}
                             placeholder={'I love your mission! How can I help?'}
-                            multiline={2}
+                            multiline
+                            numberOfLines={2}
                             placeholderTextColor={"grey"}
                             style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: 250 }} />
                         <TouchableHighlight

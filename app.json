@@ -42,7 +42,7 @@
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ],
-      "package": "com.wingcommunity.wing"
+      "package": "wing.community.wing"
     },
     "web": {
       "favicon": "./assets/favicon.png"
