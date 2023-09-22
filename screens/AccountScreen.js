@@ -129,7 +129,7 @@ const AccountScreen = () => {
                 <TouchableOpacity
                     style={{ width: 200, height: 50, padding: 15, borderRadius: 10 , backgroundColor: "#00308F" }}
                     onPress={()=>{
-                        navigation.navigate("Login");
+                        // navigation.navigate("Login");
                         logout();
                     }}>
                     <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Logout</Text>
@@ -193,7 +193,7 @@ const AccountScreen = () => {
                             onPress={() => {
                                 setpwdModalVisible(false)
                                 deleteAll(true, password);
-                                navigation.navigate("Login");
+                                // navigation.navigate("Login");
                             }}
                         >
                             <Text style={styles.textStyle}>Delete Account</Text>

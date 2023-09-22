@@ -291,8 +291,10 @@ export const AuthProvider = ({ children }) => {
 
 
   const logout = () => {
+    setLoading(true);
     setUser(null);
     signOut(auth).catch((error) => console.error(error))
+    setLoading(false);
   }
 
   const deleteUserAuth = async () => {
@@ -382,7 +384,7 @@ export const AuthProvider = ({ children }) => {
 
   const deleteUser = async () => {
     console.log("loading vars", loadingMatches, loadingPasses, loadingSwipes, loadingImages)
-    if (!loadingMatches && !loadingPasses && !loadingSwipes && !loadingImages) {
+    if (!loadingMatches && !loadingPasses && !loadingSwipes && !loadingImages && !loadingRequests) {
       await deleteDoc(doc(db, global.users, user.uid)).then(() => {
         // deleteUserAuth();
         console.log("User has been deleted successfully from DB.")
