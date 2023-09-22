@@ -153,15 +153,16 @@ const AccountScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ fontSize: 14, textAlign: "center", paddingBottom: 10 }}>Are you sure you want to delete your account? All data will be permanantly lost</Text>
+                        <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 10, color:"white", fontWeight:"bold"}}>Are you sure you want to delete your account? All data will be permanantly lost</Text>
                         <TouchableHighlight
-                            style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
+                            style={styles.opacityStyle}
                             onPress={() => {handleModalDelete()}}
                         >
                             <Text style={styles.textStyle}>Yes</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
+                            // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
+                            style={styles.opacityStyle}
                             onPress={() => {
                                 setModalVisible(!modalVisible);
                             }}
@@ -181,7 +182,7 @@ const AccountScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ fontSize: 14, textAlign: "center"}}>Please input your password to confirm deletion.</Text>
+                        <Text style={{ fontSize: 15, textAlign: "center", color: "white", fontWeight:"bold"}}>Please input your password to confirm deletion.</Text>
                         <TextInput
                             value={password}
                             onChangeText={setPassword}
@@ -189,7 +190,8 @@ const AccountScreen = () => {
                             secureTextEntry
                             style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin:20}} />
                         <TouchableHighlight
-                            style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
+                            // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
+                            style={styles.opacityStyle}
                             onPress={() => {
                                 setpwdModalVisible(false)
                                 deleteAll(true, password);
@@ -199,7 +201,8 @@ const AccountScreen = () => {
                             <Text style={styles.textStyle}>Delete Account</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
+                            // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
+                            style={styles.opacityStyle}
                             onPress={() => {
                                 setpwdModalVisible(!pwdmodalVisible)
                             }}
@@ -242,30 +245,64 @@ const styles = StyleSheet.create({
         borderColor: "#00BFFF",
         borderWidth: 2
     },
+    // centeredView: {
+    //     flex: 1,
+    //     justifyContent: 'space-evenly',
+    //     alignItems: 'center'
+    // },
+    // modalView: {
+    //     backgroundColor: 'white',
+    //     borderRadius: 20,
+    //     padding: 10,
+    //     alignItems: 'center',
+    //     shadowColor: '#000',
+    //     shadowOffset: {
+    //         width: 0,
+    //         height: 2
+    //     },
+    //     shadowOpacity: 0.25,
+    //     shadowRadius: 4,
+    //     elevation: 5
+    // },
     centeredView: {
         flex: 1,
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
         alignItems: 'center'
-    },
-    modalView: {
-        backgroundColor: 'white',
+      },
+      modalView: {
+        height: "40%",
+        width: "60%",
+        // maxHeight:500,
+        // maxWidth:"90%",
+        backgroundColor: '#00BFFF',
         borderRadius: 20,
         padding: 10,
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         shadowColor: '#000',
         shadowOffset: {
-            width: 0,
-            height: 2
+          width: 0,
+          height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-    },
-    textStyle: {
+      },
+      textStyle: {
         color: 'black',
         fontWeight: 'bold',
         textAlign: 'center'
-    }
+      },
+      opacityStyle: {
+        borderColor: "#00308F", 
+        borderWidth: 2, 
+        paddingVertical: 5, 
+        paddingHorizontal: 30, 
+        backgroundColor: "white", 
+        width: "90%", 
+        alignItems: "center", 
+        borderRadius: 10
+      }
 });
 
 export default AccountScreen;
