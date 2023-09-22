@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash_wing.png",
       "resizeMode": "contain",
-      "backgroundColor":"#00BFFF"
+      "backgroundColor": "#00BFFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,11 +23,11 @@
       "bundleIdentifier": "com.wingcommunity.wing",
       "infoPlist": {
         "UIApplicationSceneManifest": {
-            "UIApplicationSupportsMultipleScenes": false,
-              "UISceneConfigurations": {}
-          },
-          "NSLocationWhenInUseUsageDescription": "This app needs access to your location to match with users near you.",
-          "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location even when you’re not using the app so that users near you can match with you."
+          "UIApplicationSupportsMultipleScenes": false,
+          "UISceneConfigurations": {}
+        },
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location to match with users near you.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to your location even when you’re not using the app so that users near you can match with you."
       }
     },
     "android": {
@@ -55,7 +55,12 @@
         }
       ],
       "expo-build-properties",
-      "expo-updates",
+      [
+        "expo-updates",
+        {
+          "username": "rnair96"
+        }
+      ],
       "expo-apple-authentication"
     ],
     "extra": {

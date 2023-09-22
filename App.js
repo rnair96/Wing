@@ -8,7 +8,7 @@ import Constants from 'expo-constants';
 
 export default function App() {
 
-  const {sentryId} = Constants.manifest.extra
+  const {sentryId} = Constants.expoConfig.extra
 
   Sentry.init({
     dsn: sentryId,

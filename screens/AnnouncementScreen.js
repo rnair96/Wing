@@ -18,7 +18,7 @@ const AnnouncementScreen = () => {
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(true);
     const [input, setInput] = useState(null)
-    const { masterAccount, masterAccount2 } = Constants.manifest.extra
+    const { masterAccount, masterAccount2 } = Constants.expoConfig.extra
 
     const canInput = (user.email === masterAccount || user.email === masterAccount2) ? true : false;
     // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);

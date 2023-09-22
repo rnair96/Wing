@@ -16,7 +16,7 @@ const MissionControlScreen = () => {
         "What's a weekly goal to attain for two guys who want to build an online relationship business together?"
     ]
 
-    const {chatGptKey} = Constants.manifest.extra
+    const {chatGptKey} = Constants.expoConfig.extra
     // const [userText, setUserText] = useState(inputs[0]);
     const [data, setData] = useState([]);
     const apiKey = chatGptKey

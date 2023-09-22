@@ -14,7 +14,7 @@ function HelpScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
-  const {emailJsKey, emailJsService, emailJsTemplate} = Constants.manifest.extra
+  const {emailJsKey, emailJsService, emailJsTemplate} = Constants.expoConfig.extra
 
 
   const incompleteForm = !subject||!message;

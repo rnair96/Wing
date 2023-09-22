@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
 
-  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers, devUsers, prodMatches, devMatches } = Constants.manifest.extra
+  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers, devUsers, prodMatches, devMatches } = Constants.expoConfig.extra
 
 
   if (__DEV__) {
