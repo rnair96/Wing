@@ -46,19 +46,20 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>Flag User</Text>
+            <Text style={{padding:20, color:"white", fontWeight:"bold", fontSize:20}}>Flag User</Text>
 
             <TouchableHighlight
-              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              // style={{ borderColor:"white", borderWidth:2, padding:10, width:200, borderRadius:20}}
+              style={{borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:"90%", alignItems:"center", borderRadius:10 }}
               onPress={() => {
                 flagUserProfile("Inappropriate Profile");
               }}
             >
-              <Text style={styles.textStyle}>Inappropriate Profile</Text>
+              <Text style={{color:"black", fontWeight:"bold"}}>Inappropriate Profile</Text>
             </TouchableHighlight>
 
             <TouchableHighlight
-              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              style={{borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:"90%", alignItems:"center", borderRadius:10 }}
               onPress={() => {
                 flagUserProfile("Fake/Stolen Account");
               }}
@@ -66,7 +67,7 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
               <Text style={styles.textStyle}>Fake or Stolen Account</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              style={{borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:"90%", alignItems:"center", borderRadius:10 }}
               onPress={() => {
                 flagUserProfile("Abusive Behavior/Messaging");
               }}
@@ -74,7 +75,7 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
               <Text style={styles.textStyle}>Abusive Behavior/Messaging</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              style={{borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:"90%", alignItems:"center", borderRadius:10 }}
               onPress={() => {
                 flagUserProfile("Spam/Selling Something");
               }}
@@ -83,7 +84,7 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
             </TouchableHighlight>
 
             <TouchableHighlight
-              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              style={{borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:"90%", alignItems:"center", borderRadius:10 }}
               onPress={() => {
                 setIsVisible(!isVisible);
                 navigation.navigate("ReportOther", {other_user, matchedID});
@@ -94,12 +95,12 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
             
 
             <TouchableHighlight
-              style={{ borderColor:"grey", borderBottomWidth:2, padding:10, width:'100%'}}
+              style={{borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:"90%", alignItems:"center", borderRadius:10 }}
               onPress={() => {
                 setIsVisible(!isVisible);
               }}
             >
-              <Text style={styles.textStyle}>Hide</Text>
+              <Text style={styles.textStyle}>Cancel</Text>
             </TouchableHighlight>
           </View>
           </View>
@@ -109,25 +110,49 @@ const FlagModal = ({other_user, isVisible, setIsVisible, matchedID}) => {
 }
 
 const styles = StyleSheet.create({
+    // centeredView: {
+    //   flex: 1,
+    //   justifyContent: 'center',
+    //   alignItems: 'center'
+    // },
+    // modalView: {
+    //   backgroundColor: 'white',
+    //   borderRadius: 20,
+    //   padding:10,
+    //   alignItems: 'center',
+    //   shadowColor: '#000',
+    //   shadowOffset: {
+    //     width: 0,
+    //     height: 2
+    //   },
+    //   shadowOpacity: 0.25,
+    //   shadowRadius: 4,
+    //   elevation: 5
+    // },
     centeredView: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center'
-    },
-    modalView: {
-      backgroundColor: 'white',
+  },
+  modalView: {
+      height:"60%",
+      width:"70%",
+      // maxHeight:500,
+      // maxWidth:"90%",
+      backgroundColor: '#00BFFF',
       borderRadius: 20,
-      padding:10,
+      padding: 10,
       alignItems: 'center',
+      justifyContent: 'space-evenly',
       shadowColor: '#000',
       shadowOffset: {
-        width: 0,
-        height: 2
+          width: 0,
+          height: 2
       },
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5
-    },
+  },
     textStyle: {
         color: 'black',
         fontWeight: 'bold',
