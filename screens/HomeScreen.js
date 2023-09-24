@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native'
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -20,6 +20,8 @@ WebBrowser.maybeCompleteAuthSession();
 
 const HomeScreen = () => {
     const navigation = useNavigation();
+    // const { params } = useRoute();
+    // const { tutorial_bool } = params;
     const { user } = useAuth();
     const swipeRef = useRef(null);
     const [profiles, setProfiles] = useState([]);
@@ -30,8 +32,11 @@ const HomeScreen = () => {
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
     const [requestMessage, setRequestMessage] = useState(null);
     const [swipeRefMessage, setSwipeRefMessage] = useState(null);
+    // const [tutorial, setTutorial] = tutorial_bool? useState(tutorial_bool): useState(false);
 
-    const swipeCap = 3;
+    // console.log()
+
+    // const swipeCap = 3;
 
     // const [cardIndex, setCardIndex] = useState(0);
 
