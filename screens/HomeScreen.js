@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -20,8 +20,6 @@ WebBrowser.maybeCompleteAuthSession();
 
 const HomeScreen = () => {
     const navigation = useNavigation();
-    // const { params } = useRoute();
-    // const { tutorial_bool } = params;
     const { user } = useAuth();
     const swipeRef = useRef(null);
     const [profiles, setProfiles] = useState([]);
@@ -32,13 +30,9 @@ const HomeScreen = () => {
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
     const [requestMessage, setRequestMessage] = useState(null);
     const [swipeRefMessage, setSwipeRefMessage] = useState(null);
-    // const [tutorial, setTutorial] = tutorial_bool? useState(tutorial_bool): useState(false);
 
-    // console.log()
-
-    // const swipeCap = 3;
-
-    // const [cardIndex, setCardIndex] = useState(0);
+    navigation.navigate("WelcomeScreen")
+    
 
 
     useLayoutEffect(() => {
@@ -272,8 +266,6 @@ const HomeScreen = () => {
 
         console.log("you swiped left on", profiles[cardIndex].displayName);
 
-        const time = serverTimestamp();
-
         setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), profiles[cardIndex]);
 
     }
@@ -284,13 +276,16 @@ const HomeScreen = () => {
             setIsModalVisible(true);
             return;
         }
-        console.log("swiperef",swipeRef);
         // setMessagedName(profiles[cardIndex].displayName)
         setSwipeRefMessage(swipeRef)
         setMessageModalVisible(true);
     }
 
-    const swipeTop = async (cardIndex) => {
+    // const swipeTop = async (cardIndex) => {
+
+    // }
+
+    const swipeRight = async (cardIndex) => {
         if (!profiles[cardIndex]) { return; }
 
         const userSwiped = profiles[cardIndex];
@@ -317,58 +312,6 @@ const HomeScreen = () => {
         console.log("swipe number at", (swipeAmount - 1));
 
         setDoc(doc(db, global.users, user.uid, "swipes", userSwiped.id), swipedUser);
-
-    }
-
-    const swipeRight = async (cardIndex) => {
-        if (!profiles[cardIndex]) { return; }
-
-        if (swipeAmount === 0) {
-            setSwipeEnabled(false);
-            // alert("No more likes available, try again tomorrow");
-            setIsModalVisible(true);
-            return;
-        }
-
-
-        const userSwiped = profiles[cardIndex]
-        const timestamp = serverTimestamp();
-
-        //handle this with Firebase Trigger
-        getDoc(doc(db, global.users, userSwiped.id, "swipes", user.uid)).then(
-            documentSnapshot => {
-                if (documentSnapshot.exists()) {
-                    //user matched, they swiped on you already
-                    console.log("MATCHED with", userSwiped.displayName);
-
-                    setDoc(doc(db, global.matches, generateId(user.uid, userSwiped.id)), {
-                        userMatched: [user.uid, userSwiped.id],
-                        match_timestamp: timestamp,
-                        latest_message_timestamp: timestamp
-                    });
-
-                    navigation.navigate("Match", { loggedProfile, userSwiped });
-
-                } else {
-                    //first swipe of interaction
-                    console.log("you swiped right on", userSwiped.displayName);
-
-                }
-
-                const swipedUser = {
-                    swipedAt: swipeAmount,
-                    timeSwiped: timestamp,
-                    message: null,
-                    ...userSwiped
-                }
-
-                setSwipeAmount((swipeAmount - 1));
-                console.log("swipe number at", (swipeAmount - 1));
-
-                setDoc(doc(db, global.users, user.uid, "swipes", userSwiped.id), swipedUser);
-            }
-
-        );
     }
 
     return (
@@ -402,8 +345,9 @@ const HomeScreen = () => {
                         animateCardOpacity={true}
                         verticalSwipe={false}
                         cardIndex={0}
+                        horizontalSwipe={false}
                         disableRightSwipe={!swipeEnabled}
-                        disableTopSwipe={!swipeEnabled}
+                        // disableTopSwipe={!swipeEnabled}
                         onSwipedAll={() => {
                             setProfiles([])
                         }}
@@ -417,9 +361,9 @@ const HomeScreen = () => {
 
                         }}
 
-                        onSwipedTop={(cardIndex)=> {
-                            swipeTop(cardIndex);
-                        }}
+                        // onSwipedTop={(cardIndex)=> {
+                        //     swipeTop(cardIndex);
+                        // }}
                         // onTapCard={(cardIndex) =>{
                         //     if(topLine <= 2){
                         //         setTopLine(topLine+1);
@@ -428,26 +372,26 @@ const HomeScreen = () => {
                         //         setTopLine(0);
                         //     }
                         // }}
-                        overlayLabels={{
-                            left: {
-                                title: "DENY",
-                                style: {
-                                    label: {
-                                        textAlign: "right",
-                                        color: "red",
-                                    },
-                                },
-                            },
-                            right: {
-                                title: "APPROVE",
-                                style: {
-                                    label: {
-                                        textAlign: "left",
-                                        color: "#4DED30"
-                                    }
-                                }
-                            }
-                        }}
+                        // overlayLabels={{
+                        //     left: {
+                        //         title: "DENY",
+                        //         style: {
+                        //             label: {
+                        //                 textAlign: "right",
+                        //                 color: "red",
+                        //             },
+                        //         },
+                        //     },
+                        //     right: {
+                        //         title: "APPROVE",
+                        //         style: {
+                        //             label: {
+                        //                 textAlign: "left",
+                        //                 color: "#4DED30"
+                        //             }
+                        //         }
+                        //     }
+                        // }}
 
                         // pass swiperef to profile swipe to include swipe function , swipeRef: swipeRef
                         containerStyle={{ backgroundColor: "transparent" }}
@@ -516,12 +460,12 @@ const HomeScreen = () => {
                 {/* <TouchableOpacity style={styles.ButtonFlag} onPress={()=> swipeRef && swipeRef?.current ? console.log("user is", swipeRef.current): console.log("no action")}>
                             <Entypo name="flag" size={17} color="#CD7F32"/> swipeRef.current.swipeTop()
         </TouchableOpacity> */} 
-                <TouchableOpacity style={styles.swipeButtonMessage} onPress={()=> swipeRef && swipeRef?.current ? messageSwipe(swipeRef): console.log("no action")}>
-                            <Entypo name="mail" size={17} color="blue"/>
+                <TouchableOpacity style={styles.swipeButtonHeart} onPress={()=> swipeRef && swipeRef?.current ? messageSwipe(swipeRef): console.log("no action")}>
+                            <Entypo name="mail" size={17} color="green"/>
                 </TouchableOpacity> 
-                <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => swipeRef && swipeRef?.current ? swipeRef.current.swipeRight() : console.log("no action")}>
+                {/* <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => swipeRef && swipeRef?.current ? swipeRef.current.swipeRight() : console.log("no action")}>
                     <Entypo name="heart" size={24} color="green" />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
             <Modal
@@ -570,7 +514,7 @@ const HomeScreen = () => {
                             style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:120, alignItems:"center", borderRadius:10}}
                             onPress={() => {
                                 console.log("send this message to user", requestMessage);
-                                swipeRefMessage.current.swipeTop();
+                                swipeRefMessage.current.swipeRight();
                                 setMessageModalVisible(!isMessageModalVisible);
                             }}
                         >

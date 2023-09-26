@@ -216,13 +216,13 @@ const RequestMessageScreen = () => {
 
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", bottom: 20 }}>
                 <TouchableOpacity
-                    style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "red", width: "50%" }}
+                    style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#FF5864", width: "50%" }}
                     onPress={() => setSecondModal(true)}>
-                        <Text style={{ color: "white" }}>Delete</Text>
+                        <Text style={{ color: "white", fontWeight:"bold"}}>Delete</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#00BFFF", width: "50%" }}
+                <TouchableOpacity style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#32de84", width: "50%" }}
                 onPress={() => setMessageModalVisible(true)}>
-                        <Text style={{ color: "white" }}>Respond & Match</Text>
+                        <Text style={{ color: "white", fontWeight:"bold"}}>Respond & Match</Text>
                 </TouchableOpacity>
             </View>
             <Modal

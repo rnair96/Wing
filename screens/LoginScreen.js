@@ -49,14 +49,14 @@ const LoginScreen = () => {
         value = {email}
         onChangeText = {setEmail}
         placeholder={'example@example.com'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:"70%"}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:180}}/>
         <Text style={{fontWeight:"bold", fontSize:20, fontFamily:"Times New Roman", color:"white"}}>Password</Text>
         <TextInput
         value = {password}
         onChangeText = {setPassword}
         secureTextEntry
         placeholder={'*************'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:"70%"}}/>
+        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15, backgroundColor:"white", width:180, justifyContent:"center"}}/>
         <TouchableOpacity style={styles.opacitycontainer} onPress={()=>logInManually(email, password)}>
             <Text style = {styles.textcontainer}>Log In</Text>
         </TouchableOpacity>
