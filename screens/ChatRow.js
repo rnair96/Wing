@@ -121,7 +121,7 @@ const ChatRow = ({ matchedDetails }) => {
                                 <Text style={{ paddingLeft: 10, color: "white" }}>{lastMessage || "Say Hi!"}</Text>
                             )}
                         </View>
-                        <View style={{ position: "absolute", left: 180, top: 20, flexDirection: "row" }}>
+                        <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
                             <Text style={{ fontSize: 10, color: "white" }}>{timestamp || "New Match"}</Text>
                             {!read && <UnreadHighlighter />}
                         </View>

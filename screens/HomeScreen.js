@@ -323,7 +323,7 @@ const HomeScreen = () => {
                     <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
                 </TouchableOpacity>
                 {/* right:20, top:10 */}
-                <TouchableOpacity onPress={() => navigation.navigate("ToggleChat")}>
+                <TouchableOpacity onPress={() => navigation.navigate("ToggleChat", loggedProfile)}>
                     <Ionicons name="chatbubbles-sharp" size={30} color="#00BFFF" />
                 </TouchableOpacity>
             </View>

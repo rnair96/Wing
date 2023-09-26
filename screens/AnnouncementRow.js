@@ -9,12 +9,12 @@ import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import UnreadHighlighter from '../components/UnreadHighlighter';
 import getTime from '../lib/getTime';
 
-const AnnouncementRow = () => {
+const AnnouncementRow = ({profile}) => {
 
     // const { user } = useAuth();
     // const [matchedUserInfo, setMatchedUserInfo] = useState(null);
     const [lastMessage, setLastMessage] = useState();
-    // const [read, setRead] = useState();
+    const [read, setRead] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState(true);
     // const [loadingProfile, setLoadingProfile] = useState(true);
     const [timestamp, setTimeStamp] = useState();
@@ -43,6 +43,10 @@ const AnnouncementRow = () => {
             setTimeStamp(time);
         }
 
+        if(data && profile?.latest_read_announcement !== data.id){
+            setRead(false);
+        }
+
         setLoadingMessage(false);
     }
 
@@ -50,7 +54,9 @@ const AnnouncementRow = () => {
 
         const unsub = onSnapshot(query(collection(db, "announcements"),
             orderBy("timestamp", "desc")), (snapshot) =>
-            setVars(snapshot.docs[0]?.data())
+            setVars({
+                id: snapshot.docs[0]?.id,
+                ...snapshot.docs[0]?.data()})
             ,
             (error) => {
                 console.log("there was an error in announcement snapshot", error)
@@ -92,7 +98,7 @@ const AnnouncementRow = () => {
     return (
         !loadingMessage && (
             <View style={{ padding: 10, width: "95%" }}>
-                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements")}>
+                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements", profile)}>
                     {/* {!read ? <UnreadHighlighter/>:<View style={{padding:15}}></View>} */}
                         <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "#00BFFF" }} source={require("../images/logo.png")} />
                     {/* source = {{uri:matchedUserInfo[1]?.images[0]}} */}
@@ -100,10 +106,11 @@ const AnnouncementRow = () => {
                         <View style={{ padding: 10 }}>
                             <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5, color: "white" }}>Announcements</Text>
                             {/* {matchedUserInfo[1]?.displayName} */}
-                                <Text style={{ paddingLeft: 10, color: "white" }}>{lastMessage}</Text>
+                                <Text style={{ paddingLeft: 10, color: "white", fontWeight: !read? "bold":"normal" }}>{lastMessage}</Text>
                         </View>
-                        <View style={{ position: "absolute", left: 180, top: 20, flexDirection: "row" }}>
+                        <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
                             <Text style={{ fontSize: 10, color: "white" }}>{timestamp}</Text>
+                            {!read && <UnreadHighlighter />}
                         </View>
                     </View>
                 </TouchableOpacity>

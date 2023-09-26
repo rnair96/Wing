@@ -15,6 +15,8 @@ import Constants from 'expo-constants';
 const AnnouncementScreen = () => {
 
     const { user } = useAuth();
+    const {params} = useRoute();
+    const profile = params;
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(true);
     const [input, setInput] = useState(null)
@@ -45,6 +47,15 @@ const AnnouncementScreen = () => {
         };
 
     }, [db]);
+
+    useEffect(() => {
+        if (messages.length > 0 && profile && messages[0].id !== profile?.latest_read_announcement) {
+          updateDoc(doc(db, global.users, user.uid), {
+            latest_read_announcement: messages[0].id,
+          })
+          console.log("updating latest announcement as read")
+        }
+      }, [messages])
 
 
     const sendMessage = () => {

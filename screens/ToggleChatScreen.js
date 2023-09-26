@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import ChatScreen from './ChatScreen'
-import { useNavigation} from '@react-navigation/core';
+import { useNavigation, useRoute} from '@react-navigation/core';
 import RequestsScreen from './RequestsScreen';
 import AnnouncementRow from './AnnouncementRow';
 
@@ -12,6 +12,10 @@ const ToggleChatScreen = () => {
   const [showMatches, setShowMatches] = useState(true);
 
   const navigation = useNavigation();
+
+  const {params} = useRoute();
+  
+  const profile = params;
 
 
   return (
@@ -29,7 +33,7 @@ const ToggleChatScreen = () => {
         </TouchableOpacity>
         </View>
       </SafeAreaView>
-      {showMatches ? <ChatScreen/> : <RequestsScreen/>}
+      {showMatches ? <ChatScreen profile={profile}/> : <RequestsScreen/>}
     </View>
   );
 }

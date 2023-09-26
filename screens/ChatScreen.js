@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text } from 'react-native';
 import ChatList from './ChatList';
 import AnnouncementRow from './AnnouncementRow';
 
-const ChatScreen = () => {
+const ChatScreen = ({profile}) => {
 
   //perhaps if I can see if the value of latest announcement is read, I can set it below Chatlist, otherwise set it above
 
@@ -14,7 +14,7 @@ const ChatScreen = () => {
         <View style={{alignItems:'center', justifyContent:"center", width:"100%"}}>
         <Text style={{color:"#00BFFF", padding:10, fontWeight:"bold", fontSize:20}}>Active Chats</Text>
         </View>
-        <AnnouncementRow/>
+        <AnnouncementRow profile={profile}/>
 
         <ChatList/>
         </SafeAreaView>
