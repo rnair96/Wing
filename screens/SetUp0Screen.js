@@ -45,6 +45,7 @@ const SetUp0Screen = () => {
             last_year_celebrated: 2022,
             gender: gender,
             location: location,
+            latest_read_announcement:"",
             // rank: "Airman",
             // points: 0,
             // recently_promoted: true,
