@@ -31,9 +31,6 @@ const HomeScreen = () => {
     const [requestMessage, setRequestMessage] = useState(null);
     const [swipeRefMessage, setSwipeRefMessage] = useState(null);
 
-    navigation.navigate("WelcomeScreen")
-    
-
 
     useLayoutEffect(() => {
         const unsub = onSnapshot(doc(db, global.users, user?.uid), (snapshot) => {
