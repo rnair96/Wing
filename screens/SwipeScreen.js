@@ -8,6 +8,8 @@ import Swiper from "react-native-deck-swiper";
 import { getDocs, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit, orderBy } from "firebase/firestore";
 import { db } from '../firebase';
 import checkFlagged from '../lib/checkFlagged';
+import MessageModal from '../components/MessageModal';
+import RequestCapModal from '../components/RequestCapModal';
 
 
 
@@ -301,70 +303,9 @@ const SwipeScreen = ({loggedProfile}) => {
                             <Entypo name="mail" size={17} color="green"/>
                 </TouchableOpacity> 
             </View>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isModalVisible}
-                onRequestClose={() => {
-                    setIsModalVisible(!isModalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, color: "white" }}>No More Chat Requests Available!</Text>
-                        <Text style={{ padding: 5, fontWeight: "700", paddingBottom: 10, color: "white" }}>Wait Till Tomorrow To Refresh Requests.</Text>
-                        <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
-                            onPress={() => {
-                                setIsModalVisible(!isModalVisible);
-                            }}
-                        >
-                            <Text>Ok</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            </Modal>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isMessageModalVisible}
-                onRequestClose={() => {
-                    setMessageModalVisible(!isMessageModalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, color: "white" }}>Send this User a Request:</Text>
-                        <TextInput
-                            value={requestMessage}
-                            onChangeText={setRequestMessage}
-                            placeholder={'I love your mission! How can I help?'}
-                            multiline
-                            numberOfLines={3}
-                            placeholderTextColor={"grey"}
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"white", width:"90%", height:"30%"}}/>
-                            <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:120, alignItems:"center", borderRadius:10}}
-                            onPress={() => {
-                                console.log("send this message to user", requestMessage);
-                                swipeRefMessage.current.swipeRight();
-                                setMessageModalVisible(!isMessageModalVisible);
-                            }}
-                        >
-                            <Text>Send</Text>
-                        </TouchableHighlight>
-                        <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width:120, alignItems:"center", borderRadius:10}}
-                            onPress={() => {
-                                setMessageModalVisible(!isMessageModalVisible);
-                            }}
-                        >
-                            <Text>Cancel</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            </Modal>
+            <MessageModal isMessageModalVisible={isMessageModalVisible}  setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage}/>
+            <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible}/>
+            
         </View>
     )
 }

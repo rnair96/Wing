@@ -3,14 +3,9 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighli
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Entypo, Ionicons } from '@expo/vector-icons';
-import Swiper from "react-native-deck-swiper";
-import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit, orderBy } from "firebase/firestore";
+import { Ionicons } from '@expo/vector-icons';
+import { onSnapshot, doc, updateDoc, } from "firebase/firestore";
 import { db } from '../firebase';
-import generateId from '../lib/generateId'
-import getLocation from '../lib/getLocation';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
 import * as WebBrowser from 'expo-web-browser';
 import checkFlagged from '../lib/checkFlagged';
 import SwipeScreen from './SwipeScreen';
@@ -22,15 +17,7 @@ WebBrowser.maybeCompleteAuthSession();
 const HomeScreen = () => {
     const navigation = useNavigation();
     const { user } = useAuth();
-    const swipeRef = useRef(null);
-    const [profiles, setProfiles] = useState([]);
     const [loggedProfile, setLoggedProfile] = useState(null);
-    const [swipeAmount, setSwipeAmount] = useState(3);
-    const [swipeEnabled, setSwipeEnabled] = useState(true);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isMessageModalVisible, setMessageModalVisible] = useState(false);
-    const [requestMessage, setRequestMessage] = useState(null);
-    const [swipeRefMessage, setSwipeRefMessage] = useState(null);
 
 
     useLayoutEffect(() => {
