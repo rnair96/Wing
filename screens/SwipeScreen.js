@@ -180,12 +180,12 @@ const SwipeScreen = ({loggedProfile}) => {
         console.log("you messaged swiped on", profiles[cardIndex].displayName);
 
         //handle this with Firebase Trigger
-        setDoc(doc(db, global.users, userSwiped.id, "requests", user.uid), {
-            id: user.uid,
-            timestamp: timestamp,
-            message: requestMessage,
-            read: false
-        });
+        // setDoc(doc(db, global.users, userSwiped.id, "requests", user.uid), {
+        //     id: user.uid,
+        //     timestamp: timestamp,
+        //     message: requestMessage,
+        //     read: false
+        // });
 
         const swipedUser = {
             id: userSwiped.id,
