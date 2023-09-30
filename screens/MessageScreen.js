@@ -67,10 +67,8 @@ const MessageScreen = () => {
     const userName = user.displayName.split(" ")[0];
 
     if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
-      const messageDetails = { "maatchedDetails": matchedDetails, "profile": profile }
-      // if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
-      // sendPush(userName);
-      // sendPush(matchedUser[1].token,`New Message from ${userName}`,input,{type : "message", message : matchedDetails})
+      const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
+  
       sendPush(profile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
 
     }
@@ -78,39 +76,6 @@ const MessageScreen = () => {
     setInput("");
 
   }
-
-  // const sendPush = async(userName) => {
-
-  //       try {
-  //         const response = await fetch('https://exp.host/--/api/v2/push/send', {
-  //         method: 'POST',
-  //         headers: {
-  //               'Accept': 'application/json',
-  //               'Content-Type': 'application/json'
-  //         },
-  //           body: JSON.stringify({
-  //             to: matchedUser[1].token,
-  //             title: "New Message from "+userName,
-  //             body: input,
-  //             data: {
-  //               type: "message",
-  //               message: matchedDetails 
-  //             },
-  //           }),
-  //         });
-
-  //         const result = await response.json();
-
-  //         if (result.errors) {
-  //           throw new Error(`Failed to send push notification: ${result.errors}`);
-  //         }
-
-  //         return result.data;
-  //       } catch (error) {
-  //         console.error('Error sending push notification:', error);
-  //         return null;
-  //       }
-  // }
 
 
   return (

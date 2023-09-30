@@ -52,14 +52,18 @@ const StackNavigator = () => {
     
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
-        if(response.notification.request.content.data.type === "message" || response.notification.request.content.data.type === "rated"){
+        if(response.notification.request.content.data.type === "message"){//|| response.notification.request.content.data.type === "rated"
           const messageDetails = response.notification.request.content.data.message;
-          console.log("messageDetails", messageDetails)
+          console.log("messageDetails from a match", messageDetails)
           const matchedDetails = messageDetails.matchedDetails;
           const profile = messageDetails.profile
           navigation.navigate("Message", { matchedDetails, profile });
-        } else if (response.notification.request.content.data.type === "match"){
-          navigation.navigate("Chat");
+        } else if (response.notification.request.content.data.type === "request"){
+          const messageDetails = response.notification.request.content.data.message;
+          console.log("messageDetails from a request", messageDetails)
+          const requestDetails = messageDetails.requestDetails;
+          const profile = messageDetails.profile
+          navigation.navigate("RequestMessage", { requestDetails, profile });
         } else {
           navigation.navigate("Home");
         }

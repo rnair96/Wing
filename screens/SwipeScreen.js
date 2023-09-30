@@ -13,7 +13,7 @@ import RequestCapModal from '../components/RequestCapModal';
 
 
 
-const SwipeScreen = ({loggedProfile}) => {
+const SwipeScreen = ({ loggedProfile }) => {
     const navigation = useNavigation();
     const { user } = useAuth();
     const swipeRef = useRef(null);
@@ -24,7 +24,8 @@ const SwipeScreen = ({loggedProfile}) => {
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
     const [requestMessage, setRequestMessage] = useState(null);
     const [swipeRefMessage, setSwipeRefMessage] = useState(null);
-      
+    const [loadingFetch, setloadingFetch] = useState(false);
+
 
     useEffect(() => {
         // let unsub;
@@ -70,70 +71,33 @@ const SwipeScreen = ({loggedProfile}) => {
         let unsub;
 
         const fetchCards = async () => {
+            setloadingFetch(true);
 
-            try {
+            console.log("fetching cards...")
 
-                const passedIds = [];
-                await getDocs(collection(db, global.users, user.uid, "passes")).then((snapshot) => {
-                    snapshot.docs.map((doc) => passedIds.push(doc.id))
+            const functionURL = `https://us-central1-mission-partner-app.cloudfunctions.net/fetchCards/getFilteredUsers/:${user.uid}`;
+            //make link an env variable
+
+            fetch(functionURL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                // .then(response => response.text())  // Use .text() instead of .json()
+                // .then(text => {
+                //     // console.log(text);
+                //     return JSON.parse(text);  // Attempt to parse the response as JSON
+                // })
+                .then(data => {
+                    setProfiles(data);  // Set the fetched profiles to your state variable
+                })
+                .catch(error => {
+                    console.error("Error fetching profiles:", error);
                 });
 
-                const swipedIds = [];
-                await getDocs(collection(db, global.users, user.uid, "swipes")).then((snapshot) => {
-                    snapshot.docs.map((doc) => swipedIds.push(doc.id))
-                });
-
-                const requestIds = [];
-                await getDocs(collection(db, global.users, user.uid, "requests")).then((snapshot) => {
-                    snapshot.docs.map((doc) => requestIds.push(doc.id))
-                });
-
-                const ageMin = loggedProfile?.ageMin ? loggedProfile.ageMin : 18;
-
-                const ageMax = loggedProfile?.ageMax ? loggedProfile.ageMax : 100;
-
-                // const genderPreference = loggedProfile?.genderPreference ? loggedProfile.genderPreference : "both";
-                const genderPreference = loggedProfile?.gender;
-
-                const universityPreference = loggedProfile?.universityPreference ? loggedProfile.universityPreference : "No";
-
-                const tagPreference = loggedProfile?.tagPreference ? loggedProfile.tagPreference : "All";
-
-                const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
-                const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
-
-                unsub = onSnapshot(query(collection(db, global.users), where("id", "not-in", [...passedUIds, ...swipedUIds, ...requestIds, ...[user.uid]]), limit(10))
-                    , (snapshot) => {
-                        setProfiles(
-                            snapshot.docs
-                                .filter(
-                                    (doc) =>
-                                        (doc.data()?.images?.length > 2 && doc.data()?.mission && doc.data()?.medals)
-                                        && (doc.data().gender === genderPreference)
-                                        && (doc.data().mission_tag === tagPreference || tagPreference === "All")
-                                        && (universityPreference === "No" || (universityPreference === "Yes" && doc.data()?.university_student && doc.data().university_student.status === "active"))
-                                        && (doc.data().age >= ageMin && doc.data().age <= ageMax)
-                                        && (!doc.data()?.flags || !checkFlagged(doc.data().flags))//function to check that user has no unresolved flags
-                                )
-                                .map((doc) => (
-                                    {
-                                        id: doc.id,
-                                        ...doc.data()
-                                    }
-                                ))
-
-                        )
-                    },
-                    (error) => {
-                        if(error.code === "permission-denied"){
-                            console.log("Should handle this error buuuut not the biggest deal if i leave it like this.")
-                        } else{
-                            console.log("there was an error in fetching cards snapshot", error)
-                        }
-                    })
-            } catch (error) {
-                console.log("Error fetching cards:", error);
-            }
+            setloadingFetch(false);
         }
 
         fetchCards();
@@ -152,7 +116,7 @@ const SwipeScreen = ({loggedProfile}) => {
 
         console.log("you swiped left on", profiles[cardIndex].displayName);
 
-        setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), {id: profiles[cardIndex].id});
+        setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), { id: profiles[cardIndex].id });
 
     }
 
@@ -179,14 +143,6 @@ const SwipeScreen = ({loggedProfile}) => {
 
         console.log("you messaged swiped on", profiles[cardIndex].displayName);
 
-        //handle this with Firebase Trigger
-        // setDoc(doc(db, global.users, userSwiped.id, "requests", user.uid), {
-        //     id: user.uid,
-        //     timestamp: timestamp,
-        //     message: requestMessage,
-        //     read: false
-        // });
-
         const swipedUser = {
             id: userSwiped.id,
             swipedAt: swipeAmount,
@@ -202,11 +158,15 @@ const SwipeScreen = ({loggedProfile}) => {
     }
 
     return (
-        <View style={{backgroundColor: "black", height:"87%" }}>
+        <View style={{ backgroundColor: "black", height: "87%" }}>
             {/* Cards */}
-            {profiles.length === 0 ? (
+            {loadingFetch || profiles.length === 0 ? (
                 <View style={[styles.emptycardcontainer, { alignItems: "center", justifyContent: "space-evenly" }]}>
-                    <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>No Wings Around... Try Again Later</Text>
+                    {loadingFetch ? (
+                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>Loading Wings...</Text>
+                    ) : (
+                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>No Wings Around... Try Again Later</Text>
+                    )}
                     <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
                 </View>
             ) : (
@@ -233,7 +193,7 @@ const SwipeScreen = ({loggedProfile}) => {
 
                         }}
 
-                        
+
                         // pass swiperef to profile swipe to include swipe function , swipeRef: swipeRef
                         containerStyle={{ backgroundColor: "transparent" }}
                         renderCard={(card) => {
@@ -299,13 +259,13 @@ const SwipeScreen = ({loggedProfile}) => {
                     <Entypo name="cross" size={24} color="red" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.swipeButtonHeart} onPress={()=> swipeRef && swipeRef?.current ? messageSwipe(swipeRef): console.log("no action")}>
-                            <Entypo name="mail" size={17} color="green"/>
-                </TouchableOpacity> 
+                <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => swipeRef && swipeRef?.current ? messageSwipe(swipeRef) : console.log("no action")}>
+                    <Entypo name="mail" size={17} color="green" />
+                </TouchableOpacity>
             </View>
-            <MessageModal isMessageModalVisible={isMessageModalVisible}  setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage}/>
-            <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible}/>
-            
+            <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} />
+            <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+
         </View>
     )
 }
@@ -394,8 +354,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalView: {
-        height:"30%",
-        width:"80%",
+        height: "30%",
+        width: "80%",
         backgroundColor: '#00BFFF',
         borderRadius: 20,
         padding: 10,

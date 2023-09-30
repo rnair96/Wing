@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal } from 'react-native';
-import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
-import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, writeBatch, deleteDoc, setDoc } from 'firebase/firestore';
+import { collection, serverTimestamp, updateDoc, doc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -21,6 +19,14 @@ const RequestMessageScreen = () => {
     const [message, setMessage] = useState(null);
     const navigation = useNavigation();
     const batch = writeBatch(db);
+
+    useEffect(() => {
+        if (message) {
+          updateDoc(doc(db, global.users, user.uid, "requests", requestDetails.id), {
+            read: true,
+          })
+        }
+      }, [message])
 
 
     const matchThenMove = async () => {
@@ -45,11 +51,6 @@ const RequestMessageScreen = () => {
 
             batch.delete(doc(db, global.users, user.uid, "requests", requestDetails.id))
 
-            // await batch.commit().then(() => {
-            //     console.log("Added match and swipe doc and deleted request doc")
-            // })
-
-
             const messageRefOne = doc(collection(db, global.matches, id, "messages"));
 
             const messageOne = {
@@ -62,17 +63,6 @@ const RequestMessageScreen = () => {
 
             batch.set(messageRefOne, messageOne);
 
-
-            // await addDoc(collection(db, global.matches, id, "messages"), {
-            //     timestamp: requestDetails.timestamp,
-            //     userId: requestDetails.id,
-            //     displayName: profile.displayName,
-            //     message: requestDetails.message,
-            //     read: true,
-            // }).then(() => {
-            //     console.log("Message has been moved over to match.")
-            // })
-
             if (message && message !== "") {
                 const messageRefTwo = doc(collection(db, global.matches, id, "messages"));
 
@@ -84,15 +74,6 @@ const RequestMessageScreen = () => {
                     read: false,
                 }
 
-                // await addDoc(collection(db, global.matches, id, "messages"), {
-                //     timestamp: timestamp,
-                //     userId: user.uid,
-                //     displayName: user.displayName,
-                //     message: message,
-                //     read: false,
-                // }).then(() => {
-                //     console.log("User message has been added over to match as well.")
-                // })
                 batch.set(messageRefTwo, messageTwo);
             }
 
@@ -104,9 +85,6 @@ const RequestMessageScreen = () => {
 
 
                 navigation.navigate("ToggleChat");
-                // navigation.navigate("Message", { matchedDetails, profile });
-                //ensure messages are loaded to screen upon navigation
-                //use timeout?
 
                 if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
 

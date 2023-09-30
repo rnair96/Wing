@@ -4,6 +4,8 @@ import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native'
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import getTime from '../lib/getTime';
+import UnreadHighlighter from '../components/UnreadHighlighter';
+
 
 const RequestRow = ({ requestDetails }) => {
 
@@ -14,6 +16,7 @@ const RequestRow = ({ requestDetails }) => {
     const [name, setName] = useState("Account User");
     const [profilePic, setProfilePic] = useState(null);
     const [profile, setProfile] = useState(null);
+    const [read, setRead]  = useState(true);
     const navigator = useNavigation();
 
 
@@ -29,6 +32,10 @@ const RequestRow = ({ requestDetails }) => {
             let milliseconds = data?.timestamp.seconds * 1000 + Math.floor(data?.timestamp.nanoseconds / 1000000);
             const time = getTime(new Date(milliseconds))
             setTimeStamp(time);
+        }
+
+        if(data && data?.read){
+            setRead(data.read)
         }
 
         setLoadingMessage(false);
@@ -48,7 +55,6 @@ const RequestRow = ({ requestDetails }) => {
                     setName(other_user_snapshot.data().displayName);
                     setProfilePic(other_user_snapshot.data().images[0]);
                     setProfile(other_user_snapshot.data());
-
                 } else {
                     console.log("No such document!");
                 }
@@ -67,9 +73,8 @@ const RequestRow = ({ requestDetails }) => {
                 <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("RequestMessage", {
                     requestDetails, profile
                 })}>
-                    {/* {!read ? <UnreadHighlighter/>:<View style={{padding:15}}></View>} */}
                     {profilePic ? (
-                        <Image style={{ height: 60, width: 60, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
+                        <Image style={{ height: 60, width: 60, borderRadius: 50, borderWidth: !read ? 3 : 1, borderColor: "#00BFFF" }}
                             source={{ uri: profilePic }} />
                     ) : (
                         <Image style={{ height: 60, width: 60, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={require("../images/account.jpeg")} />
@@ -82,8 +87,9 @@ const RequestRow = ({ requestDetails }) => {
                             {/* {matchedUserInfo[1]?.displayName} */}
                                 <Text style={{ paddingLeft: 10, color: "white" }}>{lastMessage}</Text>
                         </View>
-                        <View style={{ position: "absolute", left: 180, top: 20, flexDirection: "row" }}>
+                        <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
                             <Text style={{ fontSize: 10, color: "white" }}>{timestamp}</Text>
+                            {!read && <UnreadHighlighter />}
                         </View>
                     </View>
                 </TouchableOpacity>

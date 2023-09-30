@@ -14,7 +14,7 @@ const ChatRow = ({ matchedDetails }) => {
     const { user } = useAuth();
     const [matchedUserInfo, setMatchedUserInfo] = useState(null);
     const [lastMessage, setLastMessage] = useState();
-    const [read, setRead] = useState();
+    const [read, setRead] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState(true);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [timestamp, setTimeStamp] = useState();
