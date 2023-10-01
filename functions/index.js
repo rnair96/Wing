@@ -55,6 +55,37 @@ const sendPush = async (token, title, body, data) => {
   }
 };
 
+const sendPushBatch = async (tokens, title, body, data) => {
+  const messages = tokens.map((token) => ({
+    to: token,
+    title: title,
+    body: body,
+    data: data,
+  }));
+
+  try {
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(messages),
+    });
+
+    const result = await response.json();
+
+    if (result.some((res) => res.status === "error")) {
+      console.log("Some notifications failed:", result);
+    }
+
+    return result;
+  } catch (error) {
+    console.log("Error sending push notifications batch:", error);
+    return null;
+  }
+};
+
 
 // const env = functions.config().env.name;
 // const usersCollection = env === 'dev' ? 'users_test' : 'users';
@@ -134,7 +165,7 @@ fetchFunction.get("/getFilteredUsers/:id", async (req, res) => {
     }
 
     const user = userSnapshot.data();
-    const userPreferences = user.tagPreference;
+    // const userPreferences = user.tagPreference;
     const userGender = user.gender;
     let matchingUsersQuery = admin.firestore().collection("users_test")
         .where("gender", "==", userGender)
@@ -149,10 +180,10 @@ fetchFunction.get("/getFilteredUsers/:id", async (req, res) => {
     }
 
     // Further filter by tag preference
-    if (userPreferences !== "All") {
-      console.log("filtering for users with mission tag", userPreferences);
+    if (user.tagPreference && user.tagPreference !== "All") {
+      console.log("filtering for users with mission tag", user.tagPreference);
       matchingUsersQuery = matchingUsersQuery
-          .where("mission_tag", "==", userPreferences);
+          .where("mission_tag", "==", user.tagPreference);
     }
 
     // Now filter these matched users against excludeIds
@@ -240,3 +271,28 @@ fetchFunction.get("/getFilteredUsers/:id", async (req, res) => {
 });
 
 exports.fetchCards = functions.https.onRequest(fetchFunction);
+
+exports.sendAnnouncementNotification = functions.firestore
+    .document("announcements/{announcementId}")
+    .onCreate(async (snap) => {
+      const newData = snap.data();
+      const tokens = [];
+
+      const usersSnapshot = await admin.firestore()
+          .collection("users_test").get();
+
+      usersSnapshot.forEach((doc) => {
+        const userData = doc.data();
+
+        if (userData.token && userData.token !== "token" &&
+        userData.token !== "not_granted") {
+          tokens.push(userData.token);
+        }
+      });
+
+      if (tokens.length > 0) {
+        return sendPushBatch(tokens, newData.title,
+            newData.message, {type: "announcement"});
+      }
+      return null;
+    });

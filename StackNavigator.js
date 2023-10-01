@@ -64,7 +64,9 @@ const StackNavigator = () => {
           const requestDetails = messageDetails.requestDetails;
           const profile = messageDetails.profile
           navigation.navigate("RequestMessage", { requestDetails, profile });
-        } else {
+        } else if (response.notification.request.content.data.type === "announcement"){
+          navigation.navigate("Announcements");
+        }else {
           navigation.navigate("Home");
         }
         

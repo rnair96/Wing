@@ -15,16 +15,15 @@ import Constants from 'expo-constants';
 const AnnouncementScreen = () => {
 
     const { user } = useAuth();
-    const {params} = useRoute();
-    const profile = params;
-    const [messages, setMessages] = useState([])
+    // const {params} = useRoute();
+    // const profile = params;
+    const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [input, setInput] = useState(null)
+    const [input, setInput] = useState(null);
+    const [title, setTitle] = useState(null);
     const { masterAccount, masterAccount2 } = Constants.expoConfig.extra
 
     const canInput = (user.email === masterAccount || user.email === masterAccount2) ? true : false;
-    // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
-
 
     useEffect(() => {
         const unsub = onSnapshot(query(collection(db, "announcements"),
@@ -48,41 +47,26 @@ const AnnouncementScreen = () => {
 
     }, [db]);
 
-    useEffect(() => {
-        if (messages.length > 0 && profile && messages[0].id !== profile?.latest_read_announcement) {
-          updateDoc(doc(db, global.users, user.uid), {
-            latest_read_announcement: messages[0].id,
-          })
-          console.log("updating latest announcement as read")
-        }
-      }, [messages])
+    // useEffect(() => {
+    //     if (messages.length > 0 && profile && messages[0].id !== profile?.latest_read_announcement) {
+    //       updateDoc(doc(db, global.users, user.uid), {
+    //         latest_read_announcement: messages[0].id,
+    //       })
+    //       console.log("updating latest announcement as read")
+    //     }
+    //   }, [messages])
 
 
     const sendMessage = () => {
         const timestamp = serverTimestamp();
         addDoc(collection(db, "announcements"), {
+            title: title,
             message: input,
             timestamp: timestamp,
         })
 
-        //send push notification to all users
-
-        // updateDoc(doc(db, global.matches, matchedDetails.id), {
-        //   latest_message_timestamp: timestamp
-        // })
-
-        // const userName = user.displayName.split(" ")[0];
-
-        // if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
-        //   const messageDetails = { "maatchedDetails": matchedDetails, "profile": profile }
-        //   // if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
-        //   // sendPush(userName);
-        //   // sendPush(matchedUser[1].token,`New Message from ${userName}`,input,{type : "message", message : matchedDetails})
-        //   sendPush(profile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
-
-        // }
-
         setInput("");
+        setTitle("")
 
     }
 
@@ -118,13 +102,23 @@ const AnnouncementScreen = () => {
                 }
                 {canInput &&
                     <View
-                        style={{ flexDirection: "row", borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center" }}>
+                        style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center" }}>
                         <TextInput
-                            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, color: "white" }}
-                            placeholder="Send Message..."
+                            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, color: "white", borderBottomWidth:2, borderColor: "#E0E0E0"}}
+                            placeholder="Set Announcement Title"
+                            onChangeText={setTitle}
+                            onSubmitEditing={sendMessage}
+                            placeholderTextColor={"#E0E0E0"}
+                            value={title}
+                        />
+                        <TextInput
+                            style={{ height: 100, width: "80%", fontSize: 15, padding: 10, color: "white" ,borderBottomWidth:2, borderColor: "#E0E0E0"}}
+                            placeholder="Enter Announcement..."
                             onChangeText={setInput}
                             onSubmitEditing={sendMessage}
                             placeholderTextColor={"#E0E0E0"}
+                            multiline
+                            numberOfLines={5}
                             value={input}
                         />
                         <Button onPress={sendMessage} title="Send" color="#00BFFF" />
