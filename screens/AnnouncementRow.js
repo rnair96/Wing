@@ -11,22 +11,12 @@ import getTime from '../lib/getTime';
 
 const AnnouncementRow = ({profile}) => {
 
-    // const { user } = useAuth();
-    // const [matchedUserInfo, setMatchedUserInfo] = useState(null);
+    const { user } = useAuth();
     const [lastMessage, setLastMessage] = useState();
     const [read, setRead] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState(true);
-    // const [loadingProfile, setLoadingProfile] = useState(true);
     const [timestamp, setTimeStamp] = useState();
-    // const [name, setName] = useState("Account User");
-    // const [profilePic, setProfilePic] = useState(null);
-    // const [profile, setProfile] = useState(null);
     const navigator = useNavigation();
-
-
-    // useEffect(() => {
-    //     setMatchedUserInfo(getMatchedUserInfo(matchedDetails.userMatched, user.uid));
-    // }, [matchedDetails, user]);
 
 
     const setVars = (data) => {
@@ -43,8 +33,8 @@ const AnnouncementRow = ({profile}) => {
             setTimeStamp(time);
         }
 
-        if(data && profile?.latest_read_announcement !== data.id){
-            setRead(false);
+        if(data && data.read!==null && data.read!==undefined){
+            setRead(data.read);
         }
 
         setLoadingMessage(false);
@@ -52,7 +42,7 @@ const AnnouncementRow = ({profile}) => {
 
     useEffect(() => {
 
-        const unsub = onSnapshot(query(collection(db, "announcements"),
+        const unsub = onSnapshot(query(collection(db, global.users, user.uid, "announcements"),
             orderBy("timestamp", "desc")), (snapshot) =>
             setVars({
                 id: snapshot.docs[0]?.id,
@@ -69,43 +59,14 @@ const AnnouncementRow = ({profile}) => {
 
     }, [db]);
 
-
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         if (matchedUserInfo) { // check if you can access matched_user[1].id safely
-    //             const other_user_snapshot = await getDoc(doc(db, global.users, matchedUserInfo)); // replace 'YOUR_COLLECTION_NAME' with the name of your collection
-    //             if (other_user_snapshot.exists) { // check if the document exists
-    //                 setName(other_user_snapshot.data().displayName);
-    //                 setProfilePic(other_user_snapshot.data().images[0]);
-    //                 setProfile(other_user_snapshot.data());
-
-    //             } else {
-    //                 console.log("No such document!");
-    //             }
-    //             setLoadingProfile(false);
-    //         } else {
-    //             console.log("matched_user might be empty or doesn't have enough items!");
-    //             setLoadingProfile(false);
-    //         }
-    //     }
-
-    //     fetchData();
-
-    // }, [matchedUserInfo, db])
-
-    //add useEffect that fetches user info from id and pass it into params
-
     return (
         !loadingMessage && (
             <View style={{ padding: 10, width: "95%" }}>
                 <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements", profile)}>
-                    {/* {!read ? <UnreadHighlighter/>:<View style={{padding:15}}></View>} */}
                         <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "#00BFFF" }} source={require("../images/logo.png")} />
-                    {/* source = {{uri:matchedUserInfo[1]?.images[0]}} */}
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5, color: "white" }}>Announcements</Text>
-                            {/* {matchedUserInfo[1]?.displayName} */}
+                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5, color: "white" }}>News & Promos</Text>
                                 <Text style={{ paddingLeft: 10, color: "white", fontWeight: !read? "bold":"normal" }}>{lastMessage}</Text>
                         </View>
                         <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>

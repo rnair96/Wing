@@ -1,13 +1,10 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image } from 'react-native';
-import ChatHeader from '../components/ChatHeader';
+import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, FlatList, Image } from 'react-native';
 import useAuth from '../hooks/useAuth';
-import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import sendPush from '../lib/sendPush';
 import Header from '../Header';
 import Constants from 'expo-constants';
 
@@ -15,8 +12,6 @@ import Constants from 'expo-constants';
 const AnnouncementScreen = () => {
 
     const { user } = useAuth();
-    // const {params} = useRoute();
-    // const profile = params;
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [input, setInput] = useState(null);
@@ -26,7 +21,7 @@ const AnnouncementScreen = () => {
     const canInput = (user.email === masterAccount || user.email === masterAccount2) ? true : false;
 
     useEffect(() => {
-        const unsub = onSnapshot(query(collection(db, "announcements"),
+        const unsub = onSnapshot(query(collection(db, global.users, user.uid, "announcements"),
             orderBy("timestamp", "desc")),
             (snapshot) => {
                 setMessages(snapshot.docs.map((doc) => ({
@@ -47,14 +42,14 @@ const AnnouncementScreen = () => {
 
     }, [db]);
 
-    // useEffect(() => {
-    //     if (messages.length > 0 && profile && messages[0].id !== profile?.latest_read_announcement) {
-    //       updateDoc(doc(db, global.users, user.uid), {
-    //         latest_read_announcement: messages[0].id,
-    //       })
-    //       console.log("updating latest announcement as read")
-    //     }
-    //   }, [messages])
+    useEffect(() => {
+        if (messages.length > 0 && !messages[0].read) {
+          updateDoc(doc(db, global.users, user.uid, "announcements", messages[0].id), {
+            read: true
+          })
+          console.log("updating latest announcement as read")
+        }
+      }, [messages])
 
 
     const sendMessage = () => {
@@ -72,8 +67,7 @@ const AnnouncementScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
-            {/* <ChatHeader matchedDetails={matchedDetails} profile={profile} /> */}
-            <Header title={"Announcements"} />
+            <Header title={"News & Promos"} />
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -118,7 +112,7 @@ const AnnouncementScreen = () => {
                             onSubmitEditing={sendMessage}
                             placeholderTextColor={"#E0E0E0"}
                             multiline
-                            numberOfLines={5}
+                            numberOfLines={10}
                             value={input}
                         />
                         <Button onPress={sendMessage} title="Send" color="#00BFFF" />

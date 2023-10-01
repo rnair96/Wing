@@ -115,7 +115,6 @@ exports.onSwipe = functions.firestore
       read: false,
     };
 
-      // send push notification to user
       const userDoc = admin.firestore().collection("users_test")
           .doc(swipedUserId);
 
@@ -274,25 +273,72 @@ exports.fetchCards = functions.https.onRequest(fetchFunction);
 
 exports.sendAnnouncementNotification = functions.firestore
     .document("announcements/{announcementId}")
-    .onCreate(async (snap) => {
+    .onCreate(async (snap, context) => {
+      const CHUNK_SIZE = 500;
       const newData = snap.data();
+      const announcementDoc = {
+        id: snap.id,
+        read: false,
+        ...snap.data(),
+      };
+
+      const announcementId = context.params.announcementId;
+
       const tokens = [];
 
       const usersSnapshot = await admin.firestore()
           .collection("users_test").get();
 
-      usersSnapshot.forEach((doc) => {
-        const userData = doc.data();
+      const users = usersSnapshot.docs;
 
-        if (userData.token && userData.token !== "token" &&
-        userData.token !== "not_granted") {
-          tokens.push(userData.token);
+      console.log("splitting users into chunks");
+
+      // Split users into chunks
+      const userChunks = [];
+      for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+        userChunks.push(users.slice(i, i + CHUNK_SIZE));
+      }
+
+      console.log("cycling through each user chunk for announcements");
+
+      for (const userChunk of userChunks) {
+        const batch = admin.firestore().batch();
+
+        userChunk.forEach((doc) => {
+          const userID = doc.id;
+          const userData = doc.data();
+
+          const announcementRef = admin.firestore().collection("users_test")
+              .doc(userID).collection("announcements").doc(announcementId);
+
+          batch.set(announcementRef, announcementDoc);
+
+          if (userData.token && userData.token !== "token" &&
+          userData.token !== "not_granted") {
+            tokens.push(userData.token);
+          }
+        });
+
+        try {
+          console.log("writing all the new announcements to users");
+          await batch.commit();
+        } catch (error) {
+          console.error("Error adding announcement to users:", error);
+        // Handle the error appropriately.
+        // Maybe retry or notify you about the failure.
         }
-      });
+      }
 
       if (tokens.length > 0) {
-        return sendPushBatch(tokens, newData.title,
-            newData.message, {type: "announcement"});
+        try {
+          console.log("sending batch notifications to users");
+          return sendPushBatch(tokens, newData.title,
+              newData.message, {type: "announcement"});
+        } catch (error) {
+          console.error("Error sending notifications:", error);
+          // Handle the error appropriately.
+          return null;
+        }
       }
       return null;
     });

@@ -34,7 +34,7 @@ const RequestRow = ({ requestDetails }) => {
             setTimeStamp(time);
         }
 
-        if(data && data?.read){
+        if(data && data.read!==null && data.read!==undefined){
             setRead(data.read)
         }
 
