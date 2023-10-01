@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native'
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,6 +18,7 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const { user } = useAuth();
     const [loggedProfile, setLoggedProfile] = useState(null);
+    const route = useRoute();
 
 
     useLayoutEffect(() => {
@@ -57,6 +58,29 @@ const HomeScreen = () => {
         };
 
     }, [db]);
+
+    useEffect(()=>{
+        if (route.params?.refresh) {
+            // Perform the refresh operation here
+            console.log("refreshing profile")
+            const unsub = onSnapshot(doc(db, global.users, user?.uid), (snapshot) => {
+                const info =
+                {
+                    id: snapshot.id,
+                    ...snapshot.data()
+                }
+                setLoggedProfile(info);
+          },
+          (error) => {
+              console.log("there was an error in refreshing loggedprofile", error)
+          }
+      )
+
+      return () => {
+          unsub();
+      };
+        }
+    },[route.params])
 
     // useEffect(() => {
     //     (async () => {

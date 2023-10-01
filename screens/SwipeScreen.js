@@ -1,13 +1,11 @@
-import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native'
+import React, { useRef, useState, useEffect } from 'react'
+import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Entypo, Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
 import { getDocs, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit, orderBy } from "firebase/firestore";
 import { db } from '../firebase';
-import checkFlagged from '../lib/checkFlagged';
 import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
 
@@ -24,7 +22,7 @@ const SwipeScreen = ({ loggedProfile }) => {
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
     const [requestMessage, setRequestMessage] = useState(null);
     const [swipeRefMessage, setSwipeRefMessage] = useState(null);
-    const [loadingFetch, setloadingFetch] = useState(false);
+    const [loadingFetch, setloadingFetch] = useState(true);
 
 
     useEffect(() => {
@@ -69,9 +67,9 @@ const SwipeScreen = ({ loggedProfile }) => {
 
     useEffect(() => {
         let unsub;
-
+        
         const fetchCards = async () => {
-            setloadingFetch(true);
+
 
             console.log("fetching cards...")
 
@@ -85,19 +83,15 @@ const SwipeScreen = ({ loggedProfile }) => {
                     }
                     return response.json();
                 })
-                // .then(response => response.text())  // Use .text() instead of .json()
-                // .then(text => {
-                //     // console.log(text);
-                //     return JSON.parse(text);  // Attempt to parse the response as JSON
-                // })
                 .then(data => {
                     setProfiles(data);  // Set the fetched profiles to your state variable
+                    console.log("cards fetched")
+                    setloadingFetch(false);
                 })
                 .catch(error => {
                     console.error("Error fetching profiles:", error);
+                    setloadingFetch(false);
                 });
-
-            setloadingFetch(false);
         }
 
         fetchCards();
@@ -108,8 +102,7 @@ const SwipeScreen = ({ loggedProfile }) => {
             }
         };
 
-
-    }, [db, loggedProfile, loggedProfile?.tagPreference]);//loggedProfile?.ageMin, loggedProfile?.ageMax,
+    }, [loggedProfile, loggedProfile?.tagPreference, loggedProfile?.universityPreference]);//loggedProfile?.ageMin, loggedProfile?.ageMax,
 
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]) { return; }
@@ -160,14 +153,22 @@ const SwipeScreen = ({ loggedProfile }) => {
     return (
         <View style={{ backgroundColor: "black", height: "87%" }}>
             {/* Cards */}
-            {loadingFetch || profiles.length === 0 ? (
-                <View style={[styles.emptycardcontainer, { alignItems: "center", justifyContent: "space-evenly" }]}>
+            {profiles.length === 0 ? (
+                <View style={[styles.emptycardcontainer]}>
                     {loadingFetch ? (
-                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>Loading Wings...</Text>
+                        <View style={[styles.emptycardcontainer]}>
+                            <View style={styles.loading}>
+                                <ActivityIndicator size="large" color="#00BFFF" />
+                                <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>Gathering Wings...</Text>
+                            </View>
+                        </View>
+
                     ) : (
-                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>No Wings Around... Try Again Later</Text>
+                        <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
+                            <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>No Wings Around... Try Again Later</Text>
+                            <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
+                        </View>
                     )}
-                    <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
                 </View>
             ) : (
                 <View style={styles.cardscontainer}>
@@ -369,7 +370,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-    }
+    },
+    loading: {
+        height: "100%",
+        alignItems: 'center',
+        justifyContent: 'space-evenly'
+
+    },
 });
 
 

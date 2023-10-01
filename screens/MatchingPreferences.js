@@ -65,7 +65,7 @@ const MatchingPreferences = () => {
           // globalMatchingBoolean: global
           }).then(()=> {
             //must trigger a refresh upon entering home screen
-          navigation.navigate("Home")
+          navigation.navigate("Home",{ refresh: true })
       }).catch((error) => {
           alert(error.message)
       });
@@ -79,7 +79,7 @@ const MatchingPreferences = () => {
           // globalMatchingBoolean: global
           }).then(()=> {
             //must trigger a refresh upon entering home screen
-          navigation.navigate("Home")
+          navigation.navigate("Home",{ refresh: true })
       }).catch((error) => {
           alert(error.message)
       });
