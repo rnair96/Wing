@@ -1,4 +1,3 @@
-import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, FlatList, Image } from 'react-native';
 import useAuth from '../hooks/useAuth';
