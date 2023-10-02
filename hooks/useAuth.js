@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider} from "firebase/auth";
 import { auth } from '../firebase';
 import { deleteDoc, writeBatch, getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db, storage } from '../firebase';
@@ -28,24 +28,33 @@ export const AuthProvider = ({ children }) => {
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
 
-  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers, devUsers, prodMatches, devMatches } = Constants.expoConfig.extra
+  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers, 
+    devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards } = Constants.expoConfig.extra
 
 
   if (__DEV__) {
     console.log('dev user signin, setting dev environment');
     global.users = devUsers;
     global.matches = devMatches;
+    global.announcements = devAnnouncements;
+    global.fetchcards = devFetchCards;
   } else {
     console.log('prod user signin, setting prod environment');
     global.users = prodUsers;
     global.matches = prodMatches;
+    global.announcements = prodAnnouncements;
+    global.fetchcards = prodFetchCards;
+
   }
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: androidClientId,
     iosClientId: iosClientId,
     expoClientId: expoClientId,
-    scopes: ["profile", "email"]
+    scopes: ["profile", "email"],
+    // redirectUri: makeRedirectUri({
+    //   scheme: 'com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2'
+    // }),
   });
 
 
@@ -54,10 +63,11 @@ export const AuthProvider = ({ children }) => {
     onAuthStateChanged(auth, (authuser) => {
       if (authuser) {
         //logged in
+        console.log("logged in")
         setUser(authuser);
       } else {
         //Not logged in...
-        console.log("not logged in user?")
+        console.log("not logged in...")
         setUser(null);
       }
 
@@ -308,11 +318,11 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error("Error deleting user from Firebase Auth:", error);
       }
-    } else if (loadingUser){
+    } else if (loadingUser) {
       console.log("not finished deleting doc, delay");
       await delay(3000);
       deleteUserAuth();
-    }else {
+    } else {
       console.log("no user found");
     }
   }
@@ -353,10 +363,10 @@ export const AuthProvider = ({ children }) => {
       try {
         setLoading(true);
         await deleteInfo()
-        
+
         console.log("All Info deleted");
         setLoading(false);
-        
+
       } catch (error) {
         console.error('There was an error', error);
       }

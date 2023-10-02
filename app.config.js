@@ -85,6 +85,10 @@ export default {
       devUsers: process.env.DEV_USERS,
       prodMatches: process.env.PROD_MATCHES,
       devMatches: process.env.DEV_MATCHES,
+      prodAnnouncements: process.env.PROD_ANNOUNCEMENTS,
+      devAnnouncements: process.env.DEV_ANNOUNCEMENTS,
+      prodFetchCards: process.env.PROD_FETCHCARDS,
+      devFetchCards: process.env.DEV_FETCHCARDS,
       masterAccount: process.env.MASTER_ACCOUNT,
       masterAccount2: process.env.MASTER_ACCOUNT2
 

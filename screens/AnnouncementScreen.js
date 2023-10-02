@@ -53,7 +53,7 @@ const AnnouncementScreen = () => {
 
     const sendMessage = () => {
         const timestamp = serverTimestamp();
-        addDoc(collection(db, "announcements"), {
+        addDoc(collection(db, global.announcements), {
             title: title,
             message: input,
             timestamp: timestamp,

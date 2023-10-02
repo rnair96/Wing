@@ -62,7 +62,7 @@ const AnnouncementRow = ({profile}) => {
     return (
         !loadingMessage && (
             <View style={{ padding: 10, width: "95%" }}>
-                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements", profile)}>
+                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements")}>
                         <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "#00BFFF" }} source={require("../images/logo.png")} />
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>

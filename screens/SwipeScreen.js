@@ -73,7 +73,7 @@ const SwipeScreen = ({ loggedProfile }) => {
 
             console.log("fetching cards...")
 
-            const functionURL = `https://us-central1-mission-partner-app.cloudfunctions.net/fetchCards/getFilteredUsers/:${user.uid}`;
+            const functionURL = `${global.fetchcards}${user.uid}`;
             //make link an env variable
 
             fetch(functionURL)
