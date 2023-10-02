@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.0.1",
+    version: "2.0.2",
     orientation: "portrait",
     icon: "./assets/wing_icon.png",
     userInterfaceStyle: "light",
