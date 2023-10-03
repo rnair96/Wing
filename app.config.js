@@ -4,11 +4,11 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.0.2",
+    version: "2.0.8",
     orientation: "portrait",
     icon: "./assets/wing_icon.png",
     userInterfaceStyle: "light",
-    scheme: process.env.IOS_CLIENT_ID, // Assuming this is what you meant by scheme
+    scheme: "com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2", // Assuming this is what you meant by scheme
     splash: {
       image: "./assets/splash_wing.png",
       resizeMode: "contain",
