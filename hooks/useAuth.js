@@ -349,8 +349,6 @@ export const AuthProvider = ({ children }) => {
 
       const functionURL = `${global.deleteuser}${user.uid}`
 
-      console.log("function url", functionURL);
-
       fetch(functionURL, {
         method: 'DELETE'
       })
@@ -368,7 +366,12 @@ export const AuthProvider = ({ children }) => {
           if (!response.ok) {
               throw new Error('Network response was not ok');
           }
-          return response.json();
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            return response.json();
+          } else {
+            return response.text();
+          }
       })
         .then(data => {
           // Check if the parsed response is OK

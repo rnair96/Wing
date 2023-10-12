@@ -678,19 +678,32 @@ functionCall.delete("/deleteUserDev/:id", async (req, res) => {
 
     const bucket = admin.storage().bucket();
 
-    for (let i = 0; i < 3; i++) {
-      const imagePath = `images/${userId}/${i}`;
-      try {
-        await bucket.file(imagePath).delete();
-        console.log("Deleted image:", imagePath);
-      } catch (err) {
-        if (err.code === 404) {
-          console.log(`Image not found: ${imagePath}. Skipping deletion.`);
-        } else {
-          console.error(`Error deleting image ${imagePath}:`, err);
-        }
-      }
+    const directoryPath = `images/${userId}/`;
+
+    // List files in the directory
+    const [files] = await bucket.getFiles({
+      prefix: directoryPath,
+    });
+
+    // Delete each file
+    for (const file of files) {
+      console.log("deleting image",file)
+      await file.delete();
     }
+
+    // for (let i = 0; i < 3; i++) {
+    //   const imagePath = `images/${userId}/${i}`;
+    //   try {
+    //     await bucket.file(imagePath).delete();
+    //     console.log("Deleted image:", imagePath);
+    //   } catch (err) {
+    //     if (err.code === 404) {
+    //       console.log(`Image not found: ${imagePath}. Skipping deletion.`);
+    //     } else {
+    //       console.error(`Error deleting image ${imagePath}:`, err);
+    //     }
+    //   }
+    // }
 
     console.log("deleting user doc");
 

@@ -204,6 +204,7 @@ const AccountScreen = () => {
                             // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             style={styles.opacityStyle}
                             onPress={() => {
+                                setPassword(null)
                                 setpwdModalVisible(!pwdmodalVisible)
                             }}
                         >
