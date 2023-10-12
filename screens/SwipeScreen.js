@@ -26,81 +26,94 @@ const SwipeScreen = ({ loggedProfile }) => {
 
 
     useEffect(() => {
-        // let unsub;
-        const setSwipes = async () => {
-            // if (loggedProfile) {
-            const startOfDay = new Date();
-            startOfDay.setHours(0, 0, 0, 0);
 
-            const endOfDay = new Date();
-            endOfDay.setHours(23, 59, 59, 999);
+        if (loggedProfile && loggedProfile !== null) {
+
+            const setSwipes = async () => {
+                const startOfDay = new Date();
+                startOfDay.setHours(0, 0, 0, 0);
+
+                const endOfDay = new Date();
+                endOfDay.setHours(23, 59, 59, 999);
 
 
-            const userSnapshot = await getDocs(query(collection(db, global.users, user.uid, "swipes"),
-                where("timeSwiped", ">=", startOfDay), where("timeSwiped", "<=", endOfDay),
-                orderBy("timeSwiped", "desc")), limit(1));
+                const userSnapshot = await getDocs(query(collection(db, global.users, user.uid, "swipes"),
+                    where("timeSwiped", ">=", startOfDay), where("timeSwiped", "<=", endOfDay),
+                    orderBy("timeSwiped", "desc")), limit(1));
 
-            if (!userSnapshot.empty) {
-                const latestSwipeDoc = userSnapshot.docs[0];
-                if (latestSwipeDoc.data()?.swipedAt && (latestSwipeDoc.data().swipedAt - 1) > 0) {
-                    console.log("setting swipes to previously", (latestSwipeDoc.data().swipedAt - 1))
-                    setSwipeAmount((latestSwipeDoc.data().swipedAt - 1));
+                if (!userSnapshot.empty) {
+                    const latestSwipeDoc = userSnapshot.docs[0];
+                    if (latestSwipeDoc.data()?.swipedAt && (latestSwipeDoc.data().swipedAt - 1) > 0) {
+                        console.log("setting swipes to previously", (latestSwipeDoc.data().swipedAt - 1))
+                        setSwipeAmount((latestSwipeDoc.data().swipedAt - 1));
+                    } else {
+                        console.log("setting swipes to 0 and disabling swipes");
+                        setSwipeAmount(0);
+                        setSwipeEnabled(false);
+                        setIsModalVisible(true);
+                    }
                 } else {
-                    console.log("setting swipes to 0 and disabling swipes");
-                    setSwipeAmount(0);
-                    setSwipeEnabled(false);
-                    // alert("No more likes available, wait till tomorrow.")
-                    setIsModalVisible(true);
+                    console.log("No swipes found today from user. Replenish swipes");
                 }
-            } else {
-                console.log("No swipes found today from user. Replenish swipes");
-                // setSwipeAmount(swipeCap);
+
             }
-
+            setSwipes();
         }
-        // }
-        setSwipes();
-        // return unsub;
 
-    }, [db])
+    }, [db, loggedProfile])
 
 
     useEffect(() => {
         let unsub;
-        
-        const fetchCards = async () => {
+
+        if (loggedProfile && loggedProfile !== null) {
+
+            const fetchCards = async () => {
 
 
-            console.log("fetching cards...")
+                console.log("fetching cards...")
 
-            const functionURL = `${global.fetchcards}${user.uid}`;
-            //make link an env variable
+                const functionURL = `${global.fetchcards}${user.uid}`;
+                // const functionURL = `https://us-central1-mission-partner-app.cloudfunctions.net/functionCall/getFilteredDevUsers/:${user.uid}`
+                //make link an env variable
 
-            fetch(functionURL)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setProfiles(data);  // Set the fetched profiles to your state variable
-                    console.log("cards fetched")
-                    setloadingFetch(false);
-                })
-                .catch(error => {
-                    console.error("Error fetching profiles:", error);
-                    setloadingFetch(false);
-                });
-        }
-
-        fetchCards();
-
-        return () => {
-            if (unsub) {
-                unsub();
+                fetch(functionURL)
+                    // .then(response => response.text())  // Get the response text
+                    // .then(text => {
+                    //     try {
+                    //         // Try to parse the response text as JSON
+                    //         return JSON.parse(text);
+                    //     } catch (err) {
+                    //         // If it's not JSON, throw the raw text
+                    //         throw text;
+                    //     }
+                    // })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        setProfiles(data);  // Set the fetched profiles to your state variable
+                        console.log("cards fetched")
+                        setloadingFetch(false);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching profiles:", error);
+                        setloadingFetch(false);
+                        //add sentry capture
+                    });
             }
-        };
+
+            fetchCards();
+
+            return () => {
+                if (unsub) {
+                    unsub();
+                }
+            };
+        }
 
     }, [loggedProfile, loggedProfile?.tagPreference, loggedProfile?.universityPreference]);//loggedProfile?.ageMin, loggedProfile?.ageMax,
 
@@ -221,20 +234,38 @@ const SwipeScreen = ({ loggedProfile }) => {
                                                 </View>
                                                 <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card?.images[0] }} />
                                             </View>
-                                            <View style={{ flexDirection: "column" }}>
-                                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                    <Text style={styles.cardtext}>{card.medals[0]}</Text>
+                                            {card?.medals && card.medals.length > 2 ? (
+                                                <View style={{ flexDirection: "column" }}>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                        <Text style={styles.cardtext}>{card.medals[0]}</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                        <Text style={styles.cardtext}>{card.medals[1]}</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                        <Text style={styles.cardtext}>{card.medals[2]}</Text>
+                                                    </View>
                                                 </View>
-                                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                    <Text style={styles.cardtext}>{card.medals[1]}</Text>
+                                            ) : (
+                                                <View style={{ flexDirection: "column" }}>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                        <Text style={styles.cardtext}>-- --</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                        <Text style={styles.cardtext}>-- --</Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                        <Text style={styles.cardtext}>-- --</Text>
+                                                    </View>
                                                 </View>
-                                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                    <Text style={styles.cardtext}>{card.medals[2]}</Text>
-                                                </View>
-                                            </View>
+                                            )}
+
                                             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                                                 <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.values[0]}</Text>
                                                 <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.values[1]}</Text>

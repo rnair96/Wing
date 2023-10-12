@@ -8,6 +8,8 @@ import sendPush from '../lib/sendPush';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import Header from '../Header';
 import generateId from '../lib/generateId'
+import * as Sentry from "@sentry/react";
+
 
 const RequestMessageScreen = () => {
 
@@ -21,12 +23,13 @@ const RequestMessageScreen = () => {
     const batch = writeBatch(db);
 
     useEffect(() => {
-        if (message) {
+        if (!requestDetails.read) {
+            console.log("updating read")
           updateDoc(doc(db, global.users, user.uid, "requests", requestDetails.id), {
             read: true,
           })
         }
-      }, [message])
+      }, [])
 
 
     const matchThenMove = async () => {
@@ -40,7 +43,11 @@ const RequestMessageScreen = () => {
 
         const swipedRef = doc(db, global.users, user.uid, "swipes", requestDetails.id)
         const swipeDoc = {
-            id: requestDetails.id
+            id: requestDetails.id,
+            message: message,
+            timeSwiped: timestamp,
+            isResponse: true
+            //add boolean variable for isResponse and have onswipe function deal with that
         }
 
         try {
@@ -86,15 +93,25 @@ const RequestMessageScreen = () => {
 
                 navigation.navigate("ToggleChat");
 
+                Sentry.captureMessage(`does profile have token at match and move? ${profile.token}`)
+                console.log(`Does profile token exist at match and move? ${profile.token}`)
+
                 if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
 
-                    const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
-
+                    const messageDetails = { "matchedDetails": matchedDetails, "profile": profile };
 
                     const userName = user.displayName.split(" ")[0];
 
+                    Sentry.captureMessage(`match & move sending message token to ${profile.token}`)
+                    Sentry.captureMessage(`match & move sending message details ${messageDetails}`)
+                    Sentry.captureMessage(`match & move sending message from ${userName}`)
 
-                    sendPush(profile.token, `${userName} has Matched and Messaged you!`, input, { type: "message", message: messageDetails })
+                    console.log(`match & move sending message token to ${profile.token}`)
+                    console.log(`match & move sending message details ${messageDetails}`)
+                    console.log(`match & move sending message from ${userName}`)
+
+
+                    sendPush(profile.token, `${userName} has Matched and Messaged you!`, message, { type: "message", message: messageDetails })
                 }
 
             });

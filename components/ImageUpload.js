@@ -6,11 +6,11 @@ import { storage } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase/storage";
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
-import checkInappropriateContent from '../lib/checkInappropriateContent';
+// import checkInappropriateContent from '../lib/checkInappropriateContent';
 import { Entypo, Ionicons} from '@expo/vector-icons';
 
 
-const ImageUpload = ({ url, setURL, index, user}) => {
+const ImageUpload = ({ url, setURL, index, userId}) => {
     const [ image, setImage ]= useState(url);
     // const [ progress, setProgress] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -136,7 +136,7 @@ const ImageUpload = ({ url, setURL, index, user}) => {
             const response = await fetch(uri);
             const blob = await response.blob();
   
-            const fileNameFull = user.id+"/"+index+"/"+fileName
+            const fileNameFull = userId+"/"+index+"/"+fileName
             uploadFirebase(blob, fileNameFull);
 
           }catch(e){

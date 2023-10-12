@@ -1,12 +1,8 @@
-import React, { Component, useState, useEffect } from 'react'
+import React from 'react'
 import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, ScrollView} from 'react-native';
-import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import { deleteDoc, doc, getDocs, collection, writeBatch, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import { storage } from '../firebase';
-import { deleteObject, ref, listAll} from "firebase/storage";
+
 
 
 
@@ -18,7 +14,6 @@ const SettingsScreen = () => {
 
 
     return (
-        // <ScrollView style={{backgroundColor:"black"}}>
         <View style={{backgroundColor:"black"}}>
         <SafeAreaView>
         <Header style={{fontSize:20, fontWeight: "bold"}} title={"Settings"}/>
@@ -44,7 +39,6 @@ const SettingsScreen = () => {
             </View>
 
           </View>
-        //   </ScrollView>
     )
 }
 
@@ -56,7 +50,7 @@ const styles = StyleSheet.create({
       height: 50,
       margin: 10,
       borderWidth: 1,
-    //   borderColor: '#ccc'
+      borderRadius: 10,
       backgroundColor:"#00308F"
     },
     iconcontainer: {

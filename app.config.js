@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.0.8",
+    version: "2.2.0",
     orientation: "portrait",
     icon: "./assets/wing_icon.png",
     userInterfaceStyle: "light",
@@ -90,8 +90,9 @@ export default {
       prodFetchCards: process.env.PROD_FETCHCARDS,
       devFetchCards: process.env.DEV_FETCHCARDS,
       masterAccount: process.env.MASTER_ACCOUNT,
-      masterAccount2: process.env.MASTER_ACCOUNT2
-
+      masterAccount2: process.env.MASTER_ACCOUNT2,
+      prodDeleteUser: process.env.PROD_DELETEUSER,
+      devDeleteUser: process.env.DEV_DELETEUSER
     }
   }
 };

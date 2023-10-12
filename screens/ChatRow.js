@@ -15,9 +15,7 @@ const ChatRow = ({ matchedDetails }) => {
     const [matchedUserInfo, setMatchedUserInfo] = useState(null);
     const [lastMessage, setLastMessage] = useState();
     const [read, setRead] = useState(true);
-    const [loadingMessage, setLoadingMessage] = useState(true);
-    const [loadingProfile, setLoadingProfile] = useState(true);
-    const [timestamp, setTimeStamp] = useState();
+    const [timestamp, setTimeStamp] = useState(null);
     const [name, setName] = useState("Account User");
     const [profilePic, setProfilePic] = useState(null);
     const [profile, setProfile] = useState(null);
@@ -50,7 +48,6 @@ const ChatRow = ({ matchedDetails }) => {
         } else {
             setRead(false);
         }
-        setLoadingMessage(false);
     }
 
     useEffect(() => {
@@ -83,11 +80,8 @@ const ChatRow = ({ matchedDetails }) => {
                 } else {
                     console.log("No such document!");
                 }
-                setLoadingProfile(false);
-            } else {
-                console.log("matched_user might be empty or doesn't have enough items!");
-                setLoadingProfile(false);
-            }
+            } 
+            
         }
 
         fetchData();
@@ -97,12 +91,10 @@ const ChatRow = ({ matchedDetails }) => {
     //add useEffect that fetches user info from id and pass it into params
 
     return (
-        !loadingMessage && !loadingProfile && (
             <View style={{ padding: 10, width: "95%" }}>
                 <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Message", {
                     matchedDetails, profile
                 })}>
-                    {/* {!read ? <UnreadHighlighter/>:<View style={{padding:15}}></View>} */}
                     {profilePic ? (
                         <Image style={{ height: 60, width: 60, borderRadius: 50, borderWidth: !read ? 3 : 1, borderColor: "#00BFFF" }}
                             source={{ uri: profilePic }} />
@@ -110,11 +102,9 @@ const ChatRow = ({ matchedDetails }) => {
                         <Image style={{ height: 60, width: 60, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={require("../images/account.jpeg")} />
                     )
                     }
-                    {/* source = {{uri:matchedUserInfo[1]?.images[0]}} */}
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
                             <Text style={{ fontWeight: "bold", fontSize: 20, paddingLeft: 10, paddingBottom: 5, color: "white" }}>{name}</Text>
-                            {/* {matchedUserInfo[1]?.displayName} */}
                             {!read ? (
                                 <Text style={{ paddingLeft: 10, color: "white", fontWeight: "bold" }}>{lastMessage || "Say Hi!"}</Text>
                             ) : (
@@ -128,7 +118,6 @@ const ChatRow = ({ matchedDetails }) => {
                     </View>
                 </TouchableOpacity>
             </View>
-        )
     )
 
 

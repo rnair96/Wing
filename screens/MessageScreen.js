@@ -8,6 +8,7 @@ import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
+import * as Sentry from "@sentry/react";
 
 const MessageScreen = () => {
 
@@ -66,8 +67,20 @@ const MessageScreen = () => {
 
     const userName = user.displayName.split(" ")[0];
 
+    Sentry.captureMessage(`does profile have token at message? ${profile.token}`)
+    console.log(`Does profile token exist at message? ${profile.token}`)
+
     if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
+
       const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
+
+      Sentry.captureMessage(`sending message token to ${profile.token}`)
+      Sentry.captureMessage(`sending message details ${messageDetails}`)
+      Sentry.captureMessage(`sending message from ${userName}`)
+
+      console.log(`sending message token to ${profile.token}`)
+      console.log(`sending message details ${messageDetails}`)
+      console.log(`sending message from ${userName}`)
   
       sendPush(profile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
 

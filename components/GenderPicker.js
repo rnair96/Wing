@@ -6,7 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 const GenderPicker = ({gender, setGender, both_boolean}) => {
 // create a 
     return (
-      <View style={{height:200, backgroundColor:"white", borderRadius:10}}>
+      <View style={{height:200, backgroundColor:"white", borderRadius:10, marginBottom:20}}>
         {both_boolean ? (
           <Picker
           style={{width:150, height:150}}

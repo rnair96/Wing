@@ -5,32 +5,36 @@ import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 // import UniversityPicker from '../components/UniversityPicker';
-import ClassLevelPicker from '../components/ClassLevelPicker';
+// import ClassLevelPicker from '../components/ClassLevelPicker';
 import Header from '../Header';
-import GradYearPicker from '../components/GradYearPicker';
+// import GradYearPicker from '../components/GradYearPicker';
 import YNRadioButton from '../components/YNRadioButton';
+import ImageUpload from '../components/ImageUpload';
+
 
 
 const StudentSetupScreen = () => {
     const { user } = useAuth();
     const [college, setCollege] = useState(null);
-    const [classlevel, setClassLevel] = useState("Undergraduate");
-    const [grad_year, setGradYear] = useState("2027");
+    // const [classlevel, setClassLevel] = useState("Undergraduate");
+    // const [grad_year, setGradYear] = useState("2027");
     const [universityPreference, setUniversityPreference] = useState("Yes");
+    const [url1, setUrl1] = useState(null);
+    const [url2, setUrl2] = useState(null);
+    const [url3, setUrl3] = useState(null);
 
     const navigation = useNavigation();
 
-    const incompleteform = !college || !classlevel;
+    const incompleteform = !college || !url1 || !url2 || !url3;;
 
     const updateUserProfile = () => {
         updateDoc(doc(db, global.users, user.uid), {
             university_student: {
-                class_level: classlevel,
-                grad_year: grad_year,
                 status: "active"
             },
             school: college,
-            universityPreference: universityPreference
+            universityPreference: universityPreference,
+            images: [url1, url2, url3]
         }).then(() => {
 
             navigation.navigate("SetUp3")
@@ -44,7 +48,7 @@ const StudentSetupScreen = () => {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1, backgroundColor:"black"}}
+            style={{ flex: 1, backgroundColor: "black" }}
             keyboardVerticalOffset={15}>
             <TouchableWithoutFeedback
             // onPress={Keyboard.dismiss()}
@@ -53,11 +57,20 @@ const StudentSetupScreen = () => {
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", paddingBottom: 50 }}>
 
                         <SafeAreaView>
-                            <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account Setup 2/5"} />
+                            <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account Setup 2/3"} />
                         </SafeAreaView>
 
+                        <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
+                        {/* <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text> */}
 
-                        <View style={{alignItems: "center" }}>
+                        <View style={{ flexDirection: "row", padding: 20, marginBottom:20 }}>
+                            <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
+                            <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
+                            <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
+                        </View>
+
+
+                        {/* <View style={{ alignItems: "center" }}> */}
                             <Text style={styles.formTitle}>Enter The University You Are Currently Attending</Text>
                             {/* <UniversityPicker university_chosen={college} setUniversity={setCollege} /> */}
                             <TextInput
@@ -65,10 +78,10 @@ const StudentSetupScreen = () => {
                                 onChangeText={setCollege}
                                 placeholder={'I.e American University'}
                                 placeholderTextColor={"grey"}
-                                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
-                        </View>
+                                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white", marginBottom:20 }} />
+                        {/* </View> */}
 
-                        <View style={{ padding: 20, alignItems: "center" }}>
+                        {/* <View style={{ padding: 20, alignItems: "center" }}>
                             <Text style={styles.formTitle}>Select Your Class Level</Text>
                             <ClassLevelPicker selectedLevel={classlevel} setSelectedLevel={setClassLevel} />
                         </View>
@@ -76,11 +89,11 @@ const StudentSetupScreen = () => {
                         <View style={{ padding: 20, alignItems: "center" }}>
                             <Text style={styles.formTitle}>Select Your Graduation Year</Text>
                             <GradYearPicker selectedYear={grad_year} setSelectedYear={setGradYear} />
-                        </View>
+                        </View> */}
 
-                        <View style={{ padding: 20, alignItems: "center" }}>
+                        <View style={{ padding: 20, alignItems: "center", marginBottom:20 }}>
                             <Text style={styles.formTitle}>Join Wing University?</Text>
-                            <Text style={{ padding: 5, color:"white" }}>{`(A space to exclusively match with other University students. You can change this setting later)`}</Text>
+                            <Text style={{ padding: 5, color: "white" }}>{`(A space to exclusively match with other University students. You can change this setting later)`}</Text>
                             <YNRadioButton selectedOption={universityPreference} setSelectedOption={setUniversityPreference} />
                         </View>
 

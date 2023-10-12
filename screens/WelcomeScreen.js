@@ -86,9 +86,9 @@ const WelcomeScreen = () => {
                 </View>
                 <Text style={styles.tutorialText}>Responding to a Request will move that user to your Active Chats and create a new chat thread.</Text>
                 <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/request_response.jpg")} />
-                <Text style={styles.boldtext}>3. Local Events & Adventures</Text>
-                <Text style={styles.tutorialText}>Access our discounted deals with bars, restuarants, events and other local establishments that you can explore with your Wing!</Text>
-                <Text style={styles.tutorialText}>Simply check the Announcements thread in your Active Chats to take advantage of the latest deals.</Text>
+                <Text style={styles.boldtext}>3. Local Missions & Events</Text>
+                <Text style={styles.tutorialText}>Get exclusive access to promotional deals with bars, restuarants, events and other local establishments that you can explore with your Wing!</Text>
+                <Text style={styles.tutorialText}>Simply check the News & Promos thread in your Active Chats to take advantage of the latest deals.</Text>
                 <Image style={{ height: 300, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.jpg")} />
                 <Text style={styles.boldtext}>4. More Options</Text>
                 <Text style={styles.tutorialText}>To edit and view your own profile,</Text>

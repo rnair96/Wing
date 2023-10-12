@@ -188,7 +188,7 @@ const AccountScreen = () => {
                             onChangeText={setPassword}
                             placeholder='**********'
                             secureTextEntry
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin:20}} />
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin:20, backgroundColor:"white"}} />
                         <TouchableHighlight
                             // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             style={styles.opacityStyle}

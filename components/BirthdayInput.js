@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import { View, TextInput } from 'react-native'
+import React, {useState} from 'react'
+import { View, TextInput, Text } from 'react-native'
 
 
 const BirthdayInput = ({setAge, birthdate, setBirthDate}) => {
-    // const [birthday, setBirthday] = useState();
+    const [inputvalue, setInputValue] = useState(birthdate);
 
     function handleBirthdayChange(text) {
-      console.log("test",text)
+      setInputValue(text);
         const dateRegex = /^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/;
         if (dateRegex.test(text)) {
-            setBirthDate(text);
+          setBirthDate(text);
             const parts = text.split('/');
             const reformattedDate = `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
             const birthDate = new Date(reformattedDate);
@@ -34,8 +34,8 @@ const BirthdayInput = ({setAge, birthdate, setBirthDate}) => {
       <View>
         <TextInput 
           placeholder="MM/DD/YYYY" 
-          value={birthdate} 
-          style={{fontSize:15, alignItems:"center", borderWidth:2, borderColor:"grey", padding:10, borderRadius:15, color:"white"}}
+          value={inputvalue} 
+          style={{fontSize:15, alignItems:"center", borderWidth:2, borderColor:"grey", padding:10, borderRadius:15, color:"white", marginBottom:10}}
           placeholderTextColor={"grey"} 
           onChangeText={handleBirthdayChange}/>
       </View>

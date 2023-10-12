@@ -24,10 +24,11 @@ const express = require("express");
 
 admin.initializeApp();
 
-const fetchFunction = express();
-const fetchFunctionDev = express();
+const functionCall = express();
+
 
 const sendPush = async (token, title, body, data) => {
+  console.log("sending push");
   try {
     const response = await fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
@@ -44,6 +45,8 @@ const sendPush = async (token, title, body, data) => {
     });
 
     const result = await response.json();
+
+    console.log("result is gotten", result);
 
     if (result.errors) {
       console.log(`Failed to send push notification: ${result.errors}`);
@@ -76,6 +79,8 @@ const sendPushBatch = async (tokens, title, body, data) => {
 
     const result = await response.json();
 
+    console.log("batch result is gotten", result);
+
     if (result.some((res) => res.status === "error")) {
       console.log("Some notifications failed:", result);
     }
@@ -87,13 +92,19 @@ const sendPushBatch = async (tokens, title, body, data) => {
   }
 };
 
-// const env = functions.config().env.name;
-// const "users" = env === "dev" ? "users_test" : "users";
 
 exports.onSwipe = functions.firestore
     .document("users/{userId}/swipes/{swipeId}")
     .onCreate(async (snap, context) => {
     // Get the ID of the user who was swiped on
+      const isResponse = snap.data().isResponse;
+
+      if (isResponse) {
+        console.log("The latest swipe is a response and not a request.");
+        return;
+      }
+
+
       const swipedUserId = snap.data().id;
       const message = snap.data().message;
       const timestamp = snap.data().timeSwiped;
@@ -118,21 +129,36 @@ exports.onSwipe = functions.firestore
       const userDoc = admin.firestore().collection("users")
           .doc(swipedUserId);
 
-      const userSnapshot = await userDoc.get();
+      const userSwipingDoc = admin.firestore().collection("users")
+          .doc(swiperId);
 
-      if (!userSnapshot.exists) {
+      const userSnapshot = await userDoc.get();
+      const userSwipingsnap = await userSwipingDoc.get();
+
+      if (!userSnapshot.exists || !userSwipingsnap.exists) {
         console.log("Given user not found");
         return;
       }
 
       const user = userSnapshot.data();
 
+      const swipingUser = userSwipingsnap.data();
+
       if (user.token && user.token !== "token" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
-        const messageDetails = {"requestDetails": request, "profile": user};
+        const messageDetails = {
+          "requestDetails": request,
+          "profile": swipingUser,
+        };
 
-        sendPush(user.token, `New Request from ${user.displayName}`,
+        console.log("sending push notification to swiped user", swipedUserId);
+        console.log("sending message details", messageDetails);
+        console.log("sending request message from", swipingUser.displayName);
+        console.log("sending request message to token", user.token);
+
+
+        sendPush(user.token, `New Request from ${swipingUser.displayName}`,
             message, {type: "request", message: messageDetails});
       }
 
@@ -143,7 +169,14 @@ exports.onSwipe = functions.firestore
 exports.onSwipeDev = functions.firestore
     .document("users_test/{userId}/swipes/{swipeId}")
     .onCreate(async (snap, context) => {
-    // Get the ID of the user who was swiped on
+      const isResponse = snap.data().isResponse;
+
+      if (isResponse) {
+        console.log("The latest swipe is a response and not a request.");
+        return;
+      }
+
+      // Get the ID of the user who was swiped on
       const swipedUserId = snap.data().id;
       const message = snap.data().message;
       const timestamp = snap.data().timeSwiped;
@@ -168,21 +201,36 @@ exports.onSwipeDev = functions.firestore
       const userDoc = admin.firestore().collection("users_test")
           .doc(swipedUserId);
 
-      const userSnapshot = await userDoc.get();
+      const userSwipingDoc = admin.firestore().collection("users_test")
+          .doc(swiperId);
 
-      if (!userSnapshot.exists) {
+      const userSnapshot = await userDoc.get();
+      const userSwipingsnap = await userSwipingDoc.get();
+
+      if (!userSnapshot.exists || !userSwipingsnap.exists) {
         console.log("Given user not found");
         return;
       }
 
       const user = userSnapshot.data();
 
+      const swipingUser = userSwipingsnap.data();
+
       if (user.token && user.token !== "token" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
-        const messageDetails = {"requestDetails": request, "profile": user};
+        const messageDetails = {
+          "requestDetails": request,
+          "profile": swipingUser,
+        };
 
-        sendPush(user.token, `New Request from ${user.displayName}`,
+        console.log("sending push notification to swiped user", swipedUserId);
+        console.log("sending message details", messageDetails);
+        console.log("sending request message from", swipingUser.displayName);
+        console.log("sending request message to token", user.token);
+
+
+        sendPush(user.token, `New Request from ${swipingUser.displayName}`,
             message, {type: "request", message: messageDetails});
       }
 
@@ -190,7 +238,7 @@ exports.onSwipeDev = functions.firestore
     });
 
 
-fetchFunction.get("/getFilteredUsers/:id", async (req, res) => {
+functionCall.get("/getFilteredUsers/:id", async (req, res) => {
   if (req.method !== "GET") {
     res.status(405).send("Method Not Allowed"); // Only allow GET requests
     return;
@@ -319,9 +367,8 @@ fetchFunction.get("/getFilteredUsers/:id", async (req, res) => {
   }
 });
 
-exports.fetchCards = functions.https.onRequest(fetchFunction);
 
-fetchFunctionDev.get("/getFilteredDevUsers/:id", async (req, res) => {
+functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
   if (req.method !== "GET") {
     res.status(405).send("Method Not Allowed"); // Only allow GET requests
     return;
@@ -450,7 +497,6 @@ fetchFunctionDev.get("/getFilteredDevUsers/:id", async (req, res) => {
   }
 });
 
-exports.fetchCardsDev = functions.https.onRequest(fetchFunctionDev);
 
 exports.sendAnnouncementNotification = functions.firestore
     .document("announcements/{announcementId}")
@@ -596,3 +642,66 @@ exports.sendAnnouncementNotificationDev = functions.firestore
       }
       return null;
     });
+
+
+functionCall.delete("/deleteUserDev/:id", async (req, res) => {
+  console.log("Initiating delete...");
+
+  const userId = req.params.id.replace(/:/g, "");
+  // Get user id from query parameter
+  if (!userId) {
+    res.status(400).send("User ID is required");
+    return;
+  }
+
+  console.log("delete called on", userId);
+
+  const userDocRef = admin.firestore().collection("users_test").doc(userId);
+
+  try {
+    console.log("deleting collections");
+    const collectionsToDelete = ["requests", "swipes", "passes"];
+    for (const collection of collectionsToDelete) {
+      const snapshot = await userDocRef.collection(collection).get();
+      if (!snapshot.empty) {
+        const batch = admin.firestore().batch();
+        snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+        await batch.commit();
+        console.log("Deleted", collection);
+      } else {
+        console.log(`No documents found in ${collection}. Skipping deletion.`);
+      }
+    }
+
+    // Delete the three images in storage
+    console.log("deleting images");
+
+    const bucket = admin.storage().bucket();
+
+    for (let i = 0; i < 3; i++) {
+      const imagePath = `images/${userId}/${i}`;
+      try {
+        await bucket.file(imagePath).delete();
+        console.log("Deleted image:", imagePath);
+      } catch (err) {
+        if (err.code === 404) {
+          console.log(`Image not found: ${imagePath}. Skipping deletion.`);
+        } else {
+          console.error(`Error deleting image ${imagePath}:`, err);
+        }
+      }
+    }
+
+    console.log("deleting user doc");
+
+    // Delete the user document from 'users' collection
+    await userDocRef.delete();
+
+    res.status(200).send("OK");
+  } catch (error) {
+    console.error("Error deleting user", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+exports.functionCall = functions.https.onRequest(functionCall);

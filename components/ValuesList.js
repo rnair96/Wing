@@ -9,8 +9,16 @@ const ValuesList = ({selectedValues, setSelectedValues}) => {
     'Responsibility', 'Perseverance', 'Courage', 'Kindness', 
     'Humility', 'Generosity', 'Gratitude', 'Optimism', 
     'Creativity', 'Wisdom', 'Leadership', 'Teamwork', 
-    'Adaptability', 'Curiosity', 'Passion', 'Ambition'
-  ];
+    'Adaptability', 'Curiosity', 'Passion', 'Ambition',
+    'Empathy', 'Determination', 'Justice', 'Fairness', 
+    'Patience', 'Discipline', 'Diligence', 'Authenticity',
+    'Consistency', 'Altruism', 'Harmony', 'Excellence', 
+    'Self-control', 'Sincerity', 'Forgiveness', 'Resilience', 
+    'Open-mindedness', 'Accountability', 'Appreciation',
+    'Tolerance', 'Mindfulness', 'Inclusivity', 'Dependability',
+    'Punctuality','Positivity', 'Vigilance', 'Devotion', 'Dedication'
+];
+
 
   const toggleValue = (value) => {
     if (selectedValues.includes(value)) {

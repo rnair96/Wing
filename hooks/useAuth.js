@@ -1,16 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider} from "firebase/auth";
+import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { auth } from '../firebase';
-import { deleteDoc, writeBatch, getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
-import { db, storage } from '../firebase';
+import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
+import { db } from '../firebase';
 import Constants from 'expo-constants';
-import { deleteObject, ref, listAll } from "firebase/storage";
 import { ImageBackground } from 'react-native';
-// import { v4 as uuidv4 } from 'uuid';
-// import 'react-native-get-random-values';
-// import * as Sentry from "@sentry/react";
+
 
 
 
@@ -21,15 +18,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
 
-  const [loadingImages, setLoadingImages] = useState(false);
-  const [loadingMatches, setLoadingMatches] = useState(false);
-  const [loadingSwipes, setLoadingSwipes] = useState(false);
-  const [loadingPasses, setLoadingPasses] = useState(false);
-  const [loadingRequests, setLoadingRequests] = useState(false);
-  const [loadingUser, setLoadingUser] = useState(false);
 
-  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers, 
-    devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards } = Constants.expoConfig.extra
+  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers,
+    devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards, prodDeleteUser, devDeleteUser } = Constants.expoConfig.extra
 
 
   if (__DEV__) {
@@ -38,12 +29,14 @@ export const AuthProvider = ({ children }) => {
     global.matches = devMatches;
     global.announcements = devAnnouncements;
     global.fetchcards = devFetchCards;
+    global.deleteuser = devDeleteUser;
   } else {
     console.log('prod user signin, setting prod environment');
     global.users = prodUsers;
     global.matches = prodMatches;
     global.announcements = prodAnnouncements;
     global.fetchcards = prodFetchCards;
+    global.deleteuser = prodDeleteUser;
 
   }
 
@@ -63,11 +56,9 @@ export const AuthProvider = ({ children }) => {
     onAuthStateChanged(auth, (authuser) => {
       if (authuser) {
         //logged in
-        console.log("logged in")
         setUser(authuser);
       } else {
         //Not logged in...
-        console.log("not logged in...")
         setUser(null);
       }
 
@@ -309,7 +300,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const deleteUserAuth = async () => {
-    if (user && !loadingUser) {
+    if (user) {
       try {
         await user.delete(); // `user` is from your state, assuming it's the currently logged-in user.
         console.log("User deleted from Firebase Auth successfully");
@@ -318,10 +309,6 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error("Error deleting user from Firebase Auth:", error);
       }
-    } else if (loadingUser) {
-      console.log("not finished deleting doc, delay");
-      await delay(3000);
-      deleteUserAuth();
     } else {
       console.log("no user found");
     }
@@ -347,11 +334,10 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   const deleteAll = async (ispass, password) => {
+    setLoading(true);
     let isauthenticated = false;
     if (ispass) {
       console.log("authenticating...")
@@ -360,150 +346,46 @@ export const AuthProvider = ({ children }) => {
     }
     if ((ispass && isauthenticated) || !ispass) {
       console.log("successfully authenticad user for delete")
-      try {
-        setLoading(true);
-        await deleteInfo()
 
-        console.log("All Info deleted");
-        setLoading(false);
+      const functionURL = `${global.deleteuser}${user.uid}`
 
-      } catch (error) {
-        console.error('There was an error', error);
-      }
-    }
-  }
+      console.log("function url", functionURL);
 
-  const deleteInfo = async () => {
-    setLoadingImages(true);
-    setLoadingMatches(true);
-    setLoadingPasses(true);
-    setLoadingSwipes(true);
-    setLoadingRequests(true);
-    setLoadingUser(true);
-
-    await Promise.all([
-      deleteStoredImages(),
-      deleteMatches(),
-      deleteSwipeHistory("swipes"),
-      deleteSwipeHistory("passes"),
-      deleteSwipeHistory("requests"),
-      deleteUser()
-    ]);
-
-    deleteUserAuth()
-  }
-
-  const deleteUser = async () => {
-    console.log("loading vars", loadingMatches, loadingPasses, loadingSwipes, loadingImages)
-    if (!loadingMatches && !loadingPasses && !loadingSwipes && !loadingImages && !loadingRequests) {
-      await deleteDoc(doc(db, global.users, user.uid)).then(() => {
-        // deleteUserAuth();
-        console.log("User has been deleted successfully from DB.")
+      fetch(functionURL, {
+        method: 'DELETE'
       })
-        .catch(error => {
-          console.log('Error deleting user', error);
+        // .then(response => response.text())  // Get the response text
+        // .then(text => {
+        //   try {
+        //     // Try to parse the response text as JSON
+        //     return JSON.parse(text);
+        //   } catch (err) {
+        //     // If it's not JSON, throw the raw text
+        //     throw text;
+        //   }
+        // })
+        .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+        .then(data => {
+          // Check if the parsed response is OK
+          // if (data.error) {
+          //   throw new Error(data.error);
+          // }
+          console.log("user deleted", data);
+          deleteUserAuth();
+          setLoading(false);
         })
-
-      setLoadingUser(false);
-    } else {
-      console.log("must delay to finish delete for user");
-      await delay(3000);
-      deleteUser();
-    }
-  }
-
-  const deleteMatches = async () => {
-    console.log("deleting matches");
-    const batch = writeBatch(db);
-    const matches = []
-    await getDocs(collection(db, global.matches)).then((snapshot) => {
-      snapshot.docs.filter((doc) => doc.id.includes(user.uid)).map((doc) => matches.push(doc.id))
-    })
-
-    if (matches.length > 0) {
-
-      matches.map((matchID) => {
-        batch.delete(doc(db, global.matches, matchID))
-      })
-
-      await batch.commit().then(() => {
-        console.log('Matches deleted successfully.');
-      }).catch((error) => {
-        console.error('Error deleting matches: ', error);
-      });
-    }
-    setLoadingMatches(false);
-  }
-
-
-  const deleteSwipeHistory = async (swipe_collection) => {
-    console.log("deleting ", swipe_collection, " history")
-    const batch = writeBatch(db);
-    const history = []
-    await getDocs(collection(db, global.users, user.uid, swipe_collection)).then((snapshot) => {
-      snapshot.docs.map((doc) => history.push(doc.id))
-    })
-
-
-    if (history.length > 0) {
-      history.map((historyID) => {
-        batch.delete(doc(db, global.users, user.uid, swipe_collection, historyID))
-      })
-
-      await batch.commit().then(() => {
-        console.log(swipe_collection, 'History deleted successfully.');
-      }).catch((error) => {
-        console.error('Error deleting', swipe_collection, 'history: ', error);
-      });
-    }
-
-    if (swipe_collection === "swipes") {
-
-      setLoadingSwipes(false);
-
-    } else if (swipe_collection === "passes") {
-
-      setLoadingPasses(false);
-
-    } else {
-
-      setLoadingRequests(false);
-
-    }
-
-  }
-
-  const deleteStoredImages = async () => {
-    console.log("Deleting images")
-
-    for (let i = 0; i < 3; i++) {
-      const folderName = `images/${user.uid}/${i}/`
-      const folderRef = ref(storage, folderName);
-
-      listAll(folderRef)
-        .then((result) => {
-          // Loop through each file and delete it
-          result.items.forEach((fileRef) => {
-            deleteObject(fileRef).then(() => {
-              console.log(`File ${fileRef.name} deleted successfully`);
-            }).catch((error) => {
-              console.error(`Error deleting file ${fileRef.name}: ${error}`);
-            });
+        .catch(error => {
+          console.error("Error deleting user", error);
+          setLoading(false);
+          //add sentry capture
           });
 
-          // Once all files are deleted, delete the folder itself
-          // deleteObject(folderRef).then(() => {
-          //     console.log(`Folder ${folderName} deleted successfully`);
-          // }).catch((error) => {
-          //     console.error(`Error deleting folder ${folderName}: ${error}`);
-          // });
-        })
-        .catch((error) => {
-          console.error(`Error listing files in folder ${folderName}: ${error}`);
-        });
-
     }
-    setLoadingImages(false);
   }
 
 
