@@ -83,18 +83,18 @@ export const ProfileSwipeScreen = () => {
                                         (
                                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
                                                 <Image style={{ height: 25, width: 25 }} source={require("../images/book.png")} />
-                                                {card.item.university_student?.class_level && card.item.university_student?.class_level!==null && card.item.university_student?.class_level!=="" && card.item.university_student?.grad_year && card.item.university_student?.grad_year !== null && card.item.university_student?.grad_year !== ""?
-                                                        (
-                                                            <View style={{ flexDirection: "row" }}>
+                                                {card.item.university_student?.class_level && card.item.university_student?.class_level !== null && card.item.university_student?.class_level !== "" && card.item.university_student?.grad_year && card.item.university_student?.grad_year !== null && card.item.university_student?.grad_year !== "" ?
+                                                    (
+                                                        <View style={{ flexDirection: "row" }}>
                                                             <Text style={{ color: "white" }}>{card.item.university_student.class_level}, </Text>
                                                             <Text style={{ color: "white" }}>Class of {card.item.university_student.grad_year}</Text>
                                                         </View>
-                                                        ) : (
-                                                <View style={{ flexDirection: "row" }}>
-                                                    <Text style={{ color: "white" }}>Level --, </Text>
-                                                    <Text style={{ color: "white" }}>Class of --</Text>
-                                                </View>
-                                                        )}
+                                                    ) : (
+                                                        <View style={{ flexDirection: "row" }}>
+                                                            <Text style={{ color: "white" }}>Level --, </Text>
+                                                            <Text style={{ color: "white" }}>Class of --</Text>
+                                                        </View>
+                                                    )}
                                             </View>
                                         ) : (
                                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
@@ -151,37 +151,40 @@ export const ProfileSwipeScreen = () => {
                                 <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                             </View>
 
-                            {card.item?.medals && card.item.medals.length > 2 ? (
-                                <View style={{ flexDirection: "column" }}>
-                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>{card.item.medals[0]}</Text>
+                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10 }}>
+                                <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
+                                {card.item?.medals && card.item.medals.length > 2 ? (
+                                    <View style={{ flexDirection: "column" }}>
+                                        <View style={{ flexDirection: "row", padding: 15, marginRight: 7 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.medals[0]}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", padding: 15, marginRight: 7 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.medals[1]}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", padding: 15, marginRight: 7 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.medals[2]}</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>{card.item.medals[1]}</Text>
+                                ) : (
+                                    <View style={{ flexDirection: "column" }}>
+                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>-- --</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>-- --</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                            <Text style={styles.cardtext}>-- --</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>{card.item.medals[2]}</Text>
-                                    </View>
-                                </View>
-                            ) : (
-                                <View style={{ flexDirection: "column" }}>
-                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>-- --</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>-- --</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>-- --</Text>
-                                    </View>
-                                </View>
-                            )}
+                                )}
+                            </View>
 
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center" }}>
                                 <Image style={{ margin: 10, ...styles.imagecontainer }} source={{ uri: card.item.images[2] }} />

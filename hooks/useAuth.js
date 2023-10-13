@@ -228,9 +228,11 @@ export const AuthProvider = ({ children }) => {
         const errorMessage = error.message;
         console.log("error in log in", errorMessage);
 
-        if (errorCode === 'auth/wrong-password' || errorCode === 'auth/user-not-found' || errorCode === 'auth/invalid-email') {
+        if (errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-email') {
           alert("Login was incorrect. Please try again.");
-        } else {
+        } else if(errorCode === 'auth/user-not-found' ){
+          alert("Account was not found. Please create one.");
+        }else {
           alert(errorMessage);
         }
 
@@ -314,6 +316,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       console.log("no user found");
     }
+    setLoading(false);
   }
 
   const authenticateUserForDelete = async (password) => {
@@ -387,7 +390,7 @@ export const AuthProvider = ({ children }) => {
           // }
           console.log("user deleted", data);
           deleteUserAuth();
-          setLoading(false);//perhaps move it to the end of deleteUserAuth
+          // setLoading(false);//perhaps move it to the end of deleteUserAuth
         })
         .catch(error => {
           console.error("Error deleting user", error);

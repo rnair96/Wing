@@ -134,18 +134,20 @@ export const ProfileViewScreen = () => {
                                     </View>
                                     <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                 </View>
-
+                                
+                                <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10 }}>
+                                <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
                                 {card.item?.medals && card.item.medals.length > 2 ? (
                                     <View style={{ flexDirection: "column" }}>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                        <View style={{ flexDirection: "row", padding: 15, marginRight: 7 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>{card.item.medals[0]}</Text>
                                         </View>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                        <View style={{ flexDirection: "row", padding: 15, marginRight: 7 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>{card.item.medals[1]}</Text>
                                         </View>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                        <View style={{ flexDirection: "row", padding: 15, marginRight: 7 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>{card.item.medals[2]}</Text>
                                         </View>
@@ -166,6 +168,7 @@ export const ProfileViewScreen = () => {
                                         </View>
                                     </View>
                                 )}
+                                </View>
 
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center" }}>
                                     <Image style={{ margin: 10, ...styles.imagecontainer }} source={{ uri: card.item.images[2] }} />

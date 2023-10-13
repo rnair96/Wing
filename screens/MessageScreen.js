@@ -81,7 +81,7 @@ const MessageScreen = () => {
       console.log(`sending message token to ${profile.token}`)
       console.log(`sending message details ${messageDetails}`)
       console.log(`sending message from ${userName}`)
-  
+
       sendPush(profile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
 
     }
@@ -115,10 +115,13 @@ const MessageScreen = () => {
                   <SenderMessage key={message.id} message={message} />
                 ) : (
                   <View style={{ padding: 10, maxWidth: 250, marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
-                    <Image
-                      style={{ height: 50, width: 50, borderRadius: 50 }}
-                      source={{ uri: profile.images[0] }}
-                    />
+                    {profile ? (
+                      <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                        source={{ uri: profile.images[0] }} />
+                    ) : (
+                      <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                        source={require("../images/account.jpeg")} />
+                    )}
                     <RecieverMessage key={message.id} message={message} />
 
                   </View>

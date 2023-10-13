@@ -19,17 +19,18 @@ const RequestMessageScreen = () => {
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
     const [secondModal, setSecondModal] = useState(false);
     const [message, setMessage] = useState(null);
+    const name = profile ? profile.displayName : "Account User";
     const navigation = useNavigation();
     const batch = writeBatch(db);
 
     useEffect(() => {
         if (!requestDetails.read) {
             console.log("updating read")
-          updateDoc(doc(db, global.users, user.uid, "requests", requestDetails.id), {
-            read: true,
-          })
+            updateDoc(doc(db, global.users, user.uid, "requests", requestDetails.id), {
+                read: true,
+            })
         }
-      }, [])
+    }, [])
 
 
     const matchThenMove = async () => {
@@ -150,18 +151,26 @@ const RequestMessageScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
-            <Header title={profile.displayName} />
+            <Header title={name} />
 
 
             <View style={{ padding: 10, maxWidth: 250, marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
-                <Image
+                {/* <Image
                     style={{ height: 50, width: 50, borderRadius: 50 }}
                     source={{ uri: profile.images[0] }}
-                />
+                /> */}
+                {profile ? (
+                    <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                        source={{ uri: profile.images[0] }} />
+                ) : (
+                    <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                        source={require("../images/account.jpeg")} />
+                )}
                 <RecieverMessage message={requestDetails} />
 
             </View>
-
+            
+            {profile ? (
             <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileSwipe", { card: profile })}>
                 <View style={{ alignItems: "center", padding: 20 }}>
                     <Text style={{ color: "white" }}>Mission: </Text>
@@ -208,17 +217,23 @@ const RequestMessageScreen = () => {
                     <Text style={{ color: "white", fontSize: 15, left: 5 }}>{profile.location}</Text>
                 </View>
             </TouchableOpacity>
+            ):(
+                <View style={{justifyContent: "center", alignItems:"center" ,width:"100%", height:"50%"}}>
+                <Text style={{fontSize:20, color:"white"}}>User profile no longer exists</Text>
+                </View>
+            )}
 
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", bottom: 20 }}>
                 <TouchableOpacity
                     style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#FF5864", width: "50%" }}
                     onPress={() => setSecondModal(true)}>
-                        <Text style={{ color: "white", fontWeight:"bold"}}>Delete</Text>
+                    <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
                 </TouchableOpacity>
+                {profile &&
                 <TouchableOpacity style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#32de84", width: "50%" }}
-                onPress={() => setMessageModalVisible(true)}>
-                        <Text style={{ color: "white", fontWeight:"bold"}}>Respond & Match</Text>
-                </TouchableOpacity>
+                    onPress={() => setMessageModalVisible(true)}>
+                    <Text style={{ color: "white", fontWeight: "bold" }}>Respond & Match</Text>
+                </TouchableOpacity>}
             </View>
             <Modal
                 animationType="slide"
