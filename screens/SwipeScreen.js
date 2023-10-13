@@ -4,8 +4,9 @@ import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { Entypo } from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
+import { getIdToken, getCurrentUser, } from "firebase/auth";
 import { getDocs, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit, orderBy } from "firebase/firestore";
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
 
@@ -76,8 +77,16 @@ const SwipeScreen = ({ loggedProfile }) => {
                 const functionURL = `${global.fetchcards}${user.uid}`;
                 // const functionURL = `https://us-central1-mission-partner-app.cloudfunctions.net/functionCall/getFilteredDevUsers/:${user.uid}`
                 //make link an env variable
+                // const idToken = await getIdToken(getCurrentUser(auth), true);
 
                 fetch(functionURL)
+                //     , {
+                //     method: 'GET',
+                //     headers: {
+                //       'Authorization': 'Bearer ' + idToken
+                //     }
+                //   }
+                //   )
                     // .then(response => response.text())  // Get the response text
                     // .then(text => {
                     //     try {

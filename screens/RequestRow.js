@@ -9,9 +9,9 @@ import UnreadHighlighter from '../components/UnreadHighlighter';
 
 const RequestRow = ({ requestDetails }) => {
 
-    const [lastMessage, setLastMessage] = useState();
-    const [loadingMessage, setLoadingMessage] = useState(true);
-    const [loadingProfile, setLoadingProfile] = useState(true);
+    const [lastMessage, setLastMessage] = useState("");
+    // const [loadingMessage, setLoadingMessage] = useState(true);
+    // const [loadingProfile, setLoadingProfile] = useState(true);
     const [timestamp, setTimeStamp] = useState();
     const [name, setName] = useState("Account User");
     const [profilePic, setProfilePic] = useState(null);
@@ -38,7 +38,7 @@ const RequestRow = ({ requestDetails }) => {
             setRead(data.read)
         }
 
-        setLoadingMessage(false);
+        // setLoadingMessage(false);
     }
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const RequestRow = ({ requestDetails }) => {
                 } else {
                     console.log("No such document!");
                 }
-                setLoadingProfile(false);
+                // setLoadingProfile(false);
         }
 
         fetchData();
@@ -68,7 +68,7 @@ const RequestRow = ({ requestDetails }) => {
     //add useEffect that fetches user info from id and pass it into params
 
     return (
-        !loadingMessage && !loadingProfile && (
+        // !loadingMessage && !loadingProfile && (
             <View style={{ padding: 10, width: "95%" }}>
                 <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("RequestMessage", {
                     requestDetails, profile
@@ -95,7 +95,7 @@ const RequestRow = ({ requestDetails }) => {
                 </TouchableOpacity>
             </View>
         )
-    )
+    // )
 
 
 }

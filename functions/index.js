@@ -92,6 +92,23 @@ const sendPushBatch = async (tokens, title, body, data) => {
   }
 };
 
+// async function verifyToken(req) {
+//   const authHeader = req.headers.authorization || "";
+//   const match = authHeader.match(/Bearer (.+)/);
+
+//   if (!match) {
+//     throw new Error("No ID token provided");
+//   }
+
+//   const idToken = match[1];
+
+//   try {
+//     const decodedToken = await admin.auth().verifyIdToken(idToken);
+//     return decodedToken.uid;
+//   } catch (error) {
+//     throw new Error("Invalid ID token");
+//   }
+// }
 
 exports.onSwipe = functions.firestore
     .document("users/{userId}/swipes/{swipeId}")
@@ -374,6 +391,9 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     return;
   }
 
+  // try {
+  //   console.log("verifying token");
+  //   const userId = await verifyToken(req);
   const userId = req.params.id.replace(/:/g, "");
   // Get user id from query parameter
   if (!userId) {
@@ -397,7 +417,7 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     let matchingUsersQuery = admin.firestore().collection("users_test")
         .where("gender", "==", userGender)
         .limit(1000);
-    // add limit to size
+      // add limit to size
 
     // Filter by university student preference
     if (user.university_student && user.universityPreference === "Yes") {
@@ -481,20 +501,25 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     console.log("filtering out incomplete profiles");
     const completeUsers = uniqueUsers.filter((user) => {
       return user.mission !== null &&
-        user.mission !== "" &&
-        user.medals && user.medals.length === 3 &&
-        user.images && user.images.length === 3;
+          user.mission !== "" &&
+          user.medals && user.medals.length === 3 &&
+          user.images && user.images.length === 3;
     });
 
     console.log("limiting to 30 profiles or less");
     const finalUsers = completeUsers.length > 30 ?
-      completeUsers.slice(0, 30) : completeUsers;
+        completeUsers.slice(0, 30) : completeUsers;
 
     res.status(200).json(finalUsers);
   } catch (error) {
     console.error("Error fetching filtered users: ", error);
     res.status(500).send("Internal Server Error");
   }
+  // } catch (error) {
+  //   console.error("Authentication error", error);
+  //   res.status(401).send("Unauthorized");
+  //   return;
+  // }
 });
 
 
@@ -687,23 +712,68 @@ functionCall.delete("/deleteUserDev/:id", async (req, res) => {
 
     // Delete each file
     for (const file of files) {
-      console.log("deleting image",file)
+      console.log("deleting image", file);
       await file.delete();
     }
 
-    // for (let i = 0; i < 3; i++) {
-    //   const imagePath = `images/${userId}/${i}`;
-    //   try {
-    //     await bucket.file(imagePath).delete();
-    //     console.log("Deleted image:", imagePath);
-    //   } catch (err) {
-    //     if (err.code === 404) {
-    //       console.log(`Image not found: ${imagePath}. Skipping deletion.`);
-    //     } else {
-    //       console.error(`Error deleting image ${imagePath}:`, err);
-    //     }
-    //   }
-    // }
+    console.log("deleting user doc");
+
+    // Delete the user document from 'users' collection
+    await userDocRef.delete();
+
+    res.status(200).send("OK");
+  } catch (error) {
+    console.error("Error deleting user", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+functionCall.delete("/deleteUser/:id", async (req, res) => {
+  console.log("Initiating delete in production...");
+
+  const userId = req.params.id.replace(/:/g, "");
+  // Get user id from query parameter
+  if (!userId) {
+    res.status(400).send("User ID is required");
+    return;
+  }
+
+  console.log("delete called on", userId);
+
+  const userDocRef = admin.firestore().collection("users").doc(userId);
+
+  try {
+    console.log("deleting collections");
+    const collectionsToDelete = ["requests", "swipes", "passes"];
+    for (const collection of collectionsToDelete) {
+      const snapshot = await userDocRef.collection(collection).get();
+      if (!snapshot.empty) {
+        const batch = admin.firestore().batch();
+        snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+        await batch.commit();
+        console.log("Deleted", collection);
+      } else {
+        console.log(`No documents found in ${collection}. Skipping deletion.`);
+      }
+    }
+
+    // Delete the three images in storage
+    console.log("deleting images");
+
+    const bucket = admin.storage().bucket();
+
+    const directoryPath = `images/${userId}/`;
+
+    // List files in the directory
+    const [files] = await bucket.getFiles({
+      prefix: directoryPath,
+    });
+
+    // Delete each file
+    for (const file of files) {
+      console.log("deleting image", file);
+      await file.delete();
+    }
 
     console.log("deleting user doc");
 

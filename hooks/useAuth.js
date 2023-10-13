@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, getIdToken, getCurrentUser } from "firebase/auth";
 import { auth } from '../firebase';
 import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -39,6 +39,8 @@ export const AuthProvider = ({ children }) => {
     global.deleteuser = prodDeleteUser;
 
   }
+
+
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: androidClientId,
@@ -349,8 +351,13 @@ export const AuthProvider = ({ children }) => {
 
       const functionURL = `${global.deleteuser}${user.uid}`
 
+      // const idToken = await getIdToken(getCurrentUser(auth), true);
+
       fetch(functionURL, {
         method: 'DELETE'
+        // headers: {
+        //   'Authorization': 'Bearer ' + idToken
+        // }
       })
         // .then(response => response.text())  // Get the response text
         // .then(text => {
@@ -380,7 +387,7 @@ export const AuthProvider = ({ children }) => {
           // }
           console.log("user deleted", data);
           deleteUserAuth();
-          setLoading(false);
+          setLoading(false);//perhaps move it to the end of deleteUserAuth
         })
         .catch(error => {
           console.error("Error deleting user", error);
