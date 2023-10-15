@@ -70,7 +70,7 @@ const MessageScreen = () => {
     Sentry.captureMessage(`does profile have token at message? ${profile.token}`)
     console.log(`Does profile token exist at message? ${profile.token}`)
 
-    if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
+    if (profile.token && profile.token !== "testing" && profile.token !== "not_granted") {
 
       const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
 

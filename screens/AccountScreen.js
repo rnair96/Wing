@@ -1,16 +1,17 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, ImageBackground } from 'react-native';
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, Switch} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import registerNotifications from '../lib/registerNotifications';
 
 
 const AccountScreen = () => {
     const { user, deleteAll, logout } = useAuth();
     const navigation = useNavigation();
-    // const [notifications, setNotifications] = useState(true);
+    const [notifications, setNotifications] = useState(true);
 
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -29,23 +30,45 @@ const AccountScreen = () => {
             if (profile?.university_student && profile.university_student.status === "active") {
                 setActiveStudent(true);
             }
+
+            if (profile.token === "testing" || profile.token === "not_granted") {
+                setNotifications(false);
+            }
         }
 
     }, [profile])
 
 
-    // const editNotifications = () => {
-    //     if(notifications){
-    //         console.log("Notifications set to false");
-    //         setNotifications(false);
+    const editNotifications = async () => {
+        if (notifications) {
+            console.log("Notifications set to false");
+            setNotifications(false);
+            updateDoc(doc(db, global.users, user.uid), {
+                token: "not_granted"
+            }).then(() => {
+                navigation.navigate("Home");
+                console.log("notifications restricted")
+            }).catch((error) => {
+                alert(error.message)
+            });
+            //really should create another field that stores permission seperately from token
 
-    //     }else{
-    //         console.log("Notifications set to true");
-    //         setNotifications(true);
+        } else {
+            console.log("Notifications set to true");
+            setNotifications(true);
+            const token = await registerNotifications();
+            updateDoc(doc(db, global.users, user.uid), {
+                token: token
+            }).then(() => {
+                navigation.navigate("Home");
+                console.log("new token set", token)
+            }).catch((error) => {
+                alert(error.message)
+            });
 
-    //     }
-    //     //update db for notifications of user
-    // }
+        }
+        //update db for notifications of user
+    }
 
     const updateEmail = () => {
         updateDoc(doc(db, global.users, user.uid), {
@@ -76,46 +99,59 @@ const AccountScreen = () => {
         });
     }
 
-    const handleModalDelete = async() => {
-       if( user.providerData[0].providerId === "password"){
-        setModalVisible(false);
-        setpwdModalVisible(true);
-       } else {
-        setModalVisible(false);
-        deleteAll(false);
-        // navigation.navigate("Login");
-       }
+    const handleModalDelete = async () => {
+        if (user.providerData[0].providerId === "password") {
+            setModalVisible(false);
+            setpwdModalVisible(true);
+        } else {
+            setModalVisible(false);
+            deleteAll(false);
+            // navigation.navigate("Login");
+        }
     }
 
 
     return (
-        <View style={{backgroundColor:"black", height:"100%"}}>
+        <View style={{ backgroundColor: "black", height: "100%" }}>
             <SafeAreaView>
-            <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account"} />
+                <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account"} />
             </SafeAreaView>
             <View style={{ height: "90%", width: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
 
+                <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Edit Push Notifications</Text>
+                    <Text style={{ fontSize: 12, margin: 10, color: "white" }}>Recieve notifications on messages, chat requests, and new matches?</Text>
+                    {/* <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200, backgroundColor: notifications? "red":"green" }} onPress={() => editNotifications()}>
+                            <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>{notifications?`Currently On.. Turn Off?`:`Currently Off.. Turn On?`}</Text>
+                        </TouchableOpacity> */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: "white", marginRight: 10 }}>{notifications ? "Yes" : "No"}</Text>
+                        <Switch
+                            trackColor={{ false: "red", true: "grey" }}
+                            thumbColor={notifications ? "white" : "grey"}
+                            onValueChange={editNotifications}
+                            value={notifications}
+                        />
+                    </View>
+                </View>
 
-                {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => editNotifications}>
-        <Text style={{textAlign:"center", fontSize: 15, fontWeight:"bold"}}>Edit Push Notifications</Text>
-        </TouchableOpacity> */}
 
                 {activeStudent && (
-                    <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "30%", width: "100%" }}>
-                        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Leave Wing-U?</Text>
-                        <Text style={{ fontSize: 12, margin: 10, color:"white" }}>Graduate Wing University and upgrade your profile and matching as a Professional!</Text>
+                    <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
+                        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Leave Wing-U?</Text>
+                        <Text style={{ fontSize: 12, margin: 10, color: "white" }}>Graduate Wing University and upgrade your profile and matching as a Professional!</Text>
                         <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200 }} onPress={() => updateUniversitySetting()}>
                             <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Yes, Upgrade to Professional</Text>
                         </TouchableOpacity>
                     </View>
                 )}
 
-                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white"}}>Contact Email</Text>
+                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Contact Email</Text>
                 <View style={{ flexDirection: "row" }}>
                     <TextInput
                         value={email}
                         onChangeText={setEmail}
-                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color:"white" }} />
+                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
                     <TouchableOpacity style={styles.savebuttonContainer} onPress={() => updateEmail()}>
                         <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Update</Text>
                     </TouchableOpacity>
@@ -123,12 +159,12 @@ const AccountScreen = () => {
 
                 {/* should actually cycle through all providerData for potential password authentication */}
                 {user.providerData[0].providerId === "password" && (<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("ChangePassword")}>
-                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Change Password</Text>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Change Password</Text>
                 </TouchableOpacity>)}
 
                 <TouchableOpacity
-                    style={{ width: 200, height: 50, padding: 15, borderRadius: 10 , backgroundColor: "#00308F" }}
-                    onPress={()=>{
+                    style={{ width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "#00308F" }}
+                    onPress={() => {
                         // navigation.navigate("Login");
                         logout();
                     }}>
@@ -153,10 +189,10 @@ const AccountScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 10, color:"white", fontWeight:"bold"}}>Are you sure you want to delete your account? All data will be permanantly lost</Text>
+                        <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 10, color: "white", fontWeight: "bold" }}>Are you sure you want to delete your account? All data will be permanantly lost</Text>
                         <TouchableHighlight
                             style={styles.opacityStyle}
-                            onPress={() => {handleModalDelete()}}
+                            onPress={() => { handleModalDelete() }}
                         >
                             <Text style={styles.textStyle}>Yes</Text>
                         </TouchableHighlight>
@@ -182,13 +218,13 @@ const AccountScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ fontSize: 15, textAlign: "center", color: "white", fontWeight:"bold"}}>Please input your password to confirm deletion.</Text>
+                        <Text style={{ fontSize: 15, textAlign: "center", color: "white", fontWeight: "bold" }}>Please input your password to confirm deletion.</Text>
                         <TextInput
                             value={password}
                             onChangeText={setPassword}
                             placeholder='**********'
                             secureTextEntry
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin:20, backgroundColor:"white"}} />
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 20, backgroundColor: "white" }} />
                         <TouchableHighlight
                             // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             style={styles.opacityStyle}
@@ -234,7 +270,7 @@ const styles = StyleSheet.create({
         width: 200,
         height: 50,
         margin: 10,
-        borderRadius:10,
+        borderRadius: 10,
         // borderWidth: 1,
         // borderColor: '#ccc',
         backgroundColor: "#00308F"
@@ -269,8 +305,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-      },
-      modalView: {
+    },
+    modalView: {
         height: "40%",
         width: "60%",
         // maxHeight:500,
@@ -282,28 +318,28 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         shadowColor: '#000',
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-      },
-      textStyle: {
+    },
+    textStyle: {
         color: 'black',
         fontWeight: 'bold',
         textAlign: 'center'
-      },
-      opacityStyle: {
-        borderColor: "#00308F", 
-        borderWidth: 2, 
-        paddingVertical: 5, 
-        paddingHorizontal: 30, 
-        backgroundColor: "white", 
-        width: "90%", 
-        alignItems: "center", 
+    },
+    opacityStyle: {
+        borderColor: "#00308F",
+        borderWidth: 2,
+        paddingVertical: 5,
+        paddingHorizontal: 30,
+        backgroundColor: "white",
+        width: "90%",
+        alignItems: "center",
         borderRadius: 10
-      }
+    }
 });
 
 export default AccountScreen;

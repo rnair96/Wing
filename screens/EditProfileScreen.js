@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import ImageUpload from '../components/ImageUpload';
-import registerNotifications from '../lib/registerNotifications';
+// import registerNotifications from '../lib/registerNotifications';
 import { useNavigation } from '@react-navigation/core';
 import TagPicker from '../components/TagPicker';
 import ValuesList from '../components/ValuesList';
@@ -14,87 +14,97 @@ import * as Sentry from "@sentry/react";
 
 
 
-const EditProfileScreen = ({ profile }) => {
+const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const { user } = useAuth();
-  const [age, setAge] = useState(18);
-  const [oldtoken, setOldToken] = useState(null);
-  const [newtoken, setNewToken] = useState("not_granted");
-  const [mission, setMission] = useState(null);
-  const [missiontag, setMissionTag] = useState("Social");
-  const [gender, setGender] = useState("male");
-  const [medal1, setMedal1] = useState(null);
-  const [medal2, setMedal2] = useState(null);
-  const [medal3, setMedal3] = useState(null);
-  const [bio, setBio] = useState(null);
-  const [location, setLocation] = useState(null);
 
-  const [activeStudent, setActiveStudent] = useState(false);
+  const age = profile?.age || 18;
+  // const oldtoken = profile?.token || null;
+  const gender = profile?.gender || "male";
+  const activeStudent = profile?.university_student?.status === "active";
 
-  const [hometown, setHometown] = useState(null);
-  const [job, setJob] = useState(null);
-  const [company, setCompany] = useState(null);
-  const [school, setSchool] = useState(null);
-  const [class_level, setClassLevel] = useState("Undergraduate");
-  const [grad_year, setGradYear] = useState("2027");
-
+  // const [newtoken, setNewToken] = useState("not_granted");
+  const [mission, setMission] = useState(profile?.mission || null);
+  const [missiontag, setMissionTag] = useState(profile?.mission_tag || "Social");
+  const [medal1, setMedal1] = useState(profile?.medals?.[0] || null);
+  const [medal2, setMedal2] = useState(profile?.medals?.[1] || null);
+  const [medal3, setMedal3] = useState(profile?.medals?.[2] || null);
+  const [bio, setBio] = useState(profile?.bio || null);
+  const [location, setLocation] = useState(profile?.location || null);
+  const [hometown, setHometown] = useState(profile?.hometown || null);
+  const [job, setJob] = useState(activeStudent ? null : profile?.job || null);
+  const [company, setCompany] = useState(activeStudent ? null : profile?.company || null);
+  const [school, setSchool] = useState(profile?.school || null);
+  const [class_level, setClassLevel] = useState(activeStudent ? profile?.university_student?.class_level || "Undergraduate" : "Undergraduate");
+  const [grad_year, setGradYear] = useState(activeStudent ? profile?.university_student?.grad_year || "2027" : "2027");
   const [incompleteForm, setIncompleteForm] = useState(true);
-  const [url1, setUrl1] = useState(null);
-  const [url2, setUrl2] = useState(null);
-  const [url3, setUrl3] = useState(null);
-  const [values, setValues] = useState([])
+  const [url1, setUrl1] = useState(profile?.images?.[0] || null);
+  const [url2, setUrl2] = useState(profile?.images?.[1] || null);
+  const [url3, setUrl3] = useState(profile?.images?.[2] || null);
+  const [values, setValues] = useState(profile?.values || []);
 
   const navigation = useNavigation();
 
 
+  // useEffect(() => {
+  //   if (profile) {
+  //     if (profile?.images && profile.images.length > 2) {
+  //       setUrl1(profile.images[0]);
+  //       setUrl2(profile.images[1]);
+  //       setUrl3(profile.images[2]);
+  //     }
 
+  //     if (profile?.medals && profile.medals.length > 2) {
+  //       setMedal1(profile.medals[0]);
+  //       setMedal2(profile.medals[1]);
+  //       setMedal3(profile.medals[2]);
+  //     }
 
-  useEffect(() => {
-    if (profile) {
-      if (profile?.images && profile.images.length > 2) {
-        setUrl1(profile.images[0]);
-        setUrl2(profile.images[1]);
-        setUrl3(profile.images[2]);
-      }
-
-      if (profile?.medals && profile.medals.length > 2) {
-        setMedal1(profile.medals[0]);
-        setMedal2(profile.medals[1]);
-        setMedal3(profile.medals[2]);
-      }
-
-      profile?.age !== undefined && setAge(parseInt(profile.age));
-      profile?.mission !== undefined && setMission(profile.mission);
-      profile?.gender !== undefined && setGender(profile.gender);
+  //     profile?.age !== undefined && setAge(parseInt(profile.age));
+  //     profile?.mission !== undefined && setMission(profile.mission);
+  //     profile?.gender !== undefined && setGender(profile.gender);
       
 
-      profile?.bio !== undefined && setBio(profile.bio);
-      profile?.location !== undefined && setLocation(profile.location);
-      profile?.values !== undefined && setValues(profile.values)
-      profile?.mission_tag !== undefined && setMissionTag(profile.mission_tag);
-      profile?.token !== undefined && setOldToken(profile.token);
-      profile?.school !== undefined && setSchool(profile.school);
-      profile?.hometown !== undefined && setHometown(profile.hometown);
-      if (profile.university_student && profile.university_student.status === "active") {
-        profile?.class_level !== undefined && setClassLevel(profile.university_student.class_level)
-        profile?.grad_year !== undefined && setGradYear(profile.university_student.grad_year)
-        setActiveStudent(true)
-      } else {
-        profile?.job !== undefined && setJob(profile.job);
-        profile?.company !== undefined && setCompany(profile.company);
+  //     profile?.bio !== undefined && setBio(profile.bio);
+  //     profile?.location !== undefined && setLocation(profile.location);
+  //     profile?.values !== undefined && setValues(profile.values)
+  //     profile?.mission_tag !== undefined && setMissionTag(profile.mission_tag);
+  //     profile?.token !== undefined && setOldToken(profile.token);
+  //     profile?.school !== undefined && setSchool(profile.school);
+  //     profile?.hometown !== undefined && setHometown(profile.hometown);
+  //     if (profile.university_student && profile.university_student.status === "active") {
+  //       profile?.class_level !== undefined && setClassLevel(profile.university_student.class_level)
+  //       profile?.grad_year !== undefined && setGradYear(profile.university_student.grad_year)
+  //       setActiveStudent(true)
+  //     } else {
+  //       profile?.job !== undefined && setJob(profile.job);
+  //       profile?.company !== undefined && setCompany(profile.company);
+  //     }
+
+
+  //   }
+
+  // }, [profile])
+
+  // console.log("mission", mission)
+
+  useEffect(() => {
+    if (profile && profile?.images && profile.images.length > 2){
+      if(url1 !== profile.images[0] || url2 !== profile.images[1] || url3 !== profile.images[2]){
+        console.log("change to false")
+        setIsEditSaved(false);
+      } else if (url1 === profile.images[0] && url2 === profile.images[1] && url3 === profile.images[2]){
+        console.log("change to true");
+        setIsEditSaved(true);
+
       }
-
-
     }
 
-  }, [profile])
-
-  console.log("mission", mission)
+  },[url1, url2, url3])
 
 
 
   useEffect(() => {
     let form;
-    // console.log("how about here?",mission)
     if (activeStudent) {
       form = !url1 || !url2 || !url3  || !location || !values || !school || !mission
     } else {//|| !medal1 || !medal2 || !medal3 || !bio || !class_level || !grad_year
@@ -109,17 +119,17 @@ const EditProfileScreen = ({ profile }) => {
 //activeStudent, url1, url2, url3, location, values, school, mission
 
 
-  useEffect(() => {
-    (async () => {
-      if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")) {
-        const new_token = await registerNotifications();
-        setNewToken(new_token);
-      } else {
-        setNewToken(oldtoken);
-      }
-    })();
+  // useEffect(() => {
+  //   (async () => {
+  //     if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")) {
+  //       const new_token = await registerNotifications();
+  //       setNewToken(new_token);
+  //     } else {
+  //       setNewToken(oldtoken);
+  //     }
+  //   })();
 
-  }, [oldtoken])
+  // }, [oldtoken])
   //create a screen at sign in for notifications
 
 
@@ -143,7 +153,7 @@ const EditProfileScreen = ({ profile }) => {
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
-        token: newtoken,
+        // token: newtoken,
         bio: bio
       }).then(() => {
         navigation.navigate("Home");
@@ -164,7 +174,7 @@ const EditProfileScreen = ({ profile }) => {
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
-        token: newtoken,
+        // token: newtoken,
         bio: bio
       }).then(() => {
         navigation.navigate("Home");
@@ -173,6 +183,8 @@ const EditProfileScreen = ({ profile }) => {
         console.log(error.message)
       });
     }
+
+    setIsEditSaved(true);
 
   }
 
