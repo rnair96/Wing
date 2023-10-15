@@ -75,12 +75,12 @@ const MessageScreen = () => {
       const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
 
       Sentry.captureMessage(`sending message token to ${profile.token}`)
-      Sentry.captureMessage(`sending message details ${messageDetails}`)
+      // Sentry.captureMessage(`sending message details ${messageDetails}`)
       Sentry.captureMessage(`sending message from ${userName}`)
 
-      console.log(`sending message token to ${profile.token}`)
-      console.log(`sending message details ${messageDetails}`)
-      console.log(`sending message from ${userName}`)
+      // console.log(`sending message token to ${profile.token}`)
+      // console.log(`sending message details ${messageDetails}`)
+      // console.log(`sending message from ${userName}`)
 
       sendPush(profile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
 

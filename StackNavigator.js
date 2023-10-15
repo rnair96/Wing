@@ -54,19 +54,18 @@ const StackNavigator = () => {
 
         if(response.notification.request.content.data.type === "message"){//|| response.notification.request.content.data.type === "rated"
           const messageDetails = response.notification.request.content.data.message;
-          console.log("messageDetails from a match", messageDetails)
           const matchedDetails = messageDetails.matchedDetails;
           const profile = messageDetails.profile
           navigation.navigate("Message", { matchedDetails, profile });
         } else if (response.notification.request.content.data.type === "request"){
           const messageDetails = response.notification.request.content.data.message;
-          console.log("messageDetails from a request", messageDetails)
           const requestDetails = messageDetails.requestDetails;
           const profile = messageDetails.profile
           navigation.navigate("RequestMessage", { requestDetails, profile });
         } else if (response.notification.request.content.data.type === "announcement"){
-          console.log("Go to announcements")
           navigation.navigate("Announcements");
+        } else if (response.notification.request.content.data.type === "match"){
+          navigation.navigate("ToggleChat");
         }else {
           navigation.navigate("Home");
         }

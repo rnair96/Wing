@@ -47,11 +47,13 @@ const SwipeScreen = ({ loggedProfile }) => {
                     if (latestSwipeDoc.data()?.swipedAt && (latestSwipeDoc.data().swipedAt - 1) > 0) {
                         console.log("setting swipes to previously", (latestSwipeDoc.data().swipedAt - 1))
                         setSwipeAmount((latestSwipeDoc.data().swipedAt - 1));
-                    } else {
+                    } else if (latestSwipeDoc.data()?.swipedAt){
                         console.log("setting swipes to 0 and disabling swipes");
                         setSwipeAmount(0);
                         setSwipeEnabled(false);
                         setIsModalVisible(true);
+                    } else {
+                        console.log("No swipes found today from user. Replenish swipes");
                     }
                 } else {
                     console.log("No swipes found today from user. Replenish swipes");

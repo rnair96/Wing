@@ -8,11 +8,11 @@ const RecieverMessage = ({ message }) => {
 
   useEffect(() => {
 
-    if (message && message?.timestamp) {
+    if (message && message?.timestamp && message.timestamp.seconds && message.timestamp.nanoseconds) {
       let milliseconds = message.timestamp.seconds * 1000 + Math.floor(message.timestamp.nanoseconds / 1000000);
       setTime(getTime(new Date(milliseconds)));
-      setLoading(false);
     }
+    setLoading(false);
 
   }, [message])
 

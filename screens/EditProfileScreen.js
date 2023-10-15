@@ -17,8 +17,8 @@ import * as Sentry from "@sentry/react";
 const EditProfileScreen = ({ profile }) => {
   const { user } = useAuth();
   const [age, setAge] = useState(18);
-  // const [oldtoken, setOldToken] = useState(null);
-  // const [newtoken, setNewToken] = useState("not_granted");
+  const [oldtoken, setOldToken] = useState(null);
+  const [newtoken, setNewToken] = useState("not_granted");
   const [mission, setMission] = useState(null);
   const [missiontag, setMissionTag] = useState("Social");
   const [gender, setGender] = useState("male");
@@ -50,8 +50,6 @@ const EditProfileScreen = ({ profile }) => {
 
   useEffect(() => {
     if (profile) {
-      console.log("how often are you here", profile.mission);
-      console.log("how often are you initialized", mission);
       if (profile?.images && profile.images.length > 2) {
         setUrl1(profile.images[0]);
         setUrl2(profile.images[1]);
@@ -73,7 +71,7 @@ const EditProfileScreen = ({ profile }) => {
       profile?.location !== undefined && setLocation(profile.location);
       profile?.values !== undefined && setValues(profile.values)
       profile?.mission_tag !== undefined && setMissionTag(profile.mission_tag);
-      // profile?.token !== undefined && setOldToken(profile.token);
+      profile?.token !== undefined && setOldToken(profile.token);
       profile?.school !== undefined && setSchool(profile.school);
       profile?.hometown !== undefined && setHometown(profile.hometown);
       if (profile.university_student && profile.university_student.status === "active") {
@@ -111,17 +109,17 @@ const EditProfileScreen = ({ profile }) => {
 //activeStudent, url1, url2, url3, location, values, school, mission
 
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")) {
-  //       const new_token = await registerNotifications();
-  //       setNewToken(new_token);
-  //     } else {
-  //       setNewToken(oldtoken);
-  //     }
-  //   })();
+  useEffect(() => {
+    (async () => {
+      if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")) {
+        const new_token = await registerNotifications();
+        setNewToken(new_token);
+      } else {
+        setNewToken(oldtoken);
+      }
+    })();
 
-  // }, [oldtoken])
+  }, [oldtoken])
   //create a screen at sign in for notifications
 
 
@@ -145,7 +143,7 @@ const EditProfileScreen = ({ profile }) => {
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
-        // token: newtoken,
+        token: newtoken,
         bio: bio
       }).then(() => {
         navigation.navigate("Home");
@@ -166,7 +164,7 @@ const EditProfileScreen = ({ profile }) => {
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
-        // token: newtoken,
+        token: newtoken,
         bio: bio
       }).then(() => {
         navigation.navigate("Home");

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import RecieverMessage from './RecieverMessage';
-import { collection, serverTimestamp, updateDoc, doc, writeBatch } from 'firebase/firestore';
+import { collection, serverTimestamp, updateDoc, doc, writeBatch, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -85,11 +85,20 @@ const RequestMessageScreen = () => {
                 batch.set(messageRefTwo, messageTwo);
             }
 
+            // const userSnapshot = await getDoc(doc(db, global.users, user.uid))
+            // let userProfile;
+
+            // if (userSnapshot.exists()) {
+            //     userProfile = userSnapshot.data();
+            //   } else {
+            //     console.log('cannot get current user data!');
+            //     userProfile = null;
+            //   }
 
 
             await batch.commit().then(() => {
                 console.log("Added match, swipe doc and deleted request doc and messages to match doc");
-                const matchedDetails = { id: requestDetails.id, ...matchDoc };
+                // const matchedDetails = { id: requestDetails.id, ...matchDoc };
 
 
                 navigation.navigate("ToggleChat");
@@ -97,22 +106,24 @@ const RequestMessageScreen = () => {
                 Sentry.captureMessage(`does profile have token at match and move? ${profile.token}`)
                 console.log(`Does profile token exist at match and move? ${profile.token}`)
 
-                if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {
+                if (profile.token && profile.token !== "token" && profile.token !== "not_granted") {// && userProfile !== null
 
-                    const messageDetails = { "matchedDetails": matchedDetails, "profile": profile };
+                    // const messageDetails = { "matchedDetails": matchedDetails, "profile": userProfile };// should be my user profile
 
                     const userName = user.displayName.split(" ")[0];
 
+                    console.log("user", user)
+
                     Sentry.captureMessage(`match & move sending message token to ${profile.token}`)
-                    Sentry.captureMessage(`match & move sending message details ${messageDetails}`)
+                    // Sentry.captureMessage(`match & move sending message details ${messageDetails}`)
                     Sentry.captureMessage(`match & move sending message from ${userName}`)
 
-                    console.log(`match & move sending message token to ${profile.token}`)
-                    console.log(`match & move sending message details ${messageDetails}`)
-                    console.log(`match & move sending message from ${userName}`)
+                    // console.log(`match & move sending message token to ${profile.token}`)
+                    // console.log(`match & move sending message details ${messageDetails}`)
+                    // console.log(`match & move sending message from ${userName}`)
 
 
-                    sendPush(profile.token, `${userName} has Matched and Messaged you!`, message, { type: "message", message: messageDetails })
+                    sendPush(profile.token, `${userName} has Matched and Messaged you!`, message, { type: "match"})
                 }
 
             });
@@ -192,6 +203,7 @@ const RequestMessageScreen = () => {
                         </View>
                         <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
                     </View>
+                    {profile?.medals && profile.medals.length > 2 ? (
                     <View style={{ flexDirection: "column" }}>
                         <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
@@ -206,6 +218,22 @@ const RequestMessageScreen = () => {
                             <Text style={styles.cardtext}>{profile.medals[2]}</Text>
                         </View>
                     </View>
+                    ) : (
+                        <View style={{ flexDirection: "column" }}>
+                            <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                <Text style={styles.cardtext}>-- --</Text>
+                            </View>
+                            <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                <Text style={styles.cardtext}>-- --</Text>
+                            </View>
+                            <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                <Text style={styles.cardtext}>-- --</Text>
+                            </View>
+                        </View>
+                    )}
                     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                         <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{profile.values[0]}</Text>
                         <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{profile.values[1]}</Text>
