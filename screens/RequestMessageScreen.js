@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal } from 'react-native';
+import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal, KeyboardAvoidingView, Keyboard } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import RecieverMessage from './RecieverMessage';
 import { collection, serverTimestamp, updateDoc, doc, writeBatch, getDoc } from 'firebase/firestore';
@@ -18,6 +18,7 @@ const RequestMessageScreen = () => {
     const { user } = useAuth();
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
     const [secondModal, setSecondModal] = useState(false);
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const [message, setMessage] = useState(null);
     const name = profile ? profile.displayName : "Account User";
     const navigation = useNavigation();
@@ -31,6 +32,26 @@ const RequestMessageScreen = () => {
             })
         }
     }, [])
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
 
     const matchThenMove = async () => {
@@ -271,8 +292,13 @@ const RequestMessageScreen = () => {
                     setMessageModalVisible(!isMessageModalVisible);
                 }}
             >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                <KeyboardAvoidingView
+                // behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.centeredView}
+                // keyboardVerticalOffset={10}
+                >
+                {/* <View style={styles.centeredView}> */}
+                    <View style={{bottom: isKeyboardVisible? "5%": 0, ...styles.modalView}}>
                         <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, color: "white" }}>Send a Message:</Text>
                         <TextInput
                             value={message}
@@ -281,9 +307,9 @@ const RequestMessageScreen = () => {
                             multiline
                             numberOfLines={2}
                             placeholderTextColor={"grey"}
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: 250 }} />
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: "90%", height: "30%" }} />
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", borderRadius: 10 }}
                             onPress={() => {
                                 matchThenMove();
                                 setMessageModalVisible(!isMessageModalVisible);
@@ -292,7 +318,7 @@ const RequestMessageScreen = () => {
                             <Text>Match</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", borderRadius: 10 }}
                             onPress={() => {
                                 setMessageModalVisible(!isMessageModalVisible);
                             }}
@@ -300,7 +326,8 @@ const RequestMessageScreen = () => {
                             <Text>Cancel</Text>
                         </TouchableHighlight>
                     </View>
-                </View>
+                {/* </View> */}
+                </KeyboardAvoidingView>
             </Modal>
             <Modal
                 animationType="slide"
@@ -409,7 +436,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     modalView: {
-        height: 200,
+        height: "30%",
+        width:"80%",
         maxHeight: 400,
         maxWidth: "90%",
         backgroundColor: '#00BFFF',

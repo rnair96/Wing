@@ -38,6 +38,8 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import ToggleChatScreen from './screens/ToggleChatScreen';
 import RequestMessageScreen from './screens/RequestMessageScreen';
 import AnnouncementScreen from './screens/AnnouncementScreen';
+import * as Sentry from "@sentry/react";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -51,6 +53,9 @@ const StackNavigator = () => {
     useEffect(() => {
     
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+
+        Sentry.captureMessage("response for user", user.displayName);
+        Sentry.captureMessage("response type", responseListeneresponse.notification.request.content.data.type);
 
         if(response.notification.request.content.data.type === "message"){//|| response.notification.request.content.data.type === "rated"
           const messageDetails = response.notification.request.content.data.message;

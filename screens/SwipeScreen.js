@@ -247,15 +247,15 @@ const SwipeScreen = ({ loggedProfile }) => {
                                             </View>
                                             {card?.medals && card.medals.length > 2 ? (
                                                 <View style={{ flexDirection: "column" }}>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.medals[0]}</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.medals[1]}</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.medals[2]}</Text>
                                                     </View>
