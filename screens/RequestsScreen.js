@@ -8,7 +8,7 @@ const RequestsScreen = () => {
 
   return (
     // <View style={{flex:1, backgroundColor:"black"}}>
-      <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
+      <SafeAreaView style={{flex:1, backgroundColor:"white"}}>
         <View style={{alignItems:'center', justifyContent:"center", width:"100%"}}>
         <Text style={{color:"#00BFFF", padding:10, fontWeight:"bold", fontSize:20}}>Requests</Text>
 

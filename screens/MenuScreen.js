@@ -16,7 +16,7 @@ const  MenuScreen = () => {
     // const total = nextRankPoints + currentPoints;
 
     return (
-        <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly", backgroundColor:"black"}}>
+        <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly", backgroundColor:"white"}}>
         <TouchableOpacity style={{flexDirection:"row", alignItems:"center"}} onPress={() => navigation.navigate("ToggleProfile", profile)}>
         <Image style={{height:100, width:100, borderRadius:50, borderColor:"#00BFFF", borderWidth:2, left:20}} source={{uri: profile? profile?.images[0]: '../images/account.jpeg'}}/>
         {/* borderColor:"#00308F" */}
@@ -24,7 +24,7 @@ const  MenuScreen = () => {
         <Ionicons name="pencil" size={30} color = "#00308F"/>
         </View>
         </TouchableOpacity>
-        <Text style={{fontSize:20, fontWeight: "bold", color:"white"}}>{profile.displayName}</Text>
+        <Text style={{fontSize:20, fontWeight: "bold"}}>{profile.displayName}</Text>
         {/* <View style ={{flexDirection:"row", alignItems:"center", padding:5}}>
             <Text style={{fontSize:13, fontWeight: "bold", color:"#00308F", paddingRight:10}}>Wing Rank:</Text>
             <Text style={{fontSize:18, fontWeight: "bold", color:"#00308F"}}>{profile.rank}</Text>

@@ -24,6 +24,8 @@ const SwipeScreen = ({ loggedProfile }) => {
     const [requestMessage, setRequestMessage] = useState(null);
     const [swipeRefMessage, setSwipeRefMessage] = useState(null);
     const [loadingFetch, setloadingFetch] = useState(true);
+    const [currentCard, setCurrentCard] = useState(null);
+
 
 
     useEffect(() => {
@@ -77,7 +79,6 @@ const SwipeScreen = ({ loggedProfile }) => {
                 console.log("fetching cards...")
 
                 const functionURL = `${global.fetchcards}${user.uid}`;
-                // const functionURL = `https://us-central1-mission-partner-app.cloudfunctions.net/functionCall/getFilteredDevUsers/:${user.uid}`
                 //make link an env variable
                 // const idToken = await getIdToken(getCurrentUser(auth), true);
 
@@ -107,6 +108,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                     })
                     .then(data => {
                         setProfiles(data);  // Set the fetched profiles to your state variable
+                        setCurrentCard(data[0])
                         console.log("cards fetched")
                         setloadingFetch(false);
                     })
@@ -175,7 +177,7 @@ const SwipeScreen = ({ loggedProfile }) => {
     }
 
     return (
-        <View style={{ backgroundColor: "black", height: "87%" }}>
+        <View style={{ backgroundColor: "white", height: "87%" }}>
             {/* Cards */}
             {profiles.length === 0 ? (
                 <View style={[styles.emptycardcontainer]}>
@@ -183,39 +185,40 @@ const SwipeScreen = ({ loggedProfile }) => {
                         <View style={[styles.emptycardcontainer]}>
                             <View style={styles.loading}>
                                 <ActivityIndicator size="large" color="#00BFFF" />
-                                <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>Gathering Wings...</Text>
+                                <Text style={{ fontWeight: "bold", fontSize: 20}}>Gathering Wings...</Text>
                             </View>
                         </View>
 
                     ) : (
                         <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>No Wings Around... Try Again Later</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20}}>No Wings Around... Try Again Later</Text>
                             <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
                         </View>
                     )}
                 </View>
             ) : (
-                <View style={styles.cardscontainer}>
-                    <Swiper cards={profiles}
-                        ref={swipeRef}
-                        stackSize={5}
-                        animateCardOpacity={true}
-                        verticalSwipe={false}
-                        cardIndex={0}
-                        horizontalSwipe={false}
-                        disableRightSwipe={!swipeEnabled}
-                        // disableTopSwipe={!swipeEnabled}
-                        onSwipedAll={() => {
+                    <View style={styles.cardscontainer}>
+                        <Swiper cards={profiles}
+                            ref={swipeRef}
+                            stackSize={5}
+                            animateCardOpacity={true}
+                            verticalSwipe={false}
+                            cardIndex={0}
+                            horizontalSwipe={false}
+                            disableRightSwipe={!swipeEnabled}
+                            // disableTopSwipe={!swipeEnabled}
+                            onSwipedAll={() => {
                             setProfiles([])
                         }}
 
                         onSwipedLeft={(cardIndex) => {
                             swipeLeft(cardIndex);
+                            setCurrentCard(profiles[cardIndex + 1])
 
                         }}
                         onSwipedRight={(cardIndex) => {
                             swipeRight(cardIndex);
-
+                            setCurrentCard(profiles[cardIndex + 1])
                         }}
 
 
@@ -226,7 +229,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                                 <View key={card.id} style={styles.cardcontainer}>
                                     <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => { navigation.navigate("ProfileSwipe", { card: card }) }}>
                                         <View style={{ alignItems: "center", bottom: 20 }}>
-                                            <Text style={{ color: "white" }}>Mission: </Text>
+                                            <Text style={{color:"white"}}>Mission: </Text>
                                             <Text style={styles.text}>{card.mission}</Text>
                                         </View>
                                         <View style={{ justifyContent: "space-evenly", height: "65%", width: "100%", backgroundColor: "#002D62" }}>
@@ -279,7 +282,7 @@ const SwipeScreen = ({ loggedProfile }) => {
 
                                             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                                                 <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.values[0]}</Text>
-                                                <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.values[1]}</Text>
+                                                <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5}}>{card.values[1]}</Text>
                                                 <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.values[2]}</Text>
                                             </View>
                                         </View>
@@ -306,7 +309,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                     <Entypo name="mail" size={17} color="green" />
                 </TouchableOpacity>
             </View>
-            <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} />
+            <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} currentCard={currentCard}/>
             <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
 
         </View>
@@ -325,24 +328,27 @@ const styles = StyleSheet.create({
     },
     cardcontainer: {
         backgroundColor: "#00308F",
+        // backgroundColor: "#00BFFF",
         height: "75%",
         borderRadius: 20,
-        borderColor: "#002D62",
-        borderWidth: 5,
-        shadowColor: "#000",
+        // borderColor: "#002D62",
+        // borderColor:"#3498DB",
+        // borderWidth: 5,
+        // shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 1
+            height: 3
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-        elevation: 2
+        shadowOpacity: 0.5,
+        shadowRadius: 3.41,
+        elevation: 5
     },
     emptycardcontainer: {
         height: "75%",
     },
     infocontainer: {
-        backgroundColor: "#00308F",
+        // backgroundColor: "#00308F",
+        backgroundColor:"#87CEEB",
         paddingTop: 15,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -380,7 +386,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#FF5864"
+        backgroundColor: "#FF5864",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2.41,
+        elevation: 5
     },
     swipeButtonHeart: {
         bottom: 10,
@@ -389,7 +402,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#32de84"
+        backgroundColor: "#32de84",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 2.41,
+        elevation: 5
     },
     centeredView: {
         flex: 1,

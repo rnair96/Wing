@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Modal, TouchableHighlight, StyleSheet, TextInput, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 
-const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMessage, setRequestMessage, swipeRefMessage }) => {
+const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMessage, setRequestMessage, swipeRefMessage, currentCard }) => {
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
+    const name = currentCard?.displayName ? currentCard?.displayName: "this User";
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -29,7 +29,7 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
     return (
 
         <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={isMessageModalVisible}
             onRequestClose={() => {
@@ -45,8 +45,8 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                 {/* <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss()}
                 > */}
-                    <View style={{ height:"30%", bottom: isKeyboardVisible? "5%": 0, ...styles.modalView }}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, color: "white" }}>Send this User a Request:</Text>
+                    <View style={{ height:"30%", bottom: isKeyboardVisible? "10%": 0, ...styles.modalView }}>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15 }}>Send {name} a Chat Request</Text>
                         <TextInput
                             value={requestMessage}
                             onChangeText={setRequestMessage}
@@ -54,25 +54,25 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                             multiline
                             numberOfLines={3}
                             placeholderTextColor={"grey"}
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: "90%", height: "30%" }} />
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", width: "95%", height: "30%" }} />
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width: 120, alignItems: "center", borderRadius: 10 }}
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", width: 120, alignItems: "center", borderRadius: 10 }}
                             onPress={() => {
                                 console.log("send this message to user", requestMessage);
                                 swipeRefMessage.current.swipeRight();
                                 setMessageModalVisible(!isMessageModalVisible);
                             }}
                         >
-                            <Text>Send</Text>
+                            <Text style={{color:"white"}}>Send</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", width: 120, alignItems: "center", borderRadius: 10 }}
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", width: 120, alignItems: "center", borderRadius: 10 }}
                             onPress={() => {
                                 setRequestMessage(null);
                                 setMessageModalVisible(!isMessageModalVisible);
                             }}
                         >
-                            <Text>Cancel</Text>
+                            <Text style={{color:"white"}}>Cancel</Text>
                         </TouchableHighlight>
                     </View>
                     {/* </View> */}
@@ -87,11 +87,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+
         // top:40
     },
     modalView: {
         width: "80%",
-        backgroundColor: '#00BFFF',
+        backgroundColor: 'white',
         borderRadius: 20,
         padding: 10,
         alignItems: 'center',
