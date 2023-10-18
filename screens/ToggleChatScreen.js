@@ -24,12 +24,14 @@ const ToggleChatScreen = () => {
       <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.goBack()}>
             <Ionicons name="ios-arrow-back" size={30} color = "#00BFFF"/>
             </TouchableOpacity>
-        <View style={{flexDirection: 'row', width:"30%", height:"80%",justifyContent:'space-between',right:"17%", top:10, borderWidth:1, borderRadius:10, backgroundColor:"#585858"}}>
-        <TouchableOpacity style={{height:40, width:40, borderWidth:1, borderRadius:10, alignItems:"center", justifyContent:"center", backgroundColor:showMatches?"white":"#A8A8A8"}} onPress={() => setShowMatches(true)}>
-          <Ionicons name="chatbubbles-sharp" size={20} color = "#00308F"/>
+        <View style={{flexDirection: 'row', width:"45%", height:"80%",justifyContent:'space-between',right:"10%", top:10, borderWidth:1, borderRadius:10, backgroundColor:"#585858"}}>
+        <TouchableOpacity style={{padding:10, borderWidth:1, borderRadius:10, alignItems:"center", justifyContent:"center", backgroundColor:showMatches?"white":"#A8A8A8"}} onPress={() => setShowMatches(true)}>
+          {/* <Ionicons name="chatbubbles-sharp" size={20} color = "#00308F"/> */}
+          <Text style={{color:"#00BFFF",fontSize:14}}>Chats</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{height:40, width:40, borderWidth:1, borderRadius:10, alignItems:"center", justifyContent:"center", backgroundColor:showMatches?"#A8A8A8":"white"}} onPress={() => setShowMatches(false)}>
-        <Ionicons name="mail" size={20} color = "#00308F"/>
+        <TouchableOpacity style={{padding:10, borderWidth:1, borderRadius:10, alignItems:"center", justifyContent:"center", backgroundColor:showMatches?"#A8A8A8":"white"}} onPress={() => setShowMatches(false)}>
+        {/* <Ionicons name="mail" size={20} color = "#00308F"/> */}
+        <Text style={{color:"#00BFFF",fontSize:14}}>Requests</Text>
         </TouchableOpacity>
         </View>
       </SafeAreaView>
