@@ -281,9 +281,9 @@ const SwipeScreen = ({ loggedProfile }) => {
                                             )}
 
                                             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                                                <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.values[0]}</Text>
-                                                <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5}}>{card.values[1]}</Text>
-                                                <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.values[2]}</Text>
+                                                <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[0]}</Text>
+                                                <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5}}>{card.values[1]}</Text>
+                                                <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[2]}</Text>
                                             </View>
                                         </View>
                                         {/* </View> */}

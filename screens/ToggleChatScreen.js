@@ -21,7 +21,7 @@ const ToggleChatScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.toggleIcons}>
-      <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={{paddingTop:20, }} onPress={() => navigation.goBack()}>
             <Ionicons name="ios-arrow-back" size={30} color = "#00BFFF"/>
             </TouchableOpacity>
         <View style={{flexDirection: 'row', width:"45%", height:"80%",justifyContent:'space-between',right:"10%", top:10, borderWidth:1, borderRadius:10, backgroundColor:"#585858"}}>

@@ -100,10 +100,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         shadowColor: '#000',
         shadowOffset: {
-            width: 0,
-            height: 2
+            width: 5,
+            height: 5
         },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.5,
         shadowRadius: 4,
         elevation: 5
     }

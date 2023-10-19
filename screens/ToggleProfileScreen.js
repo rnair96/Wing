@@ -24,12 +24,15 @@ const ToggleProfileScreen = () => {
         <TouchableOpacity style={{ paddingTop: 20 }} onPress={() => isEditSaved ? navigation.goBack() : setIsModalVisible(true)}>
           <Ionicons name="ios-arrow-back" size={30} color="#00BFFF" />
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', width: "30%", height: "80%", justifyContent: 'space-between', right: "17%", top: 10, borderWidth: 1, borderRadius: 10, backgroundColor: "#585858" }}>
-          <TouchableOpacity style={{ height: 40, width: 40, borderWidth: 1, borderRadius: 10, alignItems: "center", justifyContent: "center", backgroundColor: showEdit ? "white" : "#A8A8A8" }} onPress={() => setShowEdit(true)}>
-            <Ionicons name="pencil" size={20} color="#00308F" />
+        <View style={{ flexDirection: 'row', width: "35%", height: "80%", justifyContent: 'space-between', right: "14%", top: 10, borderWidth: 1, borderRadius: 10, backgroundColor: "#585858" }}>
+          <TouchableOpacity style={{ padding:10, borderWidth: 1, borderRadius: 10, alignItems: "center", justifyContent: "center", backgroundColor: showEdit ? "white" : "#A8A8A8" }} onPress={() => setShowEdit(true)}>
+            {/* <Ionicons name="pencil" size={20} color="#00308F" /> */}
+            <Text style={{color:"#00BFFF",fontSize:14}}>Edit</Text>
+
           </TouchableOpacity>
-          <TouchableOpacity style={{ height: 40, width: 40, borderWidth: 1, borderRadius: 10, alignItems: "center", justifyContent: "center", backgroundColor: showEdit ? "#A8A8A8" : "white" }} onPress={() => isEditSaved ? setShowEdit(false) : setIsModalVisible(true)}>
-            <MaterialCommunityIcons name="eye" size={20} color="#00308F" />
+          <TouchableOpacity style={{ padding:10, borderWidth: 1, borderRadius: 10, alignItems: "center", justifyContent: "center", backgroundColor: showEdit ? "#A8A8A8" : "white" }} onPress={() => isEditSaved ? setShowEdit(false) : setIsModalVisible(true)}>
+            {/* <MaterialCommunityIcons name="eye" size={20} color="#00308F" /> */}
+            <Text style={{color:"#00BFFF",fontSize:14}}>View</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 3,
-    backgroundColor: "black"
+    backgroundColor: "white"
   },
   toggleIcons: {
     flexDirection: 'row',

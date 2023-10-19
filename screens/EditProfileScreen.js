@@ -201,8 +201,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       >
         <ScrollView style={{ marginHorizontal: 10 }}>
 
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", backgroundColor: "black" }}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", padding: 20, color: "#00BFFF" }}>Edit Your Profile</Text>
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", backgroundColor: "white" }}>
+            {/* <Text style={{ fontSize: 15, fontWeight: "bold", padding: 20, color: "#00BFFF" }}>Edit Your Profile</Text> */}
 
 
 
@@ -213,7 +213,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                 {/* {!profile?.age ? (
         <AgePicker age= {age} setAge={setAge} />
       ):( */}
-                <Text style={{ color: "white" }}>{age}</Text>
+                <Text>{age}</Text>
                 {/* )} */}
 
               </View>
@@ -224,7 +224,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                 {/* {!profile?.gender ? (
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
       ):( */}
-                <Text style={{ color: "white" }}>{gender}</Text>
+                <Text>{gender}</Text>
                 {/* )} */}
               </View>
             </View>
@@ -239,9 +239,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                     onChangeText={setLocation}
                     placeholder={'What area are you in? (City, State)'}
                     placeholderTextColor="#888888"
-                    style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />)
+                    style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />)
                   : (
-                    <Text style={{ color: "white" }}>{location}</Text>
+                    <Text>{location}</Text>
                   )}
               </View>
 
@@ -252,7 +252,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setHometown}
                   placeholder={'Washington, DC'}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
               </View>
             </View>
 
@@ -286,11 +286,11 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setSchool}
                       placeholder={'i.e American University'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
                   </View>
 
                   <View style={{ margin: 20, padding: 10, justifyContent: "center", alignItems: "center" }}>
-                    <Text style={{ fontSize: 13, textAlign: "center", padding: 10, color: "white" }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
+                    <Text style={{ fontSize: 13, textAlign: "center", padding: 10, }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
                     <View style={{ width: "90%", backgroundColor: "#00BFFF", height: 2 }} />
                   </View>
 
@@ -304,7 +304,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setJob}
                       placeholder={'What do you do?'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
                   </View>
 
                   <View style={{ padding: 10, alignItems: "center" }}>
@@ -314,7 +314,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setCompany}
                       placeholder={'Some Company Name'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
                   </View>
 
                   <View style={{ padding: 10, alignItems: "center" }}>
@@ -324,13 +324,13 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setSchool}
                       placeholder={'i.e American University'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
                   </View>
                 </View>
               )}
 
 
-            <View style={{ flexDirection: "row", padding: 20 }}>
+            <View style={{ flexDirection: "row", margin: 10, paddingBottom:10, paddingTop:10}}>
               <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
               <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
               <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
@@ -345,13 +345,13 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               onChangeText={setBio}
               placeholder={'Share something fun about you i.e: I love kayaking and drinking beers by the river.'}
               placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
 
 
             <Text style={styles.formTitle}>Accomplishments</Text>
-            <View style={{ justifyContent: "flex-start", flexDirection: "column" }}>
+            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin:10}}>
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text style={{ color: "white" }}>1.</Text>
+                <Text>1.</Text>
                 <TextInput
                   value={medal1}
                   multiline
@@ -360,11 +360,11 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal1}
                   placeholder={"I completed a marathon."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10, color: "white" }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text style={{ color: "white" }}>2.</Text>
+                <Text>2.</Text>
                 <TextInput
                   value={medal2}
                   multiline
@@ -373,11 +373,11 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal2}
                   placeholder={"I won a hotdog eating contest"}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10, color: "white" }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text style={{ color: "white" }}>3.</Text>
+                <Text>3.</Text>
                 <TextInput
                   value={medal3}
                   multiline
@@ -386,7 +386,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal3}
                   placeholder={"I have a Youtube channel with 3k subscribers."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 10, color: "white" }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
               </View>
             </View>
 
@@ -403,7 +403,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               onChangeText={setMission}
               placeholder={'Explore the local nightlife!'}
               placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
 
             <Text style={styles.formTitle}>Mission Category</Text>
             <TagPicker tag={missiontag} setTag={setMissionTag} />
@@ -411,9 +411,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             <View style={{ height: 150 }}>
               <TouchableOpacity
                 disabled={incompleteForm}
-                style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10 }, incompleteForm ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
+                style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }, incompleteForm ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
                 onPress={updateUserProfile}>
-                <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Update Profile</Text>
+                <Text style={{ textAlign: "center",fontSize: 15, fontWeight: "bold", color:"white" }}>Update Profile</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -429,7 +429,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     // color: "#00308F",
     // color:"#00BFFF",
-    color: "white",
     padding: 20
   }
 })

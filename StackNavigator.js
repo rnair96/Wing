@@ -46,58 +46,59 @@ const Stack = createNativeStackNavigator();
 
 
 const StackNavigator = () => {
-    const { user } = useAuth();
-    const navigation = useNavigation();
-    const responseListener = useRef();
+  const { user } = useAuth();
+  const navigation = useNavigation();
+  const responseListener = useRef();
 
-    useEffect(() => {
-    
-      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+  useEffect(() => {
 
-        Sentry.captureMessage("response for user", user.displayName);
-        Sentry.captureMessage("response type", responseListeneresponse.notification.request.content.data.type);
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
-        if(response.notification.request.content.data.type === "message"){//|| response.notification.request.content.data.type === "rated"
-          const messageDetails = response.notification.request.content.data.message;
-          const matchedDetails = messageDetails.matchedDetails;
-          const profile = messageDetails.profile
-          navigation.navigate("Message", { matchedDetails, profile });
-        } else if (response.notification.request.content.data.type === "request"){
-          const messageDetails = response.notification.request.content.data.message;
-          const requestDetails = messageDetails.requestDetails;
-          const profile = messageDetails.profile
-          navigation.navigate("RequestMessage", { requestDetails, profile });
-        } else if (response.notification.request.content.data.type === "announcement"){
-          navigation.navigate("Announcements");
-        } else if (response.notification.request.content.data.type === "match"){
-          navigation.navigate("ToggleChat");
-        }else {
-          navigation.navigate("Home");
-        }
-        
-      });
-    
-      return () => {
-        Notifications.removeNotificationSubscription(responseListener.current);
-      };
-    }, []);
+      Sentry.captureMessage("response for user", user.displayName);
+      Sentry.captureMessage("response type", responseListeneresponse.notification.request.content.data.type);
 
-    return (
-      <Stack.Navigator screenOptions={{
-        headerShown: false,
-      }}>
-        {user ? (
-            <>
-            <Stack.Group>
-            <Stack.Screen name="Home" component={HomeScreen}/>
-            <Stack.Screen name="Chat" component={ChatScreen}/>
-            <Stack.Screen name="Message" component={MessageScreen}/>
+      if (response.notification.request.content.data.type === "message") {//|| response.notification.request.content.data.type === "rated"
+        const messageDetails = response.notification.request.content.data.message;
+        const matchedDetails = messageDetails.matchedDetails;
+        const profile = messageDetails.profile
+        navigation.navigate("Message", { matchedDetails, profile });
+      } else if (response.notification.request.content.data.type === "request") {
+        const messageDetails = response.notification.request.content.data.message;
+        const requestDetails = messageDetails.requestDetails;
+        const profile = messageDetails.profile
+        navigation.navigate("RequestMessage", { requestDetails, profile });
+      } else if (response.notification.request.content.data.type === "announcement") {
+        navigation.navigate("Announcements");
+      } else if (response.notification.request.content.data.type === "match") {
+        navigation.navigate("ToggleChat");
+      } else {
+        navigation.navigate("Home");
+      }
+
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false,
+    }}>
+      {user ? (
+        <>
+          <Stack.Group>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
+            <Stack.Screen name="Message" component={MessageScreen} />
             <Stack.Screen name="Menu" component={MenuScreen} />
-            <Stack.Screen name="MissionControl" component={MissionControlScreen}/>
+            <Stack.Screen name="MissionControl" component={MissionControlScreen} />
             <Stack.Screen name="Preferences" component={MatchingPreferences} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="EditProfile" component={EditProfileScreen}/>
-            <Stack.Screen name="ViewProfile" component={ViewProfileScreen}/>
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            <Stack.Screen name="ViewProfile" component={ViewProfileScreen} />
             <Stack.Screen name="PrivacyPolicy" component={PolicyScreen} />
             <Stack.Screen name="Terms" component={TermsScreen} />
             <Stack.Screen name="Guidelines" component={GuideScreen} />
@@ -105,38 +106,38 @@ const StackNavigator = () => {
             <Stack.Screen name="SetUp2" component={SetUp2Screen} />
             <Stack.Screen name="SetUp0" component={SetUp0Screen} />
             <Stack.Screen name="Help" component={HelpScreen} />
-            <Stack.Screen name="ChangePassword" component={ChangePasswordScreen}/>
-            <Stack.Screen name="ToggleProfile" component={ToggleProfileScreen}/>
-            <Stack.Screen name="ToggleChat" component={ToggleChatScreen}/>
-            <Stack.Screen name="StudentSetup" component={StudentSetupScreen}/>
-            <Stack.Screen name="SetUp3" component={SetUp3Screen}/>
-            <Stack.Screen name="SetUp4" component={SetUp4Screen}/>
-            <Stack.Screen name="SetUp5" component={SetUp5Screen}/>
-            <Stack.Screen name="Account" component={AccountScreen}/>
-            <Stack.Screen name="RequestMessage" component={RequestMessageScreen}/>
-            <Stack.Screen name="Announcements" component={AnnouncementScreen}/>
-            </Stack.Group>
-            <Stack.Group screenOptions = {{presentation: "modal" }}>
+            <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+            <Stack.Screen name="ToggleProfile" component={ToggleProfileScreen} />
+            <Stack.Screen name="ToggleChat" component={ToggleChatScreen} />
+            <Stack.Screen name="StudentSetup" component={StudentSetupScreen} />
+            <Stack.Screen name="SetUp3" component={SetUp3Screen} />
+            <Stack.Screen name="SetUp4" component={SetUp4Screen} />
+            <Stack.Screen name="SetUp5" component={SetUp5Screen} />
+            <Stack.Screen name="Account" component={AccountScreen} />
+            <Stack.Screen name="RequestMessage" component={RequestMessageScreen} />
+            <Stack.Screen name="Announcements" component={AnnouncementScreen} />
+          </Stack.Group>
+          <Stack.Group screenOptions={{ presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
-            <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen}/>
-            <Stack.Screen name="Flagged" component={FlaggedScreen}/>
-            <Stack.Screen name="ReportOther" component={ReportOtherScreen}/>
-            </Stack.Group>
-            <Stack.Group screenOptions = {{presentation: "transparentModal" }}>
-              <Stack.Screen name="Match" component={MatchScreen} />
-              <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-            </Stack.Group>
-            </>
-        ) : (
-            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false}}/>
-        )}
-         <Stack.Screen name="SignUp" component={SignUpScreen}/>
-         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}/>
+            <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen} />
+            <Stack.Screen name="Flagged" component={FlaggedScreen} />
+            <Stack.Screen name="ReportOther" component={ReportOtherScreen} />
+          </Stack.Group>
+          <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
+            <Stack.Screen name="Match" component={MatchScreen} />
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+          </Stack.Group>
+        </>
+      ) : (
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      )}
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 
 
-        
-      </Stack.Navigator>
-    )
-  }
+
+    </Stack.Navigator>
+  )
+}
 
 export default StackNavigator

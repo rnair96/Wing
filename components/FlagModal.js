@@ -46,7 +46,7 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={{ padding: 20, color: "white", fontWeight: "bold", fontSize: 20 }}>Flag User</Text>
+          <Text style={{ padding: 20, fontWeight: "bold", fontSize: 20 }}>Flag User</Text>
 
           <TouchableHighlight
             style={styles.opacitystyle}
@@ -54,7 +54,7 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
               flagUserProfile("Inappropriate Profile");
             }}
           >
-            <Text style={{ color: "black", fontWeight: "bold" }}>Inappropriate Profile</Text>
+            <Text style={styles.textStyle}>Inappropriate Profile</Text>
           </TouchableHighlight>
 
           <TouchableHighlight
@@ -109,25 +109,7 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
 }
 
 const styles = StyleSheet.create({
-  // centeredView: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center'
-  // },
-  // modalView: {
-  //   backgroundColor: 'white',
-  //   borderRadius: 20,
-  //   padding:10,
-  //   alignItems: 'center',
-  //   shadowColor: '#000',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 2
-  //   },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 4,
-  //   elevation: 5
-  // },
+ 
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -138,34 +120,36 @@ const styles = StyleSheet.create({
     width: "70%",
     // maxHeight:500,
     // maxWidth:"90%",
-    backgroundColor: '#00BFFF',
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 10,
     alignItems: 'center',
     justifyContent: 'space-evenly',
     shadowColor: '#000',
     shadowOffset: {
-      width: 0,
-      height: 2
+      width: 10,
+      height: 10
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5
   },
   textStyle: {
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     textAlign: 'center'
   },
   opacitystyle: {
-    borderColor: "#00308F",
-    borderWidth: 2,
+    // borderColor: "#00308F",
+    // borderWidth: 2,
     paddingVertical: 5,
     paddingHorizontal: 30,
-    backgroundColor: "white",
+    backgroundColor: "#00308F",
     width: "90%",
+    height:"10%",
     alignItems: "center",
-    borderRadius: 10
+    borderRadius: 10,
+    justifyContent:"center"
   }
 
 })
