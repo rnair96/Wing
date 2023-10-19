@@ -56,7 +56,7 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                             placeholderTextColor={"grey"}
                             style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", width: "95%", height: "30%" }} />
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", width: 120, alignItems: "center", borderRadius: 10 }}
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", alignItems: "center", borderRadius: 10, width: "60%", height:"20%", justifyContent:"center" }}
                             onPress={() => {
                                 console.log("send this message to user", requestMessage);
                                 swipeRefMessage.current.swipeRight();
@@ -66,7 +66,7 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                             <Text style={{color:"white"}}>Send</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", width: 120, alignItems: "center", borderRadius: 10 }}
+                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", alignItems: "center", borderRadius: 10, width: "60%", height:"20%", justifyContent:"center"}}
                             onPress={() => {
                                 setRequestMessage(null);
                                 setMessageModalVisible(!isMessageModalVisible);

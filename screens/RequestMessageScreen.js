@@ -8,6 +8,7 @@ import sendPush from '../lib/sendPush';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import Header from '../Header';
 import generateId from '../lib/generateId'
+import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 
 
@@ -144,7 +145,7 @@ const RequestMessageScreen = () => {
                     // console.log(`match & move sending message from ${userName}`)
 
 
-                    sendPush(profile.token, `${userName} has Matched and Messaged you!`, message, { type: "match"})
+                    sendPush(profile.token, `${userName} has Matched and Messaged you!`, message, { type: "match" })
                 }
 
             });
@@ -182,7 +183,7 @@ const RequestMessageScreen = () => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <Header title={name} />
 
 
@@ -192,100 +193,103 @@ const RequestMessageScreen = () => {
                     source={{ uri: profile.images[0] }}
                 /> */}
                 {profile ? (
-                    <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                    <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
                         source={{ uri: profile.images[0] }} />
                 ) : (
-                    <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                    <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
                         source={require("../images/account.jpeg")} />
                 )}
                 <RecieverMessage message={requestDetails} />
 
             </View>
-            
+
             {profile ? (
-            <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileSwipe", { card: profile })}>
-                <View style={{ alignItems: "center", padding: 20 }}>
-                    <Text style={{ color: "white" }}>Mission: </Text>
-                    <Text style={styles.text}>{profile.mission}</Text>
-                </View>
-                <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
-                    <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
-                        <View style={{ flexDirection: "column" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{profile.displayName}</Text>
-                            <Text style={{ color: "white", fontSize: 15 }}>{profile.age}</Text>
-                            {profile?.university_student && profile.university_student.status === "active" ? (
-                                <View style={{ flexDirection: "column" }}>
-                                    <Text style={{ color: "white", fontSize: 13 }}>{profile.school}</Text>
-                                    <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
+                <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileSwipe", { card: profile })}>
+                    <View style={{ alignItems: "center", padding: 20 }}>
+                        <Text style={{ color: "white" }}>Mission: </Text>
+                        <Text style={styles.text}>{profile.mission}</Text>
+                    </View>
+                    <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
+                        <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
+                            <View style={{ flexDirection: "column" }}>
+                                <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{profile.displayName}</Text>
+                                <Text style={{ color: "white", fontSize: 15 }}>{profile.age}</Text>
+                                {profile?.university_student && profile.university_student.status === "active" ? (
+                                    <View style={{ flexDirection: "column" }}>
+                                        <Text style={{ color: "white", fontSize: 13 }}>{profile.school}</Text>
+                                        <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
+                                    </View>
+                                ) : (
+                                    <Text style={{ color: "white", fontSize: 15 }}>{profile.job}</Text>
+                                )}
+                            </View>
+                            <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
+                        </View>
+                        {profile?.medals && profile.medals.length > 2 ? (
+                            <View style={{ flexDirection: "column" }}>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>{profile.medals[0]}</Text>
                                 </View>
-                            ) : (
-                                <Text style={{ color: "white", fontSize: 15 }}>{profile.job}</Text>
-                            )}
-                        </View>
-                        <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
-                    </View>
-                    {profile?.medals && profile.medals.length > 2 ? (
-                    <View style={{ flexDirection: "column" }}>
-                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                            <Text style={styles.cardtext}>{profile.medals[0]}</Text>
-                        </View>
-                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                            <Text style={styles.cardtext}>{profile.medals[1]}</Text>
-                        </View>
-                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                            <Text style={styles.cardtext}>{profile.medals[2]}</Text>
-                        </View>
-                    </View>
-                    ) : (
-                        <View style={{ flexDirection: "column" }}>
-                            <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                <Text style={styles.cardtext}>-- --</Text>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>{profile.medals[1]}</Text>
+                                </View>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>{profile.medals[2]}</Text>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                <Text style={styles.cardtext}>-- --</Text>
+                        ) : (
+                            <View style={{ flexDirection: "column" }}>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>-- --</Text>
+                                </View>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>-- --</Text>
+                                </View>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>-- --</Text>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                <Text style={styles.cardtext}>-- --</Text>
-                            </View>
+                        )}
+                        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                            <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.values[0]}</Text>
+                            <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.values[1]}</Text>
+                            <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.values[2]}</Text>
                         </View>
-                    )}
-                    <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.values[0]}</Text>
-                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.values[1]}</Text>
-                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.values[2]}</Text>
                     </View>
-                </View>
-                <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
-                    <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
-                    <Text style={{ color: "white", fontSize: 15, left: 5 }}>{profile.location}</Text>
-                </View>
-            </TouchableOpacity>
-            ):(
-                <View style={{justifyContent: "center", alignItems:"center" ,width:"100%", height:"50%"}}>
-                <Text style={{fontSize:20, color:"white"}}>User profile no longer exists</Text>
+                    <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
+                        <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
+                        <Text style={{ color: "white", fontSize: 15, left: 5 }}>{profile.location}</Text>
+                    </View>
+                </TouchableOpacity>
+            ) : (
+                <View style={{ justifyContent: "center", alignItems: "center", width: "100%", height: "50%" }}>
+                    <Text style={{ fontSize: 20 }}>User profile no longer exists</Text>
                 </View>
             )}
 
-            <View style={{ flexDirection: "row", justifyContent: "space-evenly", bottom: 20 }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-evenly", top: "3%" }}>
                 <TouchableOpacity
-                    style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#FF5864", width: "50%" }}
+                    style={styles.swipeButtonCross}
                     onPress={() => setSecondModal(true)}>
-                    <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
+                    {/* <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text> */}
+                    <Entypo name="cross" size={24} color="red" />
                 </TouchableOpacity>
                 {profile &&
-                <TouchableOpacity style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center", justifyContent: "center", padding: 15, backgroundColor: "#32de84", width: "50%" }}
-                    onPress={() => setMessageModalVisible(true)}>
-                    <Text style={{ color: "white", fontWeight: "bold" }}>Respond & Match</Text>
-                </TouchableOpacity>}
+                    <TouchableOpacity
+                        style={styles.swipeButtonHeart}
+                        onPress={() => setMessageModalVisible(true)}>
+                        {/* <Text style={{ color: "white", fontWeight: "bold" }}>Respond & Match</Text> */}
+                        <Entypo name="mail" size={17} color="green" />
+                    </TouchableOpacity>}
             </View>
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={isMessageModalVisible}
                 onRequestClose={() => {
@@ -293,44 +297,44 @@ const RequestMessageScreen = () => {
                 }}
             >
                 <KeyboardAvoidingView
-                // behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={styles.centeredView}
+                    // behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={styles.centeredView}
                 // keyboardVerticalOffset={10}
                 >
-                {/* <View style={styles.centeredView}> */}
-                    <View style={{bottom: isKeyboardVisible? "5%": 0, ...styles.modalView}}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, color: "white" }}>Send a Message:</Text>
+                    {/* <View style={styles.centeredView}> */}
+                    <View style={{ bottom: isKeyboardVisible ? "10%" : 0, ...styles.modalView }}>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17 }}>Reply and Match with {name}</Text>
                         <TextInput
                             value={message}
                             onChangeText={setMessage}
                             placeholder={'I love your mission! How can I help?'}
                             multiline
-                            numberOfLines={2}
+                            numberOfLines={5}
                             placeholderTextColor={"grey"}
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: "90%", height: "30%" }} />
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", width: "95%", height: "30%" }} />
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", borderRadius: 10 }}
+                            style={{ paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", borderRadius: 10, alignItems:"center", width: "60%", height:"20%", justifyContent:"center"}}
                             onPress={() => {
                                 matchThenMove();
                                 setMessageModalVisible(!isMessageModalVisible);
                             }}
                         >
-                            <Text>Match</Text>
+                            <Text style={{color:"white"}}>Match</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white", borderRadius: 10 }}
+                            style={{ paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", borderRadius: 10, alignItems:"center", width: "60%", height:"20%", justifyContent:"center"}}
                             onPress={() => {
                                 setMessageModalVisible(!isMessageModalVisible);
                             }}
                         >
-                            <Text>Cancel</Text>
+                            <Text style={{color:"white"}}>Cancel</Text>
                         </TouchableHighlight>
                     </View>
-                {/* </View> */}
+                    {/* </View> */}
                 </KeyboardAvoidingView>
             </Modal>
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={secondModal}
                 onRequestClose={() => {
@@ -339,23 +343,23 @@ const RequestMessageScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, color: "white" }}>Are You Sure You Want To Delete? User will not be shown again.</Text>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, textAlign:"center" }}>Are You Sure You Want To Delete This Request? {name} Will Not Be Shown Again.</Text>
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            style={{ paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", borderRadius:10, width: 120, alignItems:"center", width: "60%", height:"20%", justifyContent:"center" }}
                             onPress={() => {
                                 setSecondModal(!secondModal);
                                 deleteRequest();
                             }}
                         >
-                            <Text>Yes</Text>
+                            <Text style={{color:"white"}}>Yes</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+                            style={{ paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", borderRadius:10, width: 120, alignItems:"center", width: "60%", height:"20%", justifyContent:"center" }}
                             onPress={() => {
                                 setSecondModal(!secondModal);
                             }}
                         >
-                            <Text>No</Text>
+                            <Text style={{color:"white"}}>No</Text>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -393,17 +397,18 @@ const styles = StyleSheet.create({
     cardcontainer: {
         backgroundColor: "#00308F",
         // height: 600,
+        margin: 10,
         borderRadius: 20,
         borderColor: "#002D62",
         borderWidth: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 1
+            height: 3
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-        elevation: 2,
+        shadowOpacity: 0.5,
+        shadowRadius: 3.41,
+        elevation: 5
     },
     infocontainer: {
         //  bottom:70 ,
@@ -433,14 +438,16 @@ const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+
     },
     modalView: {
         height: "30%",
-        width:"80%",
+        width: "80%",
         maxHeight: 400,
         maxWidth: "90%",
-        backgroundColor: '#00BFFF',
+        backgroundColor: 'white',
         borderRadius: 20,
         padding: 10,
         alignItems: 'center',
@@ -453,7 +460,39 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-    }
+    },
+    swipeButtonCross: {
+        bottom: 10,
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#FF5864",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2.41,
+        elevation: 5
+    },
+    swipeButtonHeart: {
+        bottom: 10,
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#32de84",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 2.41,
+        elevation: 5
+    },
 })
 
 export default RequestMessageScreen

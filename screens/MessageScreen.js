@@ -92,7 +92,7 @@ const MessageScreen = () => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <ChatHeader matchedDetails={matchedDetails} profile={profile} />
 
       <KeyboardAvoidingView
@@ -116,10 +116,10 @@ const MessageScreen = () => {
                 ) : (
                   <View style={{ padding: 10, maxWidth: 250, marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
                     {profile ? (
-                      <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                      <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF"}}
                         source={{ uri: profile.images[0] }} />
                     ) : (
-                      <Image style={{ height: 50, width: 50, borderRadius: 50 }}
+                      <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
                         source={require("../images/account.jpeg")} />
                     )}
                     <RecieverMessage key={message.id} message={message} />
@@ -139,16 +139,18 @@ const MessageScreen = () => {
 
 
         <View
-          style={{ flexDirection: "row", borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center" }}>
+          style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin:5 }}>
           <TextInput
-            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, color: "white" }}
+            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, backgroundColor:"#E0E0E0" }}
             placeholder="Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}
-            placeholderTextColor={"#E0E0E0"}
+            placeholderTextColor={"grey"}
+            multiline = {true}
+            numberOfLines={5}
             value={input}
           />
-          <Button onPress={sendMessage} title="Send" color="#00BFFF" />
+          <Button onPress={sendMessage} title="Send" color="#00BFFF" style={{borderRadius:20}}/>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

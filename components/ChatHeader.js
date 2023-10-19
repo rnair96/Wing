@@ -12,6 +12,7 @@ const ChatHeader = ({ matchedDetails, profile }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondModal, setSecondModal] = useState(false);
   const [flag_modal, setFlagModal] = useState(false);
+  const name = profile && profile?.displayName ? profile.displayName: "Account User"
 
   // const [ rating_modal, setRatingModal ] = useState(false);
 
@@ -36,19 +37,19 @@ const ChatHeader = ({ matchedDetails, profile }) => {
 
 
   return (
-    <View style={{ flexDirection: "row", justifyContent: 'space-evenly' }}>
+    <View style={{ flexDirection: "row", justifyContent: 'space-evenly', backgroundColor:"white", paddingBottom:5, borderBottomWidth:1, borderColor:"#E0E0E0", margin:5 }}>
       <TouchableOpacity onPress={() => navigator.goBack()} style={{ padding: 2 }}>
         <Ionicons name="chevron-back-outline" size={34} color="#00BFFF" />
       </TouchableOpacity>
       {profile ? (
         <TouchableOpacity onPress={() => navigator.navigate("ProfileView", { matchedDetails, profile })} style={{ paddingVertical: 2, flexDirection: "row", marginHorizontal: "25%", left: "4%" }}>
           <Image style={{ height: 40, width: 40, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile.images[0] }} />
-          <Text style={{ padding: 10, fontWeight: "bold", fontSize: 12, color: "white" }}> {profile.displayName} </Text>
+          <Text style={{ padding: 10, fontWeight: "bold", fontSize: 12 }}> {profile.displayName} </Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={() => alert("Can't open empty user profile. Try again later.")} style={{ paddingVertical: 2, flexDirection: "row", marginHorizontal: "25%", left: "4%" }}>
           <Image style={{ height: 40, width: 40, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={require("../images/account.jpeg")} />
-          <Text style={{ padding: 10, fontWeight: "bold", fontSize: 12, color: "white" }}> Account User</Text>
+          <Text style={{ padding: 10, fontWeight: "bold", fontSize: 12 }}> Account User</Text>
         </TouchableOpacity>
       )}
 
@@ -57,7 +58,7 @@ const ChatHeader = ({ matchedDetails, profile }) => {
         <Ionicons name="menu" size={34} color="#00BFFF" />
       </TouchableOpacity>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -85,7 +86,7 @@ const ChatHeader = ({ matchedDetails, profile }) => {
             >
               <Text style={styles.textStyle}>Rate Wing</Text>
             </TouchableHighlight> */}
-            <Text style={{ padding: 20, color: "white", fontWeight: "bold", fontSize: 20 }}>Chat Options</Text>
+            <Text style={{ padding: 20, fontWeight: "bold", fontSize: 20 }}>Chat Options</Text>
 
 
             <TouchableHighlight
@@ -121,7 +122,7 @@ const ChatHeader = ({ matchedDetails, profile }) => {
 
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={secondModal}
         onRequestClose={() => {
@@ -129,8 +130,8 @@ const ChatHeader = ({ matchedDetails, profile }) => {
         }}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={{ padding: 12, color: "white", fontWeight: "bold", fontSize: 20 }}>Are You Sure You Want To Unmatch?</Text>
+          <View style={{...styles.modalView, width:"70%"}}>
+            <Text style={{ padding: 12, fontWeight: "bold", fontSize: 17, textAlign:"center" }}>Are You Sure You Want to Unmatch? {name} Will Not Be Shown Again.</Text>
             <TouchableHighlight
               style={styles.opacityStyle}
               onPress={() => {
@@ -181,14 +182,16 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+
   },
   modalView: {
     height: "30%",
     width: "60%",
     // maxHeight:500,
     // maxWidth:"90%",
-    backgroundColor: '#00BFFF',
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 10,
     alignItems: 'center',
@@ -196,25 +199,27 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 3
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5
   },
   textStyle: {
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     textAlign: 'center'
   },
   opacityStyle: {
-    borderColor: "#00308F", 
-    borderWidth: 2, 
+    // borderColor: "#00308F", 
+    // borderWidth: 2, 
     paddingVertical: 5, 
     paddingHorizontal: 30, 
-    backgroundColor: "white", 
+    backgroundColor: "#00308F", 
     width: "90%", 
+    height:"20%",
     alignItems: "center", 
+    justifyContent:"center",
     borderRadius: 10
   }
 })

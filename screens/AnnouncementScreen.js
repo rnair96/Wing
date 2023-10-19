@@ -65,7 +65,7 @@ const AnnouncementScreen = () => {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <Header title={"News & Promos"} />
 
             <KeyboardAvoidingView
@@ -95,21 +95,21 @@ const AnnouncementScreen = () => {
                 }
                 {canInput &&
                     <View
-                        style={{ borderColor: "#E0E0E0", borderWidth: 2, borderRadius: 10, alignItems: "center" }}>
+                        style={{ borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin:5 }}>
                         <TextInput
-                            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, color: "white", borderBottomWidth:2, borderColor: "#E0E0E0"}}
+                            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, borderBottomWidth:2, borderColor: "grey"}}
                             placeholder="Set Announcement Title"
                             onChangeText={setTitle}
                             onSubmitEditing={sendMessage}
-                            placeholderTextColor={"#E0E0E0"}
+                            placeholderTextColor={"grey"}
                             value={title}
                         />
                         <TextInput
-                            style={{ height: 100, width: "80%", fontSize: 15, padding: 10, color: "white" ,borderBottomWidth:2, borderColor: "#E0E0E0"}}
+                            style={{ height: 100, width: "80%", fontSize: 15, padding: 10, borderBottomWidth:2, borderColor: "grey"}}
                             placeholder="Enter Announcement..."
                             onChangeText={setInput}
                             onSubmitEditing={sendMessage}
-                            placeholderTextColor={"#E0E0E0"}
+                            placeholderTextColor={"grey"}
                             multiline
                             numberOfLines={10}
                             value={input}

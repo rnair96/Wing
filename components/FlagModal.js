@@ -37,7 +37,7 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={isVisible}
       onRequestClose={() => {
@@ -113,7 +113,9 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+
   },
   modalView: {
     height: "60%",
@@ -127,8 +129,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     shadowColor: '#000',
     shadowOffset: {
-      width: 10,
-      height: 10
+      width: 0,
+      height: 5
     },
     shadowOpacity: 0.5,
     shadowRadius: 4,
