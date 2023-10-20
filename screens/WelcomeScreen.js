@@ -59,7 +59,7 @@ const WelcomeScreen = () => {
                 <Text style={styles.boldtext}>1. Swiping through Wings</Text>
                 <Text style={styles.tutorialText}>This is your Swipe Screen, where you will be given a list of Wing profiles to swipe through.</Text>
                 {/* <View style={{justifyContent:"center", width:"100%"}}> */}
-                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/swipescreen.jpg")} />
+                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/swipescreen.png")} />
                 {/* </View> */}
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
                   <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>Press </Text>
@@ -85,11 +85,11 @@ const WelcomeScreen = () => {
                   </View>
                 </View>
                 <Text style={styles.tutorialText}>Responding to a Request will move that user to your Active Chats and create a new chat thread.</Text>
-                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/request_response.jpg")} />
+                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/request_response.png")} />
                 <Text style={styles.boldtext}>3. Local Missions & Events</Text>
                 <Text style={styles.tutorialText}>Get exclusive access to promotional deals with bars, restuarants, events and other local establishments that you can explore with your Wing!</Text>
                 <Text style={styles.tutorialText}>Simply check the News & Promos thread in your Active Chats to take advantage of the latest deals.</Text>
-                <Image style={{ height: 300, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.jpg")} />
+                <Image style={{ height: 200, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.jpg")} />
                 <Text style={styles.boldtext}>4. More Options</Text>
                 <Text style={styles.tutorialText}>To edit and view your own profile,</Text>
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>

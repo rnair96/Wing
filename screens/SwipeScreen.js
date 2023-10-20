@@ -229,7 +229,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                                 <View key={card.id} style={styles.cardcontainer}>
                                     <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => { navigation.navigate("ProfileSwipe", { card: card }) }}>
                                         <View style={{ alignItems: "center", bottom: 20 }}>
-                                            <Text style={{color:"white"}}>Mission: </Text>
+                                            <Text style={{color:"white", margin:10}}>Mission: </Text>
                                             <Text style={styles.text}>{card.mission}</Text>
                                         </View>
                                         <View style={{ justifyContent: "space-evenly", height: "65%", width: "100%", backgroundColor: "#002D62" }}>
@@ -249,7 +249,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                                                 <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card?.images[0] }} />
                                             </View>
                                             {card?.medals && card.medals.length > 2 ? (
-                                                <View style={{ flexDirection: "column" }}>
+                                                <View style={{ flexDirection: "column", marginLeft:5 }}>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.medals[0]}</Text>
@@ -264,17 +264,17 @@ const SwipeScreen = ({ loggedProfile }) => {
                                                     </View>
                                                 </View>
                                             ) : (
-                                                <View style={{ flexDirection: "column" }}>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <View style={{ flexDirection: "column", width:"100%", alignItems:"center"}}>
+                                                    <View style={{ flexDirection: "row", padding: 10 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                    <View style={{ flexDirection: "row", padding: 10 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                    <View style={{ flexDirection: "row", padding: 10 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View>
                                                 </View>
@@ -372,8 +372,9 @@ const styles = StyleSheet.create({
         // position: 'absolute', 
         top: 10,  // This will place the text near the top of the image
         color: "white",
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
+        margin:3
     },
     cardtext: {
         color: "white",

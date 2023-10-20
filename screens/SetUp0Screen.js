@@ -59,7 +59,7 @@ const SetUp0Screen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: "black" }}
+      style={{ flex: 1, backgroundColor: "white" }}
       keyboardVerticalOffset={10}>
       <ScrollView style={{ marginHorizontal: 10}}>
       <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly"}}>
@@ -79,7 +79,7 @@ const SetUp0Screen = () => {
               <TextInput
                 onChangeText={setName}
                 placeholder={'John'}
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
             </View>
           )
           }
@@ -98,7 +98,7 @@ const SetUp0Screen = () => {
             onChangeText={setLocation}
             placeholder='City, State'
             placeholderTextColor={"grey"}
-            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white", marginBottom:20}} />
+            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginBottom:20, backgroundColor:"#E0E0E0"}} />
 
           <View style={{ height: 150 }}>
             <TouchableOpacity
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "white",
     padding: 20
   }
 })

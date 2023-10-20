@@ -39,7 +39,7 @@ const SetUp2Screen = () => {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1, backgroundColor: "black" }}
+            style={{ flex: 1, backgroundColor: "white" }}
             keyboardVerticalOffset={10}>
 
             <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly" }}>
@@ -48,7 +48,7 @@ const SetUp2Screen = () => {
                     // onPress={Keyboard.dismiss()}
                 >
                     <View>
-                        <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account Setup 2/3"} />
+                        <Header style={{right:"25%"}} title={"Account Setup 2/3"} />
                     </View>
                 </TouchableWithoutFeedback>
 
@@ -69,7 +69,7 @@ const SetUp2Screen = () => {
                     onChangeText={setJob}
                     placeholder={'I.e Lawyer'}
                     placeholderTextColor={"grey"}
-                    style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+                    style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0"}} />
 
                 
 
@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     formTitle: {
         fontSize: 15,
         fontWeight: "bold",
-        color: "white",
         padding: 20
     },
     button: {

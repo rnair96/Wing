@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useState, useEffect } from 'react'
 import { StyleSheet, ImageBackground, Text, View, SafeAreaView, TouchableOpacity, Image, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import useAuth from '../hooks/useAuth';
 import * as WebBrowser from 'expo-web-browser';
@@ -12,6 +12,7 @@ const LoginScreen = () => {
     const [password, setPassword] = useState(null);
     const [isLogin, setIsLogin] = useState(false);
     const { signInWithGoogle, signInWithApple, logInManually } = useAuth();
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const navigation = useNavigation();
 
 
@@ -19,6 +20,26 @@ const LoginScreen = () => {
         navigation.setOptions({
             headerShown: false
         });
+    }, []);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
     }, []);
 
     return (
@@ -40,7 +61,7 @@ const LoginScreen = () => {
                 </TouchableWithoutFeedback>
 
                 {isLogin ? (
-                    <View style={{ marginVertical: "10%", marginHorizontal: "20%", alignItems: 'center', height: "40%", justifyContent: "space-evenly", backgroundColor: "#00308F", opacity: 0.8, borderRadius: 20 }}>
+                    <View style={{ marginVertical:  isKeyboardVisible?"-5%":"10%", marginHorizontal: "20%", alignItems: 'center', height: "40%", justifyContent: "space-evenly", backgroundColor: "#00308F", opacity: 0.8, borderRadius: 20 }}>
                         <KeyboardAvoidingView
                             behavior={Platform.OS === "ios" ? "padding" : "height"}
                             style={{ alignItems: "center", justifyContent: "space-evenly", height: "80%" }}

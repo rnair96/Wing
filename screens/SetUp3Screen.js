@@ -53,15 +53,15 @@ const SetUp3Screen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: "black" }}
+      style={{ flex: 1, backgroundColor: "white" }}
       keyboardVerticalOffset={5}>
       <TouchableWithoutFeedback
       // onPress={Keyboard.dismiss()}
       >
         <ScrollView style={{ marginHorizontal: 10 }}>
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", backgroundColor: "black" }}>
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly"}}>
             <SafeAreaView>
-              <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account Setup 3/3"} />
+              <Header style={{marginHorizontal:"17%",right:"40%"}} title={"Account Setup 3/3"} />
               {/* <Text style={{fontSize:20, fontWeight: "bold", padding:20}}>Account Setup 2/4</Text> */}
               <EulaModal
                 isVisible={eulaVisible}
@@ -85,7 +85,7 @@ const SetUp3Screen = () => {
                 onChangeText={setMission}
                 placeholder={'Explore the local nightlife'}
                 placeholderTextColor={"grey"}
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white", marginTop:20 }} />
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginTop:20, width:"55%", backgroundColor:"#E0E0E0" }} />
             </View>
 
             <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>
@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "white",
     padding: 10,
     marginTop:20
   }

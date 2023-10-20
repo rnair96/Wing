@@ -52,7 +52,7 @@ function HelpScreen() {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={15}>
     <SafeAreaView style={{margin:20}}>
-    <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Help"}/>
+    <Header title={"Help"}/>
     </SafeAreaView>
     <View style={{height:"80%",justifyContent:"space-evenly", alignItems:"center"}}>
     <Text style={{fontSize:15, textAlign:"center"}}>

@@ -45,7 +45,7 @@ const RequestsList = () => {
     ):
     (
       <View style ={{flexDirection:"row", marginVertical:"60%", justifyContent:"center"}}>
-        <Text style={{fontWeight:"bold", color:"white"}}> No Requests At This Time </Text>
+        <Text style={{fontWeight:"bold"}}> No Requests At This Time </Text>
       </View>
     )
     

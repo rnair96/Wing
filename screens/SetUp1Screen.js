@@ -10,7 +10,7 @@ const SetUp1Screen = () => {
 
 
     return (
-        <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly", backgroundColor:"black"}}>
+        <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"space-evenly", backgroundColor:"white"}}>
      
             <Text style={styles.formTitle}>Are you a college student?</Text>
             <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate("StudentSetup")}>
@@ -26,19 +26,25 @@ const SetUp1Screen = () => {
 
 const styles = StyleSheet.create({
     formTitle :{
-      fontSize:15, 
+      fontSize:17, 
       fontWeight: "bold", 
-      color:"white", 
       padding:20
     },
     button :{
         padding:10,
-        width:100, 
+        width:"50%", 
         height:50,
         backgroundColor:"#00308F",
         borderRadius:10,
         alignItems:"center",
-        justifyContent:"center"
+        justifyContent:"center",
+        shadowOffset: {
+            width: 0,
+            height: 3
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2.41,
+        elevation: 5
 
     }
   })

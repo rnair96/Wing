@@ -48,7 +48,7 @@ const StudentSetupScreen = () => {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1, backgroundColor: "black" }}
+            style={{ flex: 1, backgroundColor: "white" }}
             keyboardVerticalOffset={15}>
             <TouchableWithoutFeedback
             // onPress={Keyboard.dismiss()}
@@ -57,7 +57,7 @@ const StudentSetupScreen = () => {
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", paddingBottom: 50 }}>
 
                         <SafeAreaView>
-                            <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account Setup 2/3"} />
+                            <Header style={{right:"40%"}} title={"Account Setup 2/3"} />
                         </SafeAreaView>
 
                         <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
@@ -78,7 +78,7 @@ const StudentSetupScreen = () => {
                                 onChangeText={setCollege}
                                 placeholder={'I.e American University'}
                                 placeholderTextColor={"grey"}
-                                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white", marginBottom:20 }} />
+                                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginBottom:20 }} />
                         {/* </View> */}
 
                         {/* <View style={{ padding: 20, alignItems: "center" }}>
@@ -93,7 +93,7 @@ const StudentSetupScreen = () => {
 
                         <View style={{ padding: 20, alignItems: "center", marginBottom:20 }}>
                             <Text style={styles.formTitle}>Join Wing University?</Text>
-                            <Text style={{ padding: 5, color: "white" }}>{`(A space to exclusively match with other University students. You can change this setting later)`}</Text>
+                            <Text style={{ padding: 5 }}>{`(A space to exclusively match with other University students. You can change this setting later)`}</Text>
                             <YNRadioButton selectedOption={universityPreference} setSelectedOption={setUniversityPreference} />
                         </View>
 
@@ -101,7 +101,7 @@ const StudentSetupScreen = () => {
                             disabled={incompleteform}
                             style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10 }, incompleteform ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
                             onPress={updateUserProfile}>
-                            <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Next</Text>
+                            <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Next</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
     formTitle: {
         fontSize: 15,
         fontWeight: "bold",
-        color: "white",
         padding: 20
     },
     button: {

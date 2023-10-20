@@ -9,12 +9,12 @@ const ValuesList = ({selectedValues, setSelectedValues}) => {
     'Responsibility', 'Perseverance', 'Courage', 'Kindness', 
     'Humility', 'Generosity', 'Gratitude', 'Optimism', 
     'Creativity', 'Wisdom', 'Leadership', 'Teamwork', 
-    'Adaptability', 'Curiosity', 'Passion', 'Ambition',
+    'Adaptability', 'Curiosity', 'Passion', 'Purposeful','Ambition',
     'Empathy', 'Determination', 'Justice', 'Fairness', 
     'Patience', 'Discipline', 'Diligence', 'Authenticity',
     'Consistency', 'Altruism', 'Harmony', 'Excellence', 
     'Self-control', 'Sincerity', 'Forgiveness', 'Resilience', 
-    'Open-mindedness', 'Accountability', 'Appreciation',
+    'Open-mindedness', 'Accountability', 'Appreciation','Service',
     'Tolerance', 'Mindfulness', 'Inclusivity', 'Dependability',
     'Punctuality','Positivity', 'Vigilance', 'Devotion', 'Dedication'
 ];
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     margin: 5,
-    borderRadius: 5,
+    borderRadius: 20,
   },
   selected: {
     backgroundColor: '#00BFFF',

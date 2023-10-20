@@ -26,7 +26,7 @@ const ViewProfileScreen = ({ profile }) => {
 
                             <View style={styles.cardcontainer}>
                                 <View style={{ alignItems: "center", padding: 20 }}>
-                                    <Text style={{ color: "white" }}>Mission: </Text>
+                                    <Text style={{ color: "white", margin:5 }}>Mission: </Text>
                                     <Text style={styles.text}>{card.item.mission}</Text>
                                 </View>
                                 <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
@@ -46,7 +46,7 @@ const ViewProfileScreen = ({ profile }) => {
                                         <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card.item?.images[0] }} />
                                     </View>
                                     {card.item?.medals && card.item?.medals.length > 2 ? (
-                                                <View style={{ flexDirection: "column" }}>
+                                                <View style={{ flexDirection: "column", marginLeft:5 }}>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.item.medals[0]}</Text>
@@ -61,17 +61,17 @@ const ViewProfileScreen = ({ profile }) => {
                                                     </View>
                                                 </View>
                                             ) : (
-                                                <View style={{ flexDirection: "column" }}>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <View style={{ flexDirection: "column", width:"100%", alignItems:"center"}}>
+                                                    <View style={{ flexDirection: "row", padding: 10}}>
+                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                    <View style={{ flexDirection: "row", padding: 10}}>
+                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                    <View style={{ flexDirection: "row", padding: 10 }}>
+                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View>
                                                 </View>
@@ -312,8 +312,9 @@ const styles = StyleSheet.create({
         // left: 0,
         // right: 0,
         color: "white",
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
+        margin:3
         // textAlign: 'center',
         // textShadowColor: 'rgba(0, 0, 0, 0.9)', // Shadow color
         // textShadowOffset: { width: -1, height: 1 },

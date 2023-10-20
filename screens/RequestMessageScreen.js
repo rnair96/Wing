@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import RecieverMessage from './RecieverMessage';
 import { collection, serverTimestamp, updateDoc, doc, writeBatch, getDoc } from 'firebase/firestore';
@@ -186,7 +186,8 @@ const RequestMessageScreen = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <Header title={name} />
 
-
+            <ScrollView>
+            <View>
             <View style={{ padding: 10, maxWidth: 250, marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
                 {/* <Image
                     style={{ height: 50, width: 50, borderRadius: 50 }}
@@ -206,7 +207,7 @@ const RequestMessageScreen = () => {
             {profile ? (
                 <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileSwipe", { card: profile })}>
                     <View style={{ alignItems: "center", padding: 20 }}>
-                        <Text style={{ color: "white" }}>Mission: </Text>
+                        <Text style={{ color: "white", margin:5 }}>Mission: </Text>
                         <Text style={styles.text}>{profile.mission}</Text>
                     </View>
                     <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
@@ -226,32 +227,32 @@ const RequestMessageScreen = () => {
                             <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
                         </View>
                         {profile?.medals && profile.medals.length > 2 ? (
-                            <View style={{ flexDirection: "column" }}>
-                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                            <View style={{ flexDirection: "column", marginLeft:5, marginRight:7}}>
+                                <View style={{ flexDirection: "row", padding: 10}}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{profile.medals[0]}</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                <View style={{ flexDirection: "row", padding: 10 }}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{profile.medals[1]}</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                <View style={{ flexDirection: "row", padding: 10 }}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{profile.medals[2]}</Text>
                                 </View>
                             </View>
                         ) : (
-                            <View style={{ flexDirection: "column" }}>
+                            <View style={{ flexDirection: "column", width:"100%", alignItems:"center" }}>
                                 <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>-- --</Text>
                                 </View>
                                 <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>-- --</Text>
                                 </View>
                                 <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>-- --</Text>
                                 </View>
                             </View>
@@ -272,6 +273,8 @@ const RequestMessageScreen = () => {
                     <Text style={{ fontSize: 20 }}>User profile no longer exists</Text>
                 </View>
             )}
+            </View>
+            </ScrollView>
 
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", top: "3%" }}>
                 <TouchableOpacity
@@ -428,8 +431,9 @@ const styles = StyleSheet.create({
         // left: 0,
         // right: 0,
         color: "white",
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
+        margin: 3
         // textAlign: 'center',
         // textShadowColor: 'rgba(0, 0, 0, 0.9)', // Shadow color
         // textShadowOffset: { width: -1, height: 1 },
