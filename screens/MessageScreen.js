@@ -141,7 +141,7 @@ const MessageScreen = () => {
         <View
           style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin:5 }}>
           <TextInput
-            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, backgroundColor:"#E0E0E0" }}
+            style={{ height: 50, width: "80%", fontSize: 15, padding: 10}}
             placeholder="Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}

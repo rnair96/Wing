@@ -17,7 +17,7 @@ const MenuScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", backgroundColor: "white" }}>
-            <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.navigate("ToggleProfile", profile)}>
+            <TouchableOpacity style={{ flexDirection: "row", alignItems: "center"}} onPress={() => navigation.navigate("ToggleProfile", profile)}>
                 <Image style={{ height: 100, width: 100, borderRadius: 50, borderColor: "#00BFFF", borderWidth: 2, left: 20 }} source={{ uri: profile ? profile?.images[0] : '../images/account.jpeg' }} />
                 {/* borderColor:"#00308F" */}
                 <View style={{ padding: 4, backgroundColor: "white", borderRadius: 20, borderWidth: 1, borderColor: "#989898" }}>
@@ -50,7 +50,7 @@ const MenuScreen = () => {
                 <Text style={{ padding: 10, fontSize: 15, color: "white" }}>Help</Text>
                 <Ionicons name="help" style={{ padding: 10 }} size={30} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={{shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5}} onPress={() => navigation.navigate("Home")}>
+            <TouchableOpacity style={{shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor:"white", borderRadius:50}} onPress={() => navigation.navigate("Home")}>
                 <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
             </TouchableOpacity>
         </SafeAreaView>

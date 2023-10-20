@@ -387,6 +387,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#FF5864",
+        // shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 2
@@ -403,11 +404,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#32de84",
+        // shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 2
         },
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.5,
         shadowRadius: 2.41,
         elevation: 5
     },

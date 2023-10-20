@@ -66,11 +66,11 @@ const AnnouncementRow = ({profile}) => {
                         <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "#00BFFF" }} source={require("../images/logo.png")} />
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5, color: "white" }}>News & Promos</Text>
-                                <Text style={{ paddingLeft: 10, color: "white", fontWeight: !read? "bold":"normal" }}>{lastMessage}</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>News & Promos</Text>
+                                <Text style={{ paddingLeft: 10, fontWeight: !read? "bold":"normal" }}>{lastMessage}</Text>
                         </View>
                         <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
-                            <Text style={{ fontSize: 10, color: "white" }}>{timestamp}</Text>
+                            <Text style={{ fontSize: 10}}>{timestamp}</Text>
                             {!read && <UnreadHighlighter />}
                         </View>
                     </View>
@@ -86,18 +86,20 @@ const styles = StyleSheet.create({
     container: {
         left: 15,
         flexDirection: "row",
-        backgroundColor: "#00308F",
+        backgroundColor: "white",
         alignItems: "center",
         padding: 5,
-        shadowColor: "#000",
-        borderRadius: 15,
-        shadowOffset: {
-            width: 0,
-            height: 3
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 2.41,
-        elevation: 5
+        // shadowColor: "#000",
+        // borderRadius: 15,
+        borderBottomWidth:1,
+        borderColor:"#E0E0E0"
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 3
+        // },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 2.41,
+        // elevation: 5
     }
 })
 

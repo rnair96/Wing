@@ -143,15 +143,21 @@ const HomeScreen = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             {/* Header */}
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10 }}>
-                <TouchableOpacity style={{shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'transparent' }} onPress={() => navigation.navigate("ToggleProfile", loggedProfile)}>
+                <TouchableOpacity 
+                // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }} 
+                onPress={() => navigation.navigate("ToggleProfile", loggedProfile)}>
                     {/* left: 20, top:10 */}
                     <Ionicons name="person" size={30} color="#00BFFF" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ top: 30, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor: 'transparent'}} onPress={() => navigation.navigate("Menu", loggedProfile)}>
+                <TouchableOpacity 
+                style={{ borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white'}} 
+                onPress={() => navigation.navigate("Menu", loggedProfile)}>
                     <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
                 </TouchableOpacity>
                 {/* right:20, top:10 */}
-                <TouchableOpacity style={{shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'transparent'}} onPress={() => navigation.navigate("ToggleChat", loggedProfile)}>
+                <TouchableOpacity 
+                // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white'}} 
+                onPress={() => navigation.navigate("ToggleChat", loggedProfile)}>
                     <Ionicons name="chatbubbles-sharp" size={30} color="#00BFFF" />
                 </TouchableOpacity>
             </View>
@@ -167,7 +173,6 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         borderRadius: 50,
-        bottom: 25,
         backgroundColor: "#00BFFF",
     }
 });

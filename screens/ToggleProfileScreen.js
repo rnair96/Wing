@@ -24,15 +24,15 @@ const ToggleProfileScreen = () => {
         <TouchableOpacity style={{ paddingTop: 20 }} onPress={() => isEditSaved ? navigation.goBack() : setIsModalVisible(true)}>
           <Ionicons name="ios-arrow-back" size={30} color="#00BFFF" />
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', width: "35%", height: "80%", justifyContent: 'space-between', right: "14%", top: 10, borderWidth: 1, borderRadius: 10, backgroundColor: "#585858" }}>
-          <TouchableOpacity style={{ padding:10, borderWidth: 1, borderRadius: 10, alignItems: "center", justifyContent: "center", backgroundColor: showEdit ? "white" : "#A8A8A8" }} onPress={() => setShowEdit(true)}>
+        <View style={{ flexDirection: 'row', width: "40%", height: "80%", justifyContent: 'space-between', right: "14%", top: 10, borderBottomWidth:1, borderColor:"#E0E0E0" }}>
+          <TouchableOpacity style={{ padding:10, alignItems: "center", justifyContent: "center" }} onPress={() => setShowEdit(true)}>
             {/* <Ionicons name="pencil" size={20} color="#00308F" /> */}
-            <Text style={{color:"#00BFFF",fontSize:14}}>Edit</Text>
+            <Text style={{color: showEdit ? "#00BFFF" : "#A8A8A8",fontSize:17, fontWeight:"bold"}}>Edit</Text>
 
           </TouchableOpacity>
-          <TouchableOpacity style={{ padding:10, borderWidth: 1, borderRadius: 10, alignItems: "center", justifyContent: "center", backgroundColor: showEdit ? "#A8A8A8" : "white" }} onPress={() => isEditSaved ? setShowEdit(false) : setIsModalVisible(true)}>
+          <TouchableOpacity style={{ padding:10, alignItems: "center", justifyContent: "center" }} onPress={() => isEditSaved ? setShowEdit(false) : setIsModalVisible(true)}>
             {/* <MaterialCommunityIcons name="eye" size={20} color="#00308F" /> */}
-            <Text style={{color:"#00BFFF",fontSize:14}}>View</Text>
+            <Text style={{color: showEdit ? "#A8A8A8":"#00BFFF",fontSize:17, fontWeight:"bold"}}>View</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -47,14 +47,14 @@ const ToggleProfileScreen = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, color: "white", textAlign:"center" }}>Make sure to fill all image slots and to save changes to profile before exiting.</Text>
+            <Text style={{ padding: 5, fontWeight: "bold", fontSize: 15, textAlign:"center" }}>Make sure to fill all image slots and to save changes to profile before exiting.</Text>
             <TouchableHighlight
-              style={{ borderColor: "#00308F", borderWidth: 2, paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "white" }}
+              style={{ width: "90%", height:"20%", backgroundColor: "#00308F", borderRadius:10, justifyContent:"center", alignItems:"center" }}
               onPress={() => {
                 setIsModalVisible(!isModalVisible);
               }}
             >
-              <Text>Ok</Text>
+              <Text style={{color:"white", fontWeight: 'bold', textAlign: 'center'}}>Ok</Text>
               </TouchableHighlight>
           </View>
         </View>
@@ -82,21 +82,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)'
 },
 modalView: {
     height:"30%",
     width:"80%",
-    backgroundColor: '#00BFFF',
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 10,
     alignItems: 'center',
     justifyContent: 'space-evenly',
     shadowColor: '#000',
     shadowOffset: {
-        width: 0,
-        height: 2
+      width: 0,
+      height: 5
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5
 }

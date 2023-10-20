@@ -303,7 +303,7 @@ const RequestMessageScreen = () => {
                 >
                     {/* <View style={styles.centeredView}> */}
                     <View style={{ bottom: isKeyboardVisible ? "10%" : 0, ...styles.modalView }}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17 }}>Reply and Match with {name}</Text>
+                        <Text style={{ padding: 5, fontWeight: "bold", fontSize: 17, textAlign:"center" }}>Reply and Match with {name}</Text>
                         <TextInput
                             value={message}
                             onChangeText={setMessage}
@@ -343,7 +343,7 @@ const RequestMessageScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 17, textAlign:"center" }}>Are You Sure You Want To Delete This Request? {name} Will Not Be Shown Again.</Text>
+                        <Text style={{ padding: 5, fontWeight: "bold", fontSize: 17, textAlign:"center" }}>Are You Sure You Want To Delete This Request? {name} Will Not Be Shown Again.</Text>
                         <TouchableHighlight
                             style={{ paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", borderRadius:10, width: 120, alignItems:"center", width: "60%", height:"20%", justifyContent:"center" }}
                             onPress={() => {
