@@ -88,19 +88,19 @@ const MatchingPreferences = () => {
 
 
     return (
-    <ScrollView style={{backgroundColor:"black"}}>
+    <ScrollView style={{backgroundColor:"white"}}>
 
     <SafeAreaView style={{alignItems:"center"}}>
      {/* {profile?.genderPreference ? 
      ( */}
-      <Header style={{fontSize:20, fontWeight: "bold"}} title={"Matching Preferences"}/>
+      <Header style={{marginHorizontal:"10%", right:10}} title={"Matching Preferences"}/>
      {/* ):(
       <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 4/4"}/>
      )} */}
     </SafeAreaView>
     <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
 
-      <Text style={{fontSize:15, fontWeight: "bold", padding:40, color:"white"}}>Choose Your Wing Preferences</Text> 
+      <Text style={{fontSize:15, fontWeight: "bold", padding:40 }}>Choose Your Wing Preferences</Text> 
 
       {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
 
@@ -124,14 +124,14 @@ const MatchingPreferences = () => {
       </View> */}
 
       <View style={{alignItems:"center", paddingBottom:60}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"white", padding:10}}>Mission Category</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", padding:10}}>Mission Category</Text>
         <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
       </View>
 
       {activeStudent && (
         <View style={{alignItems:"center", padding:10}}>
-        <Text style={{fontSize:15, fontWeight: "bold", color:"white", padding:5}}>Only See Users In Wing-U?</Text>
-        <Text style={{fontSize:12, padding:20, color:"white"}}>{`(Exclusively university students)`}</Text>
+        <Text style={{fontSize:15, fontWeight: "bold", padding:5}}>Only See Users In Wing-U?</Text>
+        <Text style={{fontSize:12, padding:20 }}>{`(Exclusively university students)`}</Text>
         <YNRadioButton selectedOption={wingUni} setSelectedOption={setWingUni}/>
       </View>
       )}
@@ -139,7 +139,7 @@ const MatchingPreferences = () => {
       <View style={{height:150}}>
       <TouchableOpacity 
           disabled = {incompleteform}
-          style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteform ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
+          style={{width:200, height:50, paddingTop:15, top:20, borderRadius:10, shadowOffset: {width: 0, height: 3}, shadowOpacity: 0.5, shadowRadius: 4, elevation: 5, backgroundColor: incompleteform ? "grey" : "#00308F"}}
           onPress = {updatePreferences}>
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Preferences</Text>
       </TouchableOpacity>

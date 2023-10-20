@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 
-const Header = ({title}) => {
+const Header = ({title, style}) => {
     const navigator = useNavigation();
 
     return (
@@ -13,9 +13,9 @@ const Header = ({title}) => {
             <Ionicons name="chevron-back-outline" size={34} color="#00BFFF"/>
         </TouchableOpacity>
         {title.length < 10? (
-          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00BFFF",  marginHorizontal:"30%"}}> {title} </Text>
+          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00BFFF",  marginHorizontal:"27%", ...style}}> {title} </Text>
         ):(
-          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00BFFF",  marginHorizontal:"20%"}}> {title} </Text>
+          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00BFFF",  marginHorizontal:"20%", ...style}}> {title} </Text>
         )}
       </View>
     )

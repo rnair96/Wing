@@ -112,15 +112,15 @@ const AccountScreen = () => {
 
 
     return (
-        <View style={{ backgroundColor: "black", height: "100%" }}>
+        <View style={{ backgroundColor: "white", height: "100%" }}>
             <SafeAreaView>
-                <Header style={{ fontSize: 20, fontWeight: "bold", padding: 20 }} title={"Account"} />
+                <Header title={"Account"} />
             </SafeAreaView>
             <View style={{ height: "90%", width: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
 
                 <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
-                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Edit Push Notifications</Text>
-                    <Text style={{ fontSize: 12, margin: 10, color: "white" }}>Recieve notifications on messages, chat requests, and new matches?</Text>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Edit Push Notifications</Text>
+                    <Text style={{ fontSize: 12, margin: 10}}>Recieve notifications on messages, chat requests, and new matches?</Text>
                     {/* <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200, backgroundColor: notifications? "red":"green" }} onPress={() => editNotifications()}>
                             <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>{notifications?`Currently On.. Turn Off?`:`Currently Off.. Turn On?`}</Text>
                         </TouchableOpacity> */}
@@ -138,20 +138,20 @@ const AccountScreen = () => {
 
                 {activeStudent && (
                     <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
-                        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Leave Wing-U?</Text>
-                        <Text style={{ fontSize: 12, margin: 10, color: "white" }}>Graduate Wing University and upgrade your profile and matching as a Professional!</Text>
+                        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Leave Wing-U?</Text>
+                        <Text style={{ fontSize: 12, margin: 10 }}>Graduate Wing University and upgrade your profile and matching as a Professional!</Text>
                         <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200 }} onPress={() => updateUniversitySetting()}>
                             <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Yes, Upgrade to Professional</Text>
                         </TouchableOpacity>
                     </View>
                 )}
 
-                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Contact Email</Text>
+                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Contact Email</Text>
                 <View style={{ flexDirection: "row" }}>
                     <TextInput
                         value={email}
                         onChangeText={setEmail}
-                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, color: "white" }} />
+                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
                     <TouchableOpacity style={styles.savebuttonContainer} onPress={() => updateEmail()}>
                         <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Update</Text>
                     </TouchableOpacity>
@@ -163,7 +163,10 @@ const AccountScreen = () => {
                 </TouchableOpacity>)}
 
                 <TouchableOpacity
-                    style={{ width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "#00308F" }}
+                    style={{ width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "#00308F",  shadowOffset: {width: 0, height: 3},
+                    shadowOpacity: 0.5,
+                    shadowRadius: 4,
+                    elevation: 5 }}
                     onPress={() => {
                         // navigation.navigate("Login");
                         logout();
@@ -172,15 +175,18 @@ const AccountScreen = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[{ width: 200, height: 50, padding: 15, borderRadius: 10 }, { backgroundColor: "red" }]}
+                    style={[{ width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "red",  shadowOffset: {width: 0, height: 3},
+                    shadowOpacity: 0.5,
+                    shadowRadius: 4,
+                    elevation: 5 }]}
                     onPress={() => setModalVisible(true)}>
-                    <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Delete Account</Text>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Delete Account</Text>
                 </TouchableOpacity>
 
             </View>
 
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
@@ -189,7 +195,7 @@ const AccountScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 10, color: "white", fontWeight: "bold" }}>Are you sure you want to delete your account? All data will be permanantly lost</Text>
+                        <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 10, fontWeight: "bold" }}>Are you sure you want to delete your account? All data will be permanantly lost</Text>
                         <TouchableHighlight
                             style={styles.opacityStyle}
                             onPress={() => { handleModalDelete() }}
@@ -209,7 +215,7 @@ const AccountScreen = () => {
                 </View>
             </Modal>
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={pwdmodalVisible}
                 onRequestClose={() => {
@@ -218,13 +224,13 @@ const AccountScreen = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ fontSize: 15, textAlign: "center", color: "white", fontWeight: "bold" }}>Please input your password to confirm deletion.</Text>
+                        <Text style={{ fontSize: 15, textAlign: "center", fontWeight: "bold" }}>Please input your password to confirm deletion.</Text>
                         <TextInput
                             value={password}
                             onChangeText={setPassword}
                             placeholder='**********'
                             secureTextEntry
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 20, backgroundColor: "white" }} />
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 20 }} />
                         <TouchableHighlight
                             // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             style={styles.opacityStyle}
@@ -262,7 +268,14 @@ const styles = StyleSheet.create({
         height: 40,
         margin: 10,
         borderRadius: 10,
-        backgroundColor: "green"
+        backgroundColor: "green",
+        shadowOffset: {
+            width: 0,
+            height: 3
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 5
     },
     buttonContainer: {
         alignItems: 'center',
@@ -273,7 +286,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         // borderWidth: 1,
         // borderColor: '#ccc',
-        backgroundColor: "#00308F"
+        backgroundColor: "#00308F",
+        shadowOffset: {
+            width: 0,
+            height: 3
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 5
     },
     iconcontainer: {
         height: 60,
@@ -282,63 +302,47 @@ const styles = StyleSheet.create({
         borderColor: "#00BFFF",
         borderWidth: 2
     },
-    // centeredView: {
-    //     flex: 1,
-    //     justifyContent: 'space-evenly',
-    //     alignItems: 'center'
-    // },
-    // modalView: {
-    //     backgroundColor: 'white',
-    //     borderRadius: 20,
-    //     padding: 10,
-    //     alignItems: 'center',
-    //     shadowColor: '#000',
-    //     shadowOffset: {
-    //         width: 0,
-    //         height: 2
-    //     },
-    //     shadowOpacity: 0.25,
-    //     shadowRadius: 4,
-    //     elevation: 5
-    // },
     centeredView: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)'
     },
     modalView: {
         height: "40%",
-        width: "60%",
+        width: "80%",
         // maxHeight:500,
         // maxWidth:"90%",
-        backgroundColor: '#00BFFF',
+        backgroundColor: 'white',
         borderRadius: 20,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'space-evenly',
         shadowColor: '#000',
         shadowOffset: {
-            width: 0,
-            height: 2
+            width: 5,
+            height: 5
         },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.5,
         shadowRadius: 4,
         elevation: 5
     },
     textStyle: {
-        color: 'black',
+        color: 'white',
         fontWeight: 'bold',
         textAlign: 'center'
     },
     opacityStyle: {
-        borderColor: "#00308F",
-        borderWidth: 2,
-        paddingVertical: 5,
-        paddingHorizontal: 30,
-        backgroundColor: "white",
+        // borderColor: "#00308F",
+        // borderWidth: 2,
+        // paddingVertical: 5,
+        // paddingHorizontal: 30,
+        backgroundColor: "#00308F",
         width: "90%",
+        height:"15%",
         alignItems: "center",
-        borderRadius: 10
+        borderRadius: 10,
+        justifyContent:"center"
     }
 });
 

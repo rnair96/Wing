@@ -47,7 +47,7 @@ function HelpScreen() {
   };
 
   return (
-    <View style={{backgroundColor:"black", height:"100%"}}>
+    <View style={{backgroundColor:"white", height:"100%"}}>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={15}>
@@ -55,17 +55,17 @@ function HelpScreen() {
     <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Help"}/>
     </SafeAreaView>
     <View style={{height:"80%",justifyContent:"space-evenly", alignItems:"center"}}>
-    <Text style={{fontSize:15, textAlign:"center", color:"white"}}>
+    <Text style={{fontSize:15, textAlign:"center"}}>
         If you are experiencing an issue on this app or have any urgent questions, please submit this form. Our support team will reach out to you within 3 business days.
         </Text>
-    <Text style={{fontWeight:'bold', color:"white"}}>Subject:</Text>
+    <Text style={{fontWeight:'bold'}}>Subject:</Text>
     <TextInput
       value = {subject}
       onChangeText = {setSubject} 
       placeholder={'What is the Issue?'}
       placeholderTextColor="#888888"
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-    <Text style={{fontWeight:'bold', color:"white"}}>Message:</Text>
+    <Text style={{fontWeight:'bold'}}>Message:</Text>
     <TextInput
       value = {message}
       multiline
@@ -81,7 +81,7 @@ function HelpScreen() {
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Submit</Text>
       </TouchableOpacity>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -114,7 +114,8 @@ const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'space-evenly',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)'
       },
       modalView: {
         backgroundColor: 'white',
@@ -124,9 +125,9 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
-          height: 2
+          height: 3
         },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.5,
         shadowRadius: 4,
         elevation: 5
       },
