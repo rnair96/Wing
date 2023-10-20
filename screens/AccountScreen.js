@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, Switch} from 'react-native';
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, Switch } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -12,6 +12,7 @@ const AccountScreen = () => {
     const { user, deleteAll, logout } = useAuth();
     const navigation = useNavigation();
     const [notifications, setNotifications] = useState(true);
+
 
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -120,19 +121,33 @@ const AccountScreen = () => {
 
                 <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
                     <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Edit Push Notifications</Text>
-                    <Text style={{ fontSize: 12, margin: 10}}>Recieve notifications on messages, chat requests, and new matches?</Text>
-                    {/* <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200, backgroundColor: notifications? "red":"green" }} onPress={() => editNotifications()}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                        <Text style={{ fontSize: 12, width: "60%", padding: 10 }}>Messages, Chat Requests, & New Matches</Text>
+                        {/* <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200, backgroundColor: notifications? "red":"green" }} onPress={() => editNotifications()}>
                             <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>{notifications?`Currently On.. Turn Off?`:`Currently Off.. Turn On?`}</Text>
                         </TouchableOpacity> */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ color: "white", marginRight: 10 }}>{notifications ? "Yes" : "No"}</Text>
-                        <Switch
-                            trackColor={{ false: "red", true: "grey" }}
-                            thumbColor={notifications ? "white" : "grey"}
-                            onValueChange={editNotifications}
-                            value={notifications}
-                        />
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ color: "white", marginRight: 10 }}>{notifications ? "Yes" : "No"}</Text>
+                            <Switch
+                                trackColor={{ false: "red", true: "grey" }}
+                                thumbColor={notifications ? "white" : "grey"}
+                                onValueChange={editNotifications}
+                                value={notifications}
+                            />
+                        </View>
                     </View>
+                    {/* <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                        <Text style={{ fontSize: 12, width: "60%" }}>Community News, Promotional Offers & Events?</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ color: "white", marginRight: 10 }}>{notifications ? "Yes" : "No"}</Text>
+                            <Switch
+                                trackColor={{ false: "red", true: "grey" }}
+                                thumbColor={notifications ? "white" : "grey"}
+                                onValueChange={editNotifications}
+                                value={notifications}
+                            />
+                        </View>
+                    </View> */}
                 </View>
 
 
@@ -163,10 +178,12 @@ const AccountScreen = () => {
                 </TouchableOpacity>)}
 
                 <TouchableOpacity
-                    style={{ width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "#00308F",  shadowOffset: {width: 0, height: 3},
-                    shadowOpacity: 0.5,
-                    shadowRadius: 4,
-                    elevation: 5 }}
+                    style={{
+                        width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "#00308F", shadowOffset: { width: 0, height: 3 },
+                        shadowOpacity: 0.5,
+                        shadowRadius: 4,
+                        elevation: 5
+                    }}
                     onPress={() => {
                         // navigation.navigate("Login");
                         logout();
@@ -175,12 +192,14 @@ const AccountScreen = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[{ width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "red",  shadowOffset: {width: 0, height: 3},
-                    shadowOpacity: 0.5,
-                    shadowRadius: 4,
-                    elevation: 5 }]}
+                    style={[{
+                        width: 200, height: 50, padding: 15, borderRadius: 10, backgroundColor: "red", shadowOffset: { width: 0, height: 3 },
+                        shadowOpacity: 0.5,
+                        shadowRadius: 4,
+                        elevation: 5
+                    }]}
                     onPress={() => setModalVisible(true)}>
-                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color:"white" }}>Delete Account</Text>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Delete Account</Text>
                 </TouchableOpacity>
 
             </View>
@@ -339,10 +358,10 @@ const styles = StyleSheet.create({
         // paddingHorizontal: 30,
         backgroundColor: "#00308F",
         width: "90%",
-        height:"15%",
+        height: "15%",
         alignItems: "center",
         borderRadius: 10,
-        justifyContent:"center"
+        justifyContent: "center"
     }
 });
 
