@@ -38,6 +38,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import ToggleChatScreen from './screens/ToggleChatScreen';
 import RequestMessageScreen from './screens/RequestMessageScreen';
 import AnnouncementScreen from './screens/AnnouncementScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
 import * as Sentry from "@sentry/react";
 
 
@@ -116,6 +117,7 @@ const StackNavigator = () => {
             <Stack.Screen name="Account" component={AccountScreen} />
             <Stack.Screen name="RequestMessage" component={RequestMessageScreen} />
             <Stack.Screen name="Announcements" component={AnnouncementScreen} />
+            <Stack.Screen name="Notifications" component={NotificationsScreen} />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />

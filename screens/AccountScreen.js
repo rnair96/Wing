@@ -1,19 +1,16 @@
-import React, { Component, useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, Switch } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import registerNotifications from '../lib/registerNotifications';
 
 
 const AccountScreen = () => {
     const { user, deleteAll, logout } = useAuth();
     const navigation = useNavigation();
-    const [notifications, setNotifications] = useState(true);
-
-
+    
 
     const [modalVisible, setModalVisible] = useState(false);
     const [pwdmodalVisible, setpwdModalVisible] = useState(false);
@@ -31,45 +28,11 @@ const AccountScreen = () => {
             if (profile?.university_student && profile.university_student.status === "active") {
                 setActiveStudent(true);
             }
-
-            if (profile.token === "testing" || profile.token === "not_granted") {
-                setNotifications(false);
-            }
         }
 
     }, [profile])
 
 
-    const editNotifications = async () => {
-        if (notifications) {
-            console.log("Notifications set to false");
-            setNotifications(false);
-            updateDoc(doc(db, global.users, user.uid), {
-                token: "not_granted"
-            }).then(() => {
-                navigation.navigate("Home");
-                console.log("notifications restricted")
-            }).catch((error) => {
-                alert(error.message)
-            });
-            //really should create another field that stores permission seperately from token
-
-        } else {
-            console.log("Notifications set to true");
-            setNotifications(true);
-            const token = await registerNotifications();
-            updateDoc(doc(db, global.users, user.uid), {
-                token: token
-            }).then(() => {
-                navigation.navigate("Home");
-                console.log("new token set", token)
-            }).catch((error) => {
-                alert(error.message)
-            });
-
-        }
-        //update db for notifications of user
-    }
 
     const updateEmail = () => {
         updateDoc(doc(db, global.users, user.uid), {
@@ -119,38 +82,6 @@ const AccountScreen = () => {
             </SafeAreaView>
             <View style={{ height: "90%", width: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
 
-                <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
-                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Edit Push Notifications</Text>
-                    <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                        <Text style={{ fontSize: 12, width: "60%", padding: 10 }}>Messages, Chat Requests, & New Matches</Text>
-                        {/* <TouchableOpacity style={{ ...styles.savebuttonContainer, width: 200, backgroundColor: notifications? "red":"green" }} onPress={() => editNotifications()}>
-                            <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>{notifications?`Currently On.. Turn Off?`:`Currently Off.. Turn On?`}</Text>
-                        </TouchableOpacity> */}
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{ color: "white", marginRight: 10 }}>{notifications ? "Yes" : "No"}</Text>
-                            <Switch
-                                trackColor={{ false: "red", true: "grey" }}
-                                thumbColor={notifications ? "white" : "grey"}
-                                onValueChange={editNotifications}
-                                value={notifications}
-                            />
-                        </View>
-                    </View>
-                    {/* <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                        <Text style={{ fontSize: 12, width: "60%" }}>Community News, Promotional Offers & Events?</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{ color: "white", marginRight: 10 }}>{notifications ? "Yes" : "No"}</Text>
-                            <Switch
-                                trackColor={{ false: "red", true: "grey" }}
-                                thumbColor={notifications ? "white" : "grey"}
-                                onValueChange={editNotifications}
-                                value={notifications}
-                            />
-                        </View>
-                    </View> */}
-                </View>
-
-
                 {activeStudent && (
                     <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
                         <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Leave Wing-U?</Text>
@@ -171,6 +102,10 @@ const AccountScreen = () => {
                         <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Update</Text>
                     </TouchableOpacity>
                 </View>
+
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Notifications", profile)}>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Edit Notifications</Text>
+                </TouchableOpacity>
 
                 {/* should actually cycle through all providerData for potential password authentication */}
                 {user.providerData[0].providerId === "password" && (<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("ChangePassword")}>
