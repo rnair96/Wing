@@ -104,15 +104,15 @@ const ChatRow = ({ matchedDetails }) => {
                     }
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20, paddingLeft: 10, paddingBottom: 5, color: "white" }}>{name}</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20, paddingLeft: 10, paddingBottom: 5 }}>{name}</Text>
                             {!read ? (
-                                <Text style={{ paddingLeft: 10, color: "white", fontWeight: "bold" }}>{lastMessage || "Say Hi!"}</Text>
+                                <Text style={{ paddingLeft: 10, fontWeight: "bold" }}>{lastMessage || "Say Hi!"}</Text>
                             ) : (
-                                <Text style={{ paddingLeft: 10, color: "white" }}>{lastMessage || "Say Hi!"}</Text>
+                                <Text style={{ paddingLeft: 10 }}>{lastMessage || "Say Hi!"}</Text>
                             )}
                         </View>
                         <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
-                            <Text style={{ fontSize: 10, color: "white" }}>{timestamp || "New Match"}</Text>
+                            <Text style={{ fontSize: 10 }}>{timestamp || "New Match"}</Text>
                             {!read && <UnreadHighlighter />}
                         </View>
                     </View>
@@ -127,18 +127,21 @@ const styles = StyleSheet.create({
     container: {
         left: 15,
         flexDirection: "row",
-        backgroundColor: "#00308F",
+        // backgroundColor: "#00308F",
+        backgroundColor: "white",
         alignItems: "center",
         padding: 5,
-        shadowColor: "#000",
-        borderRadius: 15,
-        shadowOffset: {
-            width: 0,
-            height: 3
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 2.41,
-        elevation: 5
+        borderBottomWidth:1,
+        borderColor:"#E0E0E0"
+        // shadowColor: "#000",
+        // borderRadius: 15,
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 3
+        // },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 2.41,
+        // elevation: 5
     }
 })
 

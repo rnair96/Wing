@@ -83,12 +83,12 @@ const RequestRow = ({ requestDetails }) => {
                     {/* source = {{uri:matchedUserInfo[1]?.images[0]}} */}
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20, paddingLeft: 10, paddingBottom: 5, color: "white" }}>{name}</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20, paddingLeft: 10, paddingBottom: 5 }}>{name}</Text>
                             {/* {matchedUserInfo[1]?.displayName} */}
-                                <Text style={{ paddingLeft: 10, color: "white" }}>{lastMessage}</Text>
+                                <Text style={{ paddingLeft: 10 }}>{lastMessage}</Text>
                         </View>
                         <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
-                            <Text style={{ fontSize: 10, color: "white" }}>{timestamp}</Text>
+                            <Text style={{ fontSize: 10 }}>{timestamp}</Text>
                             {!read && <UnreadHighlighter />}
                         </View>
                     </View>
@@ -104,18 +104,20 @@ const styles = StyleSheet.create({
     container: {
         left: 15,
         flexDirection: "row",
-        backgroundColor: "#00308F",
+        backgroundColor: "white",
         alignItems: "center",
         padding: 5,
         shadowColor: "#000",
-        borderRadius: 15,
-        shadowOffset: {
-            width: 0,
-            height: 3
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 2.41,
-        elevation: 5
+        // borderRadius: 15,
+        borderBottomWidth:1,
+        borderColor:"#E0E0E0"
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 3
+        // },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 2.41,
+        // elevation: 5
     }
 })
 
