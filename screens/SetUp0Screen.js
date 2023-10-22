@@ -8,7 +8,6 @@ import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
-import Header from '../Header';
 
 const SetUp0Screen = () => {
   const { user } = useAuth();
@@ -17,6 +16,7 @@ const SetUp0Screen = () => {
   const [location, setLocation] = useState(null);
   const [birthdate, setBirthDate] = useState(null);
   const [token, setToken] = useState(null);
+  const [notifications, setNotifications] = useState(true);
   const [name, setName] = useState(user.displayName?.split(" ")[0]);
 
   const navigation = useNavigation();
@@ -29,6 +29,12 @@ const SetUp0Screen = () => {
       setToken(pushtoken)
     })();
   }, []);
+
+  useEffect(()=>{
+    if(token && token === "testing" || token === "not_granted"){
+        setNotifications(false);
+    }
+  },[token])
 
 
   const incompleteform = !gender || !age || !location || !name;//!job||
@@ -43,10 +49,9 @@ const SetUp0Screen = () => {
       birthdate: birthdate,
       last_year_celebrated: 2022,
       gender: gender,
-      location: location,
-      latest_read_announcement: "",
-      
+      location: location,      
       token: token,
+      notifications: {messages: notifications, events: notifications, emails: true},
       timestamp: serverTimestamp()
     }).then(() => {
       navigation.navigate("SetUp1")

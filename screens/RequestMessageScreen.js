@@ -125,10 +125,7 @@ const RequestMessageScreen = () => {
 
                 navigation.navigate("ToggleChat");
 
-                Sentry.captureMessage(`does profile have token at match and move? ${profile.token}`)
-                console.log(`Does profile token exist at match and move? ${profile.token}`)
-
-                if (profile.token && profile.token !== "testing" && profile.token !== "not_granted") {// && userProfile !== null
+                if (profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") {// && userProfile !== null
 
                     // const messageDetails = { "matchedDetails": matchedDetails, "profile": userProfile };// should be my user profile
 

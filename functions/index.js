@@ -161,7 +161,8 @@ exports.onSwipe = functions.firestore
 
       const swipingUser = userSwipingsnap.data();
 
-      if (user.token && user.token !== "testing" &&
+      if (user.notifications.messages &&
+      user.token && user.token !== "testing" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
         const messageDetails = {
@@ -233,7 +234,8 @@ exports.onSwipeDev = functions.firestore
 
       const swipingUser = userSwipingsnap.data();
 
-      if (user.token && user.token !== "testing" &&
+      if (user.notifications.messages &&
+      user.token && user.token !== "testing" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
         const messageDetails = {
@@ -417,7 +419,7 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     let matchingUsersQuery = admin.firestore().collection("users_test")
         .where("gender", "==", userGender)
         .limit(1000);
-      // add limit to size
+    // add limit to size
 
     // Filter by university student preference
     if (user.university_student && user.universityPreference === "Yes") {
@@ -501,14 +503,14 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     console.log("filtering out incomplete profiles");
     const completeUsers = uniqueUsers.filter((user) => {
       return user.mission !== null &&
-          user.mission !== "" &&
-          user.medals && user.medals.length === 3 &&
-          user.images && user.images.length === 3;
+        user.mission !== "" &&
+        user.medals && user.medals.length === 3 &&
+        user.images && user.images.length === 3;
     });
 
     console.log("limiting to 30 profiles or less");
     const finalUsers = completeUsers.length > 30 ?
-        completeUsers.slice(0, 30) : completeUsers;
+      completeUsers.slice(0, 30) : completeUsers;
 
     res.status(200).json(finalUsers);
   } catch (error) {
@@ -565,7 +567,8 @@ exports.sendAnnouncementNotification = functions.firestore
 
           batch.set(announcementRef, announcementDoc);
 
-          if (userData.token && userData.token !== "testing" &&
+          if (userData.notifications.events &&
+          userData.token && userData.token !== "testing" &&
           userData.token !== "not_granted") {
             tokens.push(userData.token);
           }
@@ -638,7 +641,8 @@ exports.sendAnnouncementNotificationDev = functions.firestore
 
           batch.set(announcementRef, announcementDoc);
 
-          if (userData.token && userData.token !== "testing" &&
+          if (userData.notifications.events &&
+          userData.token && userData.token !== "testing" &&
           userData.token !== "not_granted") {
             tokens.push(userData.token);
           }

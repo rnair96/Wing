@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
         height: 40,
         margin: 10,
         borderRadius: 10,
-        backgroundColor: "green",
+        backgroundColor: "#00308F",
         shadowOffset: {
             width: 0,
             height: 3
