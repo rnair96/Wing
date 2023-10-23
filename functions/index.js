@@ -161,7 +161,8 @@ exports.onSwipe = functions.firestore
 
       const swipingUser = userSwipingsnap.data();
 
-      if (user.notifications.messages &&
+      if (user.notifications &&
+        user.notifications.messages &&
       user.token && user.token !== "testing" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
@@ -234,7 +235,8 @@ exports.onSwipeDev = functions.firestore
 
       const swipingUser = userSwipingsnap.data();
 
-      if (user.notifications.messages &&
+      if (user.notifications &&
+        user.notifications.messages &&
       user.token && user.token !== "testing" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
@@ -567,7 +569,8 @@ exports.sendAnnouncementNotification = functions.firestore
 
           batch.set(announcementRef, announcementDoc);
 
-          if (userData.notifications.events &&
+          if (userData.notifications &&
+          userData.notifications.events &&
           userData.token && userData.token !== "testing" &&
           userData.token !== "not_granted") {
             tokens.push(userData.token);
@@ -641,7 +644,8 @@ exports.sendAnnouncementNotificationDev = functions.firestore
 
           batch.set(announcementRef, announcementDoc);
 
-          if (userData.notifications.events &&
+          if (userData.notifications &&
+          userData.notifications.events &&
           userData.token && userData.token !== "testing" &&
           userData.token !== "not_granted") {
             tokens.push(userData.token);

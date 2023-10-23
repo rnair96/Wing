@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, FlatList, Image } from 'react-native';
+import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, FlatList, Image} from 'react-native';
 import useAuth from '../hooks/useAuth';
-import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Header from '../Header';
 import Constants from 'expo-constants';
+import AnnouncementImageUpload from '../components/AnnouncementImageUpload';
+import AnnouncementRecieverMessage from './AnnouncementRecieverMessage';
 
 
 const AnnouncementScreen = () => {
@@ -15,6 +16,12 @@ const AnnouncementScreen = () => {
     const [loading, setLoading] = useState(true);
     const [input, setInput] = useState(null);
     const [title, setTitle] = useState(null);
+    const [inputOptions, setInputOptions] = useState(false);
+    const [picture, setPicture] = useState(null);
+    const [link, setLink] = useState(null);
+
+
+
     const { masterAccount, masterAccount2 } = Constants.expoConfig.extra
 
     const canInput = (user.email === masterAccount || user.email === masterAccount2) ? true : false;
@@ -43,12 +50,12 @@ const AnnouncementScreen = () => {
 
     useEffect(() => {
         if (messages.length > 0 && !messages[0].read) {
-          updateDoc(doc(db, global.users, user.uid, "announcements", messages[0].id), {
-            read: true
-          })
-          console.log("updating latest announcement as read")
+            updateDoc(doc(db, global.users, user.uid, "announcements", messages[0].id), {
+                read: true
+            })
+            console.log("updating latest announcement as read")
         }
-      }, [messages])
+    }, [messages])
 
 
     const sendMessage = () => {
@@ -57,11 +64,47 @@ const AnnouncementScreen = () => {
             title: title,
             message: input,
             timestamp: timestamp,
+            type: "text"
         })
 
         setInput("");
         setTitle("")
 
+    }
+
+    const addPicture = () => {
+        console.log("add picture", picture)
+        setPicture(null)
+
+        const timestamp = serverTimestamp();
+        addDoc(collection(db, global.announcements), {
+            title: "News & Promos sent an Image",
+            message: "",
+            picture: picture,
+            timestamp: timestamp,
+            type: "image"
+        })
+        //add push notification option in firebase function "Image sent"
+    }
+
+    const addLink = () => {
+        console.log("add link", link);
+        setLink(null);
+
+        const timestamp = serverTimestamp();
+        addDoc(collection(db, global.announcements), {
+            title: "News & Promos sent a link",
+            message: "",
+            url: link,
+            timestamp: timestamp,
+            type: "link"
+        })
+        //add push notification option in firebase function "Link sent"
+    }
+
+    const setOptions = () =>{
+        console.log("setting options to",!inputOptions)
+        setInputOptions(!inputOptions)
     }
 
     return (
@@ -87,7 +130,7 @@ const AnnouncementScreen = () => {
                                     style={{ height: 50, width: 50, borderRadius: 50, backgroundColor: "#00BFFF" }}
                                     source={require("../images/logo.png")}
                                 />
-                                <RecieverMessage key={message.id} message={message} />
+                                    <AnnouncementRecieverMessage key={message.id} message={message} />
                             </View>
                         }
                     />
@@ -95,26 +138,49 @@ const AnnouncementScreen = () => {
                 }
                 {canInput &&
                     <View
-                        style={{ borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin:5 }}>
-                        <TextInput
-                            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, borderBottomWidth:2, borderColor: "grey"}}
-                            placeholder="Set Announcement Title"
-                            onChangeText={setTitle}
-                            onSubmitEditing={sendMessage}
-                            placeholderTextColor={"grey"}
-                            value={title}
-                        />
-                        <TextInput
-                            style={{ height: 100, width: "80%", fontSize: 15, padding: 10, borderBottomWidth:2, borderColor: "grey"}}
-                            placeholder="Enter Announcement..."
-                            onChangeText={setInput}
-                            onSubmitEditing={sendMessage}
-                            placeholderTextColor={"grey"}
-                            multiline
-                            numberOfLines={10}
-                            value={input}
-                        />
-                        <Button onPress={sendMessage} title="Send" color="#00BFFF" />
+                        style={{ borderColor: "grey", borderWidth: 2, borderRadius: 10, margin: 5 }}>
+                        {/* <Button onPress={console.log("link function")} title="Add Link" color="#00BFFF" />
+                        <Button onPress={console.log("action function")} title="Add Action" color="#00BFFF" /> */}
+                        {inputOptions ? (
+                            <View style={{ alignItems: "center" }}>
+                                <AnnouncementImageUpload url={picture} setURL={setPicture}/>
+                                <TextInput
+                                    style={{ height: 50, width: "80%", fontSize: 15, padding: 10, borderBottomWidth: 2, borderColor: "grey" }}
+                                    placeholder="Give Link"
+                                    onChangeText={setLink}
+                                    onSubmitEditing={addLink}
+                                    placeholderTextColor={"grey"}
+                                    value={link}
+                                />
+                                <Button onPress={addPicture} title="Send Picture" color="#00BFFF" />
+                                <Button onPress={addLink} title="Send Link" color="#00BFFF" />
+                                <Button onPress={setOptions} title="Return to Text" color="#00BFFF" />
+                            </View>
+                        ) : (
+                            <View style={{ alignItems: "center" }}>
+                                <TextInput
+                                    style={{ height: 50, width: "80%", fontSize: 15, padding: 10, borderBottomWidth: 2, borderColor: "grey" }}
+                                    placeholder="Set Announcement Title"
+                                    onChangeText={setTitle}
+                                    onSubmitEditing={sendMessage}
+                                    placeholderTextColor={"grey"}
+                                    value={title}
+                                />
+                                <TextInput
+                                    style={{ height: 100, width: "80%", fontSize: 15, padding: 10, borderBottomWidth: 2, borderColor: "grey" }}
+                                    placeholder="Enter Announcement..."
+                                    onChangeText={setInput}
+                                    onSubmitEditing={sendMessage}
+                                    placeholderTextColor={"grey"}
+                                    multiline
+                                    numberOfLines={10}
+                                    value={input}
+                                />
+                                <Button onPress={setOptions} title="Message Options" color="#00BFFF" />
+                                <Button onPress={sendMessage} title="Send Message" color="#00BFFF" />
+                            </View>
+                        )}
+
                     </View>
                 }
             </KeyboardAvoidingView>

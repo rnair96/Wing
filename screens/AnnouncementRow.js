@@ -9,10 +9,10 @@ import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import UnreadHighlighter from '../components/UnreadHighlighter';
 import getTime from '../lib/getTime';
 
-const AnnouncementRow = ({profile}) => {
+const AnnouncementRow = () => {
 
     const { user } = useAuth();
-    const [lastMessage, setLastMessage] = useState();
+    const [lastMessage, setLastMessage] = useState(null);
     const [read, setRead] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState(true);
     const [timestamp, setTimeStamp] = useState();
@@ -20,11 +20,15 @@ const AnnouncementRow = ({profile}) => {
 
 
     const setVars = (data) => {
-        if (data && data?.message?.length > 15) {
+        if (data && data.type==="text" && data?.message?.length > 15) {
             const message = data?.message?.slice(0, 15) + "..."
             setLastMessage(message);
-        } else {
+        } else if (data && data.type==="text") {
             setLastMessage(data?.message)
+        } else if (data && data.type==="image"){
+            setLastMessage("Image sent")
+        } else if (data && data.type==="link"){
+            setLastMessage("Link sent")
         }
 
         if (data && data?.timestamp) {

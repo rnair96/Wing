@@ -1,0 +1,55 @@
+import React, { Component, useEffect, useState } from 'react'
+import { Text, View, Image, Linking, TouchableOpacity} from 'react-native'
+import getTime from '../lib/getTime';
+
+const AnnouncementRecieverMessage = ({ message }) => {
+  const [time, setTime] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+
+    if (message && message?.timestamp && message.timestamp.seconds && message.timestamp.nanoseconds) {
+      let milliseconds = message.timestamp.seconds * 1000 + Math.floor(message.timestamp.nanoseconds / 1000000);
+      setTime(getTime(new Date(milliseconds)));
+    }
+    setLoading(false);
+
+  }, [message])
+
+  const handleURL = (url) => {
+    Linking.openURL(url)
+    .then(() => {
+      // Successfully opened URL. You can add any additional logic here if needed.
+      console.log("url works!")
+    })
+    .catch(e => {
+      console.log("error opening url", e);
+      alert("URL not working, cannot open.");
+    });
+  }
+
+
+  return (
+    !loading && (
+      <View style={{ alignItems: "center" }}>
+        <View style={{ left: 5, backgroundColor: "#00BFFF", borderBottomLeftRadius: 20, borderBottomRightRadius: 20, borderTopRightRadius: 20 }}>
+          {((message?.type === undefined) || (message?.type && message.type === "text")) &&
+            <Text style={{ color: "white", padding: 10, fontSize: 20 }}> {message.message} </Text>
+          }
+          {message?.type && message.type === "image" &&
+            <Image source={{ uri: message.picture }} style={{ width: 200, height: 200, borderRadius: 5, margin: 10 }} />
+          }
+          {message?.type && message.type === 'link' && (
+            <TouchableOpacity onPress={() => handleURL(message.url)}>
+              <Text style={{ color: 'blue', padding: 10, fontSize: 20 }}>{message.url}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <Text style={{ fontSize: 12, color: "grey" }}>{time}</Text>
+      </View>
+    )
+
+  )
+}
+
+export default AnnouncementRecieverMessage
