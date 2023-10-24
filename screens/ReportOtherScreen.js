@@ -29,7 +29,9 @@ const ReportOtherScreen = () => {
                 status: "unresolved"
             })
         }).then(async () => {
-            sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" });
+            if (other_user?.notifications && other_user.notifications.messages) {
+                sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" });
+            }
             if (matchedID) {
                 await deleteMatchFull(matchedID, navigation)
             } else {
@@ -44,11 +46,11 @@ const ReportOtherScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", backgroundColor: "#00BFFF", opacity: 0.95 }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={{ alignItems:"center", justifyContent:"space-evenly" ,padding: 20, height: "30%" }}>
+                <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, height: "30%" }}>
                     <Text style={{ color: "white", fontSize: 30, fontWeight: "bold" }}> Give Reason</Text>
-                    <View style={{alignItems:"center", justifyContent:"space-evenly", margin:10, top:40}}>
-                    <Text style={styles.boldtext}>Provide details for the report you wish to submit.</Text>
-                    <Text style={styles.boldtext}>We appreciate your participation in keeping our community safe from abuse and wrongful behavior!</Text>
+                    <View style={{ alignItems: "center", justifyContent: "space-evenly", margin: 10, top: 40 }}>
+                        <Text style={styles.boldtext}>Provide details for the report you wish to submit.</Text>
+                        <Text style={styles.boldtext}>We appreciate your participation in keeping our community safe from abuse and wrongful behavior!</Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -63,11 +65,11 @@ const ReportOtherScreen = () => {
                         numberOfLines={3}
                         onChangeText={setReport}
                         placeholder={'Provide Reason for Report'}
-                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"white", width:"90%", height:"30%"}}
-                        />
+                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: "90%", height: "30%" }}
+                    />
                     <TouchableOpacity
                         disabled={incompleteForm}
-                        style={{...styles.opacityStyle, backgroundColor: incompleteForm? "grey": "white"}}
+                        style={{ ...styles.opacityStyle, backgroundColor: incompleteForm ? "grey" : "white" }}
                         // style={[{ borderColor: "grey", borderWidth: 2, borderRadius: 20, padding: 10, width: "30%", alignItems: "center" }, incompleteForm ? { backgroundColor: "grey" } : { backgroundColor: "white" }]}
                         onPress={() =>
                             flagUserProfile(report)
@@ -94,15 +96,15 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     opacityStyle: {
-        borderColor: "#00308F", 
-        borderWidth: 2, 
-        paddingVertical: 5, 
-        paddingHorizontal: 30, 
-        backgroundColor: "white", 
-        width: "40%", 
-        alignItems: "center", 
+        borderColor: "#00308F",
+        borderWidth: 2,
+        paddingVertical: 5,
+        paddingHorizontal: 30,
+        backgroundColor: "white",
+        width: "40%",
+        alignItems: "center",
         borderRadius: 10
-      }
+    }
 });
 
 

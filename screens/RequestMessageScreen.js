@@ -125,7 +125,7 @@ const RequestMessageScreen = () => {
 
                 navigation.navigate("ToggleChat");
 
-                if (profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") {// && userProfile !== null
+                if (profile?.notifications && profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") {// && userProfile !== null
 
                     // const messageDetails = { "matchedDetails": matchedDetails, "profile": userProfile };// should be my user profile
 

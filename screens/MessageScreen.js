@@ -67,7 +67,7 @@ const MessageScreen = () => {
 
     const userName = user.displayName.split(" ")[0];
 
-    if (profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") {
+    if (profile?.notifications && profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") {
 
       const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
 

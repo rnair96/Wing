@@ -21,7 +21,9 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
         status: "unresolved"
       })
     }).then(async () => {
-      sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" })
+      if(other_user?.notifications && other_user.notifications.messages) {
+        sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" })
+      }
       setIsVisible(!isVisible);
       if (matchedID) {
         await deleteMatchFull(matchedID, navigation);
