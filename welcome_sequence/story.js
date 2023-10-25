@@ -1,4 +1,4 @@
-Our Story: 
+const storyText = `Our Story: 
 
 First we were lifting buddies at the gym, then we were Wingmen exploring the nightlife in DC, and then afterwards
 we became business partners passionate about solving massive problems in the world.
@@ -8,4 +8,7 @@ that inspired them to be the best version of themselves.
 
 It was through our friendship and our journey with Purpose (Mission) that led us to the creation of Wing.
 
-If you'd like a chance to connect, see our Chat Request in your Requests screen!
+If you'd like a chance to connect, see our Chat Request in your Requests screen!`;
+
+
+export default storyText;

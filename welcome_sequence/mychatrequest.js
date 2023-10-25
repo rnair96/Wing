@@ -1,4 +1,4 @@
-Hey, I'm Raj and I'm the Founder & CEO of Wing.
+const chatText = `Hey, I'm Raj and I'm the Founder & CEO of Wing.
 
 Fun fact, I was a former Dating Coach that helped men find partners they aligned with based on Mission & Values. 
 Sound familiar? 
@@ -12,4 +12,6 @@ is for you and what ways we can improve it.
 
 This is a young community, so every opinion has a significant role to determine how this app and community can grow!
 
-If having a chance to connect and shape this community interests you, then simply reply "Yes!" to this Chat Request.
+If having a chance to connect and shape this community interests you, then simply reply "Yes!" to this Chat Request.`
+
+export default chatText;

@@ -1,4 +1,4 @@
-Culture & Etiquette:
+const cultureText = `Culture & Etiquette:
 
 We’re here to create a culture of mission-driven men helping each other become the best version of ourselves.
 
@@ -10,4 +10,6 @@ Here's how to put it into practice:
 - Reach out with a Chat Request of how you’d like to support that Wing
 - Build a network of lifelong Wings you align with
 
-Key Tip: The more value you give, the more value you will receive.
+Key Tip: The more value you give, the more value you will receive.`;
+
+export default cultureText;

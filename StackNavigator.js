@@ -39,7 +39,7 @@ import ToggleChatScreen from './screens/ToggleChatScreen';
 import RequestMessageScreen from './screens/RequestMessageScreen';
 import AnnouncementScreen from './screens/AnnouncementScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
-import * as Sentry from "@sentry/react";
+// import * as Sentry from "@sentry/react";
 
 
 
@@ -55,8 +55,10 @@ const StackNavigator = () => {
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
-      Sentry.captureMessage("response for user", user.displayName);
-      Sentry.captureMessage("response type", responseListeneresponse.notification.request.content.data.type);
+      // Sentry.captureMessage("response for user", user.displayName);
+      // Sentry.captureMessage("response type", response.notification.request.content.data.type);
+      // console.log("response for user", user.displayName)
+      // console.log("response type",response.notification.request.content.data.type)
 
       if (response.notification.request.content.data.type === "message") {//|| response.notification.request.content.data.type === "rated"
         const messageDetails = response.notification.request.content.data.message;

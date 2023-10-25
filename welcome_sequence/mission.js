@@ -1,7 +1,4 @@
-Hello! We are the Founders of Wing and we'd like to personally welcome you into our community! 
-Here's a few key points to get settled in:
-
-Our Mission
+const missionText = `Our Mission
 
 The mission of Wing is to help solve one of the biggest problems in modern society,
 men's loneliness.
@@ -15,7 +12,9 @@ That's why Wing isn't a dating app, it's a networking app designed to help with 
 including fitness and passions.
 
 It is an opportunity for men to discover a mission, build a meaningful community, and always have a Wingman ready to go out with
-so they NEVER have to rely on a dating app again.
+so they NEVER have to rely on a dating app again.`
+
+export default missionText;
 
 
 
