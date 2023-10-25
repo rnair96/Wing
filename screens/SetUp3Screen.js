@@ -8,11 +8,11 @@ import TagPicker from '../components/TagPicker';
 import Header from '../Header';
 import EulaModal from '../components/EulaModal';
 import ValuesList from '../components/ValuesList';
-import missionText from '../welcome_sequence/mission';
-import welcomeText from '../welcome_sequence/welcome';
-import cultureText from '../welcome_sequence/values_etiquette';
-import storyText from '../welcome_sequence/story';
-import chatText from '../welcome_sequence/mychatrequest';
+// import missionText from '../welcome_sequence/mission';
+// import welcomeText from '../welcome_sequence/welcome';
+// import cultureText from '../welcome_sequence/values_etiquette';
+// import storyText from '../welcome_sequence/story';
+// import chatText from '../welcome_sequence/mychatrequest';
 // import { readFileSync } from 'react-native-fs';
 
 
@@ -27,15 +27,15 @@ const SetUp3Screen = () => {
   const incompleteform = !mission || !values || values.length < 3;
 
   // const setUpChat = () => {
-  //   const batch = writeBatch(db);
+  //   const master_uid = 'iz2hFvurTzWF1ZnLyc4cpZD80Gd2'
 
-  //   const docRef = doc(db, global.users, user.uid, "requests", master.uid);//must have my UID stored somewhere
+  //   const docRef = doc(db, global.users, user.uid, "requests", master_uid);//must have my UID stored somewhere
 
 
   //   const timestamp = serverTimestamp();
 
   //   const requestDoc = {
-  //     id: master.uid,
+  //     id: master_uid,
   //     message: chatText,
   //     timestamp: timestamp,
   //     read: false
@@ -51,53 +51,53 @@ const SetUp3Screen = () => {
 
   // }
 
-  const setUpAnnouncements = async () => {
-    const batch = writeBatch(db);
+  // const setUpAnnouncements = async () => {
+  //   const batch = writeBatch(db);
 
-    const textFiles = [
-      { "path": 'https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fannouncements%2F47541449-0897-4058-9596-F8352C6ED59E.jpg?alt=media&token=4e79cd48-4000-45d3-a5f4-e037b893d5f1&_gl=1*ngpm9j*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5ODE5NzYyNy4xNzMuMS4xNjk4MTk4MTkxLjQ2LjAuMA..', "type": 'image' },
-      { "path": welcomeText, "type": 'text' },
-      { "path": missionText, "type": 'text' },
-      { "path": cultureText, "type": 'text' },
-      { "path": 'https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fannouncements%2F9BDF8690-5101-4852-89A2-CFB63BDEBCE1.jpg?alt=media&token=df1d8fc6-35ef-470b-8554-77d37d32467d&_gl=1*1a1x0ek*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5ODE5NzYyNy4xNzMuMS4xNjk4MTk4MzE3LjU5LjAuMA..', "type": 'image' },
-      { "path": storyText, "type": 'text' },
-    ];
+  //   const textFiles = [
+  //     { "path": 'https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fannouncements%2F47541449-0897-4058-9596-F8352C6ED59E.jpg?alt=media&token=4e79cd48-4000-45d3-a5f4-e037b893d5f1&_gl=1*ngpm9j*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5ODE5NzYyNy4xNzMuMS4xNjk4MTk4MTkxLjQ2LjAuMA..', "type": 'image' },
+  //     { "path": welcomeText, "type": 'text' },
+  //     { "path": missionText, "type": 'text' },
+  //     { "path": cultureText, "type": 'text' },
+  //     { "path": 'https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fannouncements%2F9BDF8690-5101-4852-89A2-CFB63BDEBCE1.jpg?alt=media&token=df1d8fc6-35ef-470b-8554-77d37d32467d&_gl=1*1a1x0ek*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5ODE5NzYyNy4xNzMuMS4xNjk4MTk4MzE3LjU5LjAuMA..', "type": 'image' },
+  //     { "path": storyText, "type": 'text' },
+  //   ];
 
-    let secondsToAdd = 0;
+  //   let secondsToAdd = 0;
 
-    for (const file of textFiles) {
-      // Read text from file
-      const message = file["path"];
+  //   for (const file of textFiles) {
+  //     // Read text from file
+  //     const message = file["path"];
 
-      // Reference to a new document in the "announcements" collection for the user
-      const docRef = doc(collection(db, global.users, user.uid, "announcements"));
+  //     // Reference to a new document in the "announcements" collection for the user
+  //     const docRef = doc(collection(db, global.users, user.uid, "announcements"));
 
-      const timestamp = new Date(Date.now() + (secondsToAdd * 1000))
-      secondsToAdd++;
+  //     const timestamp = new Date(Date.now() + (secondsToAdd * 1000))
+  //     secondsToAdd++;
 
-      console.log("timestamp", timestamp);
+  //     console.log("timestamp", timestamp);
 
-      const contentField = file["type"] === "text" ? "message" : "picture";
+  //     const contentField = file["type"] === "text" ? "message" : "picture";
 
-      batch.set(docRef, {
-        id: docRef.id, // Auto-generated ID
-        [contentField]: message, // Content from the text file
-        read: false,
-        timestamp: timestamp, // Current timestamp
-        title: '',
-        type: file['type'],
-      });
+  //     batch.set(docRef, {
+  //       id: docRef.id, // Auto-generated ID
+  //       [contentField]: message, // Content from the text file
+  //       read: false,
+  //       timestamp: timestamp, // Current timestamp
+  //       title: '',
+  //       type: file['type'],
+  //     });
 
-    }
+  //   }
 
-    try {
-      await batch.commit();
-      console.log('Announcements added successfully');
-    } catch (error) {
-      console.error('Error adding announcements: ', error);
-    }
+  //   try {
+  //     await batch.commit();
+  //     console.log('Announcements added successfully');
+  //   } catch (error) {
+  //     console.error('Error adding announcements: ', error);
+  //   }
 
-  }
+  // }
 
   const updateUserProfile = () => {
     updateDoc(doc(db, global.users, user.uid), {
@@ -105,7 +105,7 @@ const SetUp3Screen = () => {
       mission_tag: missiontag,
       values: values,
     }).then(() => {
-      setUpAnnouncements();
+      // setUpAnnouncements();
       // setUpChat();
       navigation.navigate("Home")
       navigation.navigate("WelcomeScreen")

@@ -69,11 +69,13 @@ const RequestMessageScreen = () => {
             id: requestDetails.id,
             message: message,
             timeSwiped: timestamp,
-            isResponse: true
+            isResponse: true,
+            match_id: id,
             //add boolean variable for isResponse and have onswipe function deal with that
         }
 
         try {
+            //should move all db operations to onSwipe function and handle if isResponse, only keep setting swipe doc
 
             batch.set(doc(db, global.matches, id), matchDoc);
 

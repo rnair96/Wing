@@ -162,7 +162,7 @@ exports.onSwipe = functions.firestore
       const swipingUser = userSwipingsnap.data();
 
       if (user.notifications &&
-        user.notifications.messages &&
+      user.notifications.messages &&
       user.token && user.token !== "testing" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
@@ -190,13 +190,55 @@ exports.onSwipeDev = functions.firestore
     .onCreate(async (snap, context) => {
       const isResponse = snap.data().isResponse;
 
-      if (isResponse) {
+      const masterUid = functions.config().wing.master_uid;
+
+      // Get the ID of the user who was swiped on
+      const swipedUserId = snap.data().id;
+
+      // if responding to my chat request
+
+      if (isResponse && swipedUserId === masterUid) {
+        console.log("handling reply after matching with CEO");
+        // grab match id
+        // create doc with my reply
+        // set reply
+        const masterName = functions.config().wing.master_name;
+        const matchId = snap.data().match_id;
+
+        const newTime = new Date(Date.now());
+
+        const reply = `Hey man, glad to match with you!\n\n
+      This is an auto-reply but it's my personal line 
+      so feel free to send me any questions, concerns, 
+      or thoughts in general you may have about 
+      the app and this community. 
+      I personally try to read and respond to ALL DMS.\n\n
+      I also like to check in to get to know my Wings 
+      and see how they're doing :)\n\n 
+      So keep your eye out for a surprise message from me 
+      and happy swiping!`;
+
+        const replyDoc = {
+          timestamp: newTime,
+          userId: masterUid,
+          displayName: masterName,
+          message: reply,
+          read: false,
+        };
+
+        const replyRef = admin.firestore().collection("matches_test")
+            .doc(matchId).collection("messages");
+
+        replyRef.add(replyDoc);
+        // add notification?
+        console.log("set reply");
+        return;
+      } else if (isResponse) {
         console.log("The latest swipe is a response and not a request.");
         return;
       }
 
-      // Get the ID of the user who was swiped on
-      const swipedUserId = snap.data().id;
+
       const message = snap.data().message;
       const timestamp = snap.data().timeSwiped;
 
@@ -236,7 +278,7 @@ exports.onSwipeDev = functions.firestore
       const swipingUser = userSwipingsnap.data();
 
       if (user.notifications &&
-        user.notifications.messages &&
+      user.notifications.messages &&
       user.token && user.token !== "testing" &&
       user.token !== "not_granted") {
       // add if user gave permission for request notifications
