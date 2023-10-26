@@ -27,7 +27,7 @@ const WelcomeScreen = () => {
 
     const { masterId, welcomeImage1, welcomeImage2} = Constants.expoConfig.extra
 
-    const chatRef = doc(db, global.users, user.uid, "requests", master_uid);//must have my UID stored somewhere
+    const chatRef = doc(db, global.users, user.uid, "requests", masterId);//must have my UID stored somewhere
 
 
     const chat_timestamp = serverTimestamp();

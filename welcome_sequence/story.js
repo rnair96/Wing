@@ -1,7 +1,7 @@
 const storyText = `Our Story: 
 
-First we were lifting buddies at the gym, then we were Wingmen exploring the nightlife in DC, and then afterwards
-we became business partners passionate about solving massive problems in the world.
+First we were lifting buddies at the gym, then we were Wingmen exploring the nightlife in DC,
+and then afterwards we became business partners passionate about solving massive problems in the world.
 
 One of the first businesses we started was a Purpose Coaching agency that helped burnt out professionals discover massive purposes
 that inspired them to be the best version of themselves.
