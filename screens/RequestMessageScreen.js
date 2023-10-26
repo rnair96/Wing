@@ -109,40 +109,19 @@ const RequestMessageScreen = () => {
                 batch.set(messageRefTwo, messageTwo);
             }
 
-            // const userSnapshot = await getDoc(doc(db, global.users, user.uid))
-            // let userProfile;
-
-            // if (userSnapshot.exists()) {
-            //     userProfile = userSnapshot.data();
-            //   } else {
-            //     console.log('cannot get current user data!');
-            //     userProfile = null;
-            //   }
-
 
             await batch.commit().then(() => {
                 console.log("Added match, swipe doc and deleted request doc and messages to match doc");
-                // const matchedDetails = { id: requestDetails.id, ...matchDoc };
 
 
                 navigation.navigate("ToggleChat");
 
                 if (profile?.notifications && profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") {// && userProfile !== null
 
-                    // const messageDetails = { "matchedDetails": matchedDetails, "profile": userProfile };// should be my user profile
-
                     const userName = user.displayName.split(" ")[0];
 
-                    console.log("user", user)
-
                     Sentry.captureMessage(`match & move sending message token to ${profile.token}`)
-                    // Sentry.captureMessage(`match & move sending message details ${messageDetails}`)
                     Sentry.captureMessage(`match & move sending message from ${userName}`)
-
-                    // console.log(`match & move sending message token to ${profile.token}`)
-                    // console.log(`match & move sending message details ${messageDetails}`)
-                    // console.log(`match & move sending message from ${userName}`)
-
 
                     sendPush(profile.token, `${userName} has Matched and Messaged you!`, message, { type: "match" })
                 }

@@ -115,14 +115,45 @@ exports.onSwipe = functions.firestore
     .onCreate(async (snap, context) => {
     // Get the ID of the user who was swiped on
       const isResponse = snap.data().isResponse;
+      const masterUid = functions.config().wing.master_uid;
 
-      if (isResponse) {
+      // Get the ID of the user who was swiped on
+      const swipedUserId = snap.data().id;
+
+      // if responding to my chat request
+      if (isResponse && swipedUserId === masterUid) {
+        console.log("handling reply after matching with CEO");
+
+        // set reply
+        const masterName = functions.config().wing.master_name;
+        const matchId = snap.data().match_id;
+
+        const newTime = new Date(Date.now());
+
+        const reply =
+        `Hey man, glad to match with you!\n\n This is an auto-reply but this is my personal line where I try to read and respond to ALL DMS. So feel free to share any questions, concerns, or thoughts in general you may have about the app and this community right here.\n\n I may also drop a message in to see how you're doing and how we can make your experience even better. That's my mission after all ;)\n\n So keep your eye out for a surprise message from me and have fun Winging!`;
+
+        const replyDoc = {
+          timestamp: newTime,
+          userId: masterUid,
+          displayName: masterName,
+          message: reply,
+          read: false,
+        };
+
+        const replyRef = admin.firestore().collection("matches")
+            .doc(matchId).collection("messages");
+
+        replyRef.add(replyDoc);
+        // add notification?
+        console.log("reply added");
+        return;
+      } else if (isResponse) {
         console.log("The latest swipe is a response and not a request.");
         return;
       }
 
 
-      const swipedUserId = snap.data().id;
       const message = snap.data().message;
       const timestamp = snap.data().timeSwiped;
 
@@ -188,6 +219,7 @@ exports.onSwipe = functions.firestore
 exports.onSwipeDev = functions.firestore
     .document("users_test/{userId}/swipes/{swipeId}")
     .onCreate(async (snap, context) => {
+      console.log("swipe dev initiated");
       const isResponse = snap.data().isResponse;
 
       const masterUid = functions.config().wing.master_uid;
@@ -196,27 +228,17 @@ exports.onSwipeDev = functions.firestore
       const swipedUserId = snap.data().id;
 
       // if responding to my chat request
-
       if (isResponse && swipedUserId === masterUid) {
         console.log("handling reply after matching with CEO");
-        // grab match id
-        // create doc with my reply
+
         // set reply
         const masterName = functions.config().wing.master_name;
         const matchId = snap.data().match_id;
 
         const newTime = new Date(Date.now());
 
-        const reply = `Hey man, glad to match with you!\n\n
-      This is an auto-reply but it's my personal line 
-      so feel free to send me any questions, concerns, 
-      or thoughts in general you may have about 
-      the app and this community. 
-      I personally try to read and respond to ALL DMS.\n\n
-      I also like to check in to get to know my Wings 
-      and see how they're doing :)\n\n 
-      So keep your eye out for a surprise message from me 
-      and happy swiping!`;
+        const reply =
+      `Hey man, glad to match with you!\n\n This is an auto-reply but this is my personal line where I try to read and respond to ALL DMS. So feel free to share any questions, concerns, or thoughts in general you may have about the app and this community right here.\n\n I may also drop a message in to see how you're doing and how we can make your experience even better. That's my mission after all ;)\n\n So keep your eye out for a surprise message from me and have fun Winging!`;
 
         const replyDoc = {
           timestamp: newTime,
@@ -231,7 +253,7 @@ exports.onSwipeDev = functions.firestore
 
         replyRef.add(replyDoc);
         // add notification?
-        console.log("set reply");
+        console.log("reply added");
         return;
       } else if (isResponse) {
         console.log("The latest swipe is a response and not a request.");

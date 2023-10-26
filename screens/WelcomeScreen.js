@@ -10,7 +10,7 @@ import chatText from '../welcome_sequence/mychatrequest';
 import useAuth from '../hooks/useAuth';
 import { writeBatch, serverTimestamp, collection, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-
+import Constants from 'expo-constants';
 
 
 const WelcomeScreen = () => {
@@ -25,7 +25,7 @@ const WelcomeScreen = () => {
 
     const batch = writeBatch(db);
 
-    const master_uid = 'iz2hFvurTzWF1ZnLyc4cpZD80Gd2'
+    const { masterId, welcomeImage1, welcomeImage2} = Constants.expoConfig.extra
 
     const chatRef = doc(db, global.users, user.uid, "requests", master_uid);//must have my UID stored somewhere
 
@@ -33,7 +33,7 @@ const WelcomeScreen = () => {
     const chat_timestamp = serverTimestamp();
 
     const requestDoc = {
-      id: master_uid,
+      id: masterId,
       message: chatText,
       timestamp: chat_timestamp,
       read: false
@@ -44,11 +44,11 @@ const WelcomeScreen = () => {
     console.log("set chat doc")
 
     const textFiles = [
-      { "path": 'https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fannouncements%2F47541449-0897-4058-9596-F8352C6ED59E.jpg?alt=media&token=4e79cd48-4000-45d3-a5f4-e037b893d5f1&_gl=1*ngpm9j*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5ODE5NzYyNy4xNzMuMS4xNjk4MTk4MTkxLjQ2LjAuMA..', "type": 'image' },
+      { "path": welcomeImage1, "type": 'image' },
       { "path": welcomeText, "type": 'text' },
       { "path": missionText, "type": 'text' },
       { "path": cultureText, "type": 'text' },
-      { "path": 'https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fannouncements%2F9BDF8690-5101-4852-89A2-CFB63BDEBCE1.jpg?alt=media&token=df1d8fc6-35ef-470b-8554-77d37d32467d&_gl=1*1a1x0ek*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5ODE5NzYyNy4xNzMuMS4xNjk4MTk4MzE3LjU5LjAuMA..', "type": 'image' },
+      { "path": welcomeImage2, "type": 'image' },
       { "path": storyText, "type": 'text' },
     ];
 
@@ -63,8 +63,6 @@ const WelcomeScreen = () => {
 
       const timestamp = new Date(Date.now() + (secondsToAdd * 1000))
       secondsToAdd++;
-
-      console.log("timestamp", timestamp);
 
       const contentField = file["type"] === "text" ? "message" : "picture";
 

@@ -22,9 +22,9 @@ const AnnouncementScreen = () => {
 
 
 
-    const { masterAccount, masterAccount2 } = Constants.expoConfig.extra
+    const { masterAccount, masterId } = Constants.expoConfig.extra
 
-    const canInput = (user.email === masterAccount || user.email === masterAccount2) ? true : false;
+    const canInput = (user.email === masterAccount && user.uid === masterId) ? true : false;
 
     useEffect(() => {
         const unsub = onSnapshot(query(collection(db, global.users, user.uid, "announcements"),

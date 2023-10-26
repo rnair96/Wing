@@ -92,7 +92,11 @@ export default {
       masterAccount: process.env.MASTER_ACCOUNT,
       masterAccount2: process.env.MASTER_ACCOUNT2,
       prodDeleteUser: process.env.PROD_DELETEUSER,
-      devDeleteUser: process.env.DEV_DELETEUSER
+      devDeleteUser: process.env.DEV_DELETEUSER,
+      masterId: process.env.MASTER_ID,
+      welcomeImage1: process.env.WELCOME_IMAGE1,
+      welcomeImage2: process.env.WELCOME_IMAGE2
+
     }
   }
 };
