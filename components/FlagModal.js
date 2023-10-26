@@ -6,9 +6,10 @@ import { db } from '../firebase';
 import { useNavigation } from '@react-navigation/core';
 import deleteMatchFull from '../lib/deleteMatchFull';
 import sendPush from '../lib/sendPush';
+import deleteRequest from '../lib/deleteRequest';
 
 
-const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
+const FlagModal = ({ other_user, isVisible, setIsVisible, detailsId, type }) => {
   const { user } = useAuth();
 
   const navigation = useNavigation();
@@ -18,18 +19,23 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
       flags: arrayUnion({
         type: flag,
         reported_by: user.uid,
-        // status: "unresolved"
       }),
       flagged_status: "unresolved"
     }).then(async () => {
-      if(other_user?.notifications && other_user.notifications.messages) {
+      if (other_user?.notifications && other_user.notifications.messages) {
         sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" })
       }
       setIsVisible(!isVisible);
-      if (matchedID) {
-        await deleteMatchFull(matchedID, navigation);
+      if (type && type === "match") {
+        await deleteMatchFull(detailsId ).then(()=>{
+          navigation.navigate("ToggleChat");
+        });
+      } else if (type && type === "request") {
+        await deleteRequest(detailsId, user.uid).then(()=>{
+          navigation.navigate("ToggleChat");
+        })
       } else {
-        navigation.navigate("Home");
+        navigation.navigate("Home", { refresh: true });
       }
       alert("Your report has been submitted.");
     }).catch((error) => {
@@ -112,7 +118,7 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
 }
 
 const styles = StyleSheet.create({
- 
+
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -151,10 +157,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: "#00308F",
     width: "90%",
-    height:"10%",
+    height: "10%",
     alignItems: "center",
     borderRadius: 10,
-    justifyContent:"center"
+    justifyContent: "center"
   }
 
 })

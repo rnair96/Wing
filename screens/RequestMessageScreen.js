@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import RecieverMessage from './RecieverMessage';
-import { collection, serverTimestamp, updateDoc, doc, writeBatch, getDoc } from 'firebase/firestore';
+import { collection, serverTimestamp, updateDoc, doc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import Header from '../Header';
+import ChatHeader from '../components/ChatHeader';
 import generateId from '../lib/generateId'
 import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
-
+import deleteRequest from '../lib/deleteRequest';
 
 const RequestMessageScreen = () => {
 
@@ -21,9 +21,11 @@ const RequestMessageScreen = () => {
     const [secondModal, setSecondModal] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const [message, setMessage] = useState(null);
+    
     const name = profile ? profile.displayName : "Account User";
     const navigation = useNavigation();
     const batch = writeBatch(db);
+
 
     useEffect(() => {
         if (!requestDetails.read) {
@@ -135,34 +137,36 @@ const RequestMessageScreen = () => {
 
     }
 
-    const deleteRequest = async () => {
-        // delete doc from Request
-        //add id to passedIds containing just id
-        try {
-            batch.delete(doc(db, global.users, user.uid, "requests", requestDetails.id));
+    // const deleteRequest = async () => {
+    //     // delete doc from Request
+    //     //add id to passedIds containing just id
+    //     try {
+    //         batch.delete(doc(db, global.users, user.uid, "requests", requestDetails.id));
 
 
-            batch.set(doc(db, global.users, user.uid, "passes", requestDetails.id), {
-                id: requestDetails.id
-            })
+    //         batch.set(doc(db, global.users, user.uid, "passes", requestDetails.id), {
+    //             id: requestDetails.id
+    //         })
 
-            await batch.commit().then(() => {
-                console.log("Request has been deleted from db and user has been moved to passed collection.")
-            })
+    //         await batch.commit().then(() => {
+    //             console.log("Request has been deleted from db and user has been moved to passed collection.")
+    //         })
 
-            navigation.navigate("ToggleChat");
+    //         navigation.navigate("ToggleChat");
 
 
-        } catch (error) {
-            console.log("ERROR, there was an error in deleting request", error)
-        }
+    //     } catch (error) {
+    //         console.log("ERROR, there was an error in deleting request", error)
+    //     }
 
-    }
+    // }
 
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-            <Header title={name} />
+            {/* <Header title={name} /> */}
+            <ChatHeader details={requestDetails} type={"request"} profile={profile} />
+
 
             <ScrollView>
             <View>
@@ -183,7 +187,7 @@ const RequestMessageScreen = () => {
             </View>
 
             {profile ? (
-                <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileSwipe", { card: profile })}>
+                <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileView", { profile: profile })}>
                     <View style={{ alignItems: "center", padding: 20 }}>
                         <Text style={{ color: "white", margin:5 }}>Mission: </Text>
                         <Text style={styles.text}>{profile.mission}</Text>
@@ -329,7 +333,9 @@ const RequestMessageScreen = () => {
                             style={{ paddingVertical: 5, paddingHorizontal: 30, backgroundColor: "#00308F", borderRadius:10, width: 120, alignItems:"center", width: "60%", height:"20%", justifyContent:"center" }}
                             onPress={() => {
                                 setSecondModal(!secondModal);
-                                deleteRequest();
+                                deleteRequest(requestDetails.id, user.uid).then(()=>{
+                                    navigation.navigate("ToggleChat")
+                                });
                             }}
                         >
                             <Text style={{color:"white"}}>Yes</Text>

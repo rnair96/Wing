@@ -211,7 +211,7 @@ export const ProfileSwipeScreen = () => {
                             </View>
                             <View style={{ padding: 10, alignItems: "center" }}>
                                 <TouchableOpacity style={{ padding: 30, backgroundColor: "grey", borderRadius: 10, width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
-                                    <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Return</Text>
+                                    <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Return to Swipe</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -224,7 +224,7 @@ export const ProfileSwipeScreen = () => {
                     <Text style={{ fontWeight: "bold", color: "black", padding: 10 }}> Error Loading Profile... Try Again Later</Text>
                     <View style={{ padding: 10, alignItems: "center" }}>
                         <TouchableOpacity style={{ padding: 30, backgroundColor: "grey", borderRadius: 10, width: "95%", alignItems: "center" }} onPress={() => navigation.goBack()}>
-                            <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Return</Text>
+                            <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Return to Swipe</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -244,7 +244,7 @@ export const ProfileSwipeScreen = () => {
                 </TouchableOpacity>
             </View> */}
             {/* <Foo ter/> */}
-            <FlagModal other_user={flag_user} isVisible={flag_modal} setIsVisible={setFlagModal} matchedID={null} />
+            <FlagModal other_user={flag_user} isVisible={flag_modal} setIsVisible={setFlagModal} detailsId={null} type={null}/>
         </View>
         // </SafeAreaView>
 

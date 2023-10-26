@@ -90,7 +90,7 @@ const MessageScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <ChatHeader matchedDetails={matchedDetails} profile={profile} />
+      <ChatHeader details={matchedDetails} type={"match"} profile={profile} />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}

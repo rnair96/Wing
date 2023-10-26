@@ -120,11 +120,11 @@ const StackNavigator = () => {
             <Stack.Screen name="RequestMessage" component={RequestMessageScreen} />
             <Stack.Screen name="Announcements" component={AnnouncementScreen} />
             <Stack.Screen name="Notifications" component={NotificationsScreen} />
+            <Stack.Screen name="Flagged" component={FlaggedScreen} />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "modal" }}>
             <Stack.Screen name="ProfileView" component={ProfileViewScreen} />
             <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen} />
-            <Stack.Screen name="Flagged" component={FlaggedScreen} />
             <Stack.Screen name="ReportOther" component={ReportOtherScreen} />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "transparentModal" }}>

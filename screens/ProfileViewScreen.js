@@ -2,13 +2,12 @@ import React from 'react';
 import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import tagColor from '../lib/colorTag';
 
 
 export const ProfileViewScreen = () => {
     const { params } = useRoute();
-    const { profile, matchedDetails } = params;
+    const { profile } = params;
     const card = profile
 
 
@@ -179,7 +178,7 @@ export const ProfileViewScreen = () => {
                                     </View>
                                 </View>
                                 <View style={{ justifyContent: "center", alignItems: "center", padding: 2 }}>
-                                    <TouchableOpacity style={{ padding: 30, backgroundColor: "grey", borderRadius: 10, width:"95%", alignItems:"center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5}} onPress={() => navigation.navigate("Message", { matchedDetails, profile })}>
+                                    <TouchableOpacity style={{ padding: 30, backgroundColor: "grey", borderRadius: 10, width:"95%", alignItems:"center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5}} onPress={() => navigation.goBack()}>
                                         {/* <Ionicons name="arrow-down" size={30} color="#00BFFF" /> */}
                                         <Text style={{ color: "white", fontWeight:"bold", fontSize:17 }}>Return to Chat</Text>
                                     </TouchableOpacity>
