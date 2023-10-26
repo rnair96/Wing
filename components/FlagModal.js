@@ -18,8 +18,9 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, matchedID }) => {
       flags: arrayUnion({
         type: flag,
         reported_by: user.uid,
-        status: "unresolved"
-      })
+        // status: "unresolved"
+      }),
+      flagged_status: "unresolved"
     }).then(async () => {
       if(other_user?.notifications && other_user.notifications.messages) {
         sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" })

@@ -27,10 +27,10 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp0");
             } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
                 navigation.navigate("SetUp1");
-            } else if (!snapshot.data().mission || !snapshot.data().values ) {
+            } else if (!snapshot.data().mission || !snapshot.data().values) {
                 navigation.navigate("SetUp3", { id: user.uid });
-            } 
-           
+            }
+
             // else if (!snapshot.data().genderPreference){
             //     navigation.navigate("Preferences", {id: user.uid});
             // } 
@@ -55,7 +55,7 @@ const HomeScreen = () => {
 
     }, [db]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (route.params?.refresh) {
             // Perform the refresh operation here
             console.log("refreshing profile")
@@ -66,17 +66,17 @@ const HomeScreen = () => {
                     ...snapshot.data()
                 }
                 setLoggedProfile(info);
-          },
-          (error) => {
-              console.log("there was an error in refreshing loggedprofile", error)
-          }
-      )
+            },
+                (error) => {
+                    console.log("there was an error in refreshing loggedprofile", error)
+                }
+            )
 
-      return () => {
-          unsub();
-      };
+            return () => {
+                unsub();
+            };
         }
-    },[route.params])
+    }, [route.params])
 
     // useEffect(() => {
     //     (async () => {
@@ -106,15 +106,16 @@ const HomeScreen = () => {
 
     useEffect(() => {
         //check if user has any unresolved flags
-        if (loggedProfile && loggedProfile?.flags) {
-            const check = checkFlagged(loggedProfile.flags);
-            if (check) {
-                const index = loggedProfile.flags.length - 1;
-                const flag = loggedProfile.flags[index];
-                const flag_number = index + 1;
-                //trigger modal screen
-                navigation.navigate("Flagged", { flag, flag_number });
-            }
+        if (loggedProfile && loggedProfile?.flags 
+            && loggedProfile?.flagged_status && loggedProfile.flagged_status === "unresolved") {
+            // const check = checkFlagged(loggedProfile.flags);
+            // if (check) {
+            const index = loggedProfile.flags.length - 1;
+            const flag = loggedProfile.flags[index];
+            const flag_number = index + 1;
+            //trigger modal screen
+            navigation.navigate("Flagged", { flag, flag_number });
+            // }
 
         }
 
@@ -143,27 +144,27 @@ const HomeScreen = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             {/* Header */}
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10 }}>
-                <TouchableOpacity 
-                // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }} 
-                onPress={() => navigation.navigate("ToggleProfile", loggedProfile)}>
+                <TouchableOpacity
+                    // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }} 
+                    onPress={() => navigation.navigate("ToggleProfile", loggedProfile)}>
                     {/* left: 20, top:10 */}
                     <Ionicons name="person" size={30} color="#00BFFF" />
                 </TouchableOpacity>
-                <TouchableOpacity 
-                style={{ borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white'}} 
-                onPress={() => navigation.navigate("Menu", loggedProfile)}>
+                <TouchableOpacity
+                    style={{ borderRadius: 50, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }}
+                    onPress={() => navigation.navigate("Menu", loggedProfile)}>
                     <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
                 </TouchableOpacity>
                 {/* right:20, top:10 */}
-                <TouchableOpacity 
-                // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white'}} 
-                onPress={() => navigation.navigate("ToggleChat", loggedProfile)}>
+                <TouchableOpacity
+                    // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white'}} 
+                    onPress={() => navigation.navigate("ToggleChat", loggedProfile)}>
                     <Ionicons name="chatbubbles-sharp" size={30} color="#00BFFF" />
                 </TouchableOpacity>
             </View>
             {/* End of Header */}
             {/* Cards */}
-            <SwipeScreen loggedProfile={loggedProfile}/>
+            <SwipeScreen loggedProfile={loggedProfile} />
         </SafeAreaView>
     )
 }

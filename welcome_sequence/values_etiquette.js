@@ -2,14 +2,12 @@ const cultureText = `Culture & Etiquette:
 
 We’re here to create a culture of mission-driven men helping each other become the best version of ourselves.
 
-Put shortly, it's a culture that values Mission, Service, & Community.
+Here's how we do this:
 
-Here's how to put it into practice:
+1. Swipe to find a Wing’s mission you like
+2. Reach out with a Chat Request of how you’d like to support that Wing
+3. Give value. The more you give, the more you will receive.
 
-- Swipe to find a Wing’s mission you like
-- Reach out with a Chat Request of how you’d like to support that Wing
-- Build a network of lifelong Wings you align with
-
-Key Tip: The more value you give, the more value you will receive.`;
+Key Tip: Ask yourself when you open this app, "How can I be of service today?".`;
 
 export default cultureText;

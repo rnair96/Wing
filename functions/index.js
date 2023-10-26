@@ -113,12 +113,19 @@ const sendPushBatch = async (tokens, title, body, data) => {
 exports.onSwipe = functions.firestore
     .document("users/{userId}/swipes/{swipeId}")
     .onCreate(async (snap, context) => {
-    // Get the ID of the user who was swiped on
+      console.log("swipe initiated");
+
+
+      // Get the ID of the user who was swiped on
       const isResponse = snap.data().isResponse;
       const masterUid = functions.config().wing.master_uid;
 
       // Get the ID of the user who was swiped on
       const swipedUserId = snap.data().id;
+
+      console.log("master Uid", masterUid);
+      console.log("swiped user id", swipedUserId);
+      console.log("isResponse", isResponse);
 
       // if responding to my chat request
       if (isResponse && swipedUserId === masterUid) {
@@ -238,7 +245,7 @@ exports.onSwipeDev = functions.firestore
         const newTime = new Date(Date.now());
 
         const reply =
-      `Hey man, glad to match with you!\n\n This is an auto-reply but this is my personal line where I try to read and respond to ALL DMS. So feel free to share any questions, concerns, or thoughts in general you may have about the app and this community right here.\n\n I may also drop a message in to see how you're doing and how we can make your experience even better. That's my mission after all ;)\n\n So keep your eye out for a surprise message from me and have fun Winging!`;
+        `Hey man, glad to match with you!\n\n This is an auto-reply but this is my personal line where I try to read and respond to ALL DMS. So feel free to share any questions, concerns, or thoughts in general you may have about the app and this community right here.\n\n I may also drop a message in to see how you're doing and how we can make your experience even better. That's my mission after all ;)\n\n So keep your eye out for a surprise message from me and have fun Winging!`;
 
         const replyDoc = {
           timestamp: newTime,
@@ -369,8 +376,9 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
     }
 
     // Now filter these matched users against excludeIds
+    const masterUid = functions.config().wing.master_uid;
 
-    const excludeIds = [userId]; // Start by excluding the user themself
+    const excludeIds = [userId, masterUid]; // Start by excluding the user and CEO themselves
 
     const swipesSnapshot = await userRef.collection("swipes").get();
     swipesSnapshot.forEach((doc) => {
@@ -438,7 +446,8 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
       return user.mission !== null &&
         user.mission !== "" &&
         user.medals && user.medals.length === 3 &&
-        user.images && user.images.length === 3;
+        user.images && user.images.length === 3 &&
+        (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
 
     console.log("limiting to 30 profiles or less");
@@ -502,8 +511,9 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     }
 
     // Now filter these matched users against excludeIds
+    const masterUid = functions.config().wing.master_uid;
 
-    const excludeIds = [userId]; // Start by excluding the user themself
+    const excludeIds = [userId, masterUid]; // Start by excluding the user and CEO themselves
 
     const swipesSnapshot = await userRef.collection("swipes").get();
     swipesSnapshot.forEach((doc) => {
@@ -566,12 +576,14 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     // Retrieve user data from the previously stored map
     const uniqueUsers = finalUserIds.map((id) => usersDataMap.get(id));
 
-    console.log("filtering out incomplete profiles");
+    console.log("filtering out incomplete profiles and flagged accounts");
+
     const completeUsers = uniqueUsers.filter((user) => {
       return user.mission !== null &&
         user.mission !== "" &&
         user.medals && user.medals.length === 3 &&
-        user.images && user.images.length === 3;
+        user.images && user.images.length === 3 &&
+        (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
 
     console.log("limiting to 30 profiles or less");
@@ -791,7 +803,14 @@ functionCall.delete("/deleteUserDev/:id", async (req, res) => {
     console.log("deleting user doc");
 
     // Delete the user document from 'users' collection
-    await userDocRef.delete();
+    await userDocRef.delete().then(() => {
+      console.log("user doc deleted, deleting user auth");
+    });
+
+    await admin.auth().deleteUser(userId)
+        .then(() => {
+          console.log("Successfully deleted user auth");
+        });
 
     res.status(200).send("OK");
   } catch (error) {
@@ -850,7 +869,15 @@ functionCall.delete("/deleteUser/:id", async (req, res) => {
     console.log("deleting user doc");
 
     // Delete the user document from 'users' collection
-    await userDocRef.delete();
+
+    await userDocRef.delete().then(() => {
+      console.log("user doc deleted, deleting user auth");
+    });
+
+    await admin.auth().deleteUser(userId)
+        .then(() => {
+          console.log("Successfully deleted user auth");
+        });
 
     res.status(200).send("OK");
   } catch (error) {

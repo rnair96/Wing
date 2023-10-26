@@ -303,21 +303,21 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }
 
-  const deleteUserAuth = async () => {
-    if (user) {
-      try {
-        await user.delete(); // `user` is from your state, assuming it's the currently logged-in user.
-        console.log("User deleted from Firebase Auth successfully");
-        setUser(null);
-        // logout();
-      } catch (error) {
-        console.error("Error deleting user from Firebase Auth:", error);
-      }
-    } else {
-      console.log("no user found");
-    }
-    setLoading(false);
-  }
+  // const deleteUserAuth = async () => {
+  //   if (user) {
+  //     try {
+  //       await user.delete(); // `user` is from your state, assuming it's the currently logged-in user.
+  //       console.log("User deleted from Firebase Auth successfully");
+  //       setUser(null);
+  //       // logout();
+  //     } catch (error) {
+  //       console.error("Error deleting user from Firebase Auth:", error);
+  //     }
+  //   } else {
+  //     console.log("no user found");
+  //   }
+  //   setLoading(false);
+  // }
 
   const authenticateUserForDelete = async (password) => {
     try {
@@ -389,14 +389,19 @@ export const AuthProvider = ({ children }) => {
           //   throw new Error(data.error);
           // }
           console.log("user deleted", data);
-          deleteUserAuth();
+          setUser(null);
+          // deleteUserAuth();
           // setLoading(false);//perhaps move it to the end of deleteUserAuth
+          setLoading(false);
         })
         .catch(error => {
           console.error("Error deleting user", error);
           setLoading(false);
+          alert("Unable to delete account. Try again later.")
           //add sentry capture
           });
+          
+
 
     }
   }

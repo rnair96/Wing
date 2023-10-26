@@ -46,7 +46,7 @@ const WelcomeScreen = () => {
     const textFiles = [
       { "path": welcomeImage1, "type": 'image' },
       { "path": welcomeText, "type": 'text' },
-      { "path": missionText, "type": 'text' },
+      // { "path": missionText, "type": 'text' },
       { "path": cultureText, "type": 'text' },
       { "path": welcomeImage2, "type": 'image' },
       { "path": storyText, "type": 'text' },

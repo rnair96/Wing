@@ -52,6 +52,7 @@ const SetUp0Screen = () => {
       location: location,      
       token: token,
       notifications: {messages: notifications, events: notifications, emails: true},
+      flagged_status: "none",
       timestamp: serverTimestamp()
     }).then(() => {
       navigation.navigate("SetUp1")
