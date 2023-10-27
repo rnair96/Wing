@@ -140,7 +140,7 @@ const MessageScreen = () => {
         <View
           style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
           <TextInput
-            style={{ height: 50, width: "80%", fontSize: 15, padding: 10 }}
+            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop:15 }}
             placeholder="Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}
@@ -155,17 +155,5 @@ const MessageScreen = () => {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  missionControl: {
-    bottom: 10,
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#00BFFF"
-  }
-});
 
 export default MessageScreen
