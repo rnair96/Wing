@@ -10,6 +10,7 @@ import ChatHeader from '../components/ChatHeader';
 import generateId from '../lib/generateId'
 import { Entypo } from '@expo/vector-icons';
 import deleteRequest from '../lib/deleteRequest';
+import * as Sentry from "@sentry/react";
 
 const RequestMessageScreen = () => {
 
@@ -96,13 +97,15 @@ const RequestMessageScreen = () => {
 
             batch.set(messageRefOne, messageOne);
 
+            const name = profile? profile.displayName: user.displayName.split(" ")[0]
+
             if (message && message !== "") {
                 const messageRefTwo = doc(collection(db, global.matches, id, "messages"));
 
                 const messageTwo = {
                     timestamp: timestamp,
                     userId: user.uid,
-                    displayName: user.displayName,
+                    displayName: name,
                     message: message,
                     read: false,
                 }
@@ -114,32 +117,28 @@ const RequestMessageScreen = () => {
             await batch.commit().then(() => {
                 console.log("Added match, swipe doc and deleted request doc and messages to match doc");
 
-
                 navigation.navigate("ToggleChat");
 
-                if (otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
+                if (profile && otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
 
                     const matchedDetails = { id: id, ...matchDoc }
 
                     const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": profile, "profile": otherProfile }
 
-
-                    const userName = user.displayName.split(" ")[0];
-
-                    // Sentry.captureMessage(`match & move sending message token to ${profile.token}`)
-                    // Sentry.captureMessage(`match & move sending message from ${userName}`)
-                    if(!profile){
-                        sendPush(otherProfile.token, `${userName} has Matched and Messaged you!`, message, { type: "chat"})
-                    } else{
-                        sendPush(otherProfile.token, `${userName} has Matched and Messaged you!`, message, { type: "message", message: messageDetails })
-                    }
+                    Sentry.captureMessage(`match & move sending message from ${name}`)
+                    Sentry.captureMessage(`match & move sending message to ${otherProfile.displayName} with token ${otherProfile.token}`)
+                    
+                    
+                    sendPush(otherProfile.token, `${name} has Matched and Messaged you!`, message, { type: "message", message: messageDetails })
                 }
 
             });
 
 
         } catch (error) {
-            console.log("ERROR, there was an error in moving this request and messages to Match", error)
+            console.log("ERROR, there was an error in moving this request and messages to Match", error);
+            Sentry.captureMessage(`there was an error in moving this request and messages to Match ${error}`)
+
         }
 
     }

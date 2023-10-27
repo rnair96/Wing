@@ -8,6 +8,7 @@ import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
+import * as Sentry from "@sentry/react";
 
 const MessageScreen = () => {
 
@@ -51,38 +52,36 @@ const MessageScreen = () => {
   }, [messages])
 
   const sendMessage = () => {
+    const name = profile ? profile.displayName : user.displayName.split(" ")[0]
     const timestamp = serverTimestamp();
-    addDoc(collection(db, global.matches, matchedDetails.id, "messages"), {
-      timestamp: timestamp,
-      userId: user.uid,
-      displayName: user.displayName,
-      message: input,
-      read: false,
-    })
 
-    updateDoc(doc(db, global.matches, matchedDetails.id), {
-      latest_message_timestamp: timestamp
-    })
+    try {
 
-    const userName = user.displayName.split(" ")[0];
+      addDoc(collection(db, global.matches, matchedDetails.id, "messages"), {
+        timestamp: timestamp,
+        userId: user.uid,
+        displayName: name,
+        message: input,
+        read: false,
+      })
 
-    if (otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
+      updateDoc(doc(db, global.matches, matchedDetails.id), {
+        latest_message_timestamp: timestamp
+      })
 
-      const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": profile, "profile": otherProfile }//switch profiles for push notification of other user
+      if (profile && otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
 
-      // Sentry.captureMessage(`sending message token to ${profile.token}`)
-      // Sentry.captureMessage(`sending message details ${messageDetails}`)
-      // Sentry.captureMessage(`sending message from ${userName}`)
+        const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": profile, "profile": otherProfile }
 
-      // console.log(`sending message token to ${profile.token}`)
-      // console.log(`sending message details ${messageDetails}`)
-      // console.log(`sending message from ${userName}`)
+        Sentry.captureMessage(`sending message from ${name}`)
+        Sentry.captureMessage(`sending message to ${otherProfile.displayName} with token ${otherProfile.token}`)
 
-      if (!profile) {
-        sendPush(otherProfile.token, `New Message from ${userName}`, input, message, { type: "chat" })
-      } else {
-        sendPush(otherProfile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
+        sendPush(otherProfile.token, `New Message from ${name}`, input, { type: "message", message: messageDetails })
+
       }
+    } catch (error) {
+      console.log("ERROR, there was an error in sending a message", error);
+      Sentry.captureMessage(`there was an error in sending a message ${error}`)
 
     }
 

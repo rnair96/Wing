@@ -55,10 +55,6 @@ const StackNavigator = () => {
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
-      // Sentry.captureMessage("response for user", user.displayName);
-      // Sentry.captureMessage("response type", response.notification.request.content.data.type);
-      // console.log("response for user", user.displayName)
-      // console.log("response type",response.notification.request.content.data.type)
       Sentry.captureMessage("recieving notification");
 
       if (response.notification.request.content.data.type === "message") {
@@ -82,10 +78,6 @@ const StackNavigator = () => {
       } else if (response.notification.request.content.data.type === "announcement") {
 
         navigation.navigate("Announcements");
-
-      } else if (response.notification.request.content.data.type === "chat") {
-
-        navigation.navigate("ToggleChat");
 
       } else {
 
