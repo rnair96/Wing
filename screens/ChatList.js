@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 import ChatRow from './ChatRow';
 
 
-const ChatList = () => {
+const ChatList = ({profile}) => {
     const [ matches, setMatches ] = useState([]);
     const { user } = useAuth();
 
@@ -41,7 +41,7 @@ const ChatList = () => {
       <FlatList
       data = {matches}
       keyExtractor = {item => item.id}
-      renderItem = {({item}) => <ChatRow matchedDetails = {item}/>
+      renderItem = {({item}) => <ChatRow matchedDetails = {item} profile={profile}/>
     }/>
     ):
     (

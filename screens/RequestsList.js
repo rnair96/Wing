@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 import RequestRow from './RequestRow'
 
 
-const RequestsList = () => {
+const RequestsList = ({profile}) => {
     const [ requests, setRequests ] = useState([]);
     const { user } = useAuth();
 
@@ -40,7 +40,7 @@ const RequestsList = () => {
       <FlatList
       data = {requests}
       keyExtractor = {item => item.id}
-      renderItem = {({item}) => <RequestRow requestDetails = {item}/>
+      renderItem = {({item}) => <RequestRow requestDetails = {item} profile={profile}/>
     }/>
     ):
     (

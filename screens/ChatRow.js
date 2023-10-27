@@ -9,7 +9,7 @@ import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import UnreadHighlighter from '../components/UnreadHighlighter';
 import getTime from '../lib/getTime';
 
-const ChatRow = ({ matchedDetails }) => {
+const ChatRow = ({ matchedDetails, profile }) => {
 
     const { user } = useAuth();
     const [matchedUserInfo, setMatchedUserInfo] = useState(null);
@@ -17,8 +17,8 @@ const ChatRow = ({ matchedDetails }) => {
     const [read, setRead] = useState(true);
     const [timestamp, setTimeStamp] = useState(null);
     const [name, setName] = useState("Account User");
-    const [profilePic, setProfilePic] = useState(null);
-    const [profile, setProfile] = useState(null);
+    const [otherProfilePic, setOtherProfilePic] = useState(null);
+    const [otherProfile, setOtherProfile] = useState(null);
     const navigator = useNavigation();
 
 
@@ -74,8 +74,8 @@ const ChatRow = ({ matchedDetails }) => {
                 const other_user_snapshot = await getDoc(doc(db, global.users, matchedUserInfo)); // replace 'YOUR_COLLECTION_NAME' with the name of your collection
                 if (other_user_snapshot.exists) { // check if the document exists
                     setName(other_user_snapshot.data().displayName);
-                    setProfilePic(other_user_snapshot.data().images[0]);
-                    setProfile(other_user_snapshot.data());
+                    setOtherProfilePic(other_user_snapshot.data().images[0]);
+                    setOtherProfile(other_user_snapshot.data());
 
                 } else {
                     console.log("No such document!");
@@ -93,11 +93,11 @@ const ChatRow = ({ matchedDetails }) => {
     return (
             <View style={{ padding: 10, width: "95%" }}>
                 <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Message", {
-                    matchedDetails, profile
+                    matchedDetails, otherProfile, profile
                 })}>
-                    {profilePic ? (
+                    {otherProfilePic ? (
                         <Image style={{ height: 60, width: 60, borderRadius: 50, borderWidth: !read ? 3 : 1, borderColor: "#00BFFF" }}
-                            source={{ uri: profilePic }} />
+                            source={{ uri: otherProfilePic }} />
                     ) : (
                         <Image style={{ height: 60, width: 60, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={require("../images/account.jpeg")} />
                     )

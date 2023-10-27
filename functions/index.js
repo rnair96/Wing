@@ -181,43 +181,45 @@ exports.onSwipe = functions.firestore
       read: false,
     };
 
-      const userDoc = admin.firestore().collection("users")
+      const userSwipedDoc = admin.firestore().collection("users")
           .doc(swipedUserId);
 
       const userSwipingDoc = admin.firestore().collection("users")
           .doc(swiperId);
 
-      const userSnapshot = await userDoc.get();
-      const userSwipingsnap = await userSwipingDoc.get();
+      const userSwipedSnapshot = await userSwipedDoc.get();
+      const userSwipingSnapshot = await userSwipingDoc.get();
 
-      if (!userSnapshot.exists || !userSwipingsnap.exists) {
+      if (!userSwipedSnapshot.exists || !userSwipingSnapshot.exists) {
         console.log("Given user not found");
         return;
       }
 
-      const user = userSnapshot.data();
+      const swipedUser = userSwipedSnapshot.data();
 
-      const swipingUser = userSwipingsnap.data();
+      const swipingUser = userSwipingSnapshot.data();
 
-      if (user.notifications &&
-      user.notifications.messages &&
-      user.token && user.token !== "testing" &&
-      user.token !== "not_granted") {
-      // add if user gave permission for request notifications
+      // push notification to swiped user
+      if (swipedUser.notifications &&
+        swipedUser.notifications.messages &&
+        swipedUser.token && swipedUser.token !== "testing" &&
+        swipedUser.token !== "not_granted") {
         const messageDetails = {
           "requestDetails": request,
-          "profile": swipingUser,
+          "otherProfile": swipingUser,
+          "profile": swipedUser,
         };
 
         console.log("sending push notification to swiped user", swipedUserId);
-        console.log("sending message details", messageDetails);
+        // console.log("sending message details", messageDetails);
         console.log("sending request message from", swipingUser.displayName);
-        console.log("sending request message to token", user.token);
+        console.log("sending request message to token", swipedUser.token);
 
 
-        sendPush(user.token, `New Request from ${swipingUser.displayName}`,
+        sendPush(swipedUser.token, `New Request from ${swipingUser.displayName}`,
             message, {type: "request", message: messageDetails});
       }
+      console.log("setting request doc");
 
       return requestsRef.set(request);
     });
@@ -288,43 +290,45 @@ exports.onSwipeDev = functions.firestore
       read: false,
     };
 
-      const userDoc = admin.firestore().collection("users_test")
+      const userSwipedDoc = admin.firestore().collection("users_test")
           .doc(swipedUserId);
 
       const userSwipingDoc = admin.firestore().collection("users_test")
           .doc(swiperId);
 
-      const userSnapshot = await userDoc.get();
-      const userSwipingsnap = await userSwipingDoc.get();
+      const userSwipedSnapshot = await userSwipedDoc.get();
+      const userSwipingSnapshot = await userSwipingDoc.get();
 
-      if (!userSnapshot.exists || !userSwipingsnap.exists) {
+      if (!userSwipedSnapshot.exists || !userSwipingSnapshot.exists) {
         console.log("Given user not found");
         return;
       }
 
-      const user = userSnapshot.data();
+      const swipedUser = userSwipedSnapshot.data();
 
-      const swipingUser = userSwipingsnap.data();
+      const swipingUser = userSwipingSnapshot.data();
 
-      if (user.notifications &&
-      user.notifications.messages &&
-      user.token && user.token !== "testing" &&
-      user.token !== "not_granted") {
+      if (swipedUser.notifications &&
+        swipedUser.notifications.messages &&
+        swipedUser.token && swipedUser.token !== "testing" &&
+        swipedUser.token !== "not_granted") {
       // add if user gave permission for request notifications
         const messageDetails = {
           "requestDetails": request,
-          "profile": swipingUser,
+          "otherProfile": swipingUser,
+          "profile": swipedUser,
         };
 
         console.log("sending push notification to swiped user", swipedUserId);
-        console.log("sending message details", messageDetails);
+        // console.log("sending message details", messageDetails);
         console.log("sending request message from", swipingUser.displayName);
-        console.log("sending request message to token", user.token);
+        console.log("sending request message to token", swipedUser.token);
 
 
-        sendPush(user.token, `New Request from ${swipingUser.displayName}`,
+        sendPush(swipedUser.token, `New Request from ${swipingUser.displayName}`,
             message, {type: "request", message: messageDetails});
       }
+      console.log("setting request doc");
 
       return requestsRef.set(request);
     });

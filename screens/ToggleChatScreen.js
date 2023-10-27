@@ -4,7 +4,6 @@ import { Ionicons} from '@expo/vector-icons';
 import ChatScreen from './ChatScreen'
 import { useNavigation, useRoute} from '@react-navigation/core';
 import RequestsScreen from './RequestsScreen';
-import AnnouncementRow from './AnnouncementRow';
 
 
 const ToggleChatScreen = () => {
@@ -35,7 +34,7 @@ const ToggleChatScreen = () => {
         </TouchableOpacity>
         </View>
       </SafeAreaView>
-      {showMatches ? <ChatScreen profile={profile}/> : <RequestsScreen/>}
+      {showMatches ? <ChatScreen profile={profile}/> : <RequestsScreen profile={profile}/>}
     </View>
   );
 }

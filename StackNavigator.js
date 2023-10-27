@@ -39,7 +39,7 @@ import ToggleChatScreen from './screens/ToggleChatScreen';
 import RequestMessageScreen from './screens/RequestMessageScreen';
 import AnnouncementScreen from './screens/AnnouncementScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
-// import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/react";
 
 
 
@@ -59,24 +59,40 @@ const StackNavigator = () => {
       // Sentry.captureMessage("response type", response.notification.request.content.data.type);
       // console.log("response for user", user.displayName)
       // console.log("response type",response.notification.request.content.data.type)
+      Sentry.captureMessage("recieving notification");
 
-      if (response.notification.request.content.data.type === "message") {//|| response.notification.request.content.data.type === "rated"
+      if (response.notification.request.content.data.type === "message") {
+
         const messageDetails = response.notification.request.content.data.message;
         const matchedDetails = messageDetails.matchedDetails;
+        const otherProfile = messageDetails.otherProfile;
         const profile = messageDetails.profile
-        navigation.navigate("Message", { matchedDetails, profile });
+
+        navigation.navigate("Message", { matchedDetails, otherProfile, profile });
+
       } else if (response.notification.request.content.data.type === "request") {
+
         const messageDetails = response.notification.request.content.data.message;
         const requestDetails = messageDetails.requestDetails;
+        const otherProfile = messageDetails.otherProfile
         const profile = messageDetails.profile
-        navigation.navigate("RequestMessage", { requestDetails, profile });
+
+        navigation.navigate("RequestMessage", { requestDetails, otherProfile, profile });
+
       } else if (response.notification.request.content.data.type === "announcement") {
+
         navigation.navigate("Announcements");
-      } else if (response.notification.request.content.data.type === "match") {
+
+      } else if (response.notification.request.content.data.type === "chat") {
+
         navigation.navigate("ToggleChat");
+
       } else {
+
         navigation.navigate("Home");
+
       }
+      
 
     });
 

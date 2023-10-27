@@ -8,12 +8,11 @@ import RecieverMessage from './RecieverMessage';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
-import * as Sentry from "@sentry/react";
 
 const MessageScreen = () => {
 
   const { params } = useRoute();
-  const { matchedDetails, profile } = params;
+  const { matchedDetails, otherProfile, profile } = params;
   const [input, setInput] = useState();
   const [messages, setMessages] = useState([])
   const { user } = useAuth();
@@ -67,19 +66,23 @@ const MessageScreen = () => {
 
     const userName = user.displayName.split(" ")[0];
 
-    if (profile?.notifications && profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") {
+    if (otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
 
-      const messageDetails = { "matchedDetails": matchedDetails, "profile": profile }
+      const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": profile, "profile": otherProfile }//switch profiles for push notification of other user
 
-      Sentry.captureMessage(`sending message token to ${profile.token}`)
+      // Sentry.captureMessage(`sending message token to ${profile.token}`)
       // Sentry.captureMessage(`sending message details ${messageDetails}`)
-      Sentry.captureMessage(`sending message from ${userName}`)
+      // Sentry.captureMessage(`sending message from ${userName}`)
 
       // console.log(`sending message token to ${profile.token}`)
       // console.log(`sending message details ${messageDetails}`)
       // console.log(`sending message from ${userName}`)
 
-      sendPush(profile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
+      if (!profile) {
+        sendPush(otherProfile.token, `New Message from ${userName}`, input, message, { type: "chat" })
+      } else {
+        sendPush(otherProfile.token, `New Message from ${userName}`, input, { type: "message", message: messageDetails })
+      }
 
     }
 
@@ -90,7 +93,7 @@ const MessageScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <ChatHeader details={matchedDetails} type={"match"} profile={profile} />
+      <ChatHeader details={matchedDetails} type={"match"} profile={otherProfile} />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -112,9 +115,9 @@ const MessageScreen = () => {
                   <SenderMessage key={message.id} message={message} />
                 ) : (
                   <View style={{ padding: 10, maxWidth: 250, marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
-                    {profile ? (
-                      <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF"}}
-                        source={{ uri: profile.images[0] }} />
+                    {otherProfile ? (
+                      <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
+                        source={{ uri: otherProfile.images[0] }} />
                     ) : (
                       <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
                         source={require("../images/account.jpeg")} />
@@ -136,18 +139,18 @@ const MessageScreen = () => {
 
 
         <View
-          style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin:5 }}>
+          style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
           <TextInput
-            style={{ height: 50, width: "80%", fontSize: 15, padding: 10}}
+            style={{ height: 50, width: "80%", fontSize: 15, padding: 10 }}
             placeholder="Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}
             placeholderTextColor={"grey"}
-            multiline = {true}
+            multiline={true}
             numberOfLines={5}
             value={input}
           />
-          <Button onPress={sendMessage} title="Send" color="#00BFFF" style={{borderRadius:20}}/>
+          <Button onPress={sendMessage} title="Send" color="#00BFFF" style={{ borderRadius: 20 }} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

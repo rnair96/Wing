@@ -14,9 +14,9 @@ const ChatScreen = ({profile}) => {
         {/* <View style={{alignItems:'center', justifyContent:"center", width:"100%"}}> */}
         {/* <Text style={{color:"#00BFFF", padding:10, fontWeight:"bold", fontSize:20}}>Active Chats</Text> */}
         {/* </View> */}
-        <AnnouncementRow profile={profile}/>
+        <AnnouncementRow/>
 
-        <ChatList/>
+        <ChatList profile={profile}/>
         </SafeAreaView>
     // </View>
 

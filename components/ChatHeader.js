@@ -18,14 +18,10 @@ const ChatHeader = ({ details, type, profile }) => {
   const [isMaster, SetIsMaster] = useState(false);
 
   useEffect(()=>{
-    if ((type === "request" && details.id === masterId) || (type === "match" && details.id.includes(masterId))) {
+    if (profile && profile.id === masterId) {
         SetIsMaster(true);
       }
   },[masterId])
-
-  // if ((type === "request" && details.id === masterId) || (type === "match" && details.id.includes(masterId))) {
-  //   SetIsMaster(true);
-  // }
 
   // const [ rating_modal, setRatingModal ] = useState(false);
 
