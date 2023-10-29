@@ -150,9 +150,9 @@ export const ProfileSwipeScreen = () => {
                                     <Text style={{ padding: 10, color: "white" }}>Values</Text>
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.item.values[0]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.item.values[1]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "white", borderRadius: 10, color: "white", padding: 5 }}>{card.item.values[2]}</Text>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[0]}</Text>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[1]}</Text>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[2]}</Text>
                                 </View>
 
                                 {/* <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}> */}
@@ -162,19 +162,19 @@ export const ProfileSwipeScreen = () => {
                                 <Image style={{ margin: 10, ...styles.imagecontainer }} source={{ uri: card.item.images[2] }} />
                                 <View style={{ margin: 10, alignItems: "center", paddingBottom: 10 }}>
                                     <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
-                                    {card.item?.medals && card.item.medals.length > 2 ? (
+                                    {card.item?.medals && card.item.medals.length > 0 ? (
                                         <View style={{ flexDirection: "column" }}>
                                             <View style={{ flexDirection: "row", padding: 15, margin: 10, marginRight: 20 }}>
                                                 <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                <Text style={styles.cardtext}>{card.item.medals[0]}</Text>
+                                                <Text style={styles.cardtext}>{card.item.medals[0]?card.item.medals[0]:`-- --`}</Text>
                                             </View>
                                             <View style={{ flexDirection: "row", padding: 15, margin: 10, marginRight: 20 }}>
                                                 <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                <Text style={styles.cardtext}>{card.item.medals[1]}</Text>
+                                                <Text style={styles.cardtext}>{card.item.medals[1]?card.item.medals[1]:`-- --`}</Text>
                                             </View>
                                             <View style={{ flexDirection: "row", padding: 15, margin: 10, marginRight: 20 }}>
                                                 <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                <Text style={styles.cardtext}>{card.item.medals[2]}</Text>
+                                                <Text style={styles.cardtext}>{card.item.medals[2]?card.item.medals[2]:`-- --`}</Text>
                                             </View>
                                         </View>
                                     ) : (

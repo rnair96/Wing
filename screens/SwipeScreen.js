@@ -248,19 +248,19 @@ const SwipeScreen = ({ loggedProfile }) => {
                                                 </View>
                                                 <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card?.images[0] }} />
                                             </View>
-                                            {card?.medals && card.medals.length > 2 ? (
+                                            {card?.medals && card.medals.length > 0 ? (
                                                 <View style={{ flexDirection: "column", marginLeft:5 }}>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.medals[0]}</Text>
+                                                        <Text style={styles.cardtext}>{card.medals[0]?card.medals[0]:`-- --`}</Text>
                                                     </View>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.medals[1]}</Text>
+                                                        <Text style={styles.cardtext}>{card.medals[1]?card.medals[1]:`-- --`}</Text>
                                                     </View>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.medals[2]}</Text>
+                                                        <Text style={styles.cardtext}>{card.medals[2]?card.medals[2]:`-- --`}</Text>
                                                     </View>
                                                 </View>
                                             ) : (

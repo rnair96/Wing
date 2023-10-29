@@ -25,7 +25,7 @@ const RequestMessageScreen = () => {
     const name = otherProfile ? otherProfile.displayName : "Account User";
     const navigation = useNavigation();
     const batch = writeBatch(db);
-
+    const [userProfile, setUserProfile] = useState(profile);
 
     useEffect(() => {
         if (!requestDetails.read) {
@@ -35,6 +35,38 @@ const RequestMessageScreen = () => {
             })
         }
     }, [])
+
+    useEffect(() => {
+        let isCancelled = false; // cancel flag
+
+        if (!profile) {
+            console.log("fetching user data...")
+            const fetchUserData = async () => {
+                try {
+                    const userSnap = await getDoc(doc(db, global.users, user.uid));
+                    setUserProfile({
+                        id: user.uid,
+                        ...userSnap.data()
+                    })
+                } catch (error) {
+                    if (!isCancelled) {
+                        console.log("incomplete fetch data:", error);
+                    }
+                    console.log("error fetching userdata")
+                }
+
+
+            }
+
+            fetchUserData();
+
+            return () => {
+                isCancelled = true;
+            };
+        }
+
+
+    }, [profile, db])
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -97,7 +129,7 @@ const RequestMessageScreen = () => {
 
             batch.set(messageRefOne, messageOne);
 
-            const name = profile? profile.displayName: user.displayName.split(" ")[0]
+            const username = userProfile ? userProfile.displayName : user.displayName.split(" ")[0]
 
             if (message && message !== "") {
                 const messageRefTwo = doc(collection(db, global.matches, id, "messages"));
@@ -105,7 +137,7 @@ const RequestMessageScreen = () => {
                 const messageTwo = {
                     timestamp: timestamp,
                     userId: user.uid,
-                    displayName: name,
+                    displayName: username,
                     message: message,
                     read: false,
                 }
@@ -117,19 +149,19 @@ const RequestMessageScreen = () => {
             await batch.commit().then(() => {
                 console.log("Added match, swipe doc and deleted request doc and messages to match doc");
 
-                navigation.navigate("ToggleChat");
+                navigation.navigate("ToggleChat", userProfile);
 
-                if (profile && otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
+                if (userProfile && otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
 
                     const matchedDetails = { id: id, ...matchDoc }
 
-                    const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": profile, "profile": otherProfile }
+                    const messageDetails = { matchedDetails: matchedDetails, otherProfile: userProfile }
 
-                    Sentry.captureMessage(`match & move sending message from ${name}`)
+                    Sentry.captureMessage(`match & move sending message from ${username}`)
                     Sentry.captureMessage(`match & move sending message to ${otherProfile.displayName} with token ${otherProfile.token}`)
-                    
-                    
-                    sendPush(otherProfile.token, `${name} has Matched and Messaged you!`, message, { type: "message", message: messageDetails })
+
+
+                    sendPush(otherProfile.token, `${username} has Matched and Messaged you!`, message, { type: "message", message: messageDetails })
                 }
 
             });
@@ -187,19 +219,19 @@ const RequestMessageScreen = () => {
                                     </View>
                                     <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: otherProfile?.images[0] }} />
                                 </View>
-                                {otherProfile?.medals && otherProfile.medals.length > 2 ? (
+                                {otherProfile?.medals && otherProfile.medals.length > 0 ? (
                                     <View style={{ flexDirection: "column", marginLeft: 5, marginRight: 7 }}>
                                         <View style={{ flexDirection: "row", padding: 10 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{otherProfile.medals[0]}</Text>
+                                            <Text style={styles.cardtext}>{otherProfile.medals[0]?otherProfile.medals[0]:`-- --`}</Text>
                                         </View>
                                         <View style={{ flexDirection: "row", padding: 10 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{otherProfile.medals[1]}</Text>
+                                            <Text style={styles.cardtext}>{otherProfile.medals[1]?otherProfile.medals[1]:`-- --`}</Text>
                                         </View>
                                         <View style={{ flexDirection: "row", padding: 10 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{otherProfile.medals[2]}</Text>
+                                            <Text style={styles.cardtext}>{otherProfile.medals[2]?otherProfile.medals[2]:`-- --`}</Text>
                                         </View>
                                     </View>
                                 ) : (
@@ -313,7 +345,7 @@ const RequestMessageScreen = () => {
                             onPress={() => {
                                 setSecondModal(!secondModal);
                                 deleteRequest(requestDetails.id, user.uid).then(() => {
-                                    navigation.navigate("ToggleChat")
+                                    navigation.navigate("ToggleChat", userProfile)
                                 });
                             }}
                         >

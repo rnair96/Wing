@@ -95,7 +95,7 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, detailsId, type }) => 
             style={styles.opacitystyle}
             onPress={() => {
               setIsVisible(!isVisible);
-              navigation.navigate("ReportOther", { other_user, matchedID });
+              navigation.navigate("ReportOther", { other_user, detailsId, type });
             }}
           >
             <Text style={styles.textStyle}>Other</Text>

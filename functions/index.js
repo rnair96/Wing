@@ -207,7 +207,7 @@ exports.onSwipe = functions.firestore
         const messageDetails = {
           "requestDetails": request,
           "otherProfile": swipingUser,
-          "profile": swipedUser,
+          // "profile": swipedUser,
         };
 
         console.log("sending push notification to swiped user", swipedUserId);
@@ -316,7 +316,7 @@ exports.onSwipeDev = functions.firestore
         const messageDetails = {
           "requestDetails": request,
           "otherProfile": swipingUser,
-          "profile": swipedUser,
+          // "profile": swipedUser,
         };
 
         console.log("sending push notification to swiped user", swipedUserId);
@@ -449,7 +449,7 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
     const completeUsers = uniqueUsers.filter((user) => {
       return user.mission !== null &&
         user.mission !== "" &&
-        user.medals && user.medals.length === 3 &&
+        user.values && user.values.length === 3 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
@@ -585,7 +585,7 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     const completeUsers = uniqueUsers.filter((user) => {
       return user.mission !== null &&
         user.mission !== "" &&
-        user.medals && user.medals.length === 3 &&
+        user.values && user.values.length === 3 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });

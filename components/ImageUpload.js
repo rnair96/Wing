@@ -95,7 +95,20 @@ const ImageUpload = ({ url, setURL, index, userId}) => {
               throw new Error("file-not-image");
             }
 
-            const fileInfo = await FileSystem.getInfoAsync(path);
+            let manipulatedPath = path;
+
+            console.log("path",path)
+
+            // If it's a PNG, convert to JPG.
+            if (path.endsWith('.png')) {
+              console.log("converting png")
+                const convertedImage = await ImageManipulator.manipulateAsync(path, [], {
+                    format: ImageManipulator.SaveFormat.JPEG,
+                });
+                manipulatedPath = convertedImage.uri;
+            }
+
+            const fileInfo = await FileSystem.getInfoAsync(manipulatedPath);
 
 
             // console.log("image size",fileInfo.size);
@@ -149,6 +162,9 @@ const ImageUpload = ({ url, setURL, index, userId}) => {
               return;
             } else if(e.message.includes('image-not-appropriate')){
               alert('Inappropriate content detected. Please choose another image.');
+              return;
+            } else {
+              alert('Something went wrong. Please try again and perhaps with a different image.');
               return;
             }
             // console.log("there was an error",e);
@@ -216,7 +232,7 @@ const ImageUpload = ({ url, setURL, index, userId}) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{fontSize:16, textAlign:"center", paddingBottom:10, fontWeight:"bold"}}>Uploading Image</Text>
+            <Text style={{fontSize:16, textAlign:"center", fontWeight:"bold"}}>Uploading Image</Text>
             {/* <Text style={{fontSize:14, textAlign:"center", fontWeight:"bold", color:"#00308F"}}>{progress}% Complete</Text> */}
           </View>
           </View>
@@ -257,7 +273,7 @@ const styles = StyleSheet.create({
       },
       modalView: {
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 10,
         padding:10,
         alignItems: 'center',
         shadowColor: '#000',

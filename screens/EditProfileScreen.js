@@ -44,49 +44,6 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
   const navigation = useNavigation();
 
-
-  // useEffect(() => {
-  //   if (profile) {
-  //     if (profile?.images && profile.images.length > 2) {
-  //       setUrl1(profile.images[0]);
-  //       setUrl2(profile.images[1]);
-  //       setUrl3(profile.images[2]);
-  //     }
-
-  //     if (profile?.medals && profile.medals.length > 2) {
-  //       setMedal1(profile.medals[0]);
-  //       setMedal2(profile.medals[1]);
-  //       setMedal3(profile.medals[2]);
-  //     }
-
-  //     profile?.age !== undefined && setAge(parseInt(profile.age));
-  //     profile?.mission !== undefined && setMission(profile.mission);
-  //     profile?.gender !== undefined && setGender(profile.gender);
-      
-
-  //     profile?.bio !== undefined && setBio(profile.bio);
-  //     profile?.location !== undefined && setLocation(profile.location);
-  //     profile?.values !== undefined && setValues(profile.values)
-  //     profile?.mission_tag !== undefined && setMissionTag(profile.mission_tag);
-  //     profile?.token !== undefined && setOldToken(profile.token);
-  //     profile?.school !== undefined && setSchool(profile.school);
-  //     profile?.hometown !== undefined && setHometown(profile.hometown);
-  //     if (profile.university_student && profile.university_student.status === "active") {
-  //       profile?.class_level !== undefined && setClassLevel(profile.university_student.class_level)
-  //       profile?.grad_year !== undefined && setGradYear(profile.university_student.grad_year)
-  //       setActiveStudent(true)
-  //     } else {
-  //       profile?.job !== undefined && setJob(profile.job);
-  //       profile?.company !== undefined && setCompany(profile.company);
-  //     }
-
-
-  //   }
-
-  // }, [profile])
-
-  // console.log("mission", mission)
-
   useEffect(() => {
     if (profile && profile?.images && profile.images.length > 2){
       if(url1 !== profile.images[0] || url2 !== profile.images[1] || url3 !== profile.images[2]){
@@ -99,39 +56,23 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       }
     }
 
-  },[url1, url2, url3])
+  },[url1, url2, url3 ])
 
 
 
   useEffect(() => {
     let form;
+
     if (activeStudent) {
-      form = !url1 || !url2 || !url3  || !location || !values || !school || !mission
-    } else {//|| !medal1 || !medal2 || !medal3 || !bio || !class_level || !grad_year
-      form = !url1 || !url2 || !url3  || !location || !values ||!job || !mission;//|| !medal1 || !medal2 || !medal3 || !bio 
+      form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 || !school || !mission
+    } else {
+      form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 ||!job || !mission
 
     }
 
     setIncompleteForm(form);
 
-  }, [activeStudent, url1, url2, url3, location, values, school, mission, job])//  medal1, medal2, medal3, class_level, grad_year, bio,
-
-//activeStudent, url1, url2, url3, location, values, school, mission
-
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")) {
-  //       const new_token = await registerNotifications();
-  //       setNewToken(new_token);
-  //     } else {
-  //       setNewToken(oldtoken);
-  //     }
-  //   })();
-
-  // }, [oldtoken])
-  //create a screen at sign in for notifications
-
+  }, [activeStudent, url1, url2, url3, location, values, school, mission, job])
 
 
 
@@ -156,7 +97,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
         // token: newtoken,
         bio: bio
       }).then(() => {
-        navigation.navigate("Home");
+        navigation.navigate("Home", { refresh: true });
       }).catch((error) => {
         Sentry.captureMessage("error at edit profile for student", error.message)
         console.log(error.message)
@@ -177,7 +118,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
         // token: newtoken,
         bio: bio
       }).then(() => {
-        navigation.navigate("Home");
+        navigation.navigate("Home",{ refresh: true });
       }).catch((error) => {
         Sentry.captureMessage("error at edit profile for professional", error.message)
         console.log(error.message)

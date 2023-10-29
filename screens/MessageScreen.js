@@ -18,7 +18,38 @@ const MessageScreen = () => {
   const [messages, setMessages] = useState([])
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState(profile);
   // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
+
+  useEffect(() => {
+    let isCancelled = false; // cancel flag
+
+    if (!profile) {
+      console.log("fetching user data...")
+      const fetchUserData = async () => {
+        try {
+          const userSnap = await getDoc(doc(db, global.users, user.uid));
+          setUserProfile({
+            id: user.uid,
+            ...userSnap.data()
+          })
+        } catch (error) {
+          if (!isCancelled) {
+            console.log("incomplete fetch data:", error);
+          }
+          console.log("error fetching userdata")
+        }
+
+
+      }
+
+      fetchUserData();
+
+      return () => {
+        isCancelled = true;
+      };
+    }
+  }, [profile, db])
 
 
   useEffect(() => {
@@ -52,7 +83,7 @@ const MessageScreen = () => {
   }, [messages])
 
   const sendMessage = () => {
-    const name = profile ? profile.displayName : user.displayName.split(" ")[0]
+    const name = userProfile ? userProfile.displayName : user.displayName.split(" ")[0]
     const timestamp = serverTimestamp();
 
     try {
@@ -69,12 +100,13 @@ const MessageScreen = () => {
         latest_message_timestamp: timestamp
       })
 
-      if (profile && otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
 
-        const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": profile, "profile": otherProfile }
+      if (userProfile && otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
 
-        Sentry.captureMessage(`sending message from ${name}`)
-        Sentry.captureMessage(`sending message to ${otherProfile.displayName} with token ${otherProfile.token}`)
+        const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": userProfile }
+
+        // Sentry.captureMessage(`sending message from ${name}`)
+        // Sentry.captureMessage(`sending message to ${otherProfile.displayName} with token ${otherProfile.token}`)
 
         sendPush(otherProfile.token, `New Message from ${name}`, input, { type: "message", message: messageDetails })
 
@@ -140,7 +172,7 @@ const MessageScreen = () => {
         <View
           style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
           <TextInput
-            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop:15 }}
+            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15 }}
             placeholder="Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}

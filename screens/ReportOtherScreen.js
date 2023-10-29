@@ -5,6 +5,7 @@ import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
 import deleteMatchFull from '../lib/deleteMatchFull';
+import deleteRequest from '../lib/deleteRequest';
 import sendPush from '../lib/sendPush';
 
 
@@ -16,7 +17,7 @@ const ReportOtherScreen = () => {
     const navigation = useNavigation();
     const { params } = useRoute();
 
-    const { other_user, matchedID } = params;
+    const { other_user, detailsId, type } = params;
 
     const incompleteForm = !report;
 
@@ -32,9 +33,15 @@ const ReportOtherScreen = () => {
             if (other_user?.notifications && other_user.notifications.messages) {
                 sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" });
             }
-            if (matchedID) {
-                await deleteMatchFull(matchedID, navigation)
-            } else {
+            if (detailsId && type && type === "match") {
+                await deleteMatchFull(detailsID, navigation).then(()=>{
+                    navigation.navigate("ToggleChat");
+                  })
+            } else if(detailsId && type && type === "request"){
+                await deleteRequest(detailsId, user.uid).then(()=>{
+                    navigation.navigate("ToggleChat");
+                  })
+            }else {
                 navigation.navigate("Home");
             }
             alert("Your report has been submitted.");

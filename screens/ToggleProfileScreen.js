@@ -21,11 +21,7 @@ const ToggleProfileScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.toggleIcons}>
-        <TouchableOpacity style={{ paddingTop: 20 }} onPress={() => isEditSaved ? navigation.goBack() : setIsModalVisible(true)}>
-          {/* <Ionicons name="ios-arrow-back" size={30} color="#00BFFF" /> */}
-          <Ionicons name="chevron-back-outline" size={30} color="#00BFFF"/>
-        </TouchableOpacity>
-        <View style={{ flexDirection: 'row', width: "40%", height: "80%", justifyContent: 'space-between', right: "25%", top: 10, borderBottomWidth:1, borderColor:"#E0E0E0", marginLeft:"35%" }}>
+        <View style={{ flexDirection: 'row', width: "40%", height: "80%", justifyContent: 'space-between', right: "10%", top: 10, borderBottomWidth:1, borderColor:"#E0E0E0", marginLeft:"35%" }}>
           <TouchableOpacity style={{ padding:10, alignItems: "center", justifyContent: "center" }} onPress={() => setShowEdit(true)}>
             {/* <Ionicons name="pencil" size={20} color="#00308F" /> */}
             <Text style={{color: showEdit ? "#00BFFF" : "#A8A8A8",fontSize:17, fontWeight:"bold"}}>Edit</Text>
@@ -36,10 +32,14 @@ const ToggleProfileScreen = () => {
             <Text style={{color: showEdit ? "#A8A8A8":"#00BFFF",fontSize:17, fontWeight:"bold"}}>View</Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity style={{ paddingTop: 20 }} onPress={() => isEditSaved ? navigation.goBack() : setIsModalVisible(true)}>
+          {/* <Ionicons name="ios-arrow-back" size={30} color="#00BFFF" /> */}
+          <Ionicons name="chevron-forward-outline" size={30} color="#00BFFF"/>
+        </TouchableOpacity>
       </SafeAreaView>
       {showEdit ? <EditProfileScreen profile={profile} setIsEditSaved={setIsEditSaved}/> : <ViewProfileScreen profile={profile} />}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={isModalVisible}
         onRequestClose={() => {
