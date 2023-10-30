@@ -16,7 +16,7 @@ export const ProfileViewScreen = () => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             {/* <View> */}
             {(profile?.mission && profile?.images && profile?.images.length > 2 && profile?.values && profile?.values.length > 2) ? (
                 <View>
@@ -178,9 +178,9 @@ export const ProfileViewScreen = () => {
                                     </View>
                                 </View>
                                 <View style={{ justifyContent: "center", alignItems: "center", padding: 2 }}>
-                                    <TouchableOpacity style={{ padding: 30, backgroundColor: "grey", borderRadius: 10, width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
+                                    <TouchableOpacity style={{ padding: 30, backgroundColor: "white", borderRadius: 10, borderWidth: 2, borderColor: "#00BFFF", width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
                                         {/* <Ionicons name="arrow-down" size={30} color="#00BFFF" /> */}
-                                        <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Return to Chat</Text>
+                                        <Text style={{ color: "#00BFFF", fontWeight: "bold", fontSize: 17 }}>Return to Chat</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -195,9 +195,9 @@ export const ProfileViewScreen = () => {
                     <Image style={{ height: 100, width: 100, borderRadius: 50, borderWidth: 1, borderColor: "red" }} source={require("../images/account.jpeg")} />
                     <Text style={{ fontWeight: "bold", color: "black", padding: 10 }}> Error Loading Profile... Try Again Later</Text>
                     <View style={{ justifyContent: "center", alignItems: "center", padding: 2 }}>
-                        <TouchableOpacity style={{ padding: 30, backgroundColor: "grey", borderRadius: 10, width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
+                        <TouchableOpacity style={{ padding: 30, backgroundColor: "white", borderRadius: 10, borderWidth: 2, borderColor: "#00BFFF", width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
                             {/* <Ionicons name="arrow-down" size={30} color="#00BFFF" /> */}
-                            <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Return to Chat</Text>
+                            <Text style={{ color: "#00BFFF", fontWeight: "bold", fontSize: 17 }}>Return to Chat</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

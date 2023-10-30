@@ -52,10 +52,10 @@ const ToggleChatScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.toggleIcons}>
-      <TouchableOpacity style={{paddingTop:20 }} onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={{paddingTop:5}} onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back-outline" size={30} color="#00BFFF"/>
             </TouchableOpacity>
-        <View style={{flexDirection: 'row', width:"50%", height:"80%",justifyContent:'space-between',right:"20%", top:10, borderBottomWidth:1, borderColor:"#E0E0E0", marginLeft:"35%" }}>
+        <View style={{flexDirection: 'row', width:"50%", justifyContent:'space-between',right:"20%", borderBottomWidth:1, borderColor:"#E0E0E0", marginLeft:"35%" }}>
         <TouchableOpacity style={{padding:10, alignItems:"center", justifyContent:"center"}} onPress={() => setShowMatches(true)}>
           {/* <Ionicons name="chatbubbles-sharp" size={20} color = "#00308F"/> */}
           <Text style={{color:showMatches?"#00BFFF":"#A8A8A8",fontSize:17, fontWeight:"bold"}}>Chats</Text>
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginBottom: 40,
+    marginTop:20
   },
   selectedIcon: {
     color: 'blue',

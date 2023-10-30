@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
 // import { Entypo } from '@expo/vector-icons';
 import FlagModal from '../components/FlagModal';
@@ -40,8 +40,9 @@ export const ProfileSwipeScreen = () => {
 
     return (
 
-        <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor:"white" }}>
             {(card?.mission && card?.images && card?.images.length > 2 && card?.values && card?.values.length > 2) ? (
+                <View style={{ marginTop:50}}>
                 <FlatList
                     data={[card]}
                     keyExtractor={(card) => card.id}
@@ -210,14 +211,16 @@ export const ProfileSwipeScreen = () => {
                                 </View>
                             </View>
                             <View style={{ padding: 10, alignItems: "center" }}>
-                                <TouchableOpacity style={{ padding: 30, backgroundColor: "grey", borderRadius: 10, width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
-                                    <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Return to Swipe</Text>
+                            <TouchableOpacity style={{ padding: 30, backgroundColor: "white", borderRadius: 10, borderWidth: 2, borderColor: "#00BFFF", width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
+                                    <Text style={{ color: "#00BFFF", fontWeight: "bold", fontSize: 17 }}>Return to Swipe</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        
                     )
                     }//add distance to user on location
                 />
+                </View>
             ) : (
                 <View style={{ flexDirection: "column", marginVertical: "60%", justifyContent: "center", alignItems: "center" }}>
                     <Image style={{ height: 100, width: 100, borderRadius: 50, borderWidth: 1, borderColor: "red" }} source={require("../images/account.jpeg")} />
@@ -245,7 +248,7 @@ export const ProfileSwipeScreen = () => {
             </View> */}
             {/* <Foo ter/> */}
             <FlagModal other_user={flag_user} isVisible={flag_modal} setIsVisible={setFlagModal} detailsId={null} type={null}/>
-        </View>
+        </SafeAreaView>
         // </SafeAreaView>
 
     )

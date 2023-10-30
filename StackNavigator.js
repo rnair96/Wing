@@ -171,9 +171,9 @@ const StackNavigator = () => {
           <Stack.Screen name="Menu" component={MenuScreen}
             options={{
               cardStyleInterpolator: slideFromTopInterpolator,
-              gestureDirection: 'vertical',
-              gestureResponseDistance: { vertical: 600 }, // Increase this value
-              cardOverlayEnabled: true,
+              gestureDirection: 'vertical-inverted',
+              // gestureResponseDistance: { vertical: 600 }, // Increase this value
+              // cardOverlayEnabled: true,
             }}
           />
           <Stack.Screen name="MissionControl" component={MissionControlScreen} />
@@ -218,8 +218,8 @@ const StackNavigator = () => {
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
               gestureDirection: 'vertical',
-              gestureResponseDistance: { vertical: 600 }, // Increase this value
-              cardOverlayEnabled: true, // This can make swipe smoother and add a slight overlay when swiping
+              // gestureResponseDistance: { vertical: 600 }, // Increase this value
+              // cardOverlayEnabled: true, // This can make swipe smoother and add a slight overlay when swiping
             }}
           />
           {/* <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen} /> */}
