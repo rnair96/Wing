@@ -258,7 +258,7 @@ const RequestMessageScreen = () => {
                             </View>
                             <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
                                 <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
-                                <Text style={{ color: "white", fontSize: 15, left: 5 }}>{otherProfile.location}</Text>
+                                <Text style={{ color: "white", fontSize: 15, left: 10 }}>{otherProfile.location.text}</Text>
                             </View>
                         </TouchableOpacity>
                     ) : (
@@ -397,8 +397,8 @@ const styles = StyleSheet.create({
         // height: 600,
         margin: 10,
         borderRadius: 20,
-        borderColor: "#002D62",
-        borderWidth: 5,
+        // borderColor: "#002D62",
+        // borderWidth: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

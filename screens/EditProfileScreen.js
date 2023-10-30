@@ -175,14 +175,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               <View style={{ padding: 10, alignItems: "center" }}>
                 <Text style={styles.formTitle}>Location</Text>
                 {!profile?.location ?
-                  (<TextInput
-                    value={location}
-                    onChangeText={setLocation}
-                    placeholder={'What area are you in? (City, State)'}
-                    placeholderTextColor="#888888"
-                    style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />)
+                    <Text>Must Turn on Location Services</Text>
                   : (
-                    <Text>{location}</Text>
+                    <Text>{location.text}</Text>
                   )}
               </View>
 

@@ -84,7 +84,7 @@ const ViewProfileScreen = ({ profile }) => {
                                 </View>
                                 <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding:20 }}>
                                     <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
-                                    <Text style={{ color: "white", fontSize: 15, left: 5 }}>{card.item.location}</Text>
+                                    <Text style={{ color: "white", fontSize: 15, left: 10 }}>{card.item.location.text}</Text>
                                 </View>
                             </View>
 
@@ -238,7 +238,7 @@ const ViewProfileScreen = ({ profile }) => {
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center" }}>
                                     <View style={{ flexDirection: "column", padding: 10 }}>
                                         <Image style={{ height: 20, width: 10, alignSelf: "center" }} source={require("../images/droppin_white.png")} />
-                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.location}</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.location.text}</Text>
                                     </View>
                                 </View>
                             </View>

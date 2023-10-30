@@ -7,9 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { onSnapshot, doc, updateDoc, } from "firebase/firestore";
 import { db } from '../firebase';
 import * as WebBrowser from 'expo-web-browser';
-import checkFlagged from '../lib/checkFlagged';
 import SwipeScreen from './SwipeScreen';
 // import LinearGradient from 'react-native-linear-gradient';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import getLocation from '../lib/getLocation';
+
 
 
 WebBrowser.maybeCompleteAuthSession();
@@ -19,6 +22,7 @@ const HomeScreen = () => {
     const { user } = useAuth();
     const [loggedProfile, setLoggedProfile] = useState(null);
     const route = useRoute();
+    const [islocationChanged, setIsLocationChanged] = useState(false);
 
 
     useLayoutEffect(() => {
@@ -76,68 +80,34 @@ const HomeScreen = () => {
                 unsub();
             };
         }
-    }, [route.params])
-
-    // useEffect(() => {
-    //     (async () => {
-    //         //check if user is in a new location, if so, update
-    //         if (Device.isDevice) {
-    //             const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    //             let finalStatus = existingStatus;
-    //             console.log("status", finalStatus);
-    //             if (existingStatus !== 'granted') {
-    //                 const { status } = await Notifications.requestPermissionsAsync();
-    //                 finalStatus = status;
-    //             }
-    //         }
-
-
-    //         const location = await getLocation();
-    //         if (loggedProfile && location && loggedProfile?.location !== location) {
-    //             console.log("Updating location")
-    //             updateDoc(doc(db, global.users, user.uid), {
-    //                 location: location
-    //             }).catch((error) => {
-    //                 console.log("could not refresh location");
-    //             });
-    //         }
-    //     })();
-    // }, [loggedProfile]);
+    }, [route.params, islocationChanged])
 
     useEffect(() => {
-        //check if user has any unresolved flags
-        if (loggedProfile && loggedProfile?.flags 
-            && loggedProfile?.flagged_status && loggedProfile.flagged_status === "unresolved") {
-            // const check = checkFlagged(loggedProfile.flags);
-            // if (check) {
-            const index = loggedProfile.flags.length - 1;
-            const flag = loggedProfile.flags[index];
-            const flag_number = index + 1;
-            //trigger modal screen
-            navigation.navigate("Flagged", { flag, flag_number });
-            // }
+        (async () => {
+            //check if user is in a new location, if so, update
+            if (Device.isDevice) {
+                const { status: existingStatus } = await Notifications.getPermissionsAsync();
+                let finalStatus = existingStatus;
+                console.log("status", finalStatus);
+                if (existingStatus !== 'granted') {
+                    const { status } = await Notifications.requestPermissionsAsync();
+                    finalStatus = status;
+                }
+            }
 
-        }
 
-        //birthday checker - could be done on server side
-        if (loggedProfile && loggedProfile?.birthdate) {
-            const currentDate = new Date();
-            const birthDate = new Date(loggedProfile.birthdate)
-
-            if (currentDate.getMonth() === birthDate.getMonth()
-                && currentDate.getDate() === birthDate.getDate()
-                && currentDate.getFullYear() !== loggedProfile.last_year_celebrated) {
-                console.log("Updating age on birthday")
-                const newage = loggedProfile.age + 1;
+            const location = await getLocation();
+            if (loggedProfile && location && loggedProfile?.location.text !== location.text) {
+                console.log("Updating location")
                 updateDoc(doc(db, global.users, user.uid), {
-                    age: newage,
-                    last_year_celebrated: currentDate.getFullYear()
+                    location: location
+                }).then(()=>{
+                    setIsLocationChanged(true);
                 }).catch((error) => {
-                    console.log("could not update age on birthday");
+                    console.log("could not refresh location");
                 });
             }
-        }
-
+        })();
     }, [loggedProfile]);
 
     return (

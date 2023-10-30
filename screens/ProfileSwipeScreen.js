@@ -201,7 +201,7 @@ export const ProfileSwipeScreen = () => {
                                 <View style={{ margin: 10, alignItems: "center" }}>
                                     <View style={{ flexDirection: "column", padding: 10 }}>
                                         <Image style={{ height: 20, width: 10, alignSelf: "center" }} source={require("../images/droppin_white.png")} />
-                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.location}</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.location.text}</Text>
                                     </View>
                                     <View style={{ padding: 10 }}>
                                         <TouchableOpacity style={{ padding: 10, backgroundColor: "#00BFFF", borderRadius: 20, borderWidth: 2, borderColor: "white" }} onPress={reportUser}>

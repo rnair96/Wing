@@ -4,11 +4,14 @@ import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { Entypo } from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { getIdToken, getCurrentUser, } from "firebase/auth";
 import { getDocs, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit, orderBy } from "firebase/firestore";
 import { db, auth } from '../firebase';
 import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
+// import * as Device from 'expo-device';
+// import * as Notifications from 'expo-notifications';
+// import getLocation from '../lib/getLocation';
+
 
 
 
@@ -49,7 +52,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                     if (latestSwipeDoc.data()?.swipedAt && (latestSwipeDoc.data().swipedAt - 1) > 0) {
                         console.log("setting swipes to previously", (latestSwipeDoc.data().swipedAt - 1))
                         setSwipeAmount((latestSwipeDoc.data().swipedAt - 1));
-                    } else if (latestSwipeDoc.data()?.swipedAt){
+                    } else if (latestSwipeDoc.data()?.swipedAt) {
                         console.log("setting swipes to 0 and disabling swipes");
                         setSwipeAmount(0);
                         setSwipeEnabled(false);
@@ -67,6 +70,44 @@ const SwipeScreen = ({ loggedProfile }) => {
 
     }, [db, loggedProfile])
 
+    useEffect(() => {
+        //check if user has any unresolved flags
+        if (loggedProfile && loggedProfile?.flags
+            && loggedProfile?.flagged_status && loggedProfile.flagged_status === "unresolved") {
+            // const check = checkFlagged(loggedProfile.flags);
+            // if (check) {
+            const index = loggedProfile.flags.length - 1;
+            const flag = loggedProfile.flags[index];
+            const flag_number = index + 1;
+            //trigger modal screen
+            navigation.navigate("Flagged", { flag, flag_number });
+            // }
+
+        }
+
+        if (loggedProfile && loggedProfile?.birthdate) {
+            console.log("checking birthdate")
+            const currentDate = new Date();
+            const dateParts = loggedProfile.birthdate.split("/");
+            const month = parseInt(dateParts[0], 10) - 1; // months are 0-indexed in JavaScript
+            const day = parseInt(dateParts[1], 10);
+
+            if (currentDate.getMonth() === month
+                && currentDate.getDate() === day
+                && currentDate.getFullYear() !== loggedProfile.last_year_celebrated) {
+                console.log("Updating age on birthday")
+                const newage = loggedProfile.age + 1;
+                updateDoc(doc(db, global.users, user.uid), {
+                    age: newage,
+                    last_year_celebrated: currentDate.getFullYear()
+                }).catch((error) => {
+                    console.log("could not update age on birthday");
+                });
+            }
+        }
+
+    }, [loggedProfile]);
+
 
     useEffect(() => {
         let unsub;
@@ -83,13 +124,13 @@ const SwipeScreen = ({ loggedProfile }) => {
                 // const idToken = await getIdToken(getCurrentUser(auth), true);
 
                 fetch(functionURL)
-                //     , {
-                //     method: 'GET',
-                //     headers: {
-                //       'Authorization': 'Bearer ' + idToken
-                //     }
-                //   }
-                //   )
+                    //     , {
+                    //     method: 'GET',
+                    //     headers: {
+                    //       'Authorization': 'Bearer ' + idToken
+                    //     }
+                    //   }
+                    //   )
                     // .then(response => response.text())  // Get the response text
                     // .then(text => {
                     //     try {
@@ -129,6 +170,7 @@ const SwipeScreen = ({ loggedProfile }) => {
         }
 
     }, [loggedProfile, loggedProfile?.tagPreference, loggedProfile?.universityPreference]);//loggedProfile?.ageMin, loggedProfile?.ageMax,
+
 
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]) { return; }
@@ -185,29 +227,29 @@ const SwipeScreen = ({ loggedProfile }) => {
                         <View style={[styles.emptycardcontainer]}>
                             <View style={styles.loading}>
                                 <ActivityIndicator size="large" color="#00BFFF" />
-                                <Text style={{ fontWeight: "bold", fontSize: 20}}>Gathering Wings...</Text>
+                                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Gathering Wings...</Text>
                             </View>
                         </View>
 
                     ) : (
                         <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20}}>No Wings Around... Try Again Later</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20 }}>No Wings Around... Try Again Later</Text>
                             <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
                         </View>
                     )}
                 </View>
             ) : (
-                    <View style={styles.cardscontainer}>
-                        <Swiper cards={profiles}
-                            ref={swipeRef}
-                            stackSize={5}
-                            animateCardOpacity={true}
-                            verticalSwipe={false}
-                            cardIndex={0}
-                            horizontalSwipe={false}
-                            disableRightSwipe={!swipeEnabled}
-                            // disableTopSwipe={!swipeEnabled}
-                            onSwipedAll={() => {
+                <View style={styles.cardscontainer}>
+                    <Swiper cards={profiles}
+                        ref={swipeRef}
+                        stackSize={5}
+                        animateCardOpacity={true}
+                        verticalSwipe={false}
+                        cardIndex={0}
+                        horizontalSwipe={false}
+                        disableRightSwipe={!swipeEnabled}
+                        // disableTopSwipe={!swipeEnabled}
+                        onSwipedAll={() => {
                             setProfiles([])
                         }}
 
@@ -229,7 +271,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                                 <View key={card.id} style={styles.cardcontainer}>
                                     <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => { navigation.navigate("ProfileSwipe", { card: card }) }}>
                                         <View style={{ alignItems: "center", bottom: 20 }}>
-                                            <Text style={{color:"white", margin:10}}>Mission: </Text>
+                                            <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
                                             <Text style={styles.text}>{card.mission}</Text>
                                         </View>
                                         <View style={{ justifyContent: "space-evenly", height: "65%", width: "100%", backgroundColor: "#002D62" }}>
@@ -249,22 +291,22 @@ const SwipeScreen = ({ loggedProfile }) => {
                                                 <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card?.images[0] }} />
                                             </View>
                                             {card?.medals && card.medals.length > 0 ? (
-                                                <View style={{ flexDirection: "column", marginLeft:5 }}>
+                                                <View style={{ flexDirection: "column", marginLeft: 5 }}>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.medals[0]?card.medals[0]:`-- --`}</Text>
+                                                        <Text style={styles.cardtext}>{card.medals[0] ? card.medals[0] : `-- --`}</Text>
                                                     </View>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.medals[1]?card.medals[1]:`-- --`}</Text>
+                                                        <Text style={styles.cardtext}>{card.medals[1] ? card.medals[1] : `-- --`}</Text>
                                                     </View>
                                                     <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.medals[2]?card.medals[2]:`-- --`}</Text>
+                                                        <Text style={styles.cardtext}>{card.medals[2] ? card.medals[2] : `-- --`}</Text>
                                                     </View>
                                                 </View>
                                             ) : (
-                                                <View style={{ flexDirection: "column", width:"100%", alignItems:"center"}}>
+                                                <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
                                                     <View style={{ flexDirection: "row", padding: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
@@ -282,14 +324,14 @@ const SwipeScreen = ({ loggedProfile }) => {
 
                                             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                                                 <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[0]}</Text>
-                                                <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5}}>{card.values[1]}</Text>
+                                                <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[1]}</Text>
                                                 <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[2]}</Text>
                                             </View>
                                         </View>
                                         {/* </View> */}
                                         <View style={{ justifyContent: "center", flexDirection: "row", width: "100%" }}>
                                             <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
-                                            <Text style={{ color: "white", fontSize: 15, left: 5 }}>{card.location}</Text>
+                                            <Text style={{ color: "white", fontSize: 15, left: 10 }}>{card.location.text}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -309,7 +351,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                     <Entypo name="mail" size={17} color="green" />
                 </TouchableOpacity>
             </View>
-            <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} currentCard={currentCard}/>
+            <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} currentCard={currentCard} />
             <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
 
         </View>
@@ -348,7 +390,7 @@ const styles = StyleSheet.create({
     },
     infocontainer: {
         // backgroundColor: "#00308F",
-        backgroundColor:"#87CEEB",
+        backgroundColor: "#87CEEB",
         paddingTop: 15,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -374,7 +416,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 22,
         fontWeight: 'bold',
-        margin:3
+        margin: 3
     },
     cardtext: {
         color: "white",
