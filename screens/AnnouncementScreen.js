@@ -7,6 +7,7 @@ import Header from '../Header';
 import Constants from 'expo-constants';
 import AnnouncementImageUpload from '../components/AnnouncementImageUpload';
 import AnnouncementRecieverMessage from './AnnouncementRecieverMessage';
+import * as Sentry from "@sentry/react";
 
 
 const AnnouncementScreen = () => {
@@ -38,6 +39,8 @@ const AnnouncementScreen = () => {
             },
             (error) => {
                 console.log("there was an error in announcements snapshot", error)
+                Sentry.captureMessage(`error getting announcements snapshot for ${user.uid}, ${error.message}`)
+
             })
 
         setLoading(false);
@@ -52,12 +55,17 @@ const AnnouncementScreen = () => {
         if (messages.length > 0 && !messages[0].read) {
             updateDoc(doc(db, global.users, user.uid, "announcements", messages[0].id), {
                 read: true
+            }).then(()=>{
+                console.log("updating latest announcement as read")
+            }).catch((error)=>{
+                console.log("error updating announcement as read", error)
+                Sentry.captureMessage(`Error updating latest announcement read for ${user.uid}, ${error.message}`)
             })
-            console.log("updating latest announcement as read")
         }
     }, [messages])
 
 
+    //should make message, pic and link - just one field : content
     const sendMessage = () => {
         const timestamp = serverTimestamp();
         addDoc(collection(db, global.announcements), {
@@ -65,6 +73,10 @@ const AnnouncementScreen = () => {
             message: input,
             timestamp: timestamp,
             type: "text"
+        }).catch((error)=>{
+            console.log("error sending announcement", error)
+            alert("Error sending announcement.")
+            Sentry.captureMessage(`Error sending announcement, ${error.message}`)
         })
 
         setInput("");
@@ -83,8 +95,11 @@ const AnnouncementScreen = () => {
             picture: picture,
             timestamp: timestamp,
             type: "image"
+        }).catch((error)=>{
+            console.log("error adding picture in announcement", error)
+            alert("Error adding picture in announcement.")
+            Sentry.captureMessage(`Error adding picture in announcement, ${error.message}`)
         })
-        //add push notification option in firebase function "Image sent"
     }
 
     const addLink = () => {
@@ -98,8 +113,11 @@ const AnnouncementScreen = () => {
             url: link,
             timestamp: timestamp,
             type: "link"
+        }).catch((error)=>{
+            console.log("error sending link in announcement", error)
+            alert("Error sending link in announcement.")
+            Sentry.captureMessage(`Error sending link in announcement, ${error.message}`)
         })
-        //add push notification option in firebase function "Link sent"
     }
 
     const setOptions = () =>{

@@ -11,13 +11,14 @@ import useAuth from '../hooks/useAuth';
 import { writeBatch, serverTimestamp, collection, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Constants from 'expo-constants';
+import * as Sentry from "@sentry/react";
+
 
 
 const WelcomeScreen = () => {
   const {user} = useAuth();
   const navigation = useNavigation();
   const [isTutorial, setIsTutorial] = useState(false);
-  // , alignItems:"center", justifyContent:"space-evenly", backgroundColor:"#00BFFF", opacity:0.95
 
   const setUp = async () => {
     //could move this to a firebase function that gets triggered when values and mission is created.
@@ -46,7 +47,6 @@ const WelcomeScreen = () => {
     const textFiles = [
       { "path": welcomeImage1, "type": 'image' },
       { "path": welcomeText, "type": 'text' },
-      // { "path": missionText, "type": 'text' },
       { "path": cultureText, "type": 'text' },
       { "path": welcomeImage2, "type": 'image' },
       { "path": storyText, "type": 'text' },
@@ -81,7 +81,8 @@ const WelcomeScreen = () => {
       await batch.commit();
       console.log('Announcements added successfully');
     } catch (error) {
-      console.error('Error adding announcements: ', error);
+      console.log('Error adding announcements: ', error);
+      Sentry.captureMessage(`Error in adding announcements for ${user.uid}, ${error.message}`)
     }
     navigation.navigate("Home")
 

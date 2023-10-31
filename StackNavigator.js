@@ -71,7 +71,7 @@ const StackNavigator = () => {
           const messageDetails = response.notification.request.content.data.message;
           const requestDetails = messageDetails.requestDetails;
           const otherProfile = messageDetails.otherProfile
-          const profile = messageDetails.profile
+          const profile = null
 
           navigation.navigate("RequestMessage", { requestDetails, otherProfile, profile });
 
@@ -83,7 +83,7 @@ const StackNavigator = () => {
 
         }
       } catch (error) {
-        Sentry.captureMessage("there was an error in notifications", error.code);
+        Sentry.captureMessage("there was an error in notifications", error.message);
         navigation.navigate("Home");
       }
 

@@ -8,7 +8,7 @@ import { onSnapshot, collection, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useAuth from '../hooks/useAuth';
-
+import * as Sentry from "@sentry/react";
 
 const ToggleChatScreen = () => {
 
@@ -39,7 +39,8 @@ const ToggleChatScreen = () => {
             ))
     ),
     (error) => {
-      console.log("there was an error in requestlist snapshot", error)
+      console.log("there was an error in requestlist snapshot", error);
+      Sentry.captureMessage(`Error in requestlist snapshot of ${user.uid}, ${error.message}`)
     }
     )
 

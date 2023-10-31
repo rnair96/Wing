@@ -51,8 +51,12 @@ const RequestMessageScreen = () => {
                 } catch (error) {
                     if (!isCancelled) {
                         console.log("incomplete fetch data:", error);
+                        Sentry.captureMessage(`Cancelled fetching user data in request screen of ${user.uid}, ${error.message}`)
+
                     }
-                    console.log("error fetching userdata")
+                    console.log("error fetching userdata");
+                    Sentry.captureMessage(`Error fetching user data in request screen of ${user.uid}, ${error.message}`)
+
                 }
 
 
@@ -157,10 +161,6 @@ const RequestMessageScreen = () => {
 
                     const messageDetails = { matchedDetails: matchedDetails, otherProfile: userProfile }
 
-                    Sentry.captureMessage(`match & move sending message from ${username}`)
-                    Sentry.captureMessage(`match & move sending message to ${otherProfile.displayName} with token ${otherProfile.token}`)
-
-
                     sendPush(otherProfile.token, `${username} has Matched and Messaged you!`, message, { type: "message", message: messageDetails })
                 }
 
@@ -169,7 +169,7 @@ const RequestMessageScreen = () => {
 
         } catch (error) {
             console.log("ERROR, there was an error in moving this request and messages to Match", error);
-            Sentry.captureMessage(`there was an error in moving this request and messages to Match ${error}`)
+            Sentry.captureMessage(`there was an error in moving this request and messages to Match of ${requestDetails.id} for ${userProfile.id}, ${error.message}`)
 
         }
 

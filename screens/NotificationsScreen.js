@@ -73,6 +73,7 @@ const NotificationsScreen = () => {
         }).catch((error) => {
             console.log("there was an error", error.message);
             Sentry.captureMessage("error at setting notifications", error.message)
+            alert("Error saving edits. Try again later.")
         });
 
         // }

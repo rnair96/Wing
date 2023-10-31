@@ -6,7 +6,7 @@ import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Header from '../Header';
 import ImageUpload from '../components/ImageUpload';
-
+import * as Sentry from "@sentry/react";
 
 
 const SetUp2Screen = () => {
@@ -34,7 +34,8 @@ const SetUp2Screen = () => {
 
             navigation.navigate("SetUp3")
         }).catch((error) => {
-            alert(error.message)
+            alert("Error updating profile. Try again later.")
+            Sentry.captureMessage(`Error setting up data in screen 2 for ${user.uid}, ${error.message}`)
         });
     }
 

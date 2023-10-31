@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/core';
 import deleteMatchFull from '../lib/deleteMatchFull';
 import sendPush from '../lib/sendPush';
 import deleteRequest from '../lib/deleteRequest';
+import * as Sentry from "@sentry/react";
 
 
 const FlagModal = ({ other_user, isVisible, setIsVisible, detailsId, type }) => {
@@ -39,7 +40,11 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, detailsId, type }) => 
       }
       alert("Your report has been submitted.");
     }).catch((error) => {
-      alert(error.message)
+      console.log(error.message)
+      Sentry.captureMessage(`error flagging profile ${error.message} with detailid ${detailsId}`)
+      alert("There was an error flagging profile. Try again later.")
+      navigation.navigate("Home");
+
     });
   }
 

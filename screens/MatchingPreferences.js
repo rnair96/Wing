@@ -8,6 +8,7 @@ import { db } from '../firebase';
 // import GenderPicker from '../components/GenderPicker';
 import TagPicker from '../components/TagPicker';
 import YNRadioButton from '../components/YNRadioButton';
+import * as Sentry from "@sentry/react";
 
 
 
@@ -76,7 +77,8 @@ const MatchingPreferences = () => {
         //must trigger a refresh upon entering home screen
         navigation.navigate("Home", { refresh: true })
       }).catch((error) => {
-        alert(error.message)
+        Sentry.captureMessage("error at updating student preferences for ",profile.id,", ", error.message)
+        alert("Error trying to update preferences. Try again later.")
       });
     } else {
       updateDoc(doc(db, global.users, profile.id), {
@@ -93,7 +95,8 @@ const MatchingPreferences = () => {
         //must trigger a refresh upon entering home screen
         navigation.navigate("Home", { refresh: true })
       }).catch((error) => {
-        alert(error.message)
+        Sentry.captureMessage("error at updating professional preferences for ",profile.id,", ", error.message)
+        alert("Error trying to update preferences. Try again later.")
       });
     }
   }

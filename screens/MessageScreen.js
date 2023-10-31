@@ -36,8 +36,12 @@ const MessageScreen = () => {
         } catch (error) {
           if (!isCancelled) {
             console.log("incomplete fetch data:", error);
+            Sentry.captureMessage(`Cancelled fetching user data in message screen of ${user.uid}, ${error.message}`)
+
           }
           console.log("error fetching userdata")
+          Sentry.captureMessage(`error fetching user data in message screen of ${user.uid}, ${error.message}`)
+
         }
 
 
@@ -64,6 +68,9 @@ const MessageScreen = () => {
       },
       (error) => {
         console.log("there was an error in message screen snapshot", error)
+        Sentry.captureMessage(`error fetching messages in message screen of ${matchedDetails.id}, ${error.message}`)
+        alert("Error getting messages. Try again later.")
+
       })
 
     setLoading(false);
@@ -113,7 +120,8 @@ const MessageScreen = () => {
       }
     } catch (error) {
       console.log("ERROR, there was an error in sending a message", error);
-      Sentry.captureMessage(`there was an error in sending a message ${error}`)
+      Sentry.captureMessage(`there was an error in sending a message ${error.message}`)
+      alert("Error sending message. Try again later.")
 
     }
 

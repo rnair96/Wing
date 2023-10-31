@@ -9,8 +9,6 @@ import Constants from 'expo-constants';
 import { ImageBackground } from 'react-native';
 
 
-
-
 const AuthContext = createContext({});
 
 

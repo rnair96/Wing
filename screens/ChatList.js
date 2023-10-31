@@ -4,6 +4,7 @@ import { onSnapshot, collection, query, where, doc, orderBy } from 'firebase/fir
 import { db } from '../firebase';
 import useAuth from "../hooks/useAuth";
 import ChatRow from './ChatRow';
+import * as Sentry from "@sentry/react";
 
 
 const ChatList = ({profile}) => {
@@ -28,6 +29,8 @@ const ChatList = ({profile}) => {
     ),
     (error) => {
       console.log("there was an error in chatlist snapshot", error)
+      Sentry.captureMessage(`error getting chatlist snapshot for ${user.uid}, ${error.message}`)
+
     }
     )
 

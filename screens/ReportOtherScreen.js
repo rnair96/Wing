@@ -7,6 +7,7 @@ import useAuth from '../hooks/useAuth';
 import deleteMatchFull from '../lib/deleteMatchFull';
 import deleteRequest from '../lib/deleteRequest';
 import sendPush from '../lib/sendPush';
+import * as Sentry from "@sentry/react";
 
 
 const ReportOtherScreen = () => {
@@ -47,6 +48,8 @@ const ReportOtherScreen = () => {
             alert("Your report has been submitted.");
         }).catch((error) => {
             alert(error.message)
+            Sentry.captureMessage(`Error flagging profile ${other_user?.id} for other reason, ${error.message}`)
+
         });
     }
 

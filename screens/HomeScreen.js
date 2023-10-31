@@ -8,10 +8,9 @@ import { onSnapshot, doc, updateDoc, } from "firebase/firestore";
 import { db } from '../firebase';
 import * as WebBrowser from 'expo-web-browser';
 import SwipeScreen from './SwipeScreen';
-// import LinearGradient from 'react-native-linear-gradient';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
 import getLocation from '../lib/getLocation';
+import * as Sentry from "@sentry/react";
+
 
 
 
@@ -35,10 +34,6 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp3", { id: user.uid });
             }
 
-            // else if (!snapshot.data().genderPreference){
-            //     navigation.navigate("Preferences", {id: user.uid});
-            // } 
-
             else {
                 const info =
                 {
@@ -50,6 +45,9 @@ const HomeScreen = () => {
         },
             (error) => {
                 console.log("there was an error in homescreen layout snapshot", error)
+                Sentry.captureMessage("error at getting user snapshot at homescreen ",user?.uid,", ", error.message)
+
+                
             }
         )
 
@@ -73,6 +71,7 @@ const HomeScreen = () => {
             },
                 (error) => {
                     console.log("there was an error in refreshing loggedprofile", error)
+                    Sentry.captureMessage("error at loggedprofile refresh for ",user.uid,", ", error.message)
                 }
             )
 
@@ -88,7 +87,7 @@ const HomeScreen = () => {
             if (loggedProfile && loggedProfile.location?.permission && loggedProfile.location.permission === "Always") {
                 console.log("getting new location")
                 const location = await getLocation();
-                if (location && loggedProfile?.location.text !== location.text) {
+                if (location && (loggedProfile?.location.text !== location.text)) {
                     console.log("Updating location")
                     updateDoc(doc(db, global.users, user.uid), {
                         location: {
@@ -99,6 +98,8 @@ const HomeScreen = () => {
                         setIsLocationChanged(true);
                     }).catch((error) => {
                         console.log("could not refresh location");
+                        Sentry.captureMessage("error at location refresh for ",user.uid,", ", error.message)
+
                     });
                 }
             }

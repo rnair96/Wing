@@ -5,6 +5,7 @@ import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import getTime from '../lib/getTime';
 import UnreadHighlighter from '../components/UnreadHighlighter';
+import * as Sentry from "@sentry/react";
 
 
 const RequestRow = ({ requestDetails, profile }) => {
@@ -48,7 +49,11 @@ const RequestRow = ({ requestDetails, profile }) => {
 
     useEffect(() => {
         async function fetchData() {
-                const other_user_snapshot = await getDoc(doc(db, global.users, requestDetails.id)); // replace 'YOUR_COLLECTION_NAME' with the name of your collection
+                const other_user_snapshot = await getDoc(doc(db, global.users, requestDetails.id))
+                .catch(()=>{
+                    Sentry.captureMessage(`Error getting other user snapshot for request row ${requestDetails?.id}, ${error.message}`)
+                });
+
                 if (other_user_snapshot.exists() && other_user_snapshot.data()?.displayName) { // check if the document exists
                     setName(other_user_snapshot.data().displayName);
                     setOtherProfilePic(other_user_snapshot.data().images[0]);
@@ -56,7 +61,6 @@ const RequestRow = ({ requestDetails, profile }) => {
                 } else {
                     console.log("No such document!");
                 }
-                // setLoadingProfile(false);
         }
 
         fetchData();

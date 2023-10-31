@@ -4,20 +4,15 @@ import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-// import UniversityPicker from '../components/UniversityPicker';
-// import ClassLevelPicker from '../components/ClassLevelPicker';
 import Header from '../Header';
-// import GradYearPicker from '../components/GradYearPicker';
-// import YNRadioButton from '../components/YNRadioButton';
 import ImageUpload from '../components/ImageUpload';
+import * as Sentry from "@sentry/react";
 
 
 
 const StudentSetupScreen = () => {
     const { user } = useAuth();
     const [college, setCollege] = useState(null);
-    // const [classlevel, setClassLevel] = useState("Undergraduate");
-    // const [grad_year, setGradYear] = useState("2027");
     const [universityPreference, setUniversityPreference] = useState(true);
     const [url1, setUrl1] = useState(null);
     const [url2, setUrl2] = useState(null);
@@ -43,7 +38,8 @@ const StudentSetupScreen = () => {
 
             navigation.navigate("SetUp3")
         }).catch((error) => {
-            alert(error.message)
+            alert("Error updating profile. Try again later.")
+            Sentry.captureMessage(`Error setting up data in student setup screen for ${user.uid}, ${error.message}`)
         });
     }
 

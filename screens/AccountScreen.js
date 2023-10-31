@@ -5,6 +5,7 @@ import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import * as Sentry from "@sentry/react";
 
 
 const AccountScreen = () => {
@@ -41,7 +42,9 @@ const AccountScreen = () => {
             navigation.navigate("Home");
             console.log("new email for user set to:", email)
         }).catch((error) => {
-            alert(error.message)
+            alert("There was an error, could not update email. Try again later.")
+            Sentry.captureMessage(`error updating email for ${user.uid}, ${error.message}`)
+
         });
     }
 
@@ -61,7 +64,9 @@ const AccountScreen = () => {
             navigation.navigate("Home", {refresh: true})
             alert("Congrats on graduating to Wing Professional! Make sure to update your profile to optimize matching.")
         }).catch((error) => {
-            alert(error.message)
+            alert("There was an error, could not perform graduation. Try again later.")
+            Sentry.captureMessage(`error updating to Wing Professional for ${user.uid}, ${error.message}`)
+
         });
     }
 

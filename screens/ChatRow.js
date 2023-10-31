@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { onSnapshot, orderBy, query, collection } from 'firebase/firestore';
+import { onSnapshot, orderBy, query, collection, limit } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native'
 import { getDoc, doc } from 'firebase/firestore';
@@ -8,6 +8,8 @@ import useAuth from '../hooks/useAuth';
 import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import UnreadHighlighter from '../components/UnreadHighlighter';
 import getTime from '../lib/getTime';
+import * as Sentry from "@sentry/react";
+
 
 const ChatRow = ({ matchedDetails, profile }) => {
 
@@ -53,11 +55,12 @@ const ChatRow = ({ matchedDetails, profile }) => {
     useEffect(() => {
 
         const unsub = onSnapshot(query(collection(db, global.matches, matchedDetails.id, "messages"),
-            orderBy("timestamp", "desc")), (snapshot) =>
+            orderBy("timestamp", "desc"), limit(1)), (snapshot) =>
             setVars(snapshot.docs[0]?.data())
             ,
             (error) => {
                 console.log("there was an error in chatrow snapshot", error)
+                Sentry.captureMessage(`error getting chatrow snapshot for ${matchedDetails?.id}, ${error.message}`)
             }
         )
 
@@ -70,8 +73,14 @@ const ChatRow = ({ matchedDetails, profile }) => {
 
     useEffect(() => {
         async function fetchData() {
-            if (matchedUserInfo) { // check if you can access matched_user[1].id safely
-                const other_user_snapshot = await getDoc(doc(db, global.users, matchedUserInfo)); // replace 'YOUR_COLLECTION_NAME' with the name of your collection
+            if (matchedUserInfo) { 
+
+                const other_user_snapshot = await getDoc(doc(db, global.users, matchedUserInfo))
+                .catch((error)=>{
+                    console.log("there was an error in fetching other user data in chatrow", error)
+                    Sentry.captureMessage(`error fetching other user data in chatrow ${matchedUserInfo}, ${error.message}`)
+                });
+
                 if (other_user_snapshot.exists && other_user_snapshot.data()?.displayName) { // check if the document exists
                     setName(other_user_snapshot.data().displayName);
                     setOtherProfilePic(other_user_snapshot.data().images[0]);

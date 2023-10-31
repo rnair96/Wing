@@ -99,7 +99,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       }).then(() => {
         navigation.navigate("Home", { refresh: true });
       }).catch((error) => {
-        Sentry.captureMessage("error at edit profile for student", error.message)
+        Sentry.captureMessage("error at edit profile student for ",user.uid,", ", error.message)
+        alert("Could not update profile. Try again later.")
         console.log(error.message)
       });
     } else {
@@ -120,7 +121,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       }).then(() => {
         navigation.navigate("Home",{ refresh: true });
       }).catch((error) => {
-        Sentry.captureMessage("error at edit profile for professional", error.message)
+        Sentry.captureMessage("error at edit profile professional for ",user.uid,", ", error.message)
+        alert("Could not update profile. Try again later.")
         console.log(error.message)
       });
     }

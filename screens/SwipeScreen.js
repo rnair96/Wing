@@ -8,10 +8,7 @@ import { getDocs, setDoc, collection, onSnapshot, doc, query, where, serverTimes
 import { db, auth } from '../firebase';
 import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
-// import * as Device from 'expo-device';
-// import * as Notifications from 'expo-notifications';
-// import getLocation from '../lib/getLocation';
-
+import * as Sentry from "@sentry/react";
 
 
 
@@ -45,7 +42,10 @@ const SwipeScreen = ({ loggedProfile }) => {
 
                 const userSnapshot = await getDocs(query(collection(db, global.users, user.uid, "swipes"),
                     where("timeSwiped", ">=", startOfDay), where("timeSwiped", "<=", endOfDay),
-                    orderBy("timeSwiped", "desc")), limit(1));
+                    orderBy("timeSwiped", "desc")), limit(1))
+                    .catch((error)=>{
+                        Sentry.captureMessage(`Error getting the last swipe of ${user.uid}, ${error.message}`)
+                    });
 
                 if (!userSnapshot.empty) {
                     const latestSwipeDoc = userSnapshot.docs[0];
@@ -102,6 +102,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                     last_year_celebrated: currentDate.getFullYear()
                 }).catch((error) => {
                     console.log("could not update age on birthday");
+                    Sentry.captureMessage(`Error updating birthday of ${user.uid}, ${error.message}`)
                 });
             }
         }
@@ -120,7 +121,6 @@ const SwipeScreen = ({ loggedProfile }) => {
                 console.log("fetching cards...")
 
                 const functionURL = `${global.fetchcards}${user.uid}`;
-                //make link an env variable
                 // const idToken = await getIdToken(getCurrentUser(auth), true);
 
                 fetch(functionURL)
@@ -154,9 +154,10 @@ const SwipeScreen = ({ loggedProfile }) => {
                         setloadingFetch(false);
                     })
                     .catch(error => {
-                        console.error("Error fetching profiles:", error);
+                        console.log("Error fetching profiles:", error);
+                        alert("Error gathering Wings. Try again later.")
+                        Sentry.captureMessage(`Error gathering Wings for ${user.uid}, ${error.message}`)
                         setloadingFetch(false);
-                        //add sentry capture
                     });
             }
 
@@ -177,7 +178,12 @@ const SwipeScreen = ({ loggedProfile }) => {
 
         console.log("you swiped left on", profiles[cardIndex].displayName);
 
-        setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), { id: profiles[cardIndex].id });
+        setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), { id: profiles[cardIndex].id })
+        .catch((error)=>{
+            alert("Error passing user. Try again later.")
+            Sentry.captureMessage(`Error setting a pass for ${user.uid}, ${error.message}`)
+            return;
+        });
 
     }
 
@@ -215,7 +221,12 @@ const SwipeScreen = ({ loggedProfile }) => {
         setSwipeAmount((swipeAmount - 1));
         console.log("swipe number at", (swipeAmount - 1));
 
-        setDoc(doc(db, global.users, user.uid, "swipes", userSwiped.id), swipedUser);
+        setDoc(doc(db, global.users, user.uid, "swipes", userSwiped.id), swipedUser)
+        .catch(()=>{
+            alert("Error swiping user. Try again later.")
+            Sentry.captureMessage(`Error setting a swipe for ${user.uid}, ${error.message}`)
+            return;
+        });
     }
 
     return (

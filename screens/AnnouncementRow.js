@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
-import { onSnapshot, orderBy, query, collection } from 'firebase/firestore';
+import { onSnapshot, orderBy, query, collection, limit } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native'
-import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
-import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import UnreadHighlighter from '../components/UnreadHighlighter';
 import getTime from '../lib/getTime';
+import * as Sentry from "@sentry/react";
+
 
 const AnnouncementRow = () => {
 
@@ -45,15 +45,17 @@ const AnnouncementRow = () => {
     }
 
     useEffect(() => {
-
+        //could limit this snapshot to just one document
         const unsub = onSnapshot(query(collection(db, global.users, user.uid, "announcements"),
-            orderBy("timestamp", "desc")), (snapshot) =>
+            orderBy("timestamp", "desc"), limit(1)), (snapshot) =>
             setVars({
                 id: snapshot.docs[0]?.id,
                 ...snapshot.docs[0]?.data()})
             ,
             (error) => {
                 console.log("there was an error in announcement snapshot", error)
+                Sentry.captureMessage(`error getting announcements row data for ${user.uid}, ${error.message}`)
+                
             }
         )
 
