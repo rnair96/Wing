@@ -5,7 +5,7 @@ import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
 import LoginScreen from './screens/LoginScreen';
 import MenuScreen from './screens/MenuScreen';
-import MatchScreen from './screens/MatchScreen';
+// import MatchScreen from './screens/MatchScreen';
 import useAuth from './hooks/useAuth';
 import MessageScreen from './screens/MessageScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
@@ -43,8 +43,6 @@ import NotificationsScreen from './screens/NotificationsScreen';
 import * as Sentry from "@sentry/react";
 
 
-
-// const Stack = createNativeStackNavigator();
 const Stack = createStackNavigator();
 
 
@@ -52,27 +50,8 @@ const StackNavigator = () => {
   const { user } = useAuth();
   const navigation = useNavigation();
   const responseListener = useRef();
-  // const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
   useEffect(() => {
-
-    // const handleNotificationResponse = (response) => {
-    //   if (response.notification.request.content.data.type === "message") {
-    //     const messageDetails = response.notification.request.content.data.message;
-    //     const matchedDetails = messageDetails.matchedDetails;
-    //     const otherProfile = messageDetails.otherProfile;
-
-    //     navigation.navigate("Message", { matchedDetails, otherProfile, profile: null });
-    //   }
-    // }
-
-    // if (
-    //   lastNotificationResponse &&
-    //   lastNotificationResponse.notification.request.content.data.type === "announcement"
-    // ) {
-    //   navigation.navigate("Announcements");
-    // }
-
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
@@ -112,18 +91,11 @@ const StackNavigator = () => {
     }
     );
 
-
-
-    // Notifications.getLastNotificationResponseAsync().then(response => {
-    //   if (response) {
-    //     handleNotificationResponse(response);
-    //   }
-    // });
-
     return () => {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+
 
   const customCardStyleInterpolator = ({ current, layouts }) => {
     return {
@@ -172,8 +144,6 @@ const StackNavigator = () => {
             options={{
               cardStyleInterpolator: slideFromTopInterpolator,
               gestureDirection: 'vertical-inverted',
-              // gestureResponseDistance: { vertical: 600 }, // Increase this value
-              // cardOverlayEnabled: true,
             }}
           />
           <Stack.Screen name="MissionControl" component={MissionControlScreen} />
@@ -218,8 +188,6 @@ const StackNavigator = () => {
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
               gestureDirection: 'vertical',
-              // gestureResponseDistance: { vertical: 600 }, // Increase this value
-              // cardOverlayEnabled: true, // This can make swipe smoother and add a slight overlay when swiping
             }}
           />
           {/* <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen} /> */}

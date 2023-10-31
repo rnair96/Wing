@@ -13,7 +13,8 @@ const SetUp0Screen = () => {
   const { user } = useAuth();
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState("male");
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState("Must Have Location Services On");
+  const [locationObject, setLocationObject] = useState(null);
   const [birthdate, setBirthDate] = useState(null);
   const [token, setToken] = useState(null);
   const [notifications, setNotifications] = useState(true);
@@ -24,7 +25,12 @@ const SetUp0Screen = () => {
   useEffect(() => {
     (async () => {
       const geoLocation = await getLocation()
-      setLocation(geoLocation)
+
+      if(geoLocation && geoLocation?.text){
+        setLocationObject(geoLocation)
+        setLocation(geoLocation.text)
+      }
+
       const pushtoken = await registerNotifications();
       setToken(pushtoken)
     })();
@@ -37,19 +43,21 @@ const SetUp0Screen = () => {
   },[token])
 
 
-  const incompleteform = !gender || !age || !location || !name;//!job||
+  const incompleteform = !gender || !age || !locationObject || !name;
 
   const createUserProfile = () => {
     setDoc(doc(db, global.users, user.uid), {
       id: user.uid,
       displayName: name,
       email: user.email,
-      // job: job,
       age: age,
       birthdate: birthdate,
       last_year_celebrated: 2022,
       gender: gender,
-      location: location,      
+      location: {
+        permission: "Only Once",
+        ...locationObject
+      },      
       token: token,
       notifications: {messages: notifications, events: notifications, emails: true},
       flagged_status: "none",
@@ -97,14 +105,17 @@ const SetUp0Screen = () => {
           <Text style={styles.formTitle}>Select Gender</Text>
           <GenderPicker gender={gender} setGender={setGender} both_boolean={false} />
 
-
+          {/* this shouldn't be editable, just a text submitted in */}
           <Text style={styles.formTitle}>Set Location</Text>
-          <TextInput
+          <Text>{location}</Text>
+          {/* <TextInput
             value={location}
             onChangeText={setLocation}
             placeholder='City, State'
             placeholderTextColor={"grey"}
-            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginBottom:20, backgroundColor:"#E0E0E0"}} />
+            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginBottom:20, backgroundColor:"#E0E0E0"}} /> */}
+
+          {/* ask permission on how often location can be updated, always or only once? Must have location to use app */}
 
           <View style={{ height: 150 }}>
             <TouchableOpacity

@@ -84,29 +84,25 @@ const HomeScreen = () => {
 
     useEffect(() => {
         (async () => {
-            //check if user is in a new location, if so, update
-            if (Device.isDevice) {
-                const { status: existingStatus } = await Notifications.getPermissionsAsync();
-                let finalStatus = existingStatus;
-                console.log("status", finalStatus);
-                if (existingStatus !== 'granted') {
-                    const { status } = await Notifications.requestPermissionsAsync();
-                    finalStatus = status;
+            //check if given permission, user is in a new location, if so, update
+            if (loggedProfile && loggedProfile.location?.permission && loggedProfile.location.permission === "Always") {
+                console.log("getting new location")
+                const location = await getLocation();
+                if (location && loggedProfile?.location.text !== location.text) {
+                    console.log("Updating location")
+                    updateDoc(doc(db, global.users, user.uid), {
+                        location: {
+                            permission: "Always",
+                            ...location
+                        }
+                    }).then(() => {
+                        setIsLocationChanged(true);
+                    }).catch((error) => {
+                        console.log("could not refresh location");
+                    });
                 }
             }
 
-
-            const location = await getLocation();
-            if (loggedProfile && location && loggedProfile?.location.text !== location.text) {
-                console.log("Updating location")
-                updateDoc(doc(db, global.users, user.uid), {
-                    location: location
-                }).then(()=>{
-                    setIsLocationChanged(true);
-                }).catch((error) => {
-                    console.log("could not refresh location");
-                });
-            }
         })();
     }, [loggedProfile]);
 

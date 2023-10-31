@@ -26,6 +26,10 @@ const SetUp2Screen = () => {
         updateDoc(doc(db, global.users, user.uid), {
             job: job,
             images: [url1, url2, url3],
+            preferences: {
+                tag: "All",
+                distance: "Global"
+            },
         }).then(() => {
 
             navigation.navigate("SetUp3")

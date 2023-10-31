@@ -51,7 +51,7 @@ const ChangePasswordScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header style={{ fontSize: 20, fontWeight: 'bold', padding: 20 }} title={'Change Password'} />
+      <Header style={{marginHorizontal:"10%"}} title={'Change Password'} />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor:"black"
+    backgroundColor:"white"
   },
   keyboardAvoidingView: {
     flex: 1,
@@ -102,22 +102,26 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 8,
-    color:"white"
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
+    borderRadius:10,
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginBottom: 16,
-    color:"white"
+    backgroundColor:"#E0E0E0"
   },
   button: {
     backgroundColor: "#00308F",
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: 'center',
+    shadowOffset: {width: 0,height: 2}, 
+    shadowOpacity: 0.5, 
+    shadowRadius: 2.41,
+    elevation: 5
   },
   buttonText: {
     color: '#fff',

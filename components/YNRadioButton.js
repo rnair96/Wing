@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const YNRadioButton = ({selectedOption, setSelectedOption}) => {
+const YNRadioButton = ({selectedOption, setSelectedOption, optionsArray}) => {
 //   const [selectedOption, setSelectedOption] = useState(null);
 
-  const options = ['Yes', 'No'];
+  const options = optionsArray? optionsArray: ['Local', 'Global'];
 
   return (
     <View style={styles.container}>

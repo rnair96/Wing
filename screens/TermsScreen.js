@@ -8,7 +8,7 @@ const TermsScreen = () => {
       <ScrollView style={{backgroundColor:"white"}}>
         <View style ={{flex:1, padding:10}}>
           <SafeAreaView>
-          <Header title = "Terms of Service"/>
+          <Header style={{marginHorizontal:"13%"}} title = "Terms of Service"/>
           </SafeAreaView>
         <Text style={{padding:10}}>
           These Terms of Service ("Terms") govern your use of the Wing app and any related services provided by Wing Community, LLC ("Wing", "we", "us", or "our"). By using the Wing app, you agree to these Terms.

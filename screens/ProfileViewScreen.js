@@ -18,7 +18,7 @@ export const ProfileViewScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             {/* <View> */}
-            {(profile?.mission && profile?.images && profile?.images.length > 2 && profile?.values && profile?.values.length > 2) ? (
+            {(profile?.mission && profile?.images && profile?.images.length > 2 && profile?.values && profile?.values.length > 2 && profile?.location) ? (
                 <View>
                     <FlatList
                         data={[card]}

@@ -197,7 +197,7 @@ const RequestMessageScreen = () => {
 
                     </View>
 
-                    {otherProfile ? (
+                    {otherProfile && otherProfile?.mission && otherProfile?.values && otherProfile?.values.length > 2 && otherProfile?.images && otherProfile?.images.length > 2 && otherProfile?.location? (
                         <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileView", { profile: otherProfile })}>
                             <View style={{ alignItems: "center", padding: 20 }}>
                                 <Text style={{ color: "white", margin: 5 }}>Mission: </Text>
@@ -262,8 +262,8 @@ const RequestMessageScreen = () => {
                             </View>
                         </TouchableOpacity>
                     ) : (
-                        <View style={{ justifyContent: "center", alignItems: "center", width: "100%", height: "50%" }}>
-                            <Text style={{ fontSize: 20 }}>User profile no longer exists</Text>
+                        <View style={{ justifyContent: "center", alignItems: "center", width: "100%", marginVertical: "50%" }}>
+                            <Text style={{ fontSize: 17 }}>User profile unable to load or no longer exists</Text>
                         </View>
                     )}
                 </View>

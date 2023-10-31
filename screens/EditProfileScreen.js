@@ -175,7 +175,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               <View style={{ padding: 10, alignItems: "center" }}>
                 <Text style={styles.formTitle}>Location</Text>
                 {!profile?.location ?
-                    <Text>Must Turn on Location Services</Text>
+                    <Text>Must Turn on Location Services in Settings</Text>
                   : (
                     <Text>{location.text}</Text>
                   )}

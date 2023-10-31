@@ -7,6 +7,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
 import * as Sentry from "@sentry/react";
+import YNRadioButton from '../components/YNRadioButton';
 
 
 const NotificationsScreen = () => {
@@ -15,6 +16,8 @@ const NotificationsScreen = () => {
     const [messageNotifications, setMessageNotifications] = useState(false);
     const [eventNotifications, setEventNotifications] = useState(false);
     const [emailNotifications, setEmailNotifications] = useState(false);
+    const [locationPermission, setLocationPermission] = useState("Only Once");
+
 
 
 
@@ -36,6 +39,10 @@ const NotificationsScreen = () => {
             if (profile?.notifications && profile.notifications?.emails!==undefined && profile.notifications?.emails!==null) {
                 setEmailNotifications(profile.notifications.emails);
             }
+
+            if (profile?.location && profile.location?.permission!==undefined && profile.notifications?.permission!==null) {
+                setLocationPermission(profile.location.permission);
+            }
         }
 
     }, [profile])
@@ -51,7 +58,15 @@ const NotificationsScreen = () => {
 
         updateDoc(doc(db, global.users, user.uid), {
             notifications: { "messages": messageNotifications, "events": eventNotifications, "emails": emailNotifications},
-            token: token
+            token: token,
+            location: {
+                permission: locationPermission,
+                city: profile.location.city,
+                state: profile.location.state,
+                text: profile.location.text,
+                longitude: profile.location.longitude,
+                latitude: profile.location.latitude
+            }
         }).then(() => {
             navigation.navigate("Home");
             console.log("notifications saved")
@@ -69,8 +84,8 @@ const NotificationsScreen = () => {
     return (
         <SafeAreaView style={{ backgroundColor: "white" }}>
             {/* <SafeAreaView> */}
-            <Header title={"Notifications"} />
-            <View style={{height: "100%", alignItems: "center", justifyContent: "space-evenly", margin: 10 }}>
+            <Header style={{marginHorizontal:"10%"}} title={"Location & Notifications"} />
+            <View style={{height: "92%", alignItems: "center", justifyContent: "space-evenly", margin: 10 }}>
 
                 {/* <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, width: "100%" }}> */}
                 {/* <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Edit Push Notifications</Text> */}
@@ -112,6 +127,10 @@ const NotificationsScreen = () => {
                             value={emailNotifications}
                         />
                     </View>
+                </View>
+                <View style={{ flexDirection: "column", justifyContent: "space-evenly"}}>
+                    <Text style={{ textAlign: "center", fontSize: 15,  paddingBottom:10}}>Tracking Location on App</Text>
+                    <YNRadioButton selectedOption={locationPermission} setSelectedOption={setLocationPermission} optionsArray={['Always','Only Once']}/>
                 </View>
                 <TouchableOpacity style={styles.savebuttonContainer} onPress={() => saveNotifications()}>
                     <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Save Notifications</Text>

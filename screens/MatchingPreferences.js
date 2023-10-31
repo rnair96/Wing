@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity,ScrollView } from 'react-native'
+import { Text, View, SafeAreaView, TouchableOpacity, ScrollView, Switch } from 'react-native'
 import { doc, updateDoc } from 'firebase/firestore';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import Header from '../Header';
 import { db } from '../firebase';
-import AgePicker from '../components/AgePicker';
-import GenderPicker from '../components/GenderPicker';
+// import AgePicker from '../components/AgePicker';
+// import GenderPicker from '../components/GenderPicker';
 import TagPicker from '../components/TagPicker';
 import YNRadioButton from '../components/YNRadioButton';
 
@@ -13,96 +13,108 @@ import YNRadioButton from '../components/YNRadioButton';
 
 
 const MatchingPreferences = () => {
-    // const [ ageMin, setAgeMin ] = useState(18);
-    // const [ ageMax, setAgeMax ] = useState(100);
-    const [ tag, setTag ] = useState("All");
-    const [ activeStudent, setActiveStudent ] = useState(false);
-    const [ wingUni, setWingUni ] = useState("Yes")
-    // const [ matchRadius, setMatchRadius ] = useState(100);
-    // const [ gender, setGender ] = useState("both");
-    // const [ global, setGlobal ] = useState("true");
+  // const [ ageMin, setAgeMin ] = useState(18);
+  // const [ ageMax, setAgeMax ] = useState(100);
+  const [tag, setTag] = useState("All");
+  const [activeStudent, setActiveStudent] = useState(false);
+  const [wingUni, setWingUni] = useState(true)
+  const [distance, setDistance] = useState("Global");
+  // const [ matchRadius, setMatchRadius ] = useState(100);
+  // const [ gender, setGender ] = useState("both");
+  // const [ global, setGlobal ] = useState("true");
 
 
-    const { params } = useRoute();
-    const profile = params;
+  const { params } = useRoute();
+  const profile = params;
 
-    const navigation = useNavigation();
-
-
-    useEffect(()=>{
-        if (profile) {
-            // setAgeMax(profile.ageMax);
-            // setAgeMin(profile.ageMin);
-            // setGender(profile.genderPreference);
-            if(profile?.tagPreference){
-              setTag(profile.tagPreference);
-            }
-
-            if(profile?.university_student && profile.university_student.status==="active"){
-              setActiveStudent(true);
-            }
+  const navigation = useNavigation();
 
 
-            if(profile?.universityPreference){
-              setWingUni(profile.universityPreference)
-            }
-        }
-    
-      },[profile])
+  useEffect(() => {
+   
 
-    const incompleteform = !tag//!ageMin||!ageMax||
+    if (profile && profile?.preferences) {
+      // setAgeMax(profile.ageMax);
+      // setAgeMin(profile.ageMin);
+      // setGender(profile.genderPreference);
 
+      if (profile.preferences?.tag) {
+        setTag(profile.preferences.tag);
+      }
 
-    const updatePreferences = () => {
-      if (activeStudent){
-        updateDoc(doc(db, global.users,profile.id), {
-          // ageMin: ageMin,
-          // ageMax: ageMax,
-          // matchRadius: matchRadius,
-          // genderPreference: gender,
-          tagPreference: tag,
-          universityPreference: wingUni
-          // globalMatchingBoolean: global
-          }).then(()=> {
-            //must trigger a refresh upon entering home screen
-          navigation.navigate("Home",{ refresh: true })
-      }).catch((error) => {
-          alert(error.message)
-      });
-      } else {
-        updateDoc(doc(db, global.users,profile.id), {
-          // ageMin: ageMin,
-          // ageMax: ageMax,
-          // matchRadius: matchRadius,
-          // genderPreference: gender,
-          tagPreference: tag
-          // globalMatchingBoolean: global
-          }).then(()=> {
-            //must trigger a refresh upon entering home screen
-          navigation.navigate("Home",{ refresh: true })
-      }).catch((error) => {
-          alert(error.message)
-      });
+      if (profile?.university_student && profile.university_student.status === "active") {
+        setActiveStudent(true);
+        setWingUni(profile.preferences.university)
+      }
+
+      if (profile.preferences?.distance) {
+        setDistance(profile.preferences.distance)
       }
     }
 
+  }, [profile])
 
-    return (
-    <ScrollView style={{backgroundColor:"white"}}>
+  const incompleteform = !tag//!ageMin||!ageMax||
 
-    <SafeAreaView style={{alignItems:"center"}}>
-     {/* {profile?.genderPreference ? 
+
+  const updatePreferences = () => {
+    if (activeStudent) {
+      updateDoc(doc(db, global.users, profile.id), {
+        // ageMin: ageMin,
+        // ageMax: ageMax,
+        // matchRadius: matchRadius,
+        // genderPreference: gender,
+        // tagPreference: tag,
+        // universityPreference: wingUni
+        // globalMatchingBoolean: global
+        preferences: {
+          tag: tag,
+          university: wingUni,
+          distance: distance
+        }
+      }).then(() => {
+        //must trigger a refresh upon entering home screen
+        navigation.navigate("Home", { refresh: true })
+      }).catch((error) => {
+        alert(error.message)
+      });
+    } else {
+      updateDoc(doc(db, global.users, profile.id), {
+        // ageMin: ageMin,
+        // ageMax: ageMax,
+        // matchRadius: matchRadius,
+        // genderPreference: gender,
+        preferences: {
+          tag: tag,
+          distance: distance
+        }
+        // globalMatchingBoolean: global
+      }).then(() => {
+        //must trigger a refresh upon entering home screen
+        navigation.navigate("Home", { refresh: true })
+      }).catch((error) => {
+        alert(error.message)
+      });
+    }
+  }
+
+
+  return (
+    <ScrollView style={{ backgroundColor: "white" }}>
+
+      <SafeAreaView style={{ alignItems: "center" }}>
+        {/* {profile?.genderPreference ? 
      ( */}
-      <Header style={{marginHorizontal:"10%", right:10}} title={"Matching Preferences"}/>
-     {/* ):(
+        <Header style={{ marginHorizontal: "10%", right: 10 }} title={"Matching Preferences"} />
+        {/* ):(
       <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Account Setup 4/4"}/>
      )} */}
-    </SafeAreaView>
-    <View style={{height:"90%", width:"100%", alignItems:"center", justifyContent:"space-evenly"}}>
+      </SafeAreaView>
+      <View style={{ height: "90%", width: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
 
-      <Text style={{fontSize:15, fontWeight: "bold", padding:40 }}>Choose Your Wing Preferences</Text> 
+        <Text style={{ fontSize: 15, fontWeight: "bold", padding: 40 }}>Choose Your Wing Preferences</Text>
 
-      {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
+        {/* <Text style={{fontSize:15, fontWeight: "bold", color:"#00308F"}}>Select Age Range</Text>
 
       <View style ={{flexDirection:"row", alignItems:"center"}}>
         <View style ={{padding:10}}>
@@ -118,35 +130,48 @@ const MatchingPreferences = () => {
       </View> */}
 
 
-      {/* <View style={{alignItems:"center", paddingBottom:30}}>
+        {/* <View style={{alignItems:"center", paddingBottom:30}}>
         <Text style={{fontSize:15, top:40, fontWeight: "bold", color:"#00308F"}}>Gender</Text>
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={true} />
       </View> */}
 
-      <View style={{alignItems:"center", paddingBottom:60}}>
-        <Text style={{fontSize:15, fontWeight: "bold", padding:10}}>Mission Category</Text>
-        <TagPicker tag= {tag} setTag={setTag} all_boolean={true} />
-      </View>
+        <View style={{ alignItems: "center", paddingBottom: 30 }}>
+          <Text style={{ fontSize: 15, fontWeight: "bold", padding: 10 }}>Mission Category</Text>
+          <TagPicker tag={tag} setTag={setTag} all_boolean={true} />
+        </View>
 
-      {activeStudent && (
-        <View style={{alignItems:"center", padding:10}}>
-        <Text style={{fontSize:15, fontWeight: "bold", padding:5}}>Only See Users In Wing-U?</Text>
-        <Text style={{fontSize:12, padding:20 }}>{`(Exclusively university students)`}</Text>
-        <YNRadioButton selectedOption={wingUni} setSelectedOption={setWingUni}/>
-      </View>
-      )}
+        <View style={{ alignItems: "center", padding: 10 }}>
+          <Text style={{ fontSize: 15, fontWeight: "bold", paddingBottom:20 }}>Distance</Text>
+          <YNRadioButton selectedOption={distance} setSelectedOption={setDistance} />
+        </View>
 
-      <View style={{height:150}}>
-      <TouchableOpacity 
-          disabled = {incompleteform}
-          style={{width:200, height:50, paddingTop:15, top:20, borderRadius:10, shadowOffset: {width: 0, height: 3}, shadowOpacity: 0.5, shadowRadius: 4, elevation: 5, backgroundColor: incompleteform ? "grey" : "#00308F"}}
-          onPress = {updatePreferences}>
-          <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Preferences</Text>
-      </TouchableOpacity>
+        {activeStudent && (
+          <View style={{ alignItems: "center", padding: 10 }}>
+            <Text style={{ fontSize: 15, fontWeight: "bold", padding: 5 }}>Only See Users In Wing-U?</Text>
+            <Text style={{ fontSize: 12, padding: 20 }}>{`(Exclusively match with university students)`}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
+              <Text style={{ marginRight: 10, fontWeight: "bold", fontSize: 15, }}>{wingUni ? "Yes" : "No"}</Text>
+              <Switch
+                trackColor={{ false: "red", true: "#00BFFF" }}
+                thumbColor={wingUni ? "white" : "grey"}
+                onValueChange={setWingUni}
+                value={wingUni}
+              />
+            </View>
+          </View>
+        )}
+
+        <View style={{ height: 150 }}>
+          <TouchableOpacity
+            disabled={incompleteform}
+            style={{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 4, elevation: 5, backgroundColor: incompleteform ? "grey" : "#00308F" }}
+            onPress={updatePreferences}>
+            <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Update Preferences</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      </View>
-      </ScrollView>
-    )
+    </ScrollView>
+  )
 }
 
 export default MatchingPreferences

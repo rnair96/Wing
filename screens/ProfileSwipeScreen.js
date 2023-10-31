@@ -41,7 +41,7 @@ export const ProfileSwipeScreen = () => {
     return (
 
         <SafeAreaView style={{ flex: 1, backgroundColor:"white" }}>
-            {(card?.mission && card?.images && card?.images.length > 2 && card?.values && card?.values.length > 2) ? (
+            {(card?.mission && card?.images && card?.images.length > 2 && card?.values && card?.values.length > 2 && card?.location) ? (
                 <View style={{ marginTop:50}}>
                 <FlatList
                     data={[card]}

@@ -72,13 +72,13 @@ const ChatRow = ({ matchedDetails, profile }) => {
         async function fetchData() {
             if (matchedUserInfo) { // check if you can access matched_user[1].id safely
                 const other_user_snapshot = await getDoc(doc(db, global.users, matchedUserInfo)); // replace 'YOUR_COLLECTION_NAME' with the name of your collection
-                if (other_user_snapshot.exists) { // check if the document exists
+                if (other_user_snapshot.exists && other_user_snapshot.data()?.displayName) { // check if the document exists
                     setName(other_user_snapshot.data().displayName);
                     setOtherProfilePic(other_user_snapshot.data().images[0]);
                     setOtherProfile(other_user_snapshot.data());
 
                 } else {
-                    console.log("No such document!");
+                    console.log("No such document!", matchedUserInfo);
                 }
             } 
             

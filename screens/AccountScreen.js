@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight} from 'react-native';
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -10,11 +10,11 @@ import { db } from '../firebase';
 const AccountScreen = () => {
     const { user, deleteAll, logout } = useAuth();
     const navigation = useNavigation();
-    
+
 
     const [modalVisible, setModalVisible] = useState(false);
     const [pwdmodalVisible, setpwdModalVisible] = useState(false);
-    const [email, setEmail] = useState(user.email);
+    const [email, setEmail] = useState(user ? user.email : null);
     const [password, setPassword] = useState(null)
     const [activeStudent, setActiveStudent] = useState(false);
     const { params } = useRoute();
@@ -49,14 +49,16 @@ const AccountScreen = () => {
     const updateUniversitySetting = async () => {
 
         await updateDoc(doc(db, global.users, user.uid), {
-            universityPreference: "No",
+            preferences: {
+                university: false,
+                tag: profile.preferences.tag,
+                distance: profile.preferences.distance
+            },
             university_student: {
-                status: "inactive",
-                class_level: profile.university_student.class_level,
-                grad_year: profile.university_student.grad_year
+                status: "inactive"
             },
         }).then(() => {
-            navigation.navigate("Home")
+            navigation.navigate("Home", {refresh: true})
             alert("Congrats on graduating to Wing Professional! Make sure to update your profile to optimize matching.")
         }).catch((error) => {
             alert(error.message)
@@ -73,7 +75,6 @@ const AccountScreen = () => {
             // navigation.navigate("Login");
         }
     }
-
 
     return (
         <View style={{ backgroundColor: "white", height: "100%" }}>
@@ -92,23 +93,27 @@ const AccountScreen = () => {
                     </View>
                 )}
 
-                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Contact Email</Text>
-                <View style={{ flexDirection: "row" }}>
-                    <TextInput
-                        value={email}
-                        onChangeText={setEmail}
-                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
-                    <TouchableOpacity style={styles.savebuttonContainer} onPress={() => updateEmail()}>
-                        <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Update</Text>
-                    </TouchableOpacity>
-                </View>
+                {email &&
+                    <View style={{alignItems: "center",}}>
+                        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", paddingBottom:15 }}>Contact Email</Text>
+                        <View style={{ flexDirection: "row" }}>
+                            <TextInput
+                                value={email}
+                                onChangeText={setEmail}
+                                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15 }} />
+                            <TouchableOpacity style={styles.savebuttonContainer} onPress={() => updateEmail()}>
+                                <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "bold", color: "white" }}>Update</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                }
 
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Notifications", profile)}>
-                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Edit Notifications</Text>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Location & Notifications</Text>
                 </TouchableOpacity>
 
                 {/* should actually cycle through all providerData for potential password authentication */}
-                {user.providerData[0].providerId === "password" && (<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("ChangePassword")}>
+                {user && user.providerData[0].providerId === "password" && (<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("ChangePassword")}>
                     <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Change Password</Text>
                 </TouchableOpacity>)}
 
@@ -120,7 +125,6 @@ const AccountScreen = () => {
                         elevation: 5
                     }}
                     onPress={() => {
-                        // navigation.navigate("Login");
                         logout();
                     }}>
                     <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Logout</Text>
@@ -184,7 +188,7 @@ const AccountScreen = () => {
                             onChangeText={setPassword}
                             placeholder='**********'
                             secureTextEntry
-                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 20 }} />
+                            style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, margin: 20, backgroundColor:"#E0E0E0" }} />
                         <TouchableHighlight
                             // style={{ borderColor: "grey", borderWidth: 2, padding: 15, width: 300 }}
                             style={styles.opacityStyle}

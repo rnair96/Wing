@@ -365,18 +365,27 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
         .limit(1000);
     // add limit to size
 
+    // Filter by preferences
+
     // Filter by university student preference
-    if (user.university_student && user.universityPreference === "Yes") {
+    if (user.university_student && user.preferences && user.preferences.university === true) {
       console.log("filtering for university students");
       matchingUsersQuery = matchingUsersQuery
           .where("university_student.status", "==", "active");
     }
 
     // Further filter by tag preference
-    if (user.tagPreference && user.tagPreference !== "All") {
-      console.log("filtering for users with mission tag", user.tagPreference);
+    if (user.preferences && user.preferences.tag !== "All") {
+      console.log("filtering for users with mission tag", user.preferences.tag);
       matchingUsersQuery = matchingUsersQuery
-          .where("mission_tag", "==", user.tagPreference);
+          .where("mission_tag", "==", user.preferences.tag);
+    }
+
+    // Further filter by distance preference
+    if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
+      console.log("filtering for users in local area", user.location.state);
+      matchingUsersQuery = matchingUsersQuery
+          .where("location.state", "==", user.location.state);
     }
 
     // Now filter these matched users against excludeIds
@@ -500,18 +509,27 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
         .limit(1000);
     // add limit to size
 
+    // Filter by preferences
+
     // Filter by university student preference
-    if (user.university_student && user.universityPreference === "Yes") {
+    if (user.university_student && user.preferences && user.preferences.university === true) {
       console.log("filtering for university students");
       matchingUsersQuery = matchingUsersQuery
           .where("university_student.status", "==", "active");
     }
 
     // Further filter by tag preference
-    if (user.tagPreference && user.tagPreference !== "All") {
-      console.log("filtering for users with mission tag", user.tagPreference);
+    if (user.preferences && user.preferences.tag !== "All") {
+      console.log("filtering for users with mission tag", user.preferences.tag);
       matchingUsersQuery = matchingUsersQuery
-          .where("mission_tag", "==", user.tagPreference);
+          .where("mission_tag", "==", user.preferences.tag);
+    }
+
+    // Further filter by distance preference
+    if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
+      console.log("filtering for users in local area", user.location.state);
+      matchingUsersQuery = matchingUsersQuery
+          .where("location.state", "==", user.location.state);
     }
 
     // Now filter these matched users against excludeIds
@@ -773,7 +791,7 @@ functionCall.delete("/deleteUserDev/:id", async (req, res) => {
 
   try {
     console.log("deleting collections");
-    const collectionsToDelete = ["requests", "swipes", "passes"];
+    const collectionsToDelete = ["requests", "swipes", "passes", "announcements"];
     for (const collection of collectionsToDelete) {
       const snapshot = await userDocRef.collection(collection).get();
       if (!snapshot.empty) {
@@ -839,7 +857,7 @@ functionCall.delete("/deleteUser/:id", async (req, res) => {
 
   try {
     console.log("deleting collections");
-    const collectionsToDelete = ["requests", "swipes", "passes"];
+    const collectionsToDelete = ["requests", "swipes", "passes", "announcements"];
     for (const collection of collectionsToDelete) {
       const snapshot = await userDocRef.collection(collection).get();
       if (!snapshot.empty) {

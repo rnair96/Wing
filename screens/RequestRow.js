@@ -49,7 +49,7 @@ const RequestRow = ({ requestDetails, profile }) => {
     useEffect(() => {
         async function fetchData() {
                 const other_user_snapshot = await getDoc(doc(db, global.users, requestDetails.id)); // replace 'YOUR_COLLECTION_NAME' with the name of your collection
-                if (other_user_snapshot.exists()) { // check if the document exists
+                if (other_user_snapshot.exists() && other_user_snapshot.data()?.displayName) { // check if the document exists
                     setName(other_user_snapshot.data().displayName);
                     setOtherProfilePic(other_user_snapshot.data().images[0]);
                     setOtherProfile(other_user_snapshot.data());
