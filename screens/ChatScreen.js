@@ -1,15 +1,17 @@
 import React from 'react'
-import { SafeAreaView, Text } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
 import ChatList from './ChatList';
-import Header from '../Header';
+import AnnouncementRow from './AnnouncementRow';
 
-const ChatScreen = () => {
+const ChatScreen = ({profile}) => {
 
   return (
-    <SafeAreaView>
-        <Header title= "Matches"/>
-        <ChatList/>
-    </SafeAreaView>
+      <SafeAreaView style={{flex:1, backgroundColor:"white"}}>
+        <AnnouncementRow/>
+
+        <ChatList profile={profile}/>
+        </SafeAreaView>
+
   )
 }
 

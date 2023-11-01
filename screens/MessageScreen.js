@@ -1,131 +1,175 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Keyboard, TouchableOpacity} from 'react-native';
+import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image } from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import getMatchedUserInfo from '../lib/getMatchedUserInfo';
 import sendPush from '../lib/sendPush';
+import * as Sentry from "@sentry/react";
 
 const MessageScreen = () => {
 
-    const { params } = useRoute();
-    const { matchedDetails } = params;
-    const [ input, setInput ] = useState();
-    const [ messages, setMessages ] = useState([])
-    const { user } = useAuth();
-    const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
+  const { params } = useRoute();
+  const { matchedDetails, otherProfile, profile } = params;
+  const [input, setInput] = useState();
+  const [messages, setMessages] = useState([])
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState(profile);
+  // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
 
+  useEffect(() => {
+    let isCancelled = false; // cancel flag
 
-    useEffect(()=> onSnapshot(query(collection(db,"matches",matchedDetails.id,"messages"), 
-        orderBy("timestamp", "desc")), 
-        (snapshot) => {
-            setMessages(snapshot.docs.map((doc)=>({
-                id: doc.id,
-                ...doc.data()
-            })
-            ))
-        })
-        ,[matchedDetails, db]);
+    if (!profile) {
+      console.log("fetching user data...")
+      const fetchUserData = async () => {
+        try {
+          const userSnap = await getDoc(doc(db, global.users, user.uid));
+          setUserProfile({
+            id: user.uid,
+            ...userSnap.data()
+          })
+        } catch (error) {
+          if (!isCancelled) {
+            console.log("incomplete fetch data:", error);
+            Sentry.captureMessage(`Cancelled fetching user data in message screen of ${user.uid}, ${error.message}`)
 
-    useEffect(()=>{
-      if(messages.length>0 && messages[0].userId !== user.uid && !(messages[0].read)){
-        updateDoc(doc(db, 'matches',matchedDetails.id, "messages", messages[0].id), {
-          read:true,
-        })
-      }
-    },[messages])
+          }
+          console.log("error fetching userdata")
+          Sentry.captureMessage(`error fetching user data in message screen of ${user.uid}, ${error.message}`)
 
-    const sendMessage = () => {
-      const timestamp = serverTimestamp();
-        addDoc(collection(db, "matches", matchedDetails.id, "messages"), {
-            timestamp: timestamp,
-            userId: user.uid,
-            displayName: user.displayName,
-            photoURL: matchedDetails.users[user.uid].images[0],
-            message: input,
-            read: false,
-        })
-
-        updateDoc(doc(db, 'matches',matchedDetails.id), {
-          latest_message_timestamp: timestamp
-        })
-
-        const userName = user.displayName.split(" ")[0];
-
-        if(matchedUser[1]?.token && matchedUser[1].token!=="token" && matchedUser[1].token!=="not_granted"){
-          // sendPush(userName);
-          sendPush(matchedUser[1].token,`New Message from ${userName}`,input,{type : "message", message : matchedDetails})
         }
 
-        setInput("");
+
+      }
+
+      fetchUserData();
+
+      return () => {
+        isCancelled = true;
+      };
+    }
+  }, [profile, db])
+
+
+  useEffect(() => {
+    const unsub = onSnapshot(query(collection(db, global.matches, matchedDetails.id, "messages"),
+      orderBy("timestamp", "desc")),
+      (snapshot) => {
+        setMessages(snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        })
+        ))
+      },
+      (error) => {
+        console.log("there was an error in message screen snapshot", error)
+        Sentry.captureMessage(`error fetching messages in message screen of ${matchedDetails.id}, ${error.message}`)
+        alert("Error getting messages. Try again later.")
+
+      })
+
+    setLoading(false);
+
+    return () => {
+      unsub();
+    };
+
+  }, [matchedDetails, db]);
+
+  useEffect(() => {
+    if (messages.length > 0 && messages[0].userId !== user.uid && !(messages[0].read)) {
+      updateDoc(doc(db, global.matches, matchedDetails.id, "messages", messages[0].id), {
+        read: true,
+      })
+    }
+  }, [messages])
+
+  const sendMessage = () => {
+    const name = userProfile ? userProfile.displayName : user.displayName.split(" ")[0]
+    const timestamp = serverTimestamp();
+
+    try {
+
+      addDoc(collection(db, global.matches, matchedDetails.id, "messages"), {
+        timestamp: timestamp,
+        userId: user.uid,
+        displayName: name,
+        message: input,
+        read: false,
+      })
+
+      updateDoc(doc(db, global.matches, matchedDetails.id), {
+        latest_message_timestamp: timestamp
+      })
+
+
+      if (userProfile && otherProfile?.notifications && otherProfile.notifications.messages && otherProfile.token && otherProfile.token !== "testing" && otherProfile.token !== "not_granted") {
+
+        const messageDetails = { "matchedDetails": matchedDetails, "otherProfile": userProfile }
+
+        // Sentry.captureMessage(`sending message from ${name}`)
+        // Sentry.captureMessage(`sending message to ${otherProfile.displayName} with token ${otherProfile.token}`)
+
+        sendPush(otherProfile.token, `New Message from ${name}`, input, { type: "message", message: messageDetails })
+
+      }
+    } catch (error) {
+      console.log("ERROR, there was an error in sending a message", error);
+      Sentry.captureMessage(`there was an error in sending a message ${error.message}`)
+      alert("Error sending message. Try again later.")
 
     }
 
-    // const sendPush = async(userName) => {
+    setInput("");
 
-    //       try {
-    //         const response = await fetch('https://exp.host/--/api/v2/push/send', {
-    //         method: 'POST',
-    //         headers: {
-    //               'Accept': 'application/json',
-    //               'Content-Type': 'application/json'
-    //         },
-    //           body: JSON.stringify({
-    //             to: matchedUser[1].token,
-    //             title: "New Message from "+userName,
-    //             body: input,
-    //             data: {
-    //               type: "message",
-    //               message: matchedDetails 
-    //             },
-    //           }),
-    //         });
-        
-    //         const result = await response.json();
-        
-    //         if (result.errors) {
-    //           throw new Error(`Failed to send push notification: ${result.errors}`);
-    //         }
-
-    //         return result.data;
-    //       } catch (error) {
-    //         console.error('Error sending push notification:', error);
-    //         return null;
-    //       }
-    // }
-    
-    
-    return (
-      <SafeAreaView style={{flex:1}}>
-        <ChatHeader matchedDetails={matchedDetails}/>
-
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{flex:1}}
-            keyboardVerticalOffset={10}>
+  }
 
 
-        <TouchableWithoutFeedback 
-        // onPress={Keyboard.dismiss()}
-        >
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <ChatHeader details={matchedDetails} type={"match"} profile={otherProfile} />
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={10}>
+
+        {!loading &&
+          <TouchableWithoutFeedback
+          // onPress={Keyboard.dismiss()}
+          >
+
             <FlatList
-                data={messages}
-                style={{}}
-                inverted={-1}
-                keyExtractor={(item) => item.id}
-                renderItem = {({item:message}) =>
-                    message.userId === user.uid ? (
-                        <SenderMessage key = {message.id} message={message}/>
-                    ):(
-                        <RecieverMessage key = {message.id} message={message}/>
-                    )
-            }
+              data={messages}
+              style={{}}
+              inverted={-1}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item: message }) =>
+                message.userId === user.uid ? (
+                  <SenderMessage key={message.id} message={message} />
+                ) : (
+                  <View style={{ padding: 10, maxWidth: 250, marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
+                    {otherProfile ? (
+                      <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
+                        source={{ uri: otherProfile.images[0] }} />
+                    ) : (
+                      <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
+                        source={require("../images/account.jpeg")} />
+                    )}
+                    <RecieverMessage key={message.id} message={message} />
+
+                  </View>
+                )
+              }
             />
-        </TouchableWithoutFeedback>
+
+          </TouchableWithoutFeedback>
+        }
         {/* <View style={{flexDirection:"row", justifyContent:"flex-end", bottom:10, padding:10}}>
         <TouchableOpacity style={styles.missionControl} onPress={()=>navigation.navigate("MissionControl")}>
                 <Entypo name="aircraft-take-off" size={30} color="blue"/>
@@ -133,32 +177,23 @@ const MessageScreen = () => {
     </View> */}
 
 
-        <View 
-        style={{flexDirection:"row", borderColor:"#E0E0E0", borderWidth:2, alignItems:"center"}}>
-            <TextInput
-            style={{height:50, width: 300, fontSize:15, padding:10}}
-            placeholder = "Send Message..."
+        <View
+          style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
+          <TextInput
+            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15 }}
+            placeholder="Send Message..."
             onChangeText={setInput}
             onSubmitEditing={sendMessage}
+            placeholderTextColor={"grey"}
+            multiline={true}
+            numberOfLines={5}
             value={input}
-            />
-            <Button onPress={sendMessage} title="Send" color="#00BFFF"/>
+          />
+          <Button onPress={sendMessage} title="Send" color="#00BFFF" style={{ borderRadius: 20 }} />
         </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    )
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  )
 }
-
-const styles = StyleSheet.create({
-     missionControl:{
-        bottom: 10,
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#00BFFF"
-     }
-  });
 
 export default MessageScreen

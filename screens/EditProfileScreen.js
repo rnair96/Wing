@@ -1,260 +1,373 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, Image, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { View, ScrollView, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import useAuth from '../hooks/useAuth';
-import { updateDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useNavigation, useRoute } from '@react-navigation/core';
 import ImageUpload from '../components/ImageUpload';
-import AgePicker from '../components/AgePicker';
-import GenderPicker from '../components/GenderPicker';
-import { Ionicons} from '@expo/vector-icons';
+// import registerNotifications from '../lib/registerNotifications';
+import { useNavigation } from '@react-navigation/core';
 import TagPicker from '../components/TagPicker';
-import registerNotifications from '../lib/registerNotifications';
+import ValuesList from '../components/ValuesList';
+import ClassLevelPicker from '../components/ClassLevelPicker';
+import GradYearPicker from '../components/GradYearPicker';
+import * as Sentry from "@sentry/react";
 
 
-const EditProfileScreen = () => {
+
+const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const { user } = useAuth();
-  const [ job, setJob ] = useState(null);
-  const [ age, setAge ] = useState(18);
-  const [ oldtoken, setOldToken ] = useState(null);
-  const [ newtoken, setNewToken ] = useState("not_granted");
-  const [ mission, setMission ] = useState(null);
-  const [ missiontag, setMissionTag ] = useState("Personal Growth");
-  const [ gender, setGender ] = useState("male");
-  const [ accomplishments, setAccomplishments ] = useState(null);
-  const [ skills, setSkills ] = useState(null);
-  const [ idealwing, setIdealWing ] = useState(null);
-  const [ location, setLocation ] = useState(null);
-  const [ hobbies, setHobbies ] = useState(null);
-  const [ incompleteForm, setIncompleteForm ] = useState(true);
-  const [ email, setEmail ] = useState(user.email);
-  const [ name, setName ] = useState(null);
-  const [ url1, setUrl1] = useState(null);
-  const [ url2, setUrl2] = useState(null);
-  const [ url3, setUrl3] = useState(null);
 
+  const age = profile?.age || 18;
+  // const oldtoken = profile?.token || null;
+  const gender = profile?.gender || "male";
+  const activeStudent = profile?.university_student?.status === "active";
 
-  const { params } = useRoute();
-  const profile = params;
-
-  useEffect(()=>{
-    if (profile) {
-        setUrl1(profile.images[0]);
-        setUrl2(profile.images[1]);
-        setUrl3(profile.images[2]);
-        setJob(profile.job);
-        setAge(parseInt(profile.age));
-        setMission(profile.mission);
-        setGender(profile.gender);
-        setAccomplishments(profile.accomplishments);
-        setSkills(profile.skills);
-        setLocation(profile.location);
-        setHobbies(profile.hobbies);
-        setIdealWing(profile.ideal_wing);
-        setMissionTag(profile.mission_tag);
-        setEmail(profile.email);
-        setName(profile.displayName)
-        setOldToken(profile.token);
-    }
-
-  },[profile])
-
+  // const [newtoken, setNewToken] = useState("not_granted");
+  const [mission, setMission] = useState(profile?.mission || null);
+  const [missiontag, setMissionTag] = useState(profile?.mission_tag || "Social");
+  const [medal1, setMedal1] = useState(profile?.medals?.[0] || null);
+  const [medal2, setMedal2] = useState(profile?.medals?.[1] || null);
+  const [medal3, setMedal3] = useState(profile?.medals?.[2] || null);
+  const [bio, setBio] = useState(profile?.bio || null);
+  const [location, setLocation] = useState(profile?.location || null);
+  const [hometown, setHometown] = useState(profile?.hometown || null);
+  const [job, setJob] = useState(activeStudent ? null : profile?.job || null);
+  const [company, setCompany] = useState(activeStudent ? null : profile?.company || null);
+  const [school, setSchool] = useState(profile?.school || null);
+  const [class_level, setClassLevel] = useState(activeStudent ? profile?.university_student?.class_level || "Undergraduate" : "Undergraduate");
+  const [grad_year, setGradYear] = useState(activeStudent ? profile?.university_student?.grad_year || "2027" : "2027");
+  const [incompleteForm, setIncompleteForm] = useState(true);
+  const [url1, setUrl1] = useState(profile?.images?.[0] || null);
+  const [url2, setUrl2] = useState(profile?.images?.[1] || null);
+  const [url3, setUrl3] = useState(profile?.images?.[2] || null);
+  const [values, setValues] = useState(profile?.values || []);
 
   const navigation = useNavigation();
 
-  useEffect(()=>{
-    const form =  !url1||!url2||!url3||!gender||!age||!mission||!accomplishments||!skills||!idealwing||!location||!hobbies;
+  useEffect(() => {
+    if (profile && profile?.images && profile.images.length > 2){
+      if(url1 !== profile.images[0] || url2 !== profile.images[1] || url3 !== profile.images[2]){
+        console.log("change to false")
+        setIsEditSaved(false);
+      } else if (url1 === profile.images[0] && url2 === profile.images[1] && url3 === profile.images[2]){
+        console.log("change to true");
+        setIsEditSaved(true);
+
+      }
+    }
+
+  },[url1, url2, url3 ])
+
+
+
+  useEffect(() => {
+    let form;
+
+    if (activeStudent) {
+      form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 || !school || !mission
+    } else {
+      form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 ||!job || !mission
+
+    }
+
     setIncompleteForm(form);
 
-  },[url1, url2, url3 ,gender, age,mission, accomplishments, skills, idealwing, location, hobbies])
+  }, [activeStudent, url1, url2, url3, location, values, school, mission, job])
 
-  useEffect(()=>{
-    (async () => {
-    if (oldtoken && (oldtoken === "testing" || oldtoken === "not_granted")){
-      const new_token = await registerNotifications();
-      setNewToken(new_token);
-    } else {
-      setNewToken(oldtoken);
-    }
-  })();
-
-  },[oldtoken])
 
 
   const updateUserProfile = () => {
-      updateDoc(doc(db, 'users', user.uid), {
-          id: user.uid,
-          displayName: name,
-          email: email,
-          images: [url1, url2, url3],
-          job: job,
-          age: age,
-          gender: gender,
-          mission: mission,
-          accomplishments: accomplishments,
-          skills: skills,
-          ideal_wing: idealwing,
-          hobbies: hobbies,
-          mission_tag: missiontag,
-          timestamp: serverTimestamp(),
-          token: newtoken
-      }).then(()=> {
-            navigation.navigate("Home");
+
+    if (activeStudent) { // change to one call of update doc, with different docs sent
+
+      updateDoc(doc(db, global.users, user.uid), {
+        images: [url1, url2, url3],
+        university_student: {
+          status: "active",
+          class_level: class_level,
+          grad_year: grad_year
+        },
+        school: school,
+        hometown: hometown,
+        mission: mission,
+        mission_tag: missiontag,
+        medals: [medal1, medal2, medal3],
+        values: values,
+        location: location,
+        // token: newtoken,
+        bio: bio
+      }).then(() => {
+        navigation.navigate("Home", { refresh: true });
       }).catch((error) => {
-          alert(error.message)
+        Sentry.captureMessage("error at edit profile student for ",user.uid,", ", error.message)
+        alert("Could not update profile. Try again later.")
+        console.log(error.message)
       });
+    } else {
+
+      updateDoc(doc(db, global.users, user.uid), {
+        images: [url1, url2, url3],
+        job: job,
+        company: company,
+        school: school,
+        hometown: hometown,
+        mission: mission,
+        mission_tag: missiontag,
+        medals: [medal1, medal2, medal3],
+        values: values,
+        location: location,
+        // token: newtoken,
+        bio: bio
+      }).then(() => {
+        navigation.navigate("Home",{ refresh: true });
+      }).catch((error) => {
+        Sentry.captureMessage("error at edit profile professional for ",user.uid,", ", error.message)
+        alert("Could not update profile. Try again later.")
+        console.log(error.message)
+      });
+    }
+
+    setIsEditSaved(true);
+
   }
 
 
   //Use Header
-    
-return (
-  <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{flex:1}}
-            keyboardVerticalOffset={15}>
-        <TouchableWithoutFeedback 
-          // onPress={Keyboard.dismiss()}
-        >
-      <ScrollView style={{marginHorizontal:10}}>
-      <SafeAreaView style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly", right:"4%"}}>
-            <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.goBack()}>
-            <Ionicons name="ios-arrow-back" size={30} color = "#00BFFF"/>
-            </TouchableOpacity>
-          <TouchableOpacity style={{paddingTop:20}} onPress={() => navigation.navigate("Home")}>
-          <Image style={{height:50, width:50, borderRadius:50, backgroundColor:"#00BFFF", borderColor:"#00308F", borderWidth:2}} source={require("../images/logo.png")}/>
-          </TouchableOpacity>
-          </SafeAreaView>
-        <View style={{flex:1, alignItems:"center", justifyContent:"space-evenly"}}>
-          
 
-        <Text style={{fontSize:15, fontWeight: "bold", padding:20}}>Edit Your Profile</Text>
-      
-      <View style ={{flexDirection:"row"}}>
-      <View style ={{alignItems:"center"}}>
-      <Text style={styles.formTitle}>Age</Text>
-      
-      {!profile?.age ? (
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={15}>
+      <TouchableWithoutFeedback
+      // onPress={Keyboard.dismiss()}
+      >
+        <ScrollView style={{ marginHorizontal: 10 }}>
+
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", backgroundColor: "white" }}>
+            {/* <Text style={{ fontSize: 15, fontWeight: "bold", padding: 20, color: "#00BFFF" }}>Edit Your Profile</Text> */}
+
+
+
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.formTitle}>Age</Text>
+
+                {/* {!profile?.age ? (
         <AgePicker age= {age} setAge={setAge} />
-      ):(
-        <Text>{age}</Text>
-      )}
-      
-      </View>
-      
-      <View style={{alignItems:"center"}}>
-      <Text style={styles.formTitle}>Gender</Text>
-      
-      {!profile?.gender ? (
+      ):( */}
+                <Text>{age}</Text>
+                {/* )} */}
+
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.formTitle}>Gender</Text>
+
+                {/* {!profile?.gender ? (
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
-      ):(
-        <Text>{gender}</Text>
-      )}
-      </View>
-      </View>
+      ):( */}
+                <Text>{gender}</Text>
+                {/* )} */}
+              </View>
+            </View>
 
-    <View style={{flexDirection:"column", padding:10}}>
-   
-        <View style={{padding:10, alignItems:"center"}}>
-        <Text style={styles.formTitle}>Location</Text>
-        {!profile?.location ?
-        (<TextInput
-        value = {location}
-        onChangeText = {setLocation} 
-        placeholder={'What area are you in? (City, State)'}
-        style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>)
-        :(
-          <Text>{location}</Text>
-        )}
-        </View>
+            <View style={{ flexDirection: "column", padding: 10 }}>
 
-        <View style={{padding:10, alignItems:"center"}}>
-        <Text style={styles.formTitle}>Job</Text>
-      <TextInput
-      value = {job}
-      onChangeText = {setJob} 
-      placeholder={'What do you do?'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-        </View>
-        </View>        
-  
+              <View style={{ padding: 10, alignItems: "center" }}>
+                <Text style={styles.formTitle}>Location</Text>
+                {!profile?.location ?
+                    <Text>Must Turn on Location Services in Settings</Text>
+                  : (
+                    <Text>{location.text}</Text>
+                  )}
+              </View>
 
-        <View style ={{flexDirection:"row", padding:20}}>
-            <ImageUpload url = {url1} setURL = {setUrl1} index={0} user={user}/>
-            <ImageUpload url = {url2} setURL = {setUrl2} index={1} user={user}/>
-            <ImageUpload url = {url3} setURL = {setUrl3} index={2} user={user}/>
-            </View> 
+              <View style={{ padding: 10, alignItems: "center" }}>
+                <Text style={styles.formTitle}>Hometown</Text>
+                <TextInput
+                  value={hometown}
+                  onChangeText={setHometown}
+                  placeholder={'Washington, DC'}
+                  placeholderTextColor="#888888"
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+              </View>
+            </View>
 
-      <Text style={styles.formTitle}>Hobbies</Text>
-      <TextInput
-      value = {hobbies}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setHobbies} 
-      placeholder={'What do you do for fun? i.e: Trying out new restaurants!'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={styles.formTitle}>Medals</Text>
-      <TextInput
-      value = {accomplishments}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setAccomplishments} 
-      placeholder={"What accomplishments are you most proud of? i.e Completing a marathon with a bad foot"}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+            {activeStudent ?
+              (
+                <View style={{ flexDirection: "column", padding: 10 }}>
+                  <View style={{ justifyContent: "center", alignItems: 'center', flexDirection: "row" }}>
+                    <View style={{ width: "30%", backgroundColor: "#00BFFF", height: 2 }} />
+                    <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 25 }}>WING-U</Text>
+                    <View style={{ width: "30%", backgroundColor: "#00BFFF", height: 2 }} />
 
-      <Text style={styles.formTitle}>Strengths</Text>
-      <TextInput
-      value = {skills}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setSkills} 
-      placeholder={'What are you good at? i.e: Calculating calories and being consistent'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
-    
+                  </View>
 
-      <Text style={styles.formTitle}>The Ideal Wing</Text>
-      <TextInput
-      value = {idealwing}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setIdealWing}
-      placeholder={'How can a Wing best support you? i.e: Push me in the gym'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
 
-      <Text style={styles.formTitle}>Mission</Text>
-      <TextInput
-      value = {mission}
-      multiline
-      numberOfLines={3}
-      onChangeText = {setMission} 
-      placeholder={'What goal do you want to achieve? i.e Lose 10 pounds'}
-      style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
+                  <View style={{ padding: 20, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Class Level</Text>
+                    <ClassLevelPicker selectedLevel={class_level} setSelectedLevel={setClassLevel} />
+                  </View>
 
-      <Text style={styles.formTitle}>Mission Category</Text>
-      <TagPicker tag={missiontag} setTag={setMissionTag}/>
+                  <View style={{ padding: 20, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Graduation Year</Text>
+                    <GradYearPicker selectedYear={parseInt(grad_year, 10)} setSelectedYear={setGradYear} />
+                  </View>
 
-        <View style={{height:150}}>
-      <TouchableOpacity 
-          disabled = {incompleteForm}
-          style={[{width:200, height:50, paddingTop:15, top:20, borderRadius:10}, incompleteForm ? {backgroundColor:"grey"} : {backgroundColor:"#00308F"}]}
-          onPress = {updateUserProfile}>
-          <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Update Profile</Text>
-      </TouchableOpacity>
-      </View>
-      </View>
-      </ScrollView>
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>University Currently Attending</Text>
+                    {/* <UniversityPicker university_chosen={school} setUniversity={setSchool}/> */}
+                    <TextInput
+                      value={school}
+                      onChangeText={setSchool}
+                      placeholder={'i.e American University'}
+                      placeholderTextColor="#888888"
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                  </View>
+
+                  <View style={{ margin: 20, padding: 10, justifyContent: "center", alignItems: "center" }}>
+                    <Text style={{ fontSize: 13, textAlign: "center", padding: 10, }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
+                    <View style={{ width: "90%", backgroundColor: "#00BFFF", height: 2 }} />
+                  </View>
+
+                </View>
+              ) : (
+                <View style={{ flexDirection: "column", padding: 10 }}>
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Job</Text>
+                    <TextInput
+                      value={job}
+                      onChangeText={setJob}
+                      placeholder={'What do you do?'}
+                      placeholderTextColor="#888888"
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                  </View>
+
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>Company</Text>
+                    <TextInput
+                      value={company}
+                      onChangeText={setCompany}
+                      placeholder={'Some Company Name'}
+                      placeholderTextColor="#888888"
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                  </View>
+
+                  <View style={{ padding: 10, alignItems: "center" }}>
+                    <Text style={styles.formTitle}>School Graduated From or Last Attended</Text>
+                    <TextInput
+                      value={school}
+                      onChangeText={setSchool}
+                      placeholder={'i.e American University'}
+                      placeholderTextColor="#888888"
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                  </View>
+                </View>
+              )}
+
+
+            <View style={{ flexDirection: "row", margin: 10, paddingBottom:10, paddingTop:10}}>
+              <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
+              <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
+              <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
+            </View>
+
+            <Text style={styles.formTitle}>Bio</Text>
+            <TextInput
+              value={bio}
+              multiline
+              numberOfLines={4}
+              maxLength={200}
+              onChangeText={setBio}
+              placeholder={'Share something fun about you i.e: I love kayaking and drinking beers by the river.'}
+              placeholderTextColor="#888888"
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+
+
+            <Text style={styles.formTitle}>Accomplishments</Text>
+            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin:10}}>
+              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+                <Text>1.</Text>
+                <TextInput
+                  value={medal1}
+                  multiline
+                  numberOfLines={2}
+                  maxLength={50}
+                  onChangeText={setMedal1}
+                  placeholder={"I completed a marathon."}
+                  placeholderTextColor="#888888"
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
+              </View>
+
+              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+                <Text>2.</Text>
+                <TextInput
+                  value={medal2}
+                  multiline
+                  numberOfLines={2}
+                  maxLength={50}
+                  onChangeText={setMedal2}
+                  placeholder={"I won a hotdog eating contest"}
+                  placeholderTextColor="#888888"
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
+              </View>
+
+              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+                <Text>3.</Text>
+                <TextInput
+                  value={medal3}
+                  multiline
+                  numberOfLines={2}
+                  maxLength={50}
+                  onChangeText={setMedal3}
+                  placeholder={"I have a Youtube channel with 3k subscribers."}
+                  placeholderTextColor="#888888"
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
+              </View>
+            </View>
+
+
+            <Text style={styles.formTitle}>{`Values (Pick 3)`}</Text>
+            <ValuesList selectedValues={values} setSelectedValues={setValues} />
+
+            <Text style={styles.formTitle}>Mission</Text>
+            <TextInput
+              value={mission}
+              multiline
+              numberOfLines={2}
+              maxLength={40}
+              onChangeText={setMission}
+              placeholder={'Explore the local nightlife!'}
+              placeholderTextColor="#888888"
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+
+            <Text style={styles.formTitle}>Mission Category</Text>
+            <TagPicker tag={missiontag} setTag={setMissionTag} />
+
+            <View style={{ height: 150 }}>
+              <TouchableOpacity
+                disabled={incompleteForm}
+                style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }, incompleteForm ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
+                onPress={updateUserProfile}>
+                <Text style={{ textAlign: "center",fontSize: 15, fontWeight: "bold", color:"white" }}>Update Profile</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-)
+    </KeyboardAvoidingView>
+  )
 }
 
 const styles = StyleSheet.create({
-  formTitle :{
-    fontSize:15, 
-    fontWeight: "bold", 
-    color:"#00308F", 
-    padding:20
+  formTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    // color: "#00308F",
+    // color:"#00BFFF",
+    padding: 20
   }
 })
 

@@ -6,10 +6,11 @@ import { storage } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase/storage";
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
-import checkInappropriateContent from '../lib/checkInappropriateContent';
+// import checkInappropriateContent from '../lib/checkInappropriateContent';
+import { Entypo, Ionicons} from '@expo/vector-icons';
 
 
-const ImageUpload = ({ url, setURL, index, user}) => {
+const ImageUpload = ({ url, setURL, index, userId}) => {
     const [ image, setImage ]= useState(url);
     // const [ progress, setProgress] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -94,7 +95,20 @@ const ImageUpload = ({ url, setURL, index, user}) => {
               throw new Error("file-not-image");
             }
 
-            const fileInfo = await FileSystem.getInfoAsync(path);
+            let manipulatedPath = path;
+
+            console.log("path",path)
+
+            // If it's a PNG, convert to JPG.
+            if (path.endsWith('.png')) {
+              console.log("converting png")
+                const convertedImage = await ImageManipulator.manipulateAsync(path, [], {
+                    format: ImageManipulator.SaveFormat.JPEG,
+                });
+                manipulatedPath = convertedImage.uri;
+            }
+
+            const fileInfo = await FileSystem.getInfoAsync(manipulatedPath);
 
 
             // console.log("image size",fileInfo.size);
@@ -135,7 +149,7 @@ const ImageUpload = ({ url, setURL, index, user}) => {
             const response = await fetch(uri);
             const blob = await response.blob();
   
-            const fileNameFull = user.id+"/"+index+"/"+fileName
+            const fileNameFull = userId+"/"+index+"/"+fileName
             uploadFirebase(blob, fileNameFull);
 
           }catch(e){
@@ -148,6 +162,9 @@ const ImageUpload = ({ url, setURL, index, user}) => {
               return;
             } else if(e.message.includes('image-not-appropriate')){
               alert('Inappropriate content detected. Please choose another image.');
+              return;
+            } else {
+              alert('Something went wrong. Please try again and perhaps with a different image.');
               return;
             }
             // console.log("there was an error",e);
@@ -197,8 +214,10 @@ const ImageUpload = ({ url, setURL, index, user}) => {
         ):(
         <View style={styles.emptyImageContainer}>
         <TouchableOpacity onPress={selectImage}>
-        <MaterialCommunityIcons name="image-multiple" size={50} color="#ccc" />
-        <Text>Select Image</Text>
+        <Ionicons name="person" size={50} color = "#ccc"/>
+        {/* <MaterialCommunityIcons name="image-multiple" size={50} color="#ccc" /> */}
+        
+        {/* <Text>Select Image</Text> */}
         </TouchableOpacity>
         </View>
         )}
@@ -213,7 +232,7 @@ const ImageUpload = ({ url, setURL, index, user}) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{fontSize:16, textAlign:"center", paddingBottom:10, fontWeight:"bold"}}>Uploading Image</Text>
+            <Text style={{fontSize:16, textAlign:"center", fontWeight:"bold"}}>Uploading Image</Text>
             {/* <Text style={{fontSize:14, textAlign:"center", fontWeight:"bold", color:"#00308F"}}>{progress}% Complete</Text> */}
           </View>
           </View>
@@ -228,8 +247,8 @@ const styles = StyleSheet.create({
     imageContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: 100,
-      height: 100,
+      width: 105,
+      height: 105,
       margin: 10,
       borderWidth: 3,
       borderColor: "",
@@ -239,10 +258,11 @@ const styles = StyleSheet.create({
     emptyImageContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: 100,
-      height: 100,
+      width: 105,
+      height: 105,
       margin: 10,
       borderWidth: 1,
+      borderRadius: 20,
       borderColor: '#ccc',
       backgroundColor: '#eee'
     },
@@ -253,7 +273,7 @@ const styles = StyleSheet.create({
       },
       modalView: {
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 10,
         padding:10,
         alignItems: 'center',
         shadowColor: '#000',

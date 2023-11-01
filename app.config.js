@@ -4,11 +4,11 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.0.1",
+    version: "2.5.8",
     orientation: "portrait",
     icon: "./assets/wing_icon.png",
     userInterfaceStyle: "light",
-    scheme: process.env.IOS_CLIENT_ID, // Assuming this is what you meant by scheme
+    scheme: "com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2", // Assuming this is what you meant by scheme
     splash: {
       image: "./assets/splash_wing.png",
       resizeMode: "contain",
@@ -80,7 +80,23 @@ export default {
       firebaseMessagingSenderId: process.env.FIREBASE_MESSENGINGSENDERID,
       firebaseMeasurementId: process.env.FIREBASE_MEASUREMENTID,
       firebaseProjectId: process.env.FIREBASE_PROJECTID,
-      firebaseStorageBucket: process.env.FIREBASE_STORAGEBUCKET
+      firebaseStorageBucket: process.env.FIREBASE_STORAGEBUCKET,
+      prodUsers: process.env.PROD_USERS,
+      devUsers: process.env.DEV_USERS,
+      prodMatches: process.env.PROD_MATCHES,
+      devMatches: process.env.DEV_MATCHES,
+      prodAnnouncements: process.env.PROD_ANNOUNCEMENTS,
+      devAnnouncements: process.env.DEV_ANNOUNCEMENTS,
+      prodFetchCards: process.env.PROD_FETCHCARDS,
+      devFetchCards: process.env.DEV_FETCHCARDS,
+      masterAccount: process.env.MASTER_ACCOUNT,
+      masterAccount2: process.env.MASTER_ACCOUNT2,
+      prodDeleteUser: process.env.PROD_DELETEUSER,
+      devDeleteUser: process.env.DEV_DELETEUSER,
+      masterId: process.env.MASTER_ID,
+      welcomeImage1: process.env.WELCOME_IMAGE1,
+      welcomeImage2: process.env.WELCOME_IMAGE2
+
     }
   }
 };

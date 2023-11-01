@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "mission-partner-app",
+    "dev": "mission-partner-app",
+    "prod": "mission-partner-app"
+  },
+  "targets": {},
+  "etags": {}
+}

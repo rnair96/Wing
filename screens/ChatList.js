@@ -4,17 +4,18 @@ import { onSnapshot, collection, query, where, doc, orderBy } from 'firebase/fir
 import { db } from '../firebase';
 import useAuth from "../hooks/useAuth";
 import ChatRow from './ChatRow';
+import * as Sentry from "@sentry/react";
 
 
-const ChatList = () => {
+const ChatList = ({profile}) => {
     const [ matches, setMatches ] = useState([]);
     const { user } = useAuth();
 
 
   useEffect(()=>{
-    onSnapshot(
+    const unsub = onSnapshot(
       query(
-        collection(db, "matches"), 
+        collection(db, global.matches), 
         where("userMatched", "array-contains", user.uid),
         orderBy("latest_message_timestamp", "desc")),
         ( snapshot ) => 
@@ -25,8 +26,17 @@ const ChatList = () => {
               ...doc.data(),
           }
             ))
+    ),
+    (error) => {
+      console.log("there was an error in chatlist snapshot", error)
+      Sentry.captureMessage(`error getting chatlist snapshot for ${user.uid}, ${error.message}`)
+
+    }
     )
-    )
+
+    return () => {
+      unsub();
+    };
   },[user]);
 
 
@@ -34,12 +44,12 @@ const ChatList = () => {
       <FlatList
       data = {matches}
       keyExtractor = {item => item.id}
-      renderItem = {({item}) => <ChatRow matchedDetails = {item}/>
+      renderItem = {({item}) => <ChatRow matchedDetails = {item} profile={profile}/>
     }/>
     ):
     (
       <View style ={{flexDirection:"row", marginVertical:"60%", justifyContent:"center"}}>
-        <Text style={{fontWeight:"bold"}}> No Matches At This Time </Text>
+        <Text style={{fontWeight:"bold" }}> No Matches At This Time </Text>
       </View>
     )
     

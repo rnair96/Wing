@@ -1,416 +1,148 @@
-import React, {useLayoutEffect, useRef, useState, useEffect} from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, ImageBackground, TurboModuleRegistry } from 'react-native'
-import { useNavigation } from '@react-navigation/core';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
+import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native'
+import { useNavigation, useRoute } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Entypo, Ionicons} from '@expo/vector-icons';
-import Swiper from "react-native-deck-swiper";
-import { getDocs, getDoc, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit } from "firebase/firestore";
+import { Ionicons } from '@expo/vector-icons';
+import { onSnapshot, doc, updateDoc, } from "firebase/firestore";
 import { db } from '../firebase';
-import generateId from '../lib/generateId'
-import getLocation from '../lib/getLocation';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
 import * as WebBrowser from 'expo-web-browser';
-import checkFlagged from '../lib/checkFlagged';
+import SwipeScreen from './SwipeScreen';
+import getLocation from '../lib/getLocation';
+import * as Sentry from "@sentry/react";
+
+
+
 
 WebBrowser.maybeCompleteAuthSession();
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const { user } = useAuth();
-    const swipeRef = useRef(null);
-    const [ profiles, setProfiles ] = useState([]);
-    const [ loggedProfile, setLoggedProfile ] = useState(null);
+    const [loggedProfile, setLoggedProfile] = useState(null);
+    const route = useRoute();
+    const [islocationChanged, setIsLocationChanged] = useState(false);
 
-    useLayoutEffect(()=>{
-            onSnapshot(doc(db, "users", user?.uid), (snapshot) => {
-                if (!snapshot.exists()){
-                    navigation.navigate("SetUp0");
-                } else if (!snapshot.data().mission){
-                    navigation.navigate("SetUp1");
-                } else if (!snapshot.data().accomplishments){
-                    navigation.navigate("SetUp2", {id: user.uid});
-                } 
-                
-                // else if (!snapshot.data().genderPreference){
-                //     navigation.navigate("Preferences", {id: user.uid});
-                // } 
-                
-                else {
-                    const info = 
-                        {
-                        id: snapshot.id,
-                        ...snapshot.data()
-                    }
-                    setLoggedProfile(info);
+
+    useLayoutEffect(() => {
+        const unsub = onSnapshot(doc(db, global.users, user?.uid), (snapshot) => {
+            if (!snapshot.exists()) {
+                navigation.navigate("SetUp0");
+            } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
+                navigation.navigate("SetUp1");
+            } else if (!snapshot.data().mission || !snapshot.data().values) {
+                navigation.navigate("SetUp3", { id: user.uid });
+            }
+
+            else {
+                const info =
+                {
+                    id: snapshot.id,
+                    ...snapshot.data()
                 }
+                setLoggedProfile(info);
+            }
+        },
+            (error) => {
+                console.log("there was an error in homescreen layout snapshot", error)
+                Sentry.captureMessage("error at getting user snapshot at homescreen ",user?.uid,", ", error.message)
+
+                
             }
         )
-        },[db]);
 
-    useEffect(()=>{
+        return () => {
+            unsub();
+        };
+
+    }, [db]);
+
+    useEffect(() => {
+        if (route.params?.refresh) {
+            // Perform the refresh operation here
+            console.log("refreshing profile")
+            const unsub = onSnapshot(doc(db, global.users, user?.uid), (snapshot) => {
+                const info =
+                {
+                    id: snapshot.id,
+                    ...snapshot.data()
+                }
+                setLoggedProfile(info);
+            },
+                (error) => {
+                    console.log("there was an error in refreshing loggedprofile", error)
+                    Sentry.captureMessage("error at loggedprofile refresh for ",user.uid,", ", error.message)
+                }
+            )
+
+            return () => {
+                unsub();
+            };
+        }
+    }, [route.params, islocationChanged])
+
+    useEffect(() => {
         (async () => {
-            if (Device.isDevice) {
-                const { status: existingStatus } = await Notifications.getPermissionsAsync();
-                let finalStatus = existingStatus;
-                console.log("status",finalStatus);
-                if (existingStatus !== 'granted') {
-                  const { status } = await Notifications.requestPermissionsAsync();
-                  finalStatus = status;
-                }
-            }
-
-
-            const location = await getLocation();
-            if(loggedProfile && location && loggedProfile?.location!== location){
-                console.log("Updating location")
-                updateDoc(doc(db, 'users', user.uid), {
-                    location: location
-                }).catch((error) => {
-                    console.log("could not refresh location");
-                });
-                }
-                })();
-    },[loggedProfile]);
-
-    useEffect(()=>{    
-        //check if user has any unresolved flags
-        if(loggedProfile && loggedProfile?.flags) {
-            const check = checkFlagged(loggedProfile.flags);
-            if(check){
-                const index = loggedProfile.flags.length - 1;
-                const flag = loggedProfile.flags[index];
-                const flag_number = index+1;
-                //trigger modal screen
-                navigation.navigate("Flagged",{flag, flag_number});
-            }
-
-        }
-        
-        //birthday checker
-        if (loggedProfile && loggedProfile?.birthdate){
-            const currentDate = new Date();
-            const birthDate = new Date(loggedProfile.birthdate)
-
-            if(currentDate.getMonth() === birthDate.getMonth() 
-            && currentDate.getDate() === birthDate.getDate()
-            && currentDate.getFullYear() !== loggedProfile.last_year_celebrated){
-                console.log("Updating age on birthday")
-                const newage = loggedProfile.age + 1;
-                updateDoc(doc(db, 'users', user.uid), {
-                    age: newage,
-                    last_year_celebrated: currentDate.getFullYear()
-                }).catch((error) => {
-                    console.log("could not update age on birthday");
-                });
-            }
-        }
-    },[loggedProfile]);
-
-
-    useEffect(()=>{
-        let unsub;
-
-        const fetchCards = async() => {
-
-            const passedIds = [];
-            await getDocs(collection(db,"users",user.uid,"passes")).then((snapshot) => {
-                snapshot.docs.map((doc) => passedIds.push(doc.id))
-            });
-
-            const swipedIds = [];
-            await getDocs(collection(db,"users",user.uid,"swipes")).then((snapshot) => {
-                snapshot.docs.map((doc) => swipedIds.push(doc.id))
-            });
-
-            const ageMin = loggedProfile?.ageMin ? loggedProfile.ageMin : 18;
-            
-            const ageMax = loggedProfile?.ageMax ? loggedProfile.ageMax : 100;
-
-            const genderPreference = loggedProfile?.genderPreference ? loggedProfile.genderPreference : "both";
-
-            const tagPreference = loggedProfile?.tagPreference ? loggedProfile.tagPreference : "All";
-
-            const passedUIds = passedIds?.length > 0 ? passedIds : ["test"];
-            const swipedUIds = swipedIds?.length > 0 ? swipedIds : ["test"];
-
-            unsub = onSnapshot(query(collection(db,"users"), where("id","not-in", [...passedUIds, ...swipedUIds, ...[user.uid]]), limit(10))
-            ,(snapshot) =>{
-                setProfiles(
-                    snapshot.docs
-                    .filter(
-                        (doc) => 
-                    (doc.data()?.images?.length > 2 && doc.data()?.mission && doc.data()?.job && doc.data()?.accomplishments) 
-                    && (doc.data().gender === genderPreference || genderPreference === "both") 
-                    && (doc.data().mission_tag === tagPreference || tagPreference === "All") 
-                    && (doc.data().age>=ageMin && doc.data().age<=ageMax)
-                    && (!doc.data()?.flags||!checkFlagged(doc.data().flags))//function to check that user has no unresolved flags
-                    )
-                    .map((doc) => (
-                    {
-                        id: doc.id,
-                        ...doc.data()
-                    }
-                    ))
-                    
-                )
-            })
-        }
-
-        fetchCards();
-        return unsub;
-
-    },[db, loggedProfile?.ageMin, loggedProfile?.ageMax, loggedProfile?.genderPreference, loggedProfile?.tagPreference]);
-
-    const swipeLeft = (cardIndex) => {
-        if (!profiles[cardIndex]){ return;}
-
-        console.log("you swiped left on", profiles[cardIndex].displayName);
-        setDoc(doc(db, 'users', user.uid, "passes", profiles[cardIndex].id), profiles[cardIndex]);
-    }
-
-    const swipeRight = async (cardIndex) => {
-        if (!profiles[cardIndex]){ return;}
-
-        const userSwiped = profiles[cardIndex]
-
-        getDoc(doc(db, 'users', userSwiped.id, "swipes", user.uid)).then(
-            documentSnapshot => {
-                if (documentSnapshot.exists()){
-                    //user matched, they swiped on you already
-                    console.log("MATCHED with", userSwiped.displayName);
-                    const timestamp = serverTimestamp();
-
-                    setDoc(doc(db, 'matches', generateId(user.uid, userSwiped.id)), {
-                        users: {
-                            [user.uid]: loggedProfile,
-                            [userSwiped.id]: userSwiped
-                        },
-                        userMatched: [user.uid, userSwiped.id],
-                        match_timestamp: timestamp,
-                        latest_message_timestamp: timestamp
-                    });
-
-                    navigation.navigate("Match", {loggedProfile, userSwiped});
-
-                } else {
-                    //first swipe of interaction
-                    console.log("you swiped right on",  userSwiped.displayName);
-
-                }
-                setDoc(doc(db, 'users', user.uid, "swipes",  userSwiped.id),  userSwiped);
-            }
-            
-        );
-    }
-
-  return (
-   <SafeAreaView style={{flex:1, backgroundColor:"black"}}>
-    {/* Header */}
-    <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", padding: 10}}>
-        <TouchableOpacity  onPress= {() => navigation.navigate("EditProfile", loggedProfile)}>
-            {/* left: 20, top:10 */}
-            <Ionicons name="person" size={30} color = "#00BFFF"/>
-        </TouchableOpacity>
-        <TouchableOpacity style={{top: 30}} onPress={() => navigation.navigate("Menu", loggedProfile)}>
-            <Image style={styles.iconcontainer} source={require("../images/logo.png")}/>
-        </TouchableOpacity>
-        {/* right:20, top:10 */}
-        <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
-            <Ionicons name="chatbubbles-sharp" size={30} color = "#00BFFF"/>
-        </TouchableOpacity>
-    </View>
-    {/* End of Header */}
-    {/* <FlagModal other_user={flag_user} isVisible={flag_modal}/> */}
-    {/* Cards */}
-    {profiles.length === 0 ? (
-        <View style={[styles.emptycardcontainer, {alignItems:"center", justifyContent:"space-evenly"}]}>
-            <Text style={{fontWeight:"bold", fontSize:20, color:"white"}}>No Wings Around... Try Again Later</Text>
-            <Image style={{height:300 ,width:300, borderRadius:150}} source={require("../images/island_plane.jpg")}/>
-            </View>
-    ):(
-        <View style={styles.cardscontainer}>
-        <Swiper cards={profiles}
-            ref={swipeRef} 
-            stackSize={5}
-            animateCardOpacity={true}
-            verticalSwipe={false}
-            cardIndex={0}
-            onSwipedAll={() => {
-                setProfiles([])}}
-                
-            onSwipedLeft={(cardIndex) => {
-                swipeLeft(cardIndex);
-                
-            }}
-            onSwipedRight={(cardIndex) => {
-                swipeRight(cardIndex);
-
-            }}
-            // onTapCard={(cardIndex) =>{
-            //     if(topLine <= 2){
-            //         setTopLine(topLine+1);
-            //         console.log("topline",topLine)
-            //     } else {
-            //         setTopLine(0);
-            //     }
-            // }}
-            overlayLabels={{
-                left: {
-                    title: "DENY",
-                    style: {
-                        label:{
-                            textAlign: "right",
-                            color: "red",
-                        },
-                    },
-                },
-                right: {
-                    title: "APPROVE",
-                    style: {
-                        label: {
-                            textAlign: "left",
-                            color: "#4DED30"
+            //check if given permission, user is in a new location, if so, update
+            if (loggedProfile && loggedProfile.location?.permission && loggedProfile.location.permission === "Always") {
+                console.log("getting new location")
+                const location = await getLocation();
+                if (location && (loggedProfile?.location.text !== location.text)) {
+                    console.log("Updating location")
+                    updateDoc(doc(db, global.users, user.uid), {
+                        location: {
+                            permission: "Always",
+                            ...location
                         }
-                    }
-                }
-            }}
+                    }).then(() => {
+                        setIsLocationChanged(true);
+                    }).catch((error) => {
+                        console.log("could not refresh location");
+                        Sentry.captureMessage("error at location refresh for ",user.uid,", ", error.message)
 
-            // pass swiperef to profile swipe to include swipe function , swipeRef: swipeRef
-            containerStyle={{backgroundColor:"transparent"}}
-            renderCard={(card)=> {
-                    return (
-                        <View key={card.id} style={styles.cardcontainer}>
-                        <TouchableOpacity onPress={()=>{navigation.navigate("ProfileSwipe", {card: card})}}>
-                        <View style={{alignItems:"center"}}>
-                        <Text style={{fontWeight:"bold", fontSize:15, padding: 10, color:"#00308F"}}>{card.mission}</Text>
-                        </View>   
-                        <Image style={{height:"75%" ,maxWidth:400}} source={{uri: card?.images[0]}}/>
-                        <View style={styles.infocontainer}>
-                            <View>
-                                <Text style={{fontWeight:"bold", fontSize:20}}>
-                                    {card.displayName}
-                                </Text>
-                                <Text>
-                                {card.job}
-                                </Text>
-                            </View>
-                            <View>
-                            <Text style={{fontWeight:"bold", fontSize:20}}>{card.age}</Text>
-                            <Text>{card.location}</Text>
-                            </View>
-                        </View>
-                        </TouchableOpacity>
-                        <View style={{flexDirection:"row", justifyContent:'center'}}>
-                        <TouchableOpacity style={styles.swipeButtonDown} onPress={()=>navigation.navigate("ProfileSwipe", {card: card})}>
-                                <Entypo name="arrow-bold-down" size={30} color="white"/>
-                        </TouchableOpacity>
-                        </View>
-                        
-                    </View>
-                    )
+                    });
                 }
             }
-        />
-    </View>
-    )}
 
-    <View style={{flexDirection:"row", justifyContent:"space-evenly"}}>
-        <TouchableOpacity style={styles.swipeButtonCross} onPress={()=> swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft(): console.log("no action")}>
-                <Entypo name="cross" size={24} color="red"/>
-        </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.ButtonFlag} onPress={()=> swipeRef && swipeRef?.current ? console.log("user is", swipeRef.current): console.log("no action")}>
-                            <Entypo name="flag" size={17} color="#CD7F32"/>
-        </TouchableOpacity> */}
-        <TouchableOpacity style={styles.swipeButtonHeart} onPress={()=>swipeRef && swipeRef?.current ? swipeRef.current.swipeRight(): console.log("no action")}>
-                <Entypo name="heart" size={24} color="green"/>
-        </TouchableOpacity>
-    </View>
-   </SafeAreaView>
-  )
+        })();
+    }, [loggedProfile]);
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+            {/* Header */}
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10 }}>
+                <TouchableOpacity
+                    // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }} 
+                    onPress={() => navigation.navigate("ToggleProfile", loggedProfile)}>
+                    {/* left: 20, top:10 */}
+                    <Ionicons name="person" size={30} color="#00BFFF" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{ borderRadius: 50, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }}
+                    onPress={() => navigation.navigate("Menu", loggedProfile)}>
+                    <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
+                </TouchableOpacity>
+                {/* right:20, top:10 */}
+                <TouchableOpacity
+                    // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white'}} 
+                    onPress={() => navigation.navigate("ToggleChat", loggedProfile)}>
+                    <Ionicons name="chatbubbles-sharp" size={30} color="#00BFFF" />
+                </TouchableOpacity>
+            </View>
+            {/* End of Header */}
+            {/* Cards */}
+            <SwipeScreen loggedProfile={loggedProfile} />
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
-   imagecontainer: {
-        width: 30,
-        height: 30,
-        borderRadius: 50
-    },
     iconcontainer: {
         height: 60,
         width: 60,
         borderRadius: 50,
-        bottom: 25,
         backgroundColor: "#00BFFF",
-        borderColor:"white",
-        borderWidth: 2
-    },
-    cardscontainer: {
-        flex: 1,
-        marginTop:-30,
-    },
-    cardcontainer: {
-        backgroundColor: "white",
-        height:"75%",
-        borderRadius: 20,
-        shadowColor:"#000",
-        shadowOffset: {
-            width: 0,
-            height: 1
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-        elevation:2
-    },
-    emptycardcontainer: {
-        height:"75%",
-    },
-    infocontainer: {
-        backgroundColor:"white",
-        paddingTop: 15, 
-        flexDirection:"row",
-        justifyContent: "space-between",
-        paddingHorizontal: 30
-    },
-    swipeButtonCross:{
-       bottom: 10,
-       width: 50,
-       height: 50,
-       borderRadius: 50,
-       alignItems: "center",
-       justifyContent: "center",
-       backgroundColor: "#FF5864"
-    },
-    swipeButtonHeart:{
-        bottom: 10,
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#32de84"
-     },
-    //  ButtonFlag:{
-    //     bottom: "40%",
-    //     width: 40,
-    //     height: 40,
-    //     borderRadius: 50,
-    //     alignItems: "center",
-    //     justifyContent: "center",
-    //     backgroundColor: "#FFBF00"
-    //  },
-     swipeButtonDown: {
-        bottom: "30%",
-        width: 60,
-        height: 60,
-        borderRadius: 50,
-        borderWidth:2,
-        borderColor:"white",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#00BFFF"
-      }
+    }
 });
 
 

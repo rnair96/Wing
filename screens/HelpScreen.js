@@ -14,7 +14,7 @@ function HelpScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
-  const {EMAILJS_KEY, EMAILJS_SERVICE, EMAILJS_TEMPLATE} = Constants.manifest.extra
+  const {emailJsKey, emailJsService, emailJsTemplate} = Constants.expoConfig.extra
 
 
   const incompleteForm = !subject||!message;
@@ -32,13 +32,13 @@ function HelpScreen() {
       message: message,
     };
 
-    emailjs.init(EMAILJS_KEY);//save keys somewhere private
+    emailjs.init(emailJsKey);
 
     emailjs.send(
-      EMAILJS_SERVICE,
-      EMAILJS_TEMPLATE,
+      emailJsService,
+      emailJsTemplate,
       templateParams,
-      EMAILJS_KEY
+      emailJsKey
     );
 
     setSubject('');
@@ -47,20 +47,23 @@ function HelpScreen() {
   };
 
   return (
-    <SafeAreaView style={{margin:20}}>
+    <View style={{backgroundColor:"white", height:"100%"}}>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={15}>
-    <Header style={{fontSize:20, fontWeight: "bold", padding:20}} title={"Help"}/>
+    <SafeAreaView style={{margin:20}}>
+    <Header title={"Help"}/>
+    </SafeAreaView>
     <View style={{height:"80%",justifyContent:"space-evenly", alignItems:"center"}}>
     <Text style={{fontSize:15, textAlign:"center"}}>
-        If you are experiencing an issue on this app or have any urgent questions, please submit this form. Our support team will reach out to you in 48 hours.
+        If you are experiencing an issue on this app or have any urgent questions, please submit this form. Our support team will reach out to you within 3 business days.
         </Text>
     <Text style={{fontWeight:'bold'}}>Subject:</Text>
     <TextInput
       value = {subject}
       onChangeText = {setSubject} 
       placeholder={'What is the Issue?'}
+      placeholderTextColor="#888888"
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     <Text style={{fontWeight:'bold'}}>Message:</Text>
     <TextInput
@@ -69,6 +72,7 @@ function HelpScreen() {
       numberOfLines={3}
       onChangeText = {setMessage} 
       placeholder={'Describe in detail the issue you are experiencing.'}
+      placeholderTextColor="#888888"
       style={{padding:10, borderWidth:2, borderColor:"grey", borderRadius:15}}/>
     <TouchableOpacity 
           disabled = {incompleteForm}
@@ -77,7 +81,7 @@ function HelpScreen() {
           <Text style={{textAlign:"center", color:"white", fontSize: 15, fontWeight:"bold"}}>Submit</Text>
       </TouchableOpacity>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -102,7 +106,7 @@ function HelpScreen() {
       </View>
       {/* </TouchableWithoutFeedback> */}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -110,7 +114,8 @@ const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'space-evenly',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)'
       },
       modalView: {
         backgroundColor: 'white',
@@ -120,9 +125,9 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
-          height: 2
+          height: 3
         },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.5,
         shadowRadius: 4,
         elevation: 5
       },
