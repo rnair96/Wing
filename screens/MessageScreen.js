@@ -1,11 +1,11 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, StyleSheet, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image } from 'react-native';
+import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image } from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import * as Sentry from "@sentry/react";

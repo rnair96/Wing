@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import RecieverMessage from './RecieverMessage';
-import { collection, serverTimestamp, updateDoc, doc, writeBatch } from 'firebase/firestore';
+import { collection, serverTimestamp, updateDoc, doc, writeBatch, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import { useNavigation, useRoute } from '@react-navigation/core';
