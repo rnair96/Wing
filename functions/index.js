@@ -109,6 +109,47 @@ const sendPushBatch = async (tokens, title, body, data) => {
 //     throw new Error("Invalid ID token");
 //   }
 // }
+const {google} = require("googleapis");
+const sheets = google.sheets("v4");
+
+exports.newUserSignup = functions.firestore
+    .document("users/{userId}")
+    .onCreate(async (snap, context) => {
+    // Retrieve the displayName and email from the document
+      const serviceAccount = functions.config().serviceaccount.key;
+
+
+      const jwtClient = new google.auth.JWT(
+          serviceAccount.client_email, // sheets email
+          null,
+          serviceAccount.private_key,
+          ["https://www.googleapis.com/auth/spreadsheets"],
+      );
+      const userData = snap.data();
+      const displayName = userData.displayName || "";
+      const email = userData.email || "";
+
+      try {
+      // Authenticate with the Google Sheets API
+        await jwtClient.authorize();
+
+        // Append data to the Google Sheet
+        const response = await sheets.spreadsheets.values.append({
+          auth: jwtClient,
+          spreadsheetId: functions.config().sheetid.key, // Replace with your actual spreadsheet ID
+          range: functions.config().sheetid.sheet, // Assumes you're appending to Sheet1
+          valueInputOption: "USER_ENTERED",
+          resource: {
+            values: [[displayName, email]], // Array of values to append
+          },
+        });
+
+        console.log("Added user to the sheet:", {displayName, email});
+        console.log("Append data:", response.data);
+      } catch (err) {
+        console.error("Error adding user to the sheet:", err);
+      }
+    });
 
 exports.onSwipe = functions.firestore
     .document("users/{userId}/swipes/{swipeId}")
@@ -201,13 +242,13 @@ exports.onSwipe = functions.firestore
 
       // push notification to swiped user
       if (swipedUser.notifications &&
-        swipedUser.notifications.messages &&
-        swipedUser.token && swipedUser.token !== "testing" &&
-        swipedUser.token !== "not_granted") {
+      swipedUser.notifications.messages &&
+      swipedUser.token && swipedUser.token !== "testing" &&
+      swipedUser.token !== "not_granted") {
         const messageDetails = {
           "requestDetails": request,
           "otherProfile": swipingUser,
-          // "profile": swipedUser,
+        // "profile": swipedUser,
         };
 
         console.log("sending push notification to swiped user", swipedUserId);
@@ -309,14 +350,14 @@ exports.onSwipeDev = functions.firestore
       const swipingUser = userSwipingSnapshot.data();
 
       if (swipedUser.notifications &&
-        swipedUser.notifications.messages &&
-        swipedUser.token && swipedUser.token !== "testing" &&
-        swipedUser.token !== "not_granted") {
+      swipedUser.notifications.messages &&
+      swipedUser.token && swipedUser.token !== "testing" &&
+      swipedUser.token !== "not_granted") {
       // add if user gave permission for request notifications
         const messageDetails = {
           "requestDetails": request,
           "otherProfile": swipingUser,
-          // "profile": swipedUser,
+        // "profile": swipedUser,
         };
 
         console.log("sending push notification to swiped user", swipedUserId);
