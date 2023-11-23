@@ -1,32 +1,42 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc, writeBatch, serverTimestamp, collection } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useNavigation } from '@react-navigation/core';
-import TagPicker from '../components/TagPicker';
+import { useNavigation, useRoute } from '@react-navigation/core';
+// import TagPicker from '../components/TagPicker';
 import Header from '../Header';
 import EulaModal from '../components/EulaModal';
 import ValuesList from '../components/ValuesList';
+import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 
 
 const SetUp3Screen = () => {
   const { user } = useAuth();
   const [mission, setMission] = useState(null);
-  const [missiontag, setMissionTag] = useState("Let's Have Fun");
+  const missiontag = "Let's Have Fun";
   const [eulaVisible, setEulaVisible] = useState(true);
   const [values, setValues] = useState([]);
+  const [prompt, setPrompt] = useState(null)
+  const [tagline, setTagline] = useState(null);
 
   const navigation = useNavigation();
   const incompleteform = !mission || !values || values.length < 3;
 
+  const route = useRoute();
+
 
   const updateUserProfile = () => {
     updateDoc(doc(db, global.users, user.uid), {
-      mission: mission,
-      mission_tag: missiontag,
+      // mission: mission,
+      // mission_tag: missiontag,
       values: values,
+      tagline: {
+        prompt: prompt,
+        tagline: tagline,
+        tag: missiontag
+      }
     }).then(() => {
       navigation.navigate("Home")
       navigation.navigate("WelcomeScreen")
@@ -47,6 +57,14 @@ const SetUp3Screen = () => {
     logout();
 
   }
+
+  useEffect(() => {
+    if (route.params?.tagline && route.params?.prompt) {
+      console.log("getting tagline")
+      setTagline(route.params.tagline);
+      setPrompt(route.params.prompt)
+    }
+  }, [route.params])
 
   //Use Header
 
@@ -73,11 +91,13 @@ const SetUp3Screen = () => {
             <Text style={{ ...styles.formTitle, fontSize: 20 }}>Nearly Done!</Text>
 
 
-            <Text style={styles.formTitle}>Define Your Mission {`(40 char max)`}</Text>
-            <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Hint: Think of a specific goal you want to achieve or activity you'd like to do with your Wing.</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
-              <Text style={styles.formTitle}>I Want To: </Text>
-              <TextInput
+            {/* <Text style={styles.formTitle}>Create Your Tagline {`(40 char max)`}</Text> */}
+            {/* <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>"Help me meet my future ex-wife", "I'm just here so I won't get fined", "New in town. Show me the local nightlife" </Text> */}
+            {/* <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Ex 2 - "I'm just here so I won't get fined" - Marshawn Lynch</Text> */}
+            {/* <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Ex 3 - Looking to meet my future ex-wife</Text> */}
+            {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}> */}
+            {/* <Text style={styles.formTitle}>I'm Here To: </Text> */}
+            {/* <TextInput
                 value={mission}
                 multiline
                 numberOfLines={2}
@@ -85,12 +105,32 @@ const SetUp3Screen = () => {
                 onChangeText={setMission}
                 placeholder={'Explore the local nightlife'}
                 placeholderTextColor={"grey"}
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginTop: 20, width: "55%", backgroundColor: "#E0E0E0" }} />
-            </View>
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginTop: 20, width: "55%", backgroundColor: "#E0E0E0" }} /> */}
+            {/* </View> */}
+            
+            {tagline && prompt? (
+              <View>
+              <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 5, borderRadius: 15, alignItems: "center" }}>
+                <Text>{prompt}</Text>
+                <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
+              </View>
+              <TouchableOpacity style={{bottom:85, borderRadius:50, borderWidth:1, alignItems:"center", justifyContent:"center", width:30, backgroundColor:"white"}} onPress={() => navigation.navigate("TaglinePrompt")}>
+                  <Entypo name="cross" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            ):(
+              <TouchableOpacity style={{ borderWidth: 1, borderColor: "blue", margin: 10, borderRadius: 10 }}>
+              <Button title={"Tap to Create Your Tagline"} onPress={() => navigation.navigate("TaglinePrompt")} />
+            </TouchableOpacity>
+            )
 
-            <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>
+            }
+            <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Hint: This is your hook to get a Wing's attention.</Text>
+
+
+            {/* <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>
             <Text style={{ fontSize: 12, margin: 2, color: "grey", padding: 15 }}>This will help to optimize matching you with the best Wing to assist your Mission.</Text>
-            <TagPicker tag={missiontag} setTag={setMissionTag} />
+            <TagPicker tag={missiontag} setTag={setMissionTag} /> */}
 
             <Text style={styles.formTitle}>Select Your 3 Top Values</Text>
             <ValuesList selectedValues={values} setSelectedValues={setValues} />

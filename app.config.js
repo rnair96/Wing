@@ -10,7 +10,7 @@ export default {
     userInterfaceStyle: "light",
     scheme: "com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2", // Assuming this is what you meant by scheme
     splash: {
-      image: "./assets/splash_wing.png",
+      image: "./assets/splash_wing_white.png",
       resizeMode: "contain",
       backgroundColor:"#00BFFF"
     },
