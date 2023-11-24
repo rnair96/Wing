@@ -246,10 +246,10 @@ const RequestMessageScreen = () => {
                                             <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>-- --</Text>
                                         </View>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                        {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
                                             <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>-- --</Text>
-                                        </View>
+                                        </View> */}
                                     </View>
                                 )}
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
