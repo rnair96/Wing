@@ -280,11 +280,13 @@ const SwipeScreen = ({ loggedProfile }) => {
                         renderCard={(card) => {
                             return (
                                 <View key={card.id} style={styles.cardcontainer}>
-                                    {card?.mission && card?.values && card?.values.length > 2 && card?.images && card?.images.length > 2 && card?.location? (
+                                    {card?.tagline && card?.values && card?.values.length > 2 && card?.images && card?.images.length > 2 && card?.location? (
                                         <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => { navigation.navigate("ProfileSwipe", { card: card }) }}>
-                                            <View style={{ alignItems: "center", bottom: 20 }}>
-                                                <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
-                                                <Text style={styles.text}>{card.mission}</Text>
+                                            <View style={{ alignItems: "center", bottom: 10 }}>
+                                                {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
+                                                <Text style={styles.text}>{card.mission}</Text> */}
+                                                <Text style={{ color: "white", margin: 10 }}>{card.tagline.prompt}</Text>
+                                                <Text style={styles.text}>{card.tagline.tagline}</Text>
                                             </View>
                                             <View style={{ justifyContent: "space-evenly", height: "65%", width: "100%", backgroundColor: "#002D62" }}>
                                                 <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
@@ -312,10 +314,10 @@ const SwipeScreen = ({ loggedProfile }) => {
                                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                             <Text style={styles.cardtext}>{card.medals[1] ? card.medals[1] : `-- --`}</Text>
                                                         </View>
-                                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
+                                                        {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                             <Text style={styles.cardtext}>{card.medals[2] ? card.medals[2] : `-- --`}</Text>
-                                                        </View>
+                                                        </View> */}
                                                     </View>
                                                 ) : (
                                                     <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
@@ -327,10 +329,10 @@ const SwipeScreen = ({ loggedProfile }) => {
                                                             <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                             <Text style={styles.cardtext}>-- --</Text>
                                                         </View>
-                                                        <View style={{ flexDirection: "row", padding: 10 }}>
+                                                        {/* <View style={{ flexDirection: "row", padding: 10 }}>
                                                             <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                             <Text style={styles.cardtext}>-- --</Text>
-                                                        </View>
+                                                        </View> */}
                                                     </View>
                                                 )}
 

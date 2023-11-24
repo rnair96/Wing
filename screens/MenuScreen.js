@@ -51,7 +51,7 @@ const MenuScreen = () => {
                 <Ionicons name="help" style={{ padding: 10 }} size={30} color="white" />
             </TouchableOpacity>
             <TouchableOpacity style={{shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor:"white", borderRadius:50}} onPress={() => navigation.navigate("Home")}>
-                <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
+                <Image style={styles.iconcontainer} source={require("../images/whitelogo.png")} />
             </TouchableOpacity>
         </SafeAreaView>
     )

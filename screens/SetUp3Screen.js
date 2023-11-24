@@ -22,7 +22,9 @@ const SetUp3Screen = () => {
   const [tagline, setTagline] = useState(null);
 
   const navigation = useNavigation();
-  const incompleteform = !mission || !values || values.length < 3;
+  // const incompleteform = !mission || !values || values.length < 3;
+  const incompleteform = !tagline || !values || values.length < 3;
+
 
   const route = useRoute();
 
@@ -109,12 +111,12 @@ const SetUp3Screen = () => {
             {/* </View> */}
             
             {tagline && prompt? (
-              <View>
-              <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 5, borderRadius: 15, alignItems: "center" }}>
+              <View style={{alignItems:"flex-end"}}>
+              <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 5, borderRadius: 15, alignItems: "center", top:20 }}>
                 <Text>{prompt}</Text>
                 <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
               </View>
-              <TouchableOpacity style={{bottom:85, borderRadius:50, borderWidth:1, alignItems:"center", justifyContent:"center", width:30, backgroundColor:"white"}} onPress={() => navigation.navigate("TaglinePrompt")}>
+              <TouchableOpacity style={{bottom:65, borderRadius:50, borderWidth:1, alignItems:"center", justifyContent:"center", width:30, backgroundColor:"white"}} onPress={() => navigation.navigate("TaglinePrompt")}>
                   <Entypo name="cross" size={24} color="black" />
                 </TouchableOpacity>
               </View>
@@ -125,7 +127,7 @@ const SetUp3Screen = () => {
             )
 
             }
-            <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Hint: This is your hook to get a Wing's attention.</Text>
+            <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Tip: Make it interesting. This is your hook to get a Wing's attention.</Text>
 
 
             {/* <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>

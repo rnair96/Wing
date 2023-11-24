@@ -94,13 +94,13 @@ const WelcomeScreen = () => {
       <ImageBackground
         resizeMode='cover'
         style={{ flex: 1 }}
-        source={require("../images/pilots2.jpeg")}>
+        source={require("../images/dudes_dancing.jpg")}>
         {!isTutorial ? (
-          <View style={{ alignItems: "center", justifyContent: "center", marginTop: "15%" }}>
+          <View style={{ alignItems: "center", justifyContent: "center", marginTop: "10%" }}>
             <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: "Times New Roman" }}> Welcome to</Text>
             <View style={{ flexDirection: "row" }}>
               <Text style={{ color: "#00308F", fontSize: 50, fontWeight: "bold", padding: 5, fontFamily: "Times New Roman" }}> Wing</Text>
-              <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00308F", top: 5, backgroundColor: "#00BFFF" }} source={require("../images/logo.png")} />
+              <Image style={{ height: 50, width: 50, top: 10}} source={require("../images/bluelogo.png")} />
             </View>
           </View>
         ) : (
@@ -119,8 +119,8 @@ const WelcomeScreen = () => {
 
             <View style={{ padding: 5 }}>
               <Text style={styles.boldtext}>Find a Wing.</Text>
-              <Text style={styles.boldtext}>Go On Missions.</Text>
-              <Text style={styles.boldtext}>Build Your Network.</Text>
+              <Text style={styles.boldtext}>Hit The Town.</Text>
+              <Text style={styles.boldtext}>Forget Dating Apps.</Text>
             </View>
 
             <TouchableOpacity style={{ borderRadius: 10, borderWidth: 3, padding: 10, top: 10, borderColor: "white" }} onPress={() => { setIsTutorial(true) }}>{/*, navigate to TutorialScreen */}

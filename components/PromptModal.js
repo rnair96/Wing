@@ -52,20 +52,20 @@ const PromptModal = ({ prompt, navigation, onClose }) => {
                         placeholderTextColor={"grey"}
                         style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", width: "95%", height: "30%" }}
                     />
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={onClose}
-                    >
-                        <Text style={{ color: "white" }}>Cancel</Text>
-                    </TouchableHighlight>
+                   
                     <TouchableHighlight
                         style={styles.button}
                         onPress={handleSave}
                     >
                         <Text style={{ color: "white" }}>Save</Text>
                     </TouchableHighlight>
-                    {/* <Button title="Cancel" onPress={onClose} /> */}
-                    {/* <Button title="Save" onPress={handleSave} /> */}
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={onClose}
+                    >
+                        <Text style={{ color: "white" }}>Cancel</Text>
+                    </TouchableHighlight>
+    
                 </View>
             </View>
         </Modal>

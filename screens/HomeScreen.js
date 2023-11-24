@@ -30,7 +30,7 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp0");
             } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
                 navigation.navigate("SetUp1");
-            } else if (!snapshot.data().mission || !snapshot.data().values) {
+            } else if (!snapshot.data().tagline || !snapshot.data().values) {
                 navigation.navigate("SetUp3", { id: user.uid });
             }
 
@@ -120,7 +120,7 @@ const HomeScreen = () => {
                 <TouchableOpacity
                     style={{ borderRadius: 50, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }}
                     onPress={() => navigation.navigate("Menu", loggedProfile)}>
-                    <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
+                    <Image style={styles.iconcontainer} source={require("../images/whitelogo.png")} />
                 </TouchableOpacity>
                 {/* right:20, top:10 */}
                 <TouchableOpacity

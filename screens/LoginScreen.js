@@ -49,13 +49,14 @@ const LoginScreen = () => {
                 resizeMode='cover'
                 style={[styles.container]}
                 source={require("../images/bizdudes.jpg")}>
+            {/* <View style={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}> */}
                 <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss}
                 >
                     <View style={{ height: "30%", justifyContent: "center", alignItems: "center", justifyContent: "space-evenly" }}>
                         <View style={{ flexDirection: "row", justifyContent: "center" }}>
                             <Text style={{ fontWeight: "bold", fontSize: 40, fontFamily: "Times New Roman", color:"#00308F" }}>Wing</Text>
-                            <Image style={styles.iconcontainer} source={require("../images/bluelogo.png")} />
+                            <Image style={styles.iconcontainer} source={require("../images/darkbluelogocorrect.png")} />
                         </View>
                         <View style={{height:"50%", top:"10%",justifyContent:"space-evenly"}}>
                         <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: "Times New Roman", color: "#00308F" }}>Find Your Wingman.</Text>
@@ -133,6 +134,7 @@ const LoginScreen = () => {
                 )}
 
                 {/* </KeyboardAvoidingView> */}
+                {/* </View> */}
             </ImageBackground>
         </SafeAreaView>
     )
@@ -140,7 +142,7 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     opacitycontainer: {
         backgroundColor:"#00308F",
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
         color:"white"
     },
     iconcontainer: {
-        left: 5,
+        // left: 5,
         height: 45,
         width: 45,
         // backgroundColor: "#00BFFF",

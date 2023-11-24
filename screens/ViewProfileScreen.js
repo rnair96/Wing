@@ -26,8 +26,8 @@ const ViewProfileScreen = ({ profile }) => {
 
                             <View style={styles.cardcontainer}>
                                 <View style={{ alignItems: "center", padding: 20 }}>
-                                    <Text style={{ color: "white", margin:5 }}>Mission: </Text>
-                                    <Text style={styles.text}>{card.item.mission}</Text>
+                                    <Text style={{ color: "white", margin:5 }}>{card.item.tagline.prompt}</Text>
+                                    <Text style={styles.text}>{card.item.tagline.tagline}</Text>
                                 </View>
                                 <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
                                     <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
@@ -55,10 +55,10 @@ const ViewProfileScreen = ({ profile }) => {
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.item.medals[1]?card.item.medals[1]:`-- --`}</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
+                                                    {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.item.medals[2]?card.item.medals[2]:`-- --`}</Text>
-                                                    </View>
+                                                    </View> */}
                                                 </View>
                                             ) : (
                                                 <View style={{ flexDirection: "column", width:"100%", alignItems:"center"}}>
@@ -70,10 +70,10 @@ const ViewProfileScreen = ({ profile }) => {
                                                         <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View>
-                                                    <View style={{ flexDirection: "row", padding: 10 }}>
+                                                    {/* <View style={{ flexDirection: "row", padding: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
-                                                    </View>
+                                                    </View> */}
                                                 </View>
                                             )}
                                     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
@@ -97,11 +97,11 @@ const ViewProfileScreen = ({ profile }) => {
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <View style={{ alignItems: "center" }}>
                                     <View style={{ flexDirection: "row", padding: 10 }}>
-                                        <Text style={{ padding: 10, color: "white" }}>Mission</Text>
+                                        <Text style={{ padding: 10, color: "white" }}>{card.item.tagline.prompt}</Text>
                                     </View>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>
-                                    <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.mission_tag) }}>
-                                        <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.mission_tag}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.tagline.tagline}</Text>
+                                    <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.tagline.tag) }}>
+                                        <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.tagline.tag}</Text>
                                     </View>
                                     <Image style={styles.imagecontainer} source={{ uri: card.item.images[0] }} />
                                 </View>

@@ -18,7 +18,7 @@ export const ProfileViewScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             {/* <View> */}
-            {(profile?.mission && profile?.images && profile?.images.length > 2 && profile?.values && profile?.values.length > 2 && profile?.location) ? (
+            {(profile?.tagline && profile?.images && profile?.images.length > 2 && profile?.values && profile?.values.length > 2 && profile?.location) ? (
                 <View>
                     <FlatList
                         data={[card]}
@@ -30,11 +30,11 @@ export const ProfileViewScreen = () => {
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                     <View style={{ alignItems: "center" }}>
                                         <View style={{ flexDirection: "row", padding: 10 }}>
-                                            <Text style={{ padding: 10, color: "white" }}>Mission</Text>
+                                            <Text style={{ padding: 10, color: "white" }}>{card.item.tagline.prompt}</Text>
                                         </View>
-                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>
-                                        <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.mission_tag) }}>
-                                            <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.mission_tag}</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.tagline.tagline}</Text>
+                                        <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.tagline.tagColor) }}>
+                                            <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.tagline.tag}</Text>
                                         </View>
                                         <Image style={styles.imagecontainer} source={{ uri: card.item.images[0] }} />
                                     </View>
