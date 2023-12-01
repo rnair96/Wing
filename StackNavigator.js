@@ -40,7 +40,6 @@ import ToggleChatScreen from './screens/ToggleChatScreen';
 import RequestMessageScreen from './screens/RequestMessageScreen';
 import AnnouncementScreen from './screens/AnnouncementScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
-import TaglinePromptScreen from './screens/TaglinePromptScreen';
 import * as Sentry from "@sentry/react";
 
 
@@ -209,14 +208,14 @@ const StackNavigator = () => {
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
             }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="TaglinePrompt"
             component={TaglinePromptScreen}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
               gestureDirection: 'vertical'
             }}
-          />
+          /> */}
           {/* </Stack.Group> */}
           {/* <Stack.Group screenOptions={{ presentation: "transparentModal" }}> */}
           {/* <Stack.Screen name="Match" component={MatchScreen} /> */}

@@ -10,16 +10,19 @@ import EulaModal from '../components/EulaModal';
 import ValuesList from '../components/ValuesList';
 import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
+import PromptModal from '../components/PromptModal';
+
 
 
 const SetUp3Screen = () => {
   const { user } = useAuth();
-  const [mission, setMission] = useState(null);
+  // const [mission, setMission] = useState(null);
   const missiontag = "Let's Have Fun";
   const [eulaVisible, setEulaVisible] = useState(true);
   const [values, setValues] = useState([]);
   const [prompt, setPrompt] = useState(null)
   const [tagline, setTagline] = useState(null);
+  const [isPromptVisible, setisPromptVisible] = useState(false);
 
   const navigation = useNavigation();
   // const incompleteform = !mission || !values || values.length < 3;
@@ -116,13 +119,13 @@ const SetUp3Screen = () => {
                 <Text>{prompt}</Text>
                 <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
               </View>
-              <TouchableOpacity style={{bottom:65, borderRadius:50, borderWidth:1, alignItems:"center", justifyContent:"center", width:30, backgroundColor:"white"}} onPress={() => navigation.navigate("TaglinePrompt")}>
+              <TouchableOpacity style={{bottom:65, borderRadius:50, borderWidth:1, alignItems:"center", justifyContent:"center", width:30, backgroundColor:"white"}} onPress={() => setisPromptVisible(true)}>
                   <Entypo name="cross" size={24} color="black" />
                 </TouchableOpacity>
               </View>
             ):(
               <TouchableOpacity style={{ borderWidth: 1, borderColor: "blue", margin: 10, borderRadius: 10 }}>
-              <Button title={"Tap to Create Your Tagline"} onPress={() => navigation.navigate("TaglinePrompt")} />
+              <Button title={"Tap to Create Your Tagline"} onPress={() => setisPromptVisible(true)} />
             </TouchableOpacity>
             )
 
@@ -146,6 +149,7 @@ const SetUp3Screen = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <PromptModal setTagline={setTagline} setPrompt={setPrompt} isVisible={isPromptVisible} setIsVisible={setisPromptVisible} />
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

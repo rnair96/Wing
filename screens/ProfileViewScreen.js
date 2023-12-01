@@ -33,9 +33,13 @@ export const ProfileViewScreen = () => {
                                             <Text style={{ padding: 10, color: "white" }}>{card.item.tagline.prompt}</Text>
                                         </View>
                                         <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.tagline.tagline}</Text>
-                                        <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.tagline.tagColor) }}>
-                                            <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.tagline.tag}</Text>
-                                        </View>
+
+                                        {card.item?.activity_tag && card.item.activity_tag !== "None" &&
+                                            <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.activity_tag) }}>
+                                                <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.activity_tag}</Text>
+                                            </View>
+                                        }
+
                                         <Image style={styles.imagecontainer} source={{ uri: card.item.images[0] }} />
                                     </View>
                                     <View style={styles.infocontainer}>
@@ -118,17 +122,37 @@ export const ProfileViewScreen = () => {
                                     </View>
                                 </View>
 
+                                {card.item?.prompts && card.item.prompts?.prompt1 && card.item.prompts?.tagline1 &&
+                                    <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                                        {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 20 }}> */}
+                                        <Text style={{ padding: 10, color: "white" }}>{card.item.prompts.prompt1}</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts.tagline1}</Text>
+                                        {/* </View> */}
+                                    </View>}
+
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                     <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                     <View style={{ flexDirection: "row", padding: 10 }}>
-                                        <Text style={{ padding: 10, color: "white" }}>Values</Text>
+                                        {card.item?.mission ?
+                                            (<Text style={{ padding: 10, color: "white" }}>Mission & Values</Text>) :
+                                            (<Text style={{ padding: 10, color: "white" }}>Values</Text>)}
                                     </View>
+                                    {card.item?.mission && <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>}
                                     <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[0]}</Text>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[1]}</Text>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[2]}</Text>
                                     </View>
                                 </View>
+
+                                {card.item?.prompts && card.item.prompts?.prompt2 && card.item.prompts?.tagline2 &&
+                                    <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                                        {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 10 }}> */}
+                                        <Text style={{ padding: 10, color: "white" }}>{card.item.prompts.prompt2}</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts.tagline2}</Text>
+                                        {/* </View> */}
+                                    </View>
+                                }
 
 
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>

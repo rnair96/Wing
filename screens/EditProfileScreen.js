@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, ScrollView, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -10,7 +10,9 @@ import TagPicker from '../components/TagPicker';
 import ValuesList from '../components/ValuesList';
 import ClassLevelPicker from '../components/ClassLevelPicker';
 import GradYearPicker from '../components/GradYearPicker';
+import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
+import PromptModal from '../components/PromptModal';
 
 
 
@@ -24,7 +26,16 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
   // const [newtoken, setNewToken] = useState("not_granted");
   const [mission, setMission] = useState(profile?.mission || null);
-  const [missiontag, setMissionTag] = useState(profile?.mission_tag || "Social");
+  const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
+
+  const [prompt, setPrompt] = useState(profile?.tagline?.prompt || null);
+  const [tagline, setTagline] = useState(profile?.tagline?.tagline || null);
+  const [prompt1, setPrompt1] = useState(profile?.prompts?.prompt1 || null);
+  const [tagline1, setTagline1] = useState(profile?.prompts?.tagline1 || null);
+  const [prompt2, setPrompt2] = useState(profile?.prompts?.prompt2 || null);
+  const [tagline2, setTagline2] = useState(profile?.prompts?.tagline2 || null);
+
+
   const [medal1, setMedal1] = useState(profile?.medals?.[0] || null);
   const [medal2, setMedal2] = useState(profile?.medals?.[1] || null);
   const [medal3, setMedal3] = useState(profile?.medals?.[2] || null);
@@ -41,22 +52,23 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [url2, setUrl2] = useState(profile?.images?.[1] || null);
   const [url3, setUrl3] = useState(profile?.images?.[2] || null);
   const [values, setValues] = useState(profile?.values || []);
+  const [isPromptVisible, setisPromptVisible] = useState(false);
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (profile && profile?.images && profile.images.length > 2){
-      if(url1 !== profile.images[0] || url2 !== profile.images[1] || url3 !== profile.images[2]){
+    if (profile && profile?.images && profile.images.length > 2) {
+      if (url1 !== profile.images[0] || url2 !== profile.images[1] || url3 !== profile.images[2]) {
         console.log("change to false")
         setIsEditSaved(false);
-      } else if (url1 === profile.images[0] && url2 === profile.images[1] && url3 === profile.images[2]){
+      } else if (url1 === profile.images[0] && url2 === profile.images[1] && url3 === profile.images[2]) {
         console.log("change to true");
         setIsEditSaved(true);
 
       }
     }
 
-  },[url1, url2, url3 ])
+  }, [url1, url2, url3])
 
 
 
@@ -64,15 +76,18 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
     let form;
 
     if (activeStudent) {
-      form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 || !school || !mission
+      // form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 || !school || !mission
+      form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !school || !tagline
     } else {
-      form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 ||!job || !mission
+      // form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 ||!job || !mission
+      form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !job || !tagline
+
 
     }
 
     setIncompleteForm(form);
 
-  }, [activeStudent, url1, url2, url3, location, values, school, mission, job])
+  }, [activeStudent, url1, url2, url3, location, values, school, tagline, job])//mission
 
 
 
@@ -90,7 +105,11 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
         school: school,
         hometown: hometown,
         mission: mission,
-        mission_tag: missiontag,
+        mission_tag: activitytag,
+        tagline: {
+          tagline: tagline,
+          prompt: prompt,
+        },
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
@@ -99,7 +118,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       }).then(() => {
         navigation.navigate("Home", { refresh: true });
       }).catch((error) => {
-        Sentry.captureMessage("error at edit profile student for ",user.uid,", ", error.message)
+        Sentry.captureMessage("error at edit profile student for ", user.uid, ", ", error.message)
         alert("Could not update profile. Try again later.")
         console.log(error.message)
       });
@@ -112,16 +131,20 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
         school: school,
         hometown: hometown,
         mission: mission,
-        mission_tag: missiontag,
+        activity_tag: activitytag,
+        tagline: {
+          tagline: tagline,
+          prompt: prompt,
+        },
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
         // token: newtoken,
         bio: bio
       }).then(() => {
-        navigation.navigate("Home",{ refresh: true });
+        navigation.navigate("Home", { refresh: true });
       }).catch((error) => {
-        Sentry.captureMessage("error at edit profile professional for ",user.uid,", ", error.message)
+        Sentry.captureMessage("error at edit profile professional for ", user.uid, ", ", error.message)
         alert("Could not update profile. Try again later.")
         console.log(error.message)
       });
@@ -177,7 +200,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               <View style={{ padding: 10, alignItems: "center" }}>
                 <Text style={styles.formTitle}>Location</Text>
                 {!profile?.location ?
-                    <Text>Must Turn on Location Services in Settings</Text>
+                  <Text>Must Turn on Location Services in Settings</Text>
                   : (
                     <Text>{location.text}</Text>
                   )}
@@ -190,7 +213,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setHometown}
                   placeholder={'Washington, DC'}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
               </View>
             </View>
 
@@ -224,7 +247,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setSchool}
                       placeholder={'i.e American University'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
                   </View>
 
                   <View style={{ margin: 20, padding: 10, justifyContent: "center", alignItems: "center" }}>
@@ -242,7 +265,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setJob}
                       placeholder={'What do you do?'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
                   </View>
 
                   <View style={{ padding: 10, alignItems: "center" }}>
@@ -252,7 +275,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setCompany}
                       placeholder={'Some Company Name'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
                   </View>
 
                   <View style={{ padding: 10, alignItems: "center" }}>
@@ -262,32 +285,76 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                       onChangeText={setSchool}
                       placeholder={'i.e American University'}
                       placeholderTextColor="#888888"
-                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+                      style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
                   </View>
                 </View>
               )}
 
 
-            <View style={{ flexDirection: "row", margin: 10, paddingBottom:10, paddingTop:10}}>
+            <View style={{ flexDirection: "row", paddingBottom: 10, paddingTop: 10 }}>
               <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
               <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
               <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
             </View>
 
-            <Text style={styles.formTitle}>Bio</Text>
-            <TextInput
-              value={bio}
-              multiline
-              numberOfLines={4}
-              maxLength={200}
-              onChangeText={setBio}
-              placeholder={'Share something fun about you i.e: I love kayaking and drinking beers by the river.'}
-              placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+            <Text style={{ ...styles.formTitle, textAlign: "center" }}>Set a Tag for Activities You'd Be Open To Do With A Wing</Text>
+            <TagPicker tag={activitytag} setTag={setActivityTag} />
+
+            <Text style={styles.formTitle}>Prompts</Text>
+            <Text style={{ color: "grey" }}>Must have at least one.</Text>
+            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
+              {tagline && prompt ? (
+                <View style={{ alignItems: "flex-end" }}>
+                  <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center" }}>
+                    <Text>{prompt}</Text>
+                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
+                  </View>
+                  <TouchableOpacity style={{ bottom: 95, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
+                    <Entypo name="cross" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
+                  <Button title={"Tap to Create Your Tagline"} onPress={() => setisPromptVisible(true)} />
+                </TouchableOpacity>
+              )}
+
+              {tagline1 && prompt1 ? (
+                <View style={{ alignItems: "flex-end" }}>
+                  <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center" }}>
+                    <Text>{prompt1}</Text>
+                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline1}</Text>
+                  </View>
+                  <TouchableOpacity style={{ bottom: 95, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
+                    <Entypo name="cross" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
+                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPromptVisible(true)} />
+                </TouchableOpacity>
+              )}
+
+              {tagline2 && prompt2 ? (
+                <View style={{ alignItems: "flex-end" }}>
+                  <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center" }}>
+                    <Text>{prompt2}</Text>
+                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline2}</Text>
+                  </View>
+                  <TouchableOpacity style={{ bottom: 95, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
+                    <Entypo name="cross" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
+                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPromptVisible(true)} />
+                </TouchableOpacity>
+              )}
+            </View>
 
 
             <Text style={styles.formTitle}>Accomplishments</Text>
-            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin:10}}>
+            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
                 <Text>1.</Text>
                 <TextInput
@@ -298,7 +365,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal1}
                   placeholder={"I completed a marathon."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -311,7 +378,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal2}
                   placeholder={"I won a hotdog eating contest"}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -324,7 +391,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal3}
                   placeholder={"I have a Youtube channel with 3k subscribers."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
               </View>
             </View>
 
@@ -332,32 +399,43 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             <Text style={styles.formTitle}>{`Values (Pick 3)`}</Text>
             <ValuesList selectedValues={values} setSelectedValues={setValues} />
 
-            <Text style={styles.formTitle}>Mission</Text>
+            <Text style={styles.formTitle}>A Life Mission or Short-Term Goal</Text>
+            <Text style={{ paddingBottom: 10, color: "grey" }}>A Pursuit That Has Nothing To Do With Dating</Text>
             <TextInput
               value={mission}
               multiline
               numberOfLines={2}
               maxLength={40}
               onChangeText={setMission}
-              placeholder={'Explore the local nightlife!'}
+              placeholder={'Write A Novel'}
               placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor:"#E0E0E0" }} />
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
 
-            <Text style={styles.formTitle}>Mission Category</Text>
-            <TagPicker tag={missiontag} setTag={setMissionTag} />
+            <Text style={styles.formTitle}>Bio</Text>
+            <Text style={{ paddingBottom: 10, color: "grey" }}>Share anything fun about you, i.e hobbies/passions</Text>
+            <TextInput
+              value={bio}
+              multiline
+              numberOfLines={4}
+              maxLength={200}
+              onChangeText={setBio}
+              placeholder={'I love kayaking and drinking beers by the river.'}
+              placeholderTextColor="#888888"
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
 
-            <View style={{ height: 150 }}>
+            < View style={{ height: 150 }}>
               <TouchableOpacity
                 disabled={incompleteForm}
-                style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }, incompleteForm ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
+                style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }, incompleteForm ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
                 onPress={updateUserProfile}>
-                <Text style={{ textAlign: "center",fontSize: 15, fontWeight: "bold", color:"white" }}>Update Profile</Text>
+                <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Update Profile</Text>
               </TouchableOpacity>
             </View>
           </View>
+          <PromptModal setTagline={setTagline} setPrompt={setPrompt} isVisible={isPromptVisible} setIsVisible={setisPromptVisible} />
         </ScrollView>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView >
   )
 }
 

@@ -14,19 +14,25 @@ const TagPicker = ({tag, setTag, all_boolean}) => {
           onValueChange={setTag}
         >
           <Picker.Item label="All" value="All" />
-          <Picker.Item label="Let's Have Fun (Social)" value="Let's Have Fun" />
-          <Picker.Item label="Let's Train (Fitness)" value="Let's Train" />
-          <Picker.Item label="Let's Build Something (Passions)" value="Let's Build Something" />
+          <Picker.Item label="Open for an Adventure" value="Open for an Adventure" />
+          <Picker.Item label="Open to Workout" value="Open to Workout" />
+          <Picker.Item label="Open for Building Something Cool" value="Open for Building Something Cool" />
+          <Picker.Item label="Open to Charitable Services" value="Open to Charitable Services" />
         </Picker>
         ):(
           <Picker
           style={{width:350, height:150}}
-          selectedValue={tag ? tag : "Let's Have Fun"}
+          selectedValue={tag ? tag : "None"}
           onValueChange={setTag}
+          itemStyle={{ fontSize: 13 }}
+
         >
-          <Picker.Item label="Let's Have Fun (Social)" value="Let's Have Fun" />
-          <Picker.Item label="Let's Train (Fitness)" value="Let's Train" />
-          <Picker.Item label="Let's Build Something (Passions)" value="Let's Build Something" />
+          <Picker.Item label="Let's Keep It Simple And Just Have Fun" value="None" />
+          <Picker.Item label="Tired Of The Usual. Let's Go On An Adventure!" value="Open for an Adventure" />
+          <Picker.Item label="No Pain, No Gain. Let's Workout" value="Open to Workout" />
+          <Picker.Item label="No More Dreaming. Let's Build Something Cool" value="Open to Build Something Cool" />
+          <Picker.Item label="Gotta Feed the Spirit. Let's Do A Service" value="Open to Charitable Services" />
+
         </Picker>
         )}
         

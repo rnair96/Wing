@@ -26,7 +26,7 @@ const ViewProfileScreen = ({ profile }) => {
 
                             <View style={styles.cardcontainer}>
                                 <View style={{ alignItems: "center", padding: 20 }}>
-                                    <Text style={{ color: "white", margin:5 }}>{card.item.tagline.prompt}</Text>
+                                    <Text style={{ color: "white", margin: 5 }}>{card.item.tagline.prompt}</Text>
                                     <Text style={styles.text}>{card.item.tagline.tagline}</Text>
                                 </View>
                                 <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
@@ -46,43 +46,43 @@ const ViewProfileScreen = ({ profile }) => {
                                         <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card.item?.images[0] }} />
                                     </View>
                                     {card.item?.medals && card.item?.medals.length > 0 ? (
-                                                <View style={{ flexDirection: "column", marginLeft:5 }}>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.item.medals[0]?card.item.medals[0]:`-- --`}</Text>
-                                                    </View>
-                                                    <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.item.medals[1]?card.item.medals[1]:`-- --`}</Text>
-                                                    </View>
-                                                    {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
+                                        <View style={{ flexDirection: "column", marginLeft: 5 }}>
+                                            <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>{card.item.medals[0] ? card.item.medals[0] : `-- --`}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>{card.item.medals[1] ? card.item.medals[1] : `-- --`}</Text>
+                                            </View>
+                                            {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>{card.item.medals[2]?card.item.medals[2]:`-- --`}</Text>
                                                     </View> */}
-                                                </View>
-                                            ) : (
-                                                <View style={{ flexDirection: "column", width:"100%", alignItems:"center"}}>
-                                                    <View style={{ flexDirection: "row", padding: 10}}>
-                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>-- --</Text>
-                                                    </View>
-                                                    <View style={{ flexDirection: "row", padding: 10}}>
-                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>-- --</Text>
-                                                    </View>
-                                                    {/* <View style={{ flexDirection: "row", padding: 10 }}>
+                                        </View>
+                                    ) : (
+                                        <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
+                                            <View style={{ flexDirection: "row", padding: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>-- --</Text>
+                                            </View>
+                                            <View style={{ flexDirection: "row", padding: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>-- --</Text>
+                                            </View>
+                                            {/* <View style={{ flexDirection: "row", padding: 10 }}>
                                                         <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                                         <Text style={styles.cardtext}>-- --</Text>
                                                     </View> */}
-                                                </View>
-                                            )}
+                                        </View>
+                                    )}
                                     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[0]}</Text>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[1]}</Text>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[2]}</Text>
                                     </View>
                                 </View>
-                                <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding:20 }}>
+                                <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
                                     <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
                                     <Text style={{ color: "white", fontSize: 15, left: 10 }}>{card.item.location.text}</Text>
                                 </View>
@@ -94,15 +94,19 @@ const ViewProfileScreen = ({ profile }) => {
                                 </View>
                             </View>
 
-                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <View style={{ alignItems: "center" }}>
                                     <View style={{ flexDirection: "row", padding: 10 }}>
                                         <Text style={{ padding: 10, color: "white" }}>{card.item.tagline.prompt}</Text>
                                     </View>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.tagline.tagline}</Text>
-                                    <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.tagline.tag) }}>
-                                        <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.tagline.tag}</Text>
-                                    </View>
+
+                                    {card.item?.activity_tag && card.item.activity_tag !== "None" &&
+                                        <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.activity_tag) }}>
+                                            <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.activity_tag}</Text>
+                                        </View>
+                                    }
+
                                     <Image style={styles.imagecontainer} source={{ uri: card.item.images[0] }} />
                                 </View>
                                 <View style={styles.infocontainer}>
@@ -116,79 +120,90 @@ const ViewProfileScreen = ({ profile }) => {
                                         <Text style={{ fontWeight: "bold", fontSize: 20, color: "white" }}>{card.item.age}</Text>
                                     </View>
                                 </View>
-                            {/* </View> */}
+                                {/* </View> */}
 
-                            <View style={{ margin: 10, alignItems: "center", paddingBottom: 10}}>
-                                {/* <Text style = {{padding: 10, color:"white"}}>Rank</Text>
+                                <View style={{ margin: 10, alignItems: "center", paddingBottom: 10 }}>
+                                    {/* <Text style = {{padding: 10, color:"white"}}>Rank</Text>
                     <View style={{flexDirection:"row", padding: 10}}>
                     <Image style={{height:50, width:70, borderRadius:50}} source={RankBadge.getBadge(card.item.rank)}/>
                     <Text style = {{padding: 10, fontSize: 25, color:"white", fontWeight:"bold"}}>{card.item.rank}</Text>
                     </View> */}
-                                <View style={{ padding: 10 }}>
-                                    <Text style={{ padding: 10, color: "white" }}>A Bit About Me</Text>
-                                </View>
-                                <View style={{ width: "95%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 20, flexDirection: "column", borderRadius: 10 }}>
-                                    {card.item?.university_student && card.item.university_student.status === "active" ?
-                                        (
-                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
-                                                <Image style={{ height: 25, width: 25 }} source={require("../images/book.png")} />
-                                                {card.item.university_student?.class_level && card.item.university_student?.class_level!==null && card.item.university_student?.class_level!=="" && card.item.university_student?.grad_year && card.item.university_student?.grad_year !== null && card.item.university_student?.grad_year !== ""?
+                                    <View style={{ padding: 10 }}>
+                                        <Text style={{ padding: 10, color: "white" }}>A Bit About Me</Text>
+                                    </View>
+                                    <View style={{ width: "95%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 20, flexDirection: "column", borderRadius: 10 }}>
+                                        {card.item?.university_student && card.item.university_student.status === "active" ?
+                                            (
+                                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                                    <Image style={{ height: 25, width: 25 }} source={require("../images/book.png")} />
+                                                    {card.item.university_student?.class_level && card.item.university_student?.class_level !== null && card.item.university_student?.class_level !== "" && card.item.university_student?.grad_year && card.item.university_student?.grad_year !== null && card.item.university_student?.grad_year !== "" ?
                                                         (
                                                             <View style={{ flexDirection: "row" }}>
-                                                            <Text style={{ color: "white" }}>{card.item.university_student.class_level}, </Text>
-                                                            <Text style={{ color: "white" }}>Class of {card.item.university_student.grad_year}</Text>
-                                                        </View>
+                                                                <Text style={{ color: "white" }}>{card.item.university_student.class_level}, </Text>
+                                                                <Text style={{ color: "white" }}>Class of {card.item.university_student.grad_year}</Text>
+                                                            </View>
                                                         ) : (
-                                                <View style={{ flexDirection: "row" }}>
-                                                    <Text style={{ color: "white" }}>Level --, </Text>
-                                                    <Text style={{ color: "white" }}>Class of --</Text>
-                                                </View>
+                                                            <View style={{ flexDirection: "row" }}>
+                                                                <Text style={{ color: "white" }}>Level --, </Text>
+                                                                <Text style={{ color: "white" }}>Class of --</Text>
+                                                            </View>
                                                         )}
-                                            </View>
-                                        ) : (
-                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
-                                                <Image style={{ height: 25, width: 25 }} source={require("../images/suitcase.png")} />
-                                                <View style={{ flexDirection: "row" }}>
-                                                    {card.item?.job && card.item.job !== null && card.item.job !== "" ?
-                                                        (
-                                                            <Text style={{ color: "white" }}>{card.item.job}</Text>
-                                                        ) : (
-                                                            <Text style={{ color: "white" }}>-- --</Text>
-                                                        )}
-                                                    {card.item?.company && card.item.company !== null && card.item.company !== "" &&
-                                                        <Text style={{ color: "white" }}> at {card.item.company}</Text>}
                                                 </View>
-                                            </View>
-                                        )}
-                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
-                                        <Image style={{ height: 20, width: 25 }} source={require("../images/grad_hat.png")} />
-                                        {card.item?.school && card.item.school !== null && card.item.school !== "" ?
-                                            (
-                                                <Text style={{ color: "white" }}>{card.item.school}</Text>
                                             ) : (
-                                                <Text style={{ color: "white" }}>-- --</Text>
+                                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                                    <Image style={{ height: 25, width: 25 }} source={require("../images/suitcase.png")} />
+                                                    <View style={{ flexDirection: "row" }}>
+                                                        {card.item?.job && card.item.job !== null && card.item.job !== "" ?
+                                                            (
+                                                                <Text style={{ color: "white" }}>{card.item.job}</Text>
+                                                            ) : (
+                                                                <Text style={{ color: "white" }}>-- --</Text>
+                                                            )}
+                                                        {card.item?.company && card.item.company !== null && card.item.company !== "" &&
+                                                            <Text style={{ color: "white" }}> at {card.item.company}</Text>}
+                                                    </View>
+                                                </View>
                                             )}
+                                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                            <Image style={{ height: 20, width: 25 }} source={require("../images/grad_hat.png")} />
+                                            {card.item?.school && card.item.school !== null && card.item.school !== "" ?
+                                                (
+                                                    <Text style={{ color: "white" }}>{card.item.school}</Text>
+                                                ) : (
+                                                    <Text style={{ color: "white" }}>-- --</Text>
+                                                )}
+                                        </View>
+                                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                            <Image style={{ height: 25, width: 25 }} source={require("../images/house.png")} />
+                                            {card.item?.hometown && card.item.hometown !== null && card.item.hometown !== "" ?
+                                                (
+                                                    <Text style={{ color: "white" }}>{card.item.hometown}</Text>
+                                                ) : (
+                                                    <Text style={{ color: "white" }}>-- --</Text>
+                                                )}
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
-                                        <Image style={{ height: 25, width: 25 }} source={require("../images/house.png")} />
-                                        {card.item?.hometown && card.item.hometown !== null && card.item.hometown !== "" ?
-                                            (
-                                                <Text style={{ color: "white" }}>{card.item.hometown}</Text>
-                                            ) : (
-                                                <Text style={{ color: "white" }}>-- --</Text>
-                                            )}
-                                    </View>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text>
+
                                 </View>
-                                <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text>
-
-                            </View>
                             </View>
 
-                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop:10 ,shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                            {card.item?.prompts && card.item.prompts?.prompt1 && card.item.prompts?.tagline1 &&
+                                <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                                    {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 20 }}> */}
+                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts.prompt1}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts.tagline1}</Text>
+                                    {/* </View> */}
+                                </View>}
+
+                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                 <View style={{ flexDirection: "row", padding: 10 }}>
-                                    <Text style={{ padding: 10, color: "white" }}>Values</Text>
+                                    {card.item?.mission ?
+                                        (<Text style={{ padding: 10, color: "white" }}>Mission & Values</Text>) :
+                                        (<Text style={{ padding: 10, color: "white" }}>Values</Text>)}
                                 </View>
+                                {card.item?.mission && <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>}
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[0]}</Text>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[1]}</Text>
@@ -196,45 +211,54 @@ const ViewProfileScreen = ({ profile }) => {
                                 </View>
                             </View>
 
-                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                            {card.item?.prompts && card.item.prompts?.prompt2 && card.item.prompts?.tagline2 &&
+                                <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                                    {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 10 }}> */}
+                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts.prompt2}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts.tagline2}</Text>
+                                    {/* </View> */}
+                                </View>
+                            }
+
+                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <Image style={{ margin: 10, ...styles.imagecontainer }} source={{ uri: card.item.images[2] }} />
                                 <View style={{ margin: 10, alignItems: "center", paddingBottom: 10 }}>
-                                <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
-                                {card.item?.medals && card.item.medals.length > 0 ? (
-                                <View style={{ flexDirection: "column" }}>
-                                    <View style={{ flexDirection: "row", padding: 10, margin:10, marginRight:20 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>{card.item.medals[0]?card.item.medals[0]:`-- --`}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", padding: 10, margin:10, marginRight:20 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>{card.item.medals[1]?card.item.medals[1]:`-- --`}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", padding: 10, margin:10, marginRight:20 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>{card.item.medals[2]?card.item.medals[2]:`-- --`}</Text>
-                                    </View>
+                                    <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
+                                    {card.item?.medals && card.item.medals.length > 0 ? (
+                                        <View style={{ flexDirection: "column" }}>
+                                            <View style={{ flexDirection: "row", padding: 10, margin: 10, marginRight: 20 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>{card.item.medals[0] ? card.item.medals[0] : `-- --`}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: "row", padding: 10, margin: 10, marginRight: 20 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>{card.item.medals[1] ? card.item.medals[1] : `-- --`}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: "row", padding: 10, margin: 10, marginRight: 20 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>{card.item.medals[2] ? card.item.medals[2] : `-- --`}</Text>
+                                            </View>
+                                        </View>
+                                    ) : (
+                                        <View style={{ flexDirection: "column" }}>
+                                            <View style={{ flexDirection: "row", padding: 10, margin: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>-- --</Text>
+                                            </View>
+                                            <View style={{ flexDirection: "row", padding: 10, margin: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>-- --</Text>
+                                            </View>
+                                            <View style={{ flexDirection: "row", padding: 10, margin: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                                <Text style={styles.cardtext}>-- --</Text>
+                                            </View>
+                                        </View>
+                                    )}
                                 </View>
-                                ):(
-                                    <View style={{ flexDirection: "column" }}>
-                                    <View style={{ flexDirection: "row", padding: 10, margin:10 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>-- --</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", padding: 10, margin:10 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>-- --</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", padding: 10, margin:10 }}>
-                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                        <Text style={styles.cardtext}>-- --</Text>
-                                    </View>
-                                </View>
-                                )}
-                            </View>
-                            {/* </View> */}
+                                {/* </View> */}
 
-                            {/* <View style={{ height: 200, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}> */}
+                                {/* <View style={{ height: 200, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}> */}
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center" }}>
                                     <View style={{ flexDirection: "column", padding: 10 }}>
                                         <Image style={{ height: 20, width: 10, alignSelf: "center" }} source={require("../images/droppin_white.png")} />
@@ -314,7 +338,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 22,
         fontWeight: 'bold',
-        margin:3
+        margin: 3
         // textAlign: 'center',
         // textShadowColor: 'rgba(0, 0, 0, 0.9)', // Shadow color
         // textShadowOffset: { width: -1, height: 1 },
