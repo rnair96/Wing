@@ -24,7 +24,11 @@ const PromptModal = ({ setTagline, setPrompt, isVisible, setIsVisible }) => {
         "What makes me a great Wing is that I...",
         
         "How I can guarantee my Wing and I have a great night is...",
-        
+
+        "My worst Wingman story is...",
+
+        "My best Wingman story is...",
+
         "Here\’s what the ladies love about me...",
         
         "Here\’s what the ladies hate about me...",

@@ -53,6 +53,10 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [url3, setUrl3] = useState(profile?.images?.[2] || null);
   const [values, setValues] = useState(profile?.values || []);
   const [isPromptVisible, setisPromptVisible] = useState(false);
+  const [isPrompt1Visible, setisPrompt1Visible] = useState(false);
+  const [isPrompt2Visible, setisPrompt2Visible] = useState(false);
+
+
 
   const navigation = useNavigation();
 
@@ -93,6 +97,28 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
   const updateUserProfile = () => {
 
+    let prompts = {};
+
+      if(tagline1){
+        prompts = {
+          ...prompts,
+          prompt1: prompt1,
+          tagline1: tagline1
+        }
+      }
+
+      if(tagline2){
+        prompts = {
+          ...prompts,
+          prompt2: prompt2,
+          tagline2: tagline2
+        }
+      }
+
+      if(!tagline1 && !tagline2){
+        prompts = null;
+      }
+
     if (activeStudent) { // change to one call of update doc, with different docs sent
 
       updateDoc(doc(db, global.users, user.uid), {
@@ -105,11 +131,12 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
         school: school,
         hometown: hometown,
         mission: mission,
-        mission_tag: activitytag,
+        activity_tag: activitytag,
         tagline: {
           tagline: tagline,
           prompt: prompt,
         },
+        prompts: prompts,
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
@@ -136,6 +163,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
           tagline: tagline,
           prompt: prompt,
         },
+        prompts: prompts,
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
@@ -302,7 +330,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
             <Text style={styles.formTitle}>Prompts</Text>
             <Text style={{ color: "grey" }}>Must have at least one.</Text>
-            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
+            <View style={{ alignItems:"center", flexDirection: "column", margin: 10 }}>
               {tagline && prompt ? (
                 <View style={{ alignItems: "flex-end" }}>
                   <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center" }}>
@@ -325,13 +353,13 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                     <Text>{prompt1}</Text>
                     <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline1}</Text>
                   </View>
-                  <TouchableOpacity style={{ bottom: 95, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
+                  <TouchableOpacity style={{ bottom: 110, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
                     <Entypo name="cross" size={24} color="black" />
                   </TouchableOpacity>
                 </View>
               ) : (
                 <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
-                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPromptVisible(true)} />
+                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPrompt1Visible(true)} />
                 </TouchableOpacity>
               )}
 
@@ -341,13 +369,13 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                     <Text>{prompt2}</Text>
                     <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline2}</Text>
                   </View>
-                  <TouchableOpacity style={{ bottom: 95, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
+                  <TouchableOpacity style={{ bottom: 80, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
                     <Entypo name="cross" size={24} color="black" />
                   </TouchableOpacity>
                 </View>
               ) : (
                 <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
-                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPromptVisible(true)} />
+                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPrompt2Visible(true)} />
                 </TouchableOpacity>
               )}
             </View>
@@ -433,6 +461,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
           </View>
           <PromptModal setTagline={setTagline} setPrompt={setPrompt} isVisible={isPromptVisible} setIsVisible={setisPromptVisible} />
+          <PromptModal setTagline={setTagline1} setPrompt={setPrompt1} isVisible={isPrompt1Visible} setIsVisible={setisPrompt1Visible} />
+          <PromptModal setTagline={setTagline2} setPrompt={setPrompt2} isVisible={isPrompt2Visible} setIsVisible={setisPrompt2Visible} />
+
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView >
