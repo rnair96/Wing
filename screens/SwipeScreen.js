@@ -280,13 +280,13 @@ const SwipeScreen = ({ loggedProfile }) => {
                         renderCard={(card) => {
                             return (
                                 <View key={card.id} style={styles.cardcontainer}>
-                                    {card?.tagline && card?.values && card?.values.length > 2 && card?.images && card?.images.length > 2 && card?.location? (
+                                    {card?.prompts && card?.prompts.length > 0 && card?.values && card?.values.length > 2 && card?.images && card?.images.length > 2 && card?.location? (
                                         <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => { navigation.navigate("ProfileSwipe", { card: card }) }}>
                                             <View style={{ alignItems: "center", bottom: 10 }}>
                                                 {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
                                                 <Text style={styles.text}>{card.mission}</Text> */}
-                                                <Text style={{ color: "white", margin: 10 }}>{card.tagline.prompt}</Text>
-                                                <Text style={styles.text}>{card.tagline.tagline}</Text>
+                                                <Text style={{ color: "white", margin: 10 }}>{card.prompts[0].prompt}</Text>
+                                                <Text style={styles.text}>{card.prompts[0].tagline}</Text>
                                             </View>
                                             <View style={{ justifyContent: "space-evenly", height: "65%", width: "100%", backgroundColor: "#002D62" }}>
                                                 <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>

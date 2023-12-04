@@ -28,12 +28,12 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [mission, setMission] = useState(profile?.mission || null);
   const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
 
-  const [prompt, setPrompt] = useState(profile?.tagline?.prompt || null);
-  const [tagline, setTagline] = useState(profile?.tagline?.tagline || null);
-  const [prompt1, setPrompt1] = useState(profile?.prompts?.prompt1 || null);
-  const [tagline1, setTagline1] = useState(profile?.prompts?.tagline1 || null);
-  const [prompt2, setPrompt2] = useState(profile?.prompts?.prompt2 || null);
-  const [tagline2, setTagline2] = useState(profile?.prompts?.tagline2 || null);
+  const [prompt, setPrompt] = useState(profile?.prompts?.[0]?.prompt || null);
+  const [tagline, setTagline] = useState(profile?.prompts?.[0]?.tagline || null);
+  const [prompt1, setPrompt1] = useState(profile?.prompts?.[1]?.prompt || null);
+  const [tagline1, setTagline1] = useState(profile?.prompts?.[1]?.tagline || null);
+  const [prompt2, setPrompt2] = useState(profile?.prompts?.[2]?.prompt || null);
+  const [tagline2, setTagline2] = useState(profile?.prompts?.[2]?.tagline || null);
 
 
   const [medal1, setMedal1] = useState(profile?.medals?.[0] || null);
@@ -94,30 +94,45 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   }, [activeStudent, url1, url2, url3, location, values, school, tagline, job])//mission
 
 
+  const deletePrompt = (setTag, setPromp) => {
+    setTag(null);
+    setPromp(null);
+  }
+
+
 
   const updateUserProfile = () => {
 
-    let prompts = {};
+    let promptObject, promptObject1, promptObject2;
 
-      if(tagline1){
-        prompts = {
-          ...prompts,
-          prompt1: prompt1,
-          tagline1: tagline1
-        }
+    if(tagline){
+      promptObject = {
+        prompt: prompt,
+        tagline: tagline
       }
+    } else {
+      alert("Must have at least first prompt set.")
+      return;
+    }
 
-      if(tagline2){
-        prompts = {
-          ...prompts,
-          prompt2: prompt2,
-          tagline2: tagline2
-        }
+    if (tagline1){
+      promptObject1 = {
+        prompt: prompt1,
+        tagline: tagline1
       }
+    }else {
+      promptObject1 = null;
+    }
 
-      if(!tagline1 && !tagline2){
-        prompts = null;
+    if(tagline2){
+      promptObject2 = {
+        prompt: prompt2,
+        tagline: tagline2
       }
+    } else {
+      promptObject2 = null;
+    }
+
 
     if (activeStudent) { // change to one call of update doc, with different docs sent
 
@@ -132,11 +147,11 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
         hometown: hometown,
         mission: mission,
         activity_tag: activitytag,
-        tagline: {
-          tagline: tagline,
-          prompt: prompt,
-        },
-        prompts: prompts,
+        // tagline: {
+        //   tagline: tagline,
+        //   prompt: prompt,
+        // },
+        prompts: [promptObject, promptObject1, promptObject2],
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
@@ -159,11 +174,11 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
         hometown: hometown,
         mission: mission,
         activity_tag: activitytag,
-        tagline: {
-          tagline: tagline,
-          prompt: prompt,
-        },
-        prompts: prompts,
+        // tagline: {
+        //   tagline: tagline,
+        //   prompt: prompt,
+        // },
+        prompts: [promptObject, promptObject1, promptObject2],
         medals: [medal1, medal2, medal3],
         values: values,
         location: location,
@@ -333,49 +348,49 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             <View style={{ alignItems:"center", flexDirection: "column", margin: 10 }}>
               {tagline && prompt ? (
                 <View style={{ alignItems: "flex-end" }}>
-                  <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center" }}>
+                  <TouchableOpacity style={{ left:8, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white", zIndex:1 }} onPress={() => setisPromptVisible(true)}>
+                    <Entypo name="cross" size={24} color="black" />
+                  </TouchableOpacity>
+                  <View style={{ bottom:10, backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center", zIndex:0 }}>
                     <Text>{prompt}</Text>
                     <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
                   </View>
-                  <TouchableOpacity style={{ bottom: 95, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
-                    <Entypo name="cross" size={24} color="black" />
-                  </TouchableOpacity>
                 </View>
               ) : (
-                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
-                  <Button title={"Tap to Create Your Tagline"} onPress={() => setisPromptVisible(true)} />
+                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }} onPress={() => setisPromptVisible(true)}>
+                  <Text style={{color:"#00BFFF", fontSize:20, padding:5}}>Tap to Add A Prompt</Text>
                 </TouchableOpacity>
               )}
 
               {tagline1 && prompt1 ? (
                 <View style={{ alignItems: "flex-end" }}>
-                  <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center" }}>
+                  <TouchableOpacity style={{ left:8, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white", zIndex:1}} onPress={() => deletePrompt(setTagline1, setPrompt1)}>
+                    <Entypo name="cross" size={24} color="black" />
+                  </TouchableOpacity>
+                  <View style={{ bottom:10, backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center", zIndex:0}}>
                     <Text>{prompt1}</Text>
                     <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline1}</Text>
                   </View>
-                  <TouchableOpacity style={{ bottom: 110, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
-                    <Entypo name="cross" size={24} color="black" />
-                  </TouchableOpacity>
                 </View>
               ) : (
-                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
-                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPrompt1Visible(true)} />
+                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }} onPress={() => setisPrompt1Visible(true)}>
+                  <Text style={{color:"#00BFFF", fontSize:20, padding:5}}>Tap to Add A Prompt</Text>
                 </TouchableOpacity>
               )}
 
               {tagline2 && prompt2 ? (
                 <View style={{ alignItems: "flex-end" }}>
-                  <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center" }}>
+                  <TouchableOpacity style={{left:8, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white", zIndex:1}} onPress={() => deletePrompt(setTagline2, setPrompt2)}>
+                    <Entypo name="cross" size={24} color="black" />
+                  </TouchableOpacity>
+                  <View style={{ bottom:10, backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center", zIndex:0}}>
                     <Text>{prompt2}</Text>
                     <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline2}</Text>
                   </View>
-                  <TouchableOpacity style={{ bottom: 80, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white" }} onPress={() => setisPromptVisible(true)}>
-                    <Entypo name="cross" size={24} color="black" />
-                  </TouchableOpacity>
                 </View>
               ) : (
-                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }}>
-                  <Button title={"Tap to Add A Prompt"} onPress={() => setisPrompt2Visible(true)} />
+                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }} onPress={() => setisPrompt2Visible(true)} >
+                  <Text style={{color:"#00BFFF", fontSize:20, padding:5}}>Tap to Add A Prompt</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -424,7 +439,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
 
 
-            <Text style={styles.formTitle}>{`Values (Pick 3)`}</Text>
+            <Text style={styles.formTitle}>Values</Text>
+            <Text style={{ color: "grey", textAlign:"center" }}>Pick Three. This helps us find the Wings that will best match you.</Text>
             <ValuesList selectedValues={values} setSelectedValues={setValues} />
 
             <Text style={styles.formTitle}>A Life Mission or Short-Term Goal</Text>
@@ -461,8 +477,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
           </View>
           <PromptModal setTagline={setTagline} setPrompt={setPrompt} isVisible={isPromptVisible} setIsVisible={setisPromptVisible} />
-          <PromptModal setTagline={setTagline1} setPrompt={setPrompt1} isVisible={isPrompt1Visible} setIsVisible={setisPrompt1Visible} />
-          <PromptModal setTagline={setTagline2} setPrompt={setPrompt2} isVisible={isPrompt2Visible} setIsVisible={setisPrompt2Visible} />
+          <PromptModal setTagline={setTagline1} setPrompt={setPrompt1} isVisible={isPrompt1Visible} setIsVisible={setisPrompt1Visible} charLimit={150}/>
+          <PromptModal setTagline={setTagline2} setPrompt={setPrompt2} isVisible={isPrompt2Visible} setIsVisible={setisPrompt2Visible} charLimit={150}/>
 
         </ScrollView>
       </TouchableWithoutFeedback>

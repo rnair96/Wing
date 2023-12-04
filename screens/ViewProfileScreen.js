@@ -26,8 +26,8 @@ const ViewProfileScreen = ({ profile }) => {
 
                             <View style={styles.cardcontainer}>
                                 <View style={{ alignItems: "center", padding: 20 }}>
-                                    <Text style={{ color: "white", margin: 5 }}>{card.item.tagline.prompt}</Text>
-                                    <Text style={styles.text}>{card.item.tagline.tagline}</Text>
+                                    <Text style={{ color: "white", margin: 5 }}>{card.item.prompts[0].prompt}</Text>
+                                    <Text style={styles.text}>{card.item.prompts[0].tagline}</Text>
                                 </View>
                                 <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
                                     <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
@@ -97,9 +97,9 @@ const ViewProfileScreen = ({ profile }) => {
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <View style={{ alignItems: "center" }}>
                                     <View style={{ flexDirection: "row", padding: 10 }}>
-                                        <Text style={{ padding: 10, color: "white" }}>{card.item.tagline.prompt}</Text>
+                                        <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[0].prompt}</Text>
                                     </View>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.tagline.tagline}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[0].tagline}</Text>
 
                                     {card.item?.activity_tag && card.item.activity_tag !== "None" &&
                                         <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.activity_tag) }}>
@@ -188,11 +188,11 @@ const ViewProfileScreen = ({ profile }) => {
                                 </View>
                             </View>
 
-                            {card.item?.prompts && card.item.prompts?.prompt1 && card.item.prompts?.tagline1 &&
+                            {card.item?.prompts && card.item.prompts.length > 1 && card.item.prompts[1]!== null && card.item.prompts[1]?.prompt && card.item.prompts[1]?.tagline &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                     {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 20 }}> */}
-                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts.prompt1}</Text>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts.tagline1}</Text>
+                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[1].prompt}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[1].tagline}</Text>
                                     {/* </View> */}
                                 </View>}
 
@@ -211,11 +211,11 @@ const ViewProfileScreen = ({ profile }) => {
                                 </View>
                             </View>
 
-                            {card.item?.prompts && card.item.prompts?.prompt2 && card.item.prompts?.tagline2 &&
+                            {card.item?.prompts && card.item.prompts.length > 2 && card.item.prompts[2]!== null && card.item.prompts[2]?.prompt && card.item.prompts[2]?.tagline &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                     {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 10 }}> */}
-                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts.prompt2}</Text>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts.tagline2}</Text>
+                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[2].prompt}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[2].tagline}</Text>
                                     {/* </View> */}
                                 </View>
                             }

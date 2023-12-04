@@ -197,13 +197,13 @@ const RequestMessageScreen = () => {
 
                     </View>
 
-                    {otherProfile && otherProfile?.tagline && otherProfile?.values && otherProfile?.values.length > 2 && otherProfile?.images && otherProfile?.images.length > 2 && otherProfile?.location? (
+                    {otherProfile && otherProfile?.prompts && otherProfile?.prompts.length>0 && otherProfile?.values && otherProfile?.values.length > 2 && otherProfile?.images && otherProfile?.images.length > 2 && otherProfile?.location? (
                         <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileView", { profile: otherProfile })}>
                             <View style={{ alignItems: "center", padding: 10 }}>
                                                 {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
                                                 <Text style={styles.text}>{card.mission}</Text> */}
-                                                <Text style={{ color: "white", margin: 5 }}>{otherProfile.tagline.prompt}</Text>
-                                                <Text style={styles.text}>{otherProfile.tagline.tagline}</Text>
+                                                <Text style={{ color: "white", margin: 5 }}>{otherProfile.prompts[0].prompt}</Text>
+                                                <Text style={styles.text}>{otherProfile.prompts[0].tagline}</Text>
                                             </View>
                             <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
                                 <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>

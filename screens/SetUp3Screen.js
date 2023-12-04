@@ -16,8 +16,6 @@ import PromptModal from '../components/PromptModal';
 
 const SetUp3Screen = () => {
   const { user } = useAuth();
-  // const [mission, setMission] = useState(null);
-  const missiontag = "Let's Have Fun";
   const [eulaVisible, setEulaVisible] = useState(true);
   const [values, setValues] = useState([]);
   const [prompt, setPrompt] = useState(null)
@@ -33,15 +31,18 @@ const SetUp3Screen = () => {
 
 
   const updateUserProfile = () => {
+    const promptObject = {
+      prompt: prompt,
+      tagline: tagline
+    }
+
     updateDoc(doc(db, global.users, user.uid), {
-      // mission: mission,
-      // mission_tag: missiontag,
       values: values,
-      tagline: {
-        prompt: prompt,
-        tagline: tagline,
-        tag: missiontag
-      }
+      // tagline: {
+      //   prompt: prompt,
+      //   tagline: tagline,
+      // }
+      prompts: [promptObject, null, null]
     }).then(() => {
       navigation.navigate("Home")
       navigation.navigate("WelcomeScreen")
@@ -63,13 +64,13 @@ const SetUp3Screen = () => {
 
   }
 
-  useEffect(() => {
-    if (route.params?.tagline && route.params?.prompt) {
-      console.log("getting tagline")
-      setTagline(route.params.tagline);
-      setPrompt(route.params.prompt)
-    }
-  }, [route.params])
+  // useEffect(() => {
+  //   if (route.params?.tagline && route.params?.prompt) {
+  //     console.log("getting tagline")
+  //     setTagline(route.params.tagline);
+  //     setPrompt(route.params.prompt)
+  //   }
+  // }, [route.params])
 
   //Use Header
 
@@ -112,21 +113,21 @@ const SetUp3Screen = () => {
                 placeholderTextColor={"grey"}
                 style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginTop: 20, width: "55%", backgroundColor: "#E0E0E0" }} /> */}
             {/* </View> */}
-            
-            {tagline && prompt? (
-              <View style={{alignItems:"flex-end"}}>
-              <View style={{ backgroundColor: "#E0E0E0", padding: 10, margin: 5, borderRadius: 15, alignItems: "center", top:20 }}>
-                <Text>{prompt}</Text>
-                <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
-              </View>
-              <TouchableOpacity style={{bottom:65, borderRadius:50, borderWidth:1, alignItems:"center", justifyContent:"center", width:30, backgroundColor:"white"}} onPress={() => setisPromptVisible(true)}>
+
+            {tagline && prompt ? (
+              <View style={{ alignItems: "flex-end" }}>
+                <TouchableOpacity style={{ left: 8, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white", zIndex: 1 }} onPress={() => setisPromptVisible(true)}>
                   <Entypo name="cross" size={24} color="black" />
                 </TouchableOpacity>
+                <View style={{ bottom: 10, backgroundColor: "#E0E0E0", padding: 10, margin: 5, borderRadius: 15, alignItems: "center", top: 20, zIndex: 0 }}>
+                  <Text>{prompt}</Text>
+                  <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
+                </View>
               </View>
-            ):(
-              <TouchableOpacity style={{ borderWidth: 1, borderColor: "blue", margin: 10, borderRadius: 10 }}>
-              <Button title={"Tap to Create Your Tagline"} onPress={() => setisPromptVisible(true)} />
-            </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={{ borderWidth: 1, borderColor: "blue", margin: 10, borderRadius: 10 }} onPress={() => setisPromptVisible(true)}>
+                <Text style={{ color: "#00BFFF", fontSize: 20, padding: 5 }}>Tap to Add A Prompt</Text>
+              </TouchableOpacity>
             )
 
             }

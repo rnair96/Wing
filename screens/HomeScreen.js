@@ -30,7 +30,7 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp0");
             } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
                 navigation.navigate("SetUp1");
-            } else if (!snapshot.data().tagline || !snapshot.data().values) {
+            } else if (!snapshot.data().prompts || !snapshot.data().values) {
                 navigation.navigate("SetUp3", { id: user.uid });
             }
 
