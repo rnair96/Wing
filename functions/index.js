@@ -91,6 +91,30 @@ const sendPushBatch = async (tokens, title, body, data) => {
     return null;
   }
 };
+function createCompareFunction(currentUser) {
+  const currentUserValues = currentUser.values;
+  const currentUserTag = currentUser.activity_tag? currentUser.activity_tag: null;
+
+  return function compareUsers(user1, user2) {
+    // Count the matching values for user1
+    const matchingValuesUser1 = user1.values.filter((value) =>
+      currentUserValues.includes(value)).length;
+
+    // Count the matching values for user2
+    const matchingValuesUser2 = user2.values.filter((value) =>
+      currentUserValues.includes(value)).length;
+
+    if ((matchingValuesUser1 === matchingValuesUser2) && currentUserTag) {
+      const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
+      const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
+
+      return user2ActivityMatch - user1ActivityMatch;
+    }
+
+    // Sort in descending order of matching values
+    return matchingValuesUser2 - matchingValuesUser1;
+  };
+}
 
 // async function verifyToken(req) {
 //   const authHeader = req.headers.authorization || "";
@@ -504,9 +528,15 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
 
+    const compareUsers = createCompareFunction(user);
+
+    // sort users by matching values
+    console.log("sorting profiles by values and tags");
+    const sortedUsers = completeUsers.sort(compareUsers);
+
     console.log("limiting to 30 profiles or less");
-    const finalUsers = completeUsers.length > 30 ?
-      completeUsers.slice(0, 30) : completeUsers;
+    const finalUsers = sortedUsers.length > 30 ?
+      sortedUsers.slice(0, 30) : sortedUsers;
 
     res.status(200).json(finalUsers);
   } catch (error) {
@@ -559,12 +589,13 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
           .where("university_student.status", "==", "active");
     }
 
+    // no longer needed
     // Further filter by tag preference
-    if (user.preferences && user.preferences.tag !== "All") {
-      console.log("filtering for users with mission tag", user.preferences.tag);
-      matchingUsersQuery = matchingUsersQuery
-          .where("mission_tag", "==", user.preferences.tag);
-    }
+    // if (user.preferences && user.preferences.tag !== "All") {
+    //   console.log("filtering for users with mission tag", user.preferences.tag);
+    //   matchingUsersQuery = matchingUsersQuery
+    //     .where("mission_tag", "==", user.preferences.tag);
+    // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
@@ -642,16 +673,21 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     console.log("filtering out incomplete profiles and flagged accounts");
 
     const completeUsers = uniqueUsers.filter((user) => {
-      return user.mission !== null &&
-        user.mission !== "" &&
+      return user.prompts && user.prompts.length > 0 &&
         user.values && user.values.length === 3 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
 
+    const compareUsers = createCompareFunction(user);
+
+    // sort users by matching values
+    console.log("sorting profiles by values and tags");
+    const sortedUsers = completeUsers.sort(compareUsers);
+
     console.log("limiting to 30 profiles or less");
-    const finalUsers = completeUsers.length > 30 ?
-      completeUsers.slice(0, 30) : completeUsers;
+    const finalUsers = sortedUsers.length > 30 ?
+      sortedUsers.slice(0, 30) : sortedUsers;
 
     res.status(200).json(finalUsers);
   } catch (error) {

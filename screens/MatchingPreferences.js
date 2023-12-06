@@ -6,7 +6,7 @@ import Header from '../Header';
 import { db } from '../firebase';
 // import AgePicker from '../components/AgePicker';
 // import GenderPicker from '../components/GenderPicker';
-import TagPicker from '../components/TagPicker';
+// import TagPicker from '../components/TagPicker';
 import YNRadioButton from '../components/YNRadioButton';
 import * as Sentry from "@sentry/react";
 
@@ -16,7 +16,7 @@ import * as Sentry from "@sentry/react";
 const MatchingPreferences = () => {
   // const [ ageMin, setAgeMin ] = useState(18);
   // const [ ageMax, setAgeMax ] = useState(100);
-  const [tag, setTag] = useState("All");
+  // const [tag, setTag] = useState("All");
   const [activeStudent, setActiveStudent] = useState(false);
   const [wingUni, setWingUni] = useState(true)
   const [distance, setDistance] = useState("Global");
@@ -39,9 +39,9 @@ const MatchingPreferences = () => {
       // setAgeMin(profile.ageMin);
       // setGender(profile.genderPreference);
 
-      if (profile.preferences?.tag) {
-        setTag(profile.preferences.tag);
-      }
+      // if (profile.preferences?.tag) {
+      //   setTag(profile.preferences.tag);
+      // }
 
       if (profile?.university_student && profile.university_student.status === "active") {
         setActiveStudent(true);
@@ -55,7 +55,7 @@ const MatchingPreferences = () => {
 
   }, [profile])
 
-  const incompleteform = !tag//!ageMin||!ageMax||
+  // const incompleteform = !tag//!ageMin||!ageMax||
 
 
   const updatePreferences = () => {
@@ -69,7 +69,7 @@ const MatchingPreferences = () => {
         // universityPreference: wingUni
         // globalMatchingBoolean: global
         preferences: {
-          tag: tag,
+          // tag: tag,
           university: wingUni,
           distance: distance
         }
@@ -87,7 +87,7 @@ const MatchingPreferences = () => {
         // matchRadius: matchRadius,
         // genderPreference: gender,
         preferences: {
-          tag: tag,
+          // tag: tag,
           distance: distance
         }
         // globalMatchingBoolean: global
@@ -138,10 +138,10 @@ const MatchingPreferences = () => {
         <GenderPicker gender= {gender} setGender={setGender} both_boolean={true} />
       </View> */}
 
-        <View style={{ alignItems: "center", paddingBottom: 30 }}>
+        {/* <View style={{ alignItems: "center", paddingBottom: 30 }}>
           <Text style={{ fontSize: 15, fontWeight: "bold", padding: 10 }}>Mission Category</Text>
           <TagPicker tag={tag} setTag={setTag} all_boolean={true} />
-        </View>
+        </View> */}
 
         <View style={{ alignItems: "center", padding: 10 }}>
           <Text style={{ fontSize: 15, fontWeight: "bold", paddingBottom:20 }}>Distance</Text>
@@ -166,8 +166,8 @@ const MatchingPreferences = () => {
 
         <View style={{ height: 150 }}>
           <TouchableOpacity
-            disabled={incompleteform}
-            style={{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 4, elevation: 5, backgroundColor: incompleteform ? "grey" : "#00308F" }}
+            // disabled={incompleteform} incompleteform ? "grey" :
+            style={{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 4, elevation: 5, backgroundColor:"#00308F" }}
             onPress={updatePreferences}>
             <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Update Preferences</Text>
           </TouchableOpacity>

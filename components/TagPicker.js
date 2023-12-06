@@ -14,7 +14,7 @@ const TagPicker = ({tag, setTag, all_boolean}) => {
           onValueChange={setTag}
         >
           <Picker.Item label="All" value="All" />
-          <Picker.Item label="Open to an Adventure" value="Open to an Adventure" />
+          <Picker.Item label="Open to Outdoor Activities" value="Open to Outdoor Activities" />
           <Picker.Item label="Open to Workout" value="Open to Workout" />
           <Picker.Item label="Open to Building Something Cool" value="Open for Building Something Cool" />
           <Picker.Item label="Open to Charitable Services" value="Open to Charitable Services" />
@@ -28,7 +28,7 @@ const TagPicker = ({tag, setTag, all_boolean}) => {
 
         >
           <Picker.Item label="Let's Keep It Simple And Just Have Fun" value="None" />
-          <Picker.Item label="Tired Of The Usual. Let's Go On An Adventure!" value="Open to an Adventure" />
+          <Picker.Item label="Need Some Sun. Let's Do Something Outside" value="Open to Outdoor Activities" />
           <Picker.Item label="No Pain, No Gain. Let's Workout" value="Open to Workout" />
           <Picker.Item label="No More Dreaming. Let's Build Something Cool" value="Open to Build Something Cool" />
           <Picker.Item label="Gotta Feed the Spirit. Let's Do A Service" value="Open to Charitable Services" />
