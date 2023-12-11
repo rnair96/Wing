@@ -10,12 +10,12 @@ const Header = ({title, style}) => {
     return (
       <View style={{flexDirection:"row", justifyContent:"flex-start"}}>
         <TouchableOpacity onPress={() => navigator.goBack()} style={{padding: 2}}>
-            <Ionicons name="chevron-back-outline" size={34} color="#00BFFF"/>
+            <Ionicons name="chevron-back-outline" size={34} color="#00308F"/>
         </TouchableOpacity>
         {title.length < 10? (
-          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00BFFF",  marginHorizontal:"27%", ...style}}> {title} </Text>
+          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00308F",  marginHorizontal:"27%", ...style}}> {title} </Text>
         ):(
-          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00BFFF",  marginHorizontal:"20%", ...style}}> {title} </Text>
+          <Text style={{ padding:10, fontWeight:"bold", fontSize:20, color:"#00308F",  marginHorizontal:"20%", ...style}}> {title} </Text>
         )}
       </View>
     )

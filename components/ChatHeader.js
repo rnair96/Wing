@@ -48,7 +48,7 @@ const ChatHeader = ({ details, type, profile }) => {
   return (
     <View style={{ flexDirection: "row", justifyContent: 'space-evenly', backgroundColor: "white", paddingBottom: 5, borderBottomWidth: 1, borderColor: "#E0E0E0", margin: 5 }}>
       <TouchableOpacity onPress={() => navigator.goBack()} style={{ padding: 2 }}>
-        <Ionicons name="chevron-back-outline" size={34} color="#00BFFF" />
+        <Ionicons name="chevron-back-outline" size={34} color="#00308F" />
       </TouchableOpacity>
       {profile ? (
         <TouchableOpacity onPress={() => navigator.navigate("ProfileView", { profile })} style={{ paddingVertical: 2, flexDirection: "row", marginHorizontal: "25%", left: "4%" }}>
@@ -64,7 +64,7 @@ const ChatHeader = ({ details, type, profile }) => {
 
 
       <TouchableOpacity onPress={() => setModalVisible(true)} style={{ padding: 2, flexDirection: "row" }}>
-        <Ionicons name="menu" size={34} color="#00BFFF" />
+        <Ionicons name="menu" size={34} color="#00308F" />
       </TouchableOpacity>
       <Modal
         animationType="fade"

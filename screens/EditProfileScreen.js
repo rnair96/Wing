@@ -13,6 +13,7 @@ import GradYearPicker from '../components/GradYearPicker';
 import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 import PromptModal from '../components/PromptModal';
+import PromptPicker from '../components/PromptPicker';
 
 
 
@@ -20,11 +21,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const { user } = useAuth();
 
   const age = profile?.age || 18;
-  // const oldtoken = profile?.token || null;
   const gender = profile?.gender || "male";
   const activeStudent = profile?.university_student?.status === "active";
 
-  // const [newtoken, setNewToken] = useState("not_granted");
   const [mission, setMission] = useState(profile?.mission || null);
   const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
 
@@ -80,10 +79,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
     let form;
 
     if (activeStudent) {
-      // form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 || !school || !mission
       form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !school || !tagline
     } else {
-      // form = !url1 || !url2 || !url3  || !location || !values || values.length < 3 ||!job || !mission
       form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !job || !tagline
 
 
@@ -91,21 +88,14 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
     setIncompleteForm(form);
 
-  }, [activeStudent, url1, url2, url3, location, values, school, tagline, job])//mission
-
-
-  const deletePrompt = (setTag, setPromp) => {
-    setTag(null);
-    setPromp(null);
-  }
-
+  }, [activeStudent, url1, url2, url3, location, values, school, tagline, job])
 
 
   const updateUserProfile = () => {
 
     let promptObject, promptObject1, promptObject2;
 
-    if(tagline){
+    if (tagline) {
       promptObject = {
         prompt: prompt,
         tagline: tagline
@@ -115,16 +105,16 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       return;
     }
 
-    if (tagline1){
+    if (tagline1) {
       promptObject1 = {
         prompt: prompt1,
         tagline: tagline1
       }
-    }else {
+    } else {
       promptObject1 = null;
     }
 
-    if(tagline2){
+    if (tagline2) {
       promptObject2 = {
         prompt: prompt2,
         tagline: tagline2
@@ -133,70 +123,43 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       promptObject2 = null;
     }
 
-
-    if (activeStudent) { // change to one call of update doc, with different docs sent
-
-      updateDoc(doc(db, global.users, user.uid), {
-        images: [url1, url2, url3],
-        university_student: {
-          status: "active",
-          class_level: class_level,
-          grad_year: grad_year
-        },
-        school: school,
-        hometown: hometown,
-        mission: mission,
-        activity_tag: activitytag,
-        // tagline: {
-        //   tagline: tagline,
-        //   prompt: prompt,
-        // },
-        prompts: [promptObject, promptObject1, promptObject2],
-        medals: [medal1, medal2, medal3],
-        values: values,
-        location: location,
-        // token: newtoken,
-        bio: bio
-      }).then(() => {
-        navigation.navigate("Home", { refresh: true });
-      }).catch((error) => {
-        Sentry.captureMessage("error at edit profile student for ", user.uid, ", ", error.message)
-        alert("Could not update profile. Try again later.")
-        console.log(error.message)
-      });
-    } else {
-
-      updateDoc(doc(db, global.users, user.uid), {
-        images: [url1, url2, url3],
-        job: job,
-        company: company,
-        school: school,
-        hometown: hometown,
-        mission: mission,
-        activity_tag: activitytag,
-        // tagline: {
-        //   tagline: tagline,
-        //   prompt: prompt,
-        // },
-        prompts: [promptObject, promptObject1, promptObject2],
-        medals: [medal1, medal2, medal3],
-        values: values,
-        location: location,
-        // token: newtoken,
-        bio: bio
-      }).then(() => {
-        navigation.navigate("Home", { refresh: true });
-      }).catch((error) => {
-        Sentry.captureMessage("error at edit profile professional for ", user.uid, ", ", error.message)
-        alert("Could not update profile. Try again later.")
-        console.log(error.message)
-      });
+    const updateObject = {
+      images: [url1, url2, url3],
+      school: school,
+      hometown: hometown,
+      mission: mission,
+      activity_tag: activitytag,
+      prompts: [promptObject, promptObject1, promptObject2],
+      medals: [medal1, medal2, medal3],
+      values: values,
+      location: location,
+      bio: bio,
     }
+
+    if (activeStudent) {
+      updateObject.university_student =
+      {
+        status: "active",
+        class_level: class_level,
+        grad_year: grad_year
+      }
+    } else {
+      updateObject.job = job
+      updateObject.company = company
+    }
+
+
+    updateDoc(doc(db, global.users, user.uid), updateObject).then(() => {
+      navigation.navigate("Home", { refresh: true });
+    }).catch((error) => {
+      Sentry.captureMessage("error at edit profile for ", user.uid, ", ", error.message)
+      alert("Could not update profile. Try again later.")
+      console.log(error.message)
+    });
 
     setIsEditSaved(true);
 
   }
-
 
   //Use Header
 
@@ -345,55 +308,13 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
             <Text style={styles.formTitle}>Prompts</Text>
             <Text style={{ color: "grey" }}>Must have at least one.</Text>
-            <View style={{ alignItems:"center", flexDirection: "column", margin: 10 }}>
-              {tagline && prompt ? (
-                <View style={{ alignItems: "flex-end" }}>
-                  <TouchableOpacity style={{ left:8, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white", zIndex:1 }} onPress={() => setisPromptVisible(true)}>
-                    <Entypo name="cross" size={24} color="black" />
-                  </TouchableOpacity>
-                  <View style={{ bottom:10, backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center", zIndex:0 }}>
-                    <Text>{prompt}</Text>
-                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline}</Text>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }} onPress={() => setisPromptVisible(true)}>
-                  <Text style={{color:"#00BFFF", fontSize:20, padding:5}}>Tap to Add A Prompt</Text>
-                </TouchableOpacity>
-              )}
-
-              {tagline1 && prompt1 ? (
-                <View style={{ alignItems: "flex-end" }}>
-                  <TouchableOpacity style={{ left:8, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white", zIndex:1}} onPress={() => deletePrompt(setTagline1, setPrompt1)}>
-                    <Entypo name="cross" size={24} color="black" />
-                  </TouchableOpacity>
-                  <View style={{ bottom:10, backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center", zIndex:0}}>
-                    <Text>{prompt1}</Text>
-                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline1}</Text>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }} onPress={() => setisPrompt1Visible(true)}>
-                  <Text style={{color:"#00BFFF", fontSize:20, padding:5}}>Tap to Add A Prompt</Text>
-                </TouchableOpacity>
-              )}
-
-              {tagline2 && prompt2 ? (
-                <View style={{ alignItems: "flex-end" }}>
-                  <TouchableOpacity style={{left:8, borderRadius: 50, borderWidth: 1, alignItems: "center", justifyContent: "center", width: 30, backgroundColor: "white", zIndex:1}} onPress={() => deletePrompt(setTagline2, setPrompt2)}>
-                    <Entypo name="cross" size={24} color="black" />
-                  </TouchableOpacity>
-                  <View style={{ bottom:10, backgroundColor: "#E0E0E0", padding: 10, margin: 0, borderRadius: 15, alignItems: "center", zIndex:0}}>
-                    <Text>{prompt2}</Text>
-                    <Text style={{ fontWeight: "bold", paddingTop: 10 }}>{tagline2}</Text>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity style={{ borderWidth: 1, borderColor: "#00BFFF", margin: 10, borderRadius: 10 }} onPress={() => setisPrompt2Visible(true)} >
-                  <Text style={{color:"#00BFFF", fontSize:20, padding:5}}>Tap to Add A Prompt</Text>
-                </TouchableOpacity>
-              )}
+            <View style={{ alignItems: "center", flexDirection: "column", margin: 10 }}>
+              <PromptPicker tagline={tagline} prompt={prompt} setPromptVisible={setisPromptVisible} />
+              <PromptPicker tagline={tagline1} prompt={prompt1} setPromptVisible={setisPrompt1Visible} setTag={setTagline1} setPrompt={setPrompt1} />
+              <PromptPicker tagline={tagline2} prompt={prompt2} setPromptVisible={setisPrompt2Visible} setTag={setTagline2} setPrompt={setPrompt2} />
             </View>
+
+
 
 
             <Text style={styles.formTitle}>Accomplishments</Text>
@@ -440,7 +361,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
 
             <Text style={styles.formTitle}>Values</Text>
-            <Text style={{ color: "grey", textAlign:"center" }}>Pick Three. This helps us find the Wings that will best match you.</Text>
+            <Text style={{ color: "grey", textAlign: "center" }}>Pick Three. This helps us find the Wings that will best match you.</Text>
             <ValuesList selectedValues={values} setSelectedValues={setValues} />
 
             <Text style={styles.formTitle}>A Life Mission or Short-Term Goal</Text>
@@ -477,8 +398,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
           </View>
           <PromptModal setTagline={setTagline} setPrompt={setPrompt} isVisible={isPromptVisible} setIsVisible={setisPromptVisible} />
-          <PromptModal setTagline={setTagline1} setPrompt={setPrompt1} isVisible={isPrompt1Visible} setIsVisible={setisPrompt1Visible} charLimit={150}/>
-          <PromptModal setTagline={setTagline2} setPrompt={setPrompt2} isVisible={isPrompt2Visible} setIsVisible={setisPrompt2Visible} charLimit={150}/>
+          <PromptModal setTagline={setTagline1} setPrompt={setPrompt1} isVisible={isPrompt1Visible} setIsVisible={setisPrompt1Visible} charLimit={150} />
+          <PromptModal setTagline={setTagline2} setPrompt={setPrompt2} isVisible={isPrompt2Visible} setIsVisible={setisPrompt2Visible} charLimit={150} />
 
         </ScrollView>
       </TouchableWithoutFeedback>

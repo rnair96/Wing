@@ -190,10 +190,8 @@ const ViewProfileScreen = ({ profile }) => {
 
                             {card.item?.prompts && card.item.prompts.length > 1 && card.item.prompts[1]!== null && card.item.prompts[1]?.prompt && card.item.prompts[1]?.tagline &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                    {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 20 }}> */}
                                     <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[1].prompt}</Text>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[1].tagline}</Text>
-                                    {/* </View> */}
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[1].tagline}</Text>
                                 </View>}
 
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
@@ -213,10 +211,8 @@ const ViewProfileScreen = ({ profile }) => {
 
                             {card.item?.prompts && card.item.prompts.length > 2 && card.item.prompts[2]!== null && card.item.prompts[2]?.prompt && card.item.prompts[2]?.tagline &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                    {/* <View style={{ width: "80%", backgroundColor: "#6495ED", justifyContent: "flex-start", padding: 5, margin: 5, flexDirection: "column", borderRadius: 10 }}> */}
                                     <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[2].prompt}</Text>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[2].tagline}</Text>
-                                    {/* </View> */}
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[2].tagline}</Text>
                                 </View>
                             }
 

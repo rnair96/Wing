@@ -81,7 +81,7 @@ const SetUp0Screen = () => {
         <TouchableWithoutFeedback
           onPress={Keyboard.dismiss()}
         >
-          <Text style={{ color: "#00BFFF", fontSize: 20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
+          <Text style={{ color: "#00308F", fontSize: 20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
 
         
         </TouchableWithoutFeedback>
