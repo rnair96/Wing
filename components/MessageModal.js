@@ -50,7 +50,7 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                         <TextInput
                             value={requestMessage}
                             onChangeText={setRequestMessage}
-                            placeholder={'I love your mission! How can I help?'}
+                            placeholder={'A compliment or a joke breaks the ice!'}
                             multiline
                             numberOfLines={3}
                             placeholderTextColor={"grey"}

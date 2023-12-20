@@ -23,6 +23,6 @@ This is a young community, so every opinion has a significant role to determine 
 
 If having a chance to connect and shape this community interests you, then simply reply "Yes!" to this Chat Request.
 
-P.S if you reply, I’ll drop the method me and my Wings used to successfully approach girls in any situation ;)`
+P.S if you reply, I’ll drop the method me and my Wings used to successfully approach women in any situation ;)`
 
 export default chatText;

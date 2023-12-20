@@ -168,7 +168,7 @@ const WelcomeScreen = () => {
                 <Text style={styles.boldtext}>3. Local Deals & Events</Text>
                 <Text style={styles.tutorialText}>Get exclusive access to promotional deals with bars, restuarants, events and other local establishments that you can explore with your Wing!</Text>
                 <Text style={styles.tutorialText}>Simply check the News & Promos thread in your Active Chats to take advantage of the latest deals.</Text>
-                <Image style={{ height: 150, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.jpg")} />
+                <Image style={{ height: 150, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.png")} />
                 <Text style={styles.boldtext}>4. More Options</Text>
                 <Text style={styles.tutorialText}>To edit and view your own profile,</Text>
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>

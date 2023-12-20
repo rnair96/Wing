@@ -28,9 +28,6 @@ const SetUp3Screen = () => {
   const incompleteform = !tagline || !values || values.length < 3;
 
 
-  const route = useRoute();
-
-
   const updateUserProfile = () => {
     const promptObject = {
       prompt: prompt,

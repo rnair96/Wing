@@ -93,7 +93,7 @@ const sendPushBatch = async (tokens, title, body, data) => {
 };
 function createCompareFunction(currentUser) {
   const currentUserValues = currentUser.values;
-  const currentUserTag = currentUser.activity_tag? currentUser.activity_tag: null;
+  const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
 
   return function compareUsers(user1, user2) {
     // Count the matching values for user1
@@ -175,6 +175,54 @@ exports.newUserSignup = functions.firestore
       }
     });
 
+const db = admin.firestore();
+
+exports.aggregateSurveyResponses = functions.firestore
+    .document("users/{userId}")
+    .onUpdate(async (change, context) => {
+      const newData = change.after.data();
+      const oldData = change.before.data();
+      let surveyDoc = "initialSurveyData";
+      let objectentries;
+
+
+      if (newData.surveyInfo && newData.surveyInfo.initial && !oldData.surveyInfo) {
+        console.log("initial survey set checked");
+        objectentries = newData.surveyInfo.initial;
+      } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.thirtydays && !oldData.surveyInfo.thirtydays) {
+        console.log("thirty days survey set checked");
+        surveyDoc = "thirtydaysSurveyData";
+        objectentries = newData.surveyInfo.thirtydays;
+      } else {
+        return null;
+      }
+
+      // Aggregate data document reference
+      const aggregateDocRef = db.collection("userData").doc(surveyDoc);
+
+      // Transaction to ensure atomic update
+      return db.runTransaction(async (transaction) => {
+        const aggregateDoc = await transaction.get(aggregateDocRef);
+        const aggregateData = aggregateDoc.exists ? aggregateDoc.data() : {};
+
+        // Iterate over each question in the surveyInfo
+        for (const [question, answer] of Object.entries(objectentries)) {
+        // Initialize question data structure if not present
+          if (!aggregateData[question]) {
+            aggregateData[question] = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0};
+          }
+
+          console.log("incrementing data for ", question );
+          // Increment the count for the given answer
+          aggregateData[question][answer]++;
+        }
+
+        // Update the aggregate data document
+        transaction.set(aggregateDocRef, aggregateData);
+      });
+    });
+
+
 exports.onSwipe = functions.firestore
     .document("users/{userId}/swipes/{swipeId}")
     .onCreate(async (snap, context) => {
@@ -203,7 +251,7 @@ exports.onSwipe = functions.firestore
         const newTime = new Date(Date.now());
 
         const reply =
-        `Hey man, glad to match with you!\n\n This is an auto-reply but this is my personal line where I try to read and respond to ALL DMS. So feel free to share any questions, concerns, or thoughts in general you may have about the app and this community right here.\n\n I may also drop a message in to see how you're doing and how we can make your experience even better. That's my mission after all ;)\n\n So keep your eye out for a surprise message from me and have fun Winging!`;
+        `Maverick in Top Gun 2 said it best, “If you think up there, you’re dead!”\n\n 1. Approach a girl you like within 3-seconds of seeing her. Don’t think. Do.\n\n 2. Have good posture, eye contact and a genuine smile. Body language communicates 90% more than words.\n\n 3. Get her interest. It could be as simple as cracking a joke about the bar you’re in to a thoughtful compliment about her outfit. \n\n 4. If she has a friend and your Wing is available, introduce him WELL. I.e: Cite one of his accomplishments on his profile.\n\n 5. Stay loyal to each other. The more you make your Wing look good in front of others, the better you’ll look by default.\n\n Bonus: Try to do this approach with EVERYONE. It becomes less forced when you’re just having a good time with everyone you meet, rather than just girls you like. It can even BRING girls to you. This is essentially “Charisma”. \n\nFeel free to share any questions, concerns, or thoughts in general you may have about the app, this community or even dating right here. I try to read and respond to ALL DMS. I may also drop a message in to see how you're doing and how we can make your experience here even better. \n\nSo keep your eye out for a surprise message from me and have fun Winging!`;
 
         const replyDoc = {
           timestamp: newTime,
@@ -312,7 +360,7 @@ exports.onSwipeDev = functions.firestore
         const newTime = new Date(Date.now());
 
         const reply =
-        `Maverick in Top Gun 2 said it best, “If you think up there, you’re dead!”\n\n 1. Approach a girl you like within 3-seconds of seeing her. Don’t think. Do.\n\n 2. Have good posture, eye contact and a genuine smile. Body language communicates 90% more than words.\n\n 3. Get her interest. It could be as simple as cracking a joke about the bar you’re in to a thoughtful compliment about her outfit. \n\n 4. If she has a friend and your Wing is available, introduce him WELL. I.e: Cite one of his accomplishments on his profile.\n\n 5. Stay loyal to each other. The more you make your Wing look good in front of others, the better you’ll look by default.\n\n Bonus: Try to do this approach with EVERYONE. It becomes less forced when you’re just having a good time with everyone you meet, rather than just girls you like. It can even BRING girls to you. This is what’s known as “charisma”. \n\nFeel free to share any questions, concerns, or thoughts in general you may have about the app, this community or even dating right here. I try to read and respond to ALL DMS.I may also drop a message in to see how you're doing and how we can make your experience on the app even better. \n\nSo keep your eye out for a surprise message from me and have fun Winging!`;
+        `Maverick in Top Gun 2 said it best, “If you think up there, you’re dead!”\n\n 1. Approach a girl you like within 3-seconds of seeing her. Don’t think. Do.\n\n 2. Have good posture, eye contact and a genuine smile. Body language communicates 90% more than words.\n\n 3. Get her interest. It could be as simple as cracking a joke about the bar you’re in to a thoughtful compliment about her outfit. \n\n 4. If she has a friend and your Wing is available, introduce him WELL. I.e: Cite one of his accomplishments on his profile.\n\n 5. Stay loyal to each other. The more you make your Wing look good in front of others, the better you’ll look by default.\n\n Bonus: Try to do this approach with EVERYONE. It becomes less forced when you’re just having a good time with everyone you meet, rather than just girls you like. It can even BRING girls to you. This is essentially “Charisma”. \n\nFeel free to share any questions, concerns, or thoughts in general you may have about the app, this community or even dating right here. I try to read and respond to ALL DMS. I may also drop a message in to see how you're doing and how we can make your experience here even better. \n\nSo keep your eye out for a surprise message from me and have fun Winging!`;
 
         const replyDoc = {
           timestamp: newTime,

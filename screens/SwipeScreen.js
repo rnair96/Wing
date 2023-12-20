@@ -9,6 +9,8 @@ import { db, auth } from '../firebase';
 import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
 import * as Sentry from "@sentry/react";
+import SurveyModal from '../components/SurveyModal';
+import {hasThirtyDaysPassed, hasMatch} from '../lib/secondSurveyCheck';
 
 
 
@@ -19,12 +21,18 @@ const SwipeScreen = ({ loggedProfile }) => {
     const [profiles, setProfiles] = useState([]);
     const [swipeAmount, setSwipeAmount] = useState(5);
     const [swipeEnabled, setSwipeEnabled] = useState(true);
+
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
+
     const [requestMessage, setRequestMessage] = useState(null);
     const [swipeRefMessage, setSwipeRefMessage] = useState(null);
     const [loadingFetch, setloadingFetch] = useState(true);
     const [currentCard, setCurrentCard] = useState(null);
+
+    const [surveyVisible, setSurveyVisible] = useState(false);
+    const [surveyType, setSurveyType] = useState("initial")
+    const [surveyOtherInfo, setSurveyOtherInfo] = useState(null);
 
 
 
@@ -171,6 +179,30 @@ const SwipeScreen = ({ loggedProfile }) => {
         }
 
     }, [loggedProfile]);//loggedProfile?.ageMin, loggedProfile?.ageMax,
+
+    useEffect(() => {
+        // Define an async function within the useEffect
+        const checkConditions = async () => {
+            if (loggedProfile && !loggedProfile?.surveyInfo && swipeAmount !== 5) {
+                console.log("first survey")
+                setSurveyVisible(true);
+                // Add other conditions to check if thirty days have passed since account creation
+            } else if (loggedProfile && loggedProfile?.surveyInfo && !loggedProfile.surveyInfo?.thirtydays 
+                       && hasThirtyDaysPassed(loggedProfile.timestamp)) {
+                console.log("thirty days passed")
+                const hasAMatch = await hasMatch(user.uid);
+                if (hasAMatch) {
+                    console.log("second survey")
+                    setSurveyType("thirtydays");
+                    setSurveyOtherInfo(loggedProfile?.surveyInfo)
+                    setSurveyVisible(true)
+                }
+            }
+        };
+    
+        // Call the async function
+        checkConditions();
+    }, [loggedProfile, swipeAmount]);
 
 
     const swipeLeft = (cardIndex) => {
@@ -376,6 +408,7 @@ const SwipeScreen = ({ loggedProfile }) => {
             </View>
             <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} currentCard={currentCard} />
             <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+            <SurveyModal type={surveyType} isVisible={surveyVisible} setIsVisible={setSurveyVisible} otherInfo={surveyOtherInfo}/>
 
         </View>
     )
