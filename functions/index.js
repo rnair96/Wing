@@ -487,12 +487,13 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
           .where("university_student.status", "==", "active");
     }
 
+    // no longer needed
     // Further filter by tag preference
-    if (user.preferences && user.preferences.tag !== "All") {
-      console.log("filtering for users with mission tag", user.preferences.tag);
-      matchingUsersQuery = matchingUsersQuery
-          .where("mission_tag", "==", user.preferences.tag);
-    }
+    // if (user.preferences && user.preferences.tag !== "All") {
+    //   console.log("filtering for users with mission tag", user.preferences.tag);
+    //   matchingUsersQuery = matchingUsersQuery
+    //     .where("mission_tag", "==", user.preferences.tag);
+    // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
@@ -567,10 +568,10 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
     // Retrieve user data from the previously stored map
     const uniqueUsers = finalUserIds.map((id) => usersDataMap.get(id));
 
-    console.log("filtering out incomplete profiles");
+    console.log("filtering out incomplete profiles and flagged accounts");
+
     const completeUsers = uniqueUsers.filter((user) => {
-      return user.mission !== null &&
-        user.mission !== "" &&
+      return user.prompts && user.prompts.length > 0 &&
         user.values && user.values.length === 3 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
