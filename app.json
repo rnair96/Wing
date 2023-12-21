@@ -2,7 +2,7 @@
   "expo": {
     "name": "Wing",
     "slug": "mission_partner",
-    "version": "2.6.2",
+    "version": "2.6.3",
     "orientation": "portrait",
     "icon": "./assets/icon_dkbluewing_whitebg.png",
     "userInterfaceStyle": "light",

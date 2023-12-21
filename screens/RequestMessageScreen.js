@@ -305,7 +305,7 @@ const RequestMessageScreen = () => {
                         <TextInput
                             value={message}
                             onChangeText={setMessage}
-                            placeholder={'I love your mission! How can I help?'}
+                            placeholder={'Send A Reply...'}
                             multiline
                             numberOfLines={5}
                             placeholderTextColor={"grey"}

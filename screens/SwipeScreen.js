@@ -10,7 +10,7 @@ import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
 import * as Sentry from "@sentry/react";
 import SurveyModal from '../components/SurveyModal';
-import {hasThirtyDaysPassed, hasMatch} from '../lib/secondSurveyCheck';
+import { hasThirtyDaysPassed, hasMatch } from '../lib/secondSurveyCheck';
 
 
 
@@ -51,7 +51,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                 const userSnapshot = await getDocs(query(collection(db, global.users, user.uid, "swipes"),
                     where("timeSwiped", ">=", startOfDay), where("timeSwiped", "<=", endOfDay),
                     orderBy("timeSwiped", "desc")), limit(1))
-                    .catch((error)=>{
+                    .catch((error) => {
                         Sentry.captureMessage(`Error getting the last swipe of ${user.uid}, ${error.message}`)
                     });
 
@@ -183,12 +183,13 @@ const SwipeScreen = ({ loggedProfile }) => {
     useEffect(() => {
         // Define an async function within the useEffect
         const checkConditions = async () => {
-            if (loggedProfile && !loggedProfile?.surveyInfo && swipeAmount !== 5) {
+            if (loggedProfile && !loggedProfile?.surveyInfo && loggedProfile.gender === "male" && swipeAmount !== 5) {
                 console.log("first survey")
                 setSurveyVisible(true);
                 // Add other conditions to check if thirty days have passed since account creation
-            } else if (loggedProfile && loggedProfile?.surveyInfo && !loggedProfile.surveyInfo?.thirtydays 
-                       && hasThirtyDaysPassed(loggedProfile.timestamp)) {
+            } else if (loggedProfile && loggedProfile?.surveyInfo && loggedProfile.gender === "male" 
+                && !loggedProfile.surveyInfo?.thirtydays
+                && hasThirtyDaysPassed(loggedProfile.timestamp)) {
                 console.log("thirty days passed")
                 const hasAMatch = await hasMatch(user.uid);
                 if (hasAMatch) {
@@ -199,7 +200,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                 }
             }
         };
-    
+
         // Call the async function
         checkConditions();
     }, [loggedProfile, swipeAmount]);
@@ -211,11 +212,11 @@ const SwipeScreen = ({ loggedProfile }) => {
         console.log("you swiped left on", profiles[cardIndex].displayName);
 
         setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), { id: profiles[cardIndex].id })
-        .catch((error)=>{
-            alert("Error passing user. Try again later.")
-            Sentry.captureMessage(`Error setting a pass for ${user.uid}, ${error.message}`)
-            return;
-        });
+            .catch((error) => {
+                alert("Error passing user. Try again later.")
+                Sentry.captureMessage(`Error setting a pass for ${user.uid}, ${error.message}`)
+                return;
+            });
 
     }
 
@@ -254,11 +255,11 @@ const SwipeScreen = ({ loggedProfile }) => {
         console.log("swipe number at", (swipeAmount - 1));
 
         setDoc(doc(db, global.users, user.uid, "swipes", userSwiped.id), swipedUser)
-        .catch(()=>{
-            alert("Error swiping user. Try again later.")
-            Sentry.captureMessage(`Error setting a swipe for ${user.uid}, ${error.message}`)
-            return;
-        });
+            .catch(() => {
+                alert("Error swiping user. Try again later.")
+                Sentry.captureMessage(`Error setting a swipe for ${user.uid}, ${error.message}`)
+                return;
+            });
     }
 
     return (
@@ -312,7 +313,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                         renderCard={(card) => {
                             return (
                                 <View key={card.id} style={styles.cardcontainer}>
-                                    {card?.prompts && card?.prompts.length > 0 && card?.values && card?.values.length > 2 && card?.images && card?.images.length > 2 && card?.location? (
+                                    {card?.prompts && card?.prompts.length > 0 && card?.values && card?.values.length > 2 && card?.images && card?.images.length > 2 && card?.location ? (
                                         <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => { navigation.navigate("ProfileSwipe", { card: card }) }}>
                                             <View style={{ alignItems: "center", bottom: 10 }}>
                                                 {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
@@ -408,7 +409,7 @@ const SwipeScreen = ({ loggedProfile }) => {
             </View>
             <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} currentCard={currentCard} />
             <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
-            <SurveyModal type={surveyType} isVisible={surveyVisible} setIsVisible={setSurveyVisible} otherInfo={surveyOtherInfo}/>
+            <SurveyModal type={surveyType} isVisible={surveyVisible} setIsVisible={setSurveyVisible} otherInfo={surveyOtherInfo} />
 
         </View>
     )
