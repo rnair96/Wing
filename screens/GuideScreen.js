@@ -8,7 +8,7 @@ const GuideScreen = () => {
       <ScrollView style={{backgroundColor:"white"}}>
         <View style ={{flex:1, padding:10}}>
         <SafeAreaView>
-        <Header style ={{marginHorizontal:"5%"}} title = "Community Guidelines"/>
+        <Header style ={{marginHorizontal:"10%"}} title = "Community Guidelines"/>
         </SafeAreaView>
         <Text style={{padding:10}}>
 1. Respectful Communication

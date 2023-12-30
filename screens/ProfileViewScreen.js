@@ -3,6 +3,8 @@ import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tagColor from '../lib/colorTag';
+import { Ionicons } from '@expo/vector-icons';
+
 
 
 export const ProfileViewScreen = () => {
@@ -17,6 +19,9 @@ export const ProfileViewScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+            <TouchableOpacity style={{ alignItems: "center" }} onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-up-outline" size={40} color="#00308F" />
+            </TouchableOpacity>
             {/* <View> */}
             {(profile?.prompts && profile.prompts.length > 0 && profile?.images && profile?.images.length > 2 && profile?.values && profile?.values.length > 2 && profile?.location) ? (
                 <View>
@@ -197,7 +202,7 @@ export const ProfileViewScreen = () => {
                                         </View>
                                     </View>
                                 </View>
-                                <View style={{ justifyContent: "center", alignItems: "center", padding: 2 }}>
+                                <View style={{ justifyContent: "center", alignItems: "center", padding: 2, paddingBottom:70 }}>
                                     <TouchableOpacity style={{ padding: 30, backgroundColor: "white", borderRadius: 10, borderWidth: 2, borderColor: "#00BFFF", width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
                                         {/* <Ionicons name="arrow-down" size={30} color="#00BFFF" /> */}
                                         <Text style={{ color: "#00BFFF", fontWeight: "bold", fontSize: 17 }}>Return to Chat</Text>

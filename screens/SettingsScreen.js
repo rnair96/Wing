@@ -14,7 +14,7 @@ const SettingsScreen = () => {
 
 
     return (
-        <View style={{ backgroundColor: "white" }}>
+        <View style={{ backgroundColor: "white"}}>
             <SafeAreaView>
                 <Header title={"Settings"} />
             </SafeAreaView>

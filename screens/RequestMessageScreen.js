@@ -271,7 +271,7 @@ const RequestMessageScreen = () => {
                 </View>
             </ScrollView>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-evenly", top: "3%" }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                 <TouchableOpacity
                     style={styles.swipeButtonCross}
                     onPress={() => setSecondModal(true)}>
@@ -300,7 +300,7 @@ const RequestMessageScreen = () => {
                 // keyboardVerticalOffset={10}
                 >
                     {/* <View style={styles.centeredView}> */}
-                    <View style={{ bottom: isKeyboardVisible ? "10%" : 0, ...styles.modalView }}>
+                    <View style={{ bottom: isKeyboardVisible ? "10%" : 0, ...styles.modalView, height: isKeyboardVisible? "50%":"30%" }}>
                         <Text style={{ padding: 5, fontWeight: "bold", fontSize: 17, textAlign: "center" }}>Reply and Match with {name}</Text>
                         <TextInput
                             value={message}
@@ -440,13 +440,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+        // backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
 
     },
     modalView: {
-        height: "30%",
         width: "80%",
-        maxHeight: 400,
+        // maxHeight: 400,
         maxWidth: "90%",
         backgroundColor: 'white',
         borderRadius: 20,

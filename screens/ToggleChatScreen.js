@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginBottom: 40,
-    marginTop:20
+    marginTop:30
   },
   selectedIcon: {
     color: 'blue',

@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image } from 'react-native';
+import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image, TouchableOpacity, Text } from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
@@ -189,7 +189,10 @@ const MessageScreen = () => {
             numberOfLines={5}
             value={input}
           />
-          <Button onPress={sendMessage} title="Send" color="#00BFFF" style={{ borderRadius: 20 }} />
+          <TouchableOpacity onPress={sendMessage} style={{marginLeft:20}}>
+            <Text style={{color:"#00BFFF", fontSize:15}}>Send</Text>
+          </TouchableOpacity>
+          {/* <Button onPress={sendMessage} title="Send" style={{ borderRadius: 20 }} /> */}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

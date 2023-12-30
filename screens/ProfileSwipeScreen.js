@@ -5,6 +5,8 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import FlagModal from '../components/FlagModal';
 // import { RankBadge } from '../lib/RankBadge';
 import tagColor from '../lib/colorTag';
+import { Ionicons } from '@expo/vector-icons';
+
 
 // import Container from '../components/Footer';
 
@@ -41,8 +43,11 @@ export const ProfileSwipeScreen = () => {
     return (
 
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-            {(card?.prompts && card?.prompts.length>0 && card?.images && card?.images.length > 2 && card?.values && card?.values.length > 2 && card?.location) ? (
-                <View style={{ marginTop: 50 }}>
+            <TouchableOpacity style={{ alignItems: "center" }} onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-up-outline" size={40} color="#00308F" />
+            </TouchableOpacity>
+            {(card?.prompts && card?.prompts.length > 0 && card?.images && card?.images.length > 2 && card?.values && card?.values.length > 2 && card?.location) ? (
+                <View style={{ marginTop: 30 }}>
                     <FlatList
                         data={[card]}
                         keyExtractor={(card) => card.id}
@@ -56,7 +61,7 @@ export const ProfileSwipeScreen = () => {
                                             <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[0].prompt}</Text>
                                         </View>
                                         <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[0].tagline}</Text>
-                                        {card.item?.activity_tag && card.item.activity_tag!=="None" &&
+                                        {card.item?.activity_tag && card.item.activity_tag !== "None" &&
                                             <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.activity_tag) }}>
                                                 <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.activity_tag}</Text>
                                             </View>
@@ -146,19 +151,19 @@ export const ProfileSwipeScreen = () => {
                                     </View>
                                 </View>
 
-                                {card.item.prompts.length > 1 && card.item.prompts[1]!==null && card.item.prompts[1]?.prompt && card.item.prompts[1]?.tagline &&
-                                <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[1].prompt}</Text>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[1].tagline}</Text>
-                                </View>}
+                                {card.item.prompts.length > 1 && card.item.prompts[1] !== null && card.item.prompts[1]?.prompt && card.item.prompts[1]?.tagline &&
+                                    <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                                        <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[1].prompt}</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[1].tagline}</Text>
+                                    </View>}
 
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                     <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                     {/* </View> */}
                                     <View style={{ flexDirection: "row", padding: 10 }}>
-                                        {card.item?.mission ? 
-                                        (<Text style={{ padding: 10, color: "white" }}>Mission & Values</Text>):
-                                        (<Text style={{ padding: 10, color: "white" }}>Values</Text>)}
+                                        {card.item?.mission ?
+                                            (<Text style={{ padding: 10, color: "white" }}>Mission & Values</Text>) :
+                                            (<Text style={{ padding: 10, color: "white" }}>Values</Text>)}
                                     </View>
                                     {card.item?.mission && <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>}
                                     <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
@@ -170,11 +175,11 @@ export const ProfileSwipeScreen = () => {
                                     {/* <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}> */}
                                 </View>
 
-                                {card.item.prompts.length > 2 && card.item.prompts[2]!==null && card.item.prompts[2]?.prompt && card.item.prompts[2]?.tagline &&
-                                <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                    <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[2].prompt}</Text>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[2].tagline}</Text>
-                                </View>
+                                {card.item.prompts.length > 2 && card.item.prompts[2] !== null && card.item.prompts[2]?.prompt && card.item.prompts[2]?.tagline &&
+                                    <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                                        <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[2].prompt}</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[2].tagline}</Text>
+                                    </View>
                                 }
 
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
@@ -228,7 +233,7 @@ export const ProfileSwipeScreen = () => {
                                         </View>
                                     </View>
                                 </View>
-                                <View style={{ padding: 10, alignItems: "center" }}>
+                                <View style={{ padding: 10, alignItems: "center", paddingBottom:70 }}>
                                     <TouchableOpacity style={{ padding: 30, backgroundColor: "white", borderRadius: 10, borderWidth: 2, borderColor: "#00BFFF", width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => navigation.goBack()}>
                                         <Text style={{ color: "#00BFFF", fontWeight: "bold", fontSize: 17 }}>Return to Swipe</Text>
                                     </TouchableOpacity>

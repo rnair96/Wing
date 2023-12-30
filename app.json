@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash_darkbluewing_whitebg.png",
       "resizeMode": "contain",
-      "backgroundColor": "#00BFFF"
+      "backgroundColor": "#FFFFFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

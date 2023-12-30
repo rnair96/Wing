@@ -179,7 +179,7 @@ const StackNavigator = () => {
             component={ProfileViewScreen}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              gestureDirection: 'vertical'
+            //   gestureDirection: 'vertical'
             }}
           />
           <Stack.Screen
@@ -187,7 +187,7 @@ const StackNavigator = () => {
             component={ProfileSwipeScreen}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              gestureDirection: 'vertical',
+              // gestureDirection: 'vertical',
             }}
           />
           {/* <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen} /> */}

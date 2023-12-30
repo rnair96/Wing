@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
   toggleIcons: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginBottom: 40,
+    marginBottom: 30,
+    marginTop:30,
   },
   selectedIcon: {
     color: 'blue',

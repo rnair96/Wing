@@ -45,7 +45,7 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                 {/* <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss()}
                 > */}
-                    <View style={{ height:"30%", bottom: isKeyboardVisible? "10%": 0, ...styles.modalView }}>
+                    <View style={{ height:isKeyboardVisible? "50%": "30%", bottom: isKeyboardVisible? "10%": 0, ...styles.modalView }}>
                         <Text style={{ padding: 5, fontWeight: "800", fontSize: 15 }}>Send {name} a Chat Request</Text>
                         <TextInput
                             value={requestMessage}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+        // backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
 
         // top:40
     },
