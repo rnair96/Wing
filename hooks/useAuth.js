@@ -433,7 +433,7 @@ export const AuthProvider = ({ children }) => {
         <ImageBackground
           resizeMode='cover'
           style={{ flex: 1 }}
-          source={require("../assets/splash_wing.png")}
+          source={require("../assets/splash_darkbluewing_whitebg.png")}
         />}
       {!loading && children}
     </AuthContext.Provider>

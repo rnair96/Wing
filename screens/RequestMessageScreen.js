@@ -197,12 +197,14 @@ const RequestMessageScreen = () => {
 
                     </View>
 
-                    {otherProfile && otherProfile?.mission && otherProfile?.values && otherProfile?.values.length > 2 && otherProfile?.images && otherProfile?.images.length > 2 && otherProfile?.location? (
+                    {otherProfile && otherProfile?.prompts && otherProfile?.prompts.length>0 && otherProfile?.values && otherProfile?.values.length > 2 && otherProfile?.images && otherProfile?.images.length > 2 && otherProfile?.location? (
                         <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileView", { profile: otherProfile })}>
-                            <View style={{ alignItems: "center", padding: 20 }}>
-                                <Text style={{ color: "white", margin: 5 }}>Mission: </Text>
-                                <Text style={styles.text}>{otherProfile.mission}</Text>
-                            </View>
+                            <View style={{ alignItems: "center", padding: 10 }}>
+                                                {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
+                                                <Text style={styles.text}>{card.mission}</Text> */}
+                                                <Text style={{ color: "white", margin: 5 }}>{otherProfile.prompts[0].prompt}</Text>
+                                                <Text style={styles.text}>{otherProfile.prompts[0].tagline}</Text>
+                                            </View>
                             <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
                                 <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
                                     <View style={{ flexDirection: "column" }}>
@@ -229,10 +231,10 @@ const RequestMessageScreen = () => {
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>{otherProfile.medals[1]?otherProfile.medals[1]:`-- --`}</Text>
                                         </View>
-                                        <View style={{ flexDirection: "row", padding: 10 }}>
+                                        {/* <View style={{ flexDirection: "row", padding: 10 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>{otherProfile.medals[2]?otherProfile.medals[2]:`-- --`}</Text>
-                                        </View>
+                                        </View> */}
                                     </View>
                                 ) : (
                                     <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
@@ -244,10 +246,10 @@ const RequestMessageScreen = () => {
                                             <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>-- --</Text>
                                         </View>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                        {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
                                             <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>-- --</Text>
-                                        </View>
+                                        </View> */}
                                     </View>
                                 )}
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
@@ -303,7 +305,7 @@ const RequestMessageScreen = () => {
                         <TextInput
                             value={message}
                             onChangeText={setMessage}
-                            placeholder={'I love your mission! How can I help?'}
+                            placeholder={'Send A Reply...'}
                             multiline
                             numberOfLines={5}
                             placeholderTextColor={"grey"}

@@ -54,17 +54,17 @@ const ToggleChatScreen = () => {
     <View style={styles.container}>
       <SafeAreaView style={styles.toggleIcons}>
       <TouchableOpacity style={{paddingTop:5}} onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={30} color="#00BFFF"/>
+            <Ionicons name="chevron-back-outline" size={30} color="#00308F"/>
             </TouchableOpacity>
         <View style={{flexDirection: 'row', width:"50%", justifyContent:'space-between',right:"20%", borderBottomWidth:1, borderColor:"#E0E0E0", marginLeft:"35%" }}>
         <TouchableOpacity style={{padding:10, alignItems:"center", justifyContent:"center"}} onPress={() => setShowMatches(true)}>
           {/* <Ionicons name="chatbubbles-sharp" size={20} color = "#00308F"/> */}
-          <Text style={{color:showMatches?"#00BFFF":"#A8A8A8",fontSize:17, fontWeight:"bold"}}>Chats</Text>
+          <Text style={{color:showMatches?"#00308F":"#A8A8A8",fontSize:17, fontWeight:"bold"}}>Chats</Text>
           {/* {chatIndicator && <UnreadHighlighter />} */}
         </TouchableOpacity>
         <TouchableOpacity style={{padding:10, alignItems:"center", justifyContent:"center", flexDirection:"row"}} onPress={() => setShowMatches(false)}>
         {/* <Ionicons name="mail" size={20} color = "#00308F"/> */}
-        <Text style={{color:showMatches?"#A8A8A8":"#00BFFF",fontSize:17, fontWeight:"bold"}}>Requests</Text>
+        <Text style={{color:showMatches?"#A8A8A8":"#00308F",fontSize:17, fontWeight:"bold"}}>Requests</Text>
         {requests && requests.length>0 && 
         <View style={{left:10}}>
         <MaterialCommunityIcons name="alert-circle" size={20} color="#00BFFF" />

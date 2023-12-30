@@ -28,7 +28,7 @@ const WelcomeScreen = () => {
 
     const { masterId, welcomeImage1, welcomeImage2} = Constants.expoConfig.extra
 
-    const chatRef = doc(db, global.users, user.uid, "requests", masterId);//must have my UID stored somewhere
+    const chatRef = doc(db, global.users, user.uid, "requests", masterId);
 
 
     const chat_timestamp = serverTimestamp();
@@ -94,13 +94,13 @@ const WelcomeScreen = () => {
       <ImageBackground
         resizeMode='cover'
         style={{ flex: 1 }}
-        source={require("../images/pilots2.jpeg")}>
+        source={require("../images/dudes_dancing.jpg")}>
         {!isTutorial ? (
-          <View style={{ alignItems: "center", justifyContent: "center", marginTop: "15%" }}>
+          <View style={{ alignItems: "center", justifyContent: "center", marginTop: "10%" }}>
             <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: "Times New Roman" }}> Welcome to</Text>
             <View style={{ flexDirection: "row" }}>
               <Text style={{ color: "#00308F", fontSize: 50, fontWeight: "bold", padding: 5, fontFamily: "Times New Roman" }}> Wing</Text>
-              <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00308F", top: 5, backgroundColor: "#00BFFF" }} source={require("../images/logo.png")} />
+              <Image style={{ height: 50, width: 50, top: 10}} source={require("../images/bluelogo.png")} />
             </View>
           </View>
         ) : (
@@ -115,12 +115,12 @@ const WelcomeScreen = () => {
 
 
         {!isTutorial ? (
-          <View style={{ alignItems: "center", justifyContent: 'space-evenly', height: "60%", backgroundColor: "#00308F", opacity: 0.8, borderRadius: 20, marginHorizontal: "23%", marginTop: "10%" }}>
+          <View style={{ alignItems: "center", justifyContent: 'space-evenly', height: "60%", backgroundColor: "#00308F", opacity: 0.9, borderRadius: 20, marginHorizontal: "23%", marginTop: "10%" }}>
 
             <View style={{ padding: 5 }}>
               <Text style={styles.boldtext}>Find a Wing.</Text>
-              <Text style={styles.boldtext}>Go On Missions.</Text>
-              <Text style={styles.boldtext}>Build Your Network.</Text>
+              <Text style={styles.boldtext}>Hit The Town.</Text>
+              <Text style={styles.boldtext}>Delete Dating Apps.</Text>
             </View>
 
             <TouchableOpacity style={{ borderRadius: 10, borderWidth: 3, padding: 10, top: 10, borderColor: "white" }} onPress={() => { setIsTutorial(true) }}>{/*, navigate to TutorialScreen */}
@@ -132,7 +132,7 @@ const WelcomeScreen = () => {
           </View>
         ) : (
 
-          <View style={{ alignItems: "center", height: "70%", backgroundColor: "#00308F", opacity: 0.8, borderRadius: 20, marginHorizontal: "10%", marginTop: "5%" }}>
+          <View style={{ alignItems: "center", height: "70%", backgroundColor: "#00308F", opacity: 0.9, borderRadius: 20, marginHorizontal: "10%", marginTop: "5%" }}>
             <ScrollView style={{ margin: 10, borderWidth: 1, borderColor: "white", borderRadius: 10 }}>
               <View>
                 <Text style={styles.boldtext}>1. Swiping through Wings</Text>
@@ -160,30 +160,30 @@ const WelcomeScreen = () => {
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
                   <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>Tap </Text>
                   <View style={{ bottom: 10 }}>
-                    <Ionicons name="chatbubbles-sharp" size={30} color="#00BFFF" />
+                    <Ionicons name="chatbubbles-sharp" size={30} color="white" />
                   </View>
                 </View>
                 <Text style={styles.tutorialText}>Responding to a Request will move that user to your Active Chats and create a new chat thread.</Text>
                 <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/request_response.png")} />
-                <Text style={styles.boldtext}>3. Local Missions & Events</Text>
+                <Text style={styles.boldtext}>3. Local Deals & Events</Text>
                 <Text style={styles.tutorialText}>Get exclusive access to promotional deals with bars, restuarants, events and other local establishments that you can explore with your Wing!</Text>
                 <Text style={styles.tutorialText}>Simply check the News & Promos thread in your Active Chats to take advantage of the latest deals.</Text>
-                <Image style={{ height: 200, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.jpg")} />
+                <Image style={{ height: 150, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.png")} />
                 <Text style={styles.boldtext}>4. More Options</Text>
                 <Text style={styles.tutorialText}>To edit and view your own profile,</Text>
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
                   <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>Tap </Text>
                   <View style={{ bottom: 10 }}>
-                    <Ionicons name="person" size={30} color="#00BFFF" />
+                    <Ionicons name="person" size={30} color="white" />
                   </View>
                 </View>
                 <Text style={styles.tutorialText}>For Settings, Matching Preferences, or Help options,</Text>
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
                   <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>Tap </Text>
-                  <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
+                  <Image style={styles.iconcontainer} source={require("../images/whitelogo.png")} />
 
                 </View>
-                <Text style={styles.boldtext}>Ok, you’re all set to find your Wing and go on Missions!</Text>
+                <Text style={styles.boldtext}>Ok, you’re all set to find your Wing and hit the Town!</Text>
 
               </View>
             </ScrollView>
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     width: 30,
     borderRadius: 50,
     bottom: 5,
-    backgroundColor: "#00BFFF",
+    backgroundColor: "#00308F",
   },
   swipeButtonHeart: {
     bottom: 5,

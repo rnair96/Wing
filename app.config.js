@@ -4,13 +4,13 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.5.8",
+    version: "2.6.3",
     orientation: "portrait",
-    icon: "./assets/wing_icon.png",
+    icon: "./assets/icon_dkbluewing_whitebg.png",
     userInterfaceStyle: "light",
     scheme: "com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2", // Assuming this is what you meant by scheme
     splash: {
-      image: "./assets/splash_wing.png",
+      image: "./assets/splash_darkbluewing_whitebg.png",
       resizeMode: "contain",
       backgroundColor:"#00BFFF"
     },

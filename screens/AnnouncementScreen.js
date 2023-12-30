@@ -145,8 +145,8 @@ const AnnouncementScreen = () => {
 
                             <View style={{ padding: 10, maxWidth: "80%", marginRight: "auto", alignSelf: "flex-start", flexDirection: "row" }}>
                                 <Image
-                                    style={{ height: 50, width: 50, borderRadius: 50, backgroundColor: "#00BFFF" }}
-                                    source={require("../images/logo.png")}
+                                    style={{ height: 50, width: 50, borderRadius: 50, backgroundColor: "#00308F", borderWidth: 1, borderColor: "#00BFFF" }}
+                                    source={require("../images/whitelogo.png")}
                                 />
                                     <AnnouncementRecieverMessage key={message.id} message={message} />
                             </View>

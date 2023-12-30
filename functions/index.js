@@ -91,6 +91,30 @@ const sendPushBatch = async (tokens, title, body, data) => {
     return null;
   }
 };
+function createCompareFunction(currentUser) {
+  const currentUserValues = currentUser.values;
+  const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
+
+  return function compareUsers(user1, user2) {
+    // Count the matching values for user1
+    const matchingValuesUser1 = user1.values.filter((value) =>
+      currentUserValues.includes(value)).length;
+
+    // Count the matching values for user2
+    const matchingValuesUser2 = user2.values.filter((value) =>
+      currentUserValues.includes(value)).length;
+
+    if ((matchingValuesUser1 === matchingValuesUser2) && currentUserTag) {
+      const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
+      const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
+
+      return user2ActivityMatch - user1ActivityMatch;
+    }
+
+    // Sort in descending order of matching values
+    return matchingValuesUser2 - matchingValuesUser1;
+  };
+}
 
 // async function verifyToken(req) {
 //   const authHeader = req.headers.authorization || "";
@@ -151,6 +175,54 @@ exports.newUserSignup = functions.firestore
       }
     });
 
+const db = admin.firestore();
+
+exports.aggregateSurveyResponses = functions.firestore
+    .document("users/{userId}")
+    .onUpdate(async (change, context) => {
+      const newData = change.after.data();
+      const oldData = change.before.data();
+      let surveyDoc = "initialSurveyData";
+      let objectentries;
+
+
+      if (newData.surveyInfo && newData.surveyInfo.initial && !oldData.surveyInfo) {
+        console.log("initial survey set checked");
+        objectentries = newData.surveyInfo.initial;
+      } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.thirtydays && !oldData.surveyInfo.thirtydays) {
+        console.log("thirty days survey set checked");
+        surveyDoc = "thirtydaysSurveyData";
+        objectentries = newData.surveyInfo.thirtydays;
+      } else {
+        return null;
+      }
+
+      // Aggregate data document reference
+      const aggregateDocRef = db.collection("userData").doc(surveyDoc);
+
+      // Transaction to ensure atomic update
+      return db.runTransaction(async (transaction) => {
+        const aggregateDoc = await transaction.get(aggregateDocRef);
+        const aggregateData = aggregateDoc.exists ? aggregateDoc.data() : {};
+
+        // Iterate over each question in the surveyInfo
+        for (const [question, answer] of Object.entries(objectentries)) {
+        // Initialize question data structure if not present
+          if (!aggregateData[question]) {
+            aggregateData[question] = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0};
+          }
+
+          console.log("incrementing data for ", question );
+          // Increment the count for the given answer
+          aggregateData[question][answer]++;
+        }
+
+        // Update the aggregate data document
+        transaction.set(aggregateDocRef, aggregateData);
+      });
+    });
+
+
 exports.onSwipe = functions.firestore
     .document("users/{userId}/swipes/{swipeId}")
     .onCreate(async (snap, context) => {
@@ -179,7 +251,7 @@ exports.onSwipe = functions.firestore
         const newTime = new Date(Date.now());
 
         const reply =
-        `Hey man, glad to match with you!\n\n This is an auto-reply but this is my personal line where I try to read and respond to ALL DMS. So feel free to share any questions, concerns, or thoughts in general you may have about the app and this community right here.\n\n I may also drop a message in to see how you're doing and how we can make your experience even better. That's my mission after all ;)\n\n So keep your eye out for a surprise message from me and have fun Winging!`;
+        `Maverick in Top Gun 2 said it best, “If you think up there, you’re dead!”\n\n 1. Approach a girl you like within 3-seconds of seeing her. Don’t think. Do.\n\n 2. Have good posture, eye contact and a genuine smile. Body language communicates 90% more than words.\n\n 3. Get her interest. It could be as simple as cracking a joke about the bar you’re in to a thoughtful compliment about her outfit. \n\n 4. If she has a friend and your Wing is available, introduce him WELL. I.e: Cite one of his accomplishments on his profile.\n\n 5. Stay loyal to each other. The more you make your Wing look good in front of others, the better you’ll look by default.\n\n Bonus: Try to do this approach with EVERYONE. It becomes less forced when you’re just having a good time with everyone you meet, rather than just girls you like. It can even BRING girls to you. This is essentially “Charisma”. \n\nFeel free to share any questions, concerns, or thoughts in general you may have about the app, this community or even dating right here. I try to read and respond to ALL DMS. I may also drop a message in to see how you're doing and how we can make your experience here even better. \n\nSo keep your eye out for a surprise message from me and have fun Winging!`;
 
         const replyDoc = {
           timestamp: newTime,
@@ -288,7 +360,7 @@ exports.onSwipeDev = functions.firestore
         const newTime = new Date(Date.now());
 
         const reply =
-        `Hey man, glad to match with you!\n\n This is an auto-reply but this is my personal line where I try to read and respond to ALL DMS. So feel free to share any questions, concerns, or thoughts in general you may have about the app and this community right here.\n\n I may also drop a message in to see how you're doing and how we can make your experience even better. That's my mission after all ;)\n\n So keep your eye out for a surprise message from me and have fun Winging!`;
+        `Maverick in Top Gun 2 said it best, “If you think up there, you’re dead!”\n\n 1. Approach a girl you like within 3-seconds of seeing her. Don’t think. Do.\n\n 2. Have good posture, eye contact and a genuine smile. Body language communicates 90% more than words.\n\n 3. Get her interest. It could be as simple as cracking a joke about the bar you’re in to a thoughtful compliment about her outfit. \n\n 4. If she has a friend and your Wing is available, introduce him WELL. I.e: Cite one of his accomplishments on his profile.\n\n 5. Stay loyal to each other. The more you make your Wing look good in front of others, the better you’ll look by default.\n\n Bonus: Try to do this approach with EVERYONE. It becomes less forced when you’re just having a good time with everyone you meet, rather than just girls you like. It can even BRING girls to you. This is essentially “Charisma”. \n\nFeel free to share any questions, concerns, or thoughts in general you may have about the app, this community or even dating right here. I try to read and respond to ALL DMS. I may also drop a message in to see how you're doing and how we can make your experience here even better. \n\nSo keep your eye out for a surprise message from me and have fun Winging!`;
 
         const replyDoc = {
           timestamp: newTime,
@@ -415,156 +487,13 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
           .where("university_student.status", "==", "active");
     }
 
+    // no longer needed
     // Further filter by tag preference
-    if (user.preferences && user.preferences.tag !== "All") {
-      console.log("filtering for users with mission tag", user.preferences.tag);
-      matchingUsersQuery = matchingUsersQuery
-          .where("mission_tag", "==", user.preferences.tag);
-    }
-
-    // Further filter by distance preference
-    if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
-      console.log("filtering for users in local area", user.location.state);
-      matchingUsersQuery = matchingUsersQuery
-          .where("location.state", "==", user.location.state);
-    }
-
-    // Now filter these matched users against excludeIds
-    const masterUid = functions.config().wing.master_uid;
-
-    const excludeIds = [userId, masterUid]; // Start by excluding the user and CEO themselves
-
-    const swipesSnapshot = await userRef.collection("swipes").get();
-    swipesSnapshot.forEach((doc) => {
-      excludeIds.push(doc.id);
-    });
-
-    const passesSnapshot = await userRef.collection("passes").get();
-    passesSnapshot.forEach((doc) => {
-      excludeIds.push(doc.id);
-    });
-
-    const requestsSnapshot = await userRef.collection("requests").get();
-    requestsSnapshot.forEach((doc) => {
-      excludeIds.push(doc.id);
-    });
-
-    // Fetch users excluding the ids in excludeIds
-
-    // Chunk the excludeIds into groups of 10
-    console.log("chunking ids");
-    const chunkedExcludeIds = [];
-    for (let i = 0; i < excludeIds.length; i += 10) {
-      chunkedExcludeIds.push(excludeIds.slice(i, i + 10));
-    }
-
-    const usersDataMap = new Map();
-    const allQueriedUserIds = [];
-
-    for (const idsChunk of chunkedExcludeIds) {
-      console.log("filtering for each chunk");
-      const chunkQuery = matchingUsersQuery
-          .where(admin.firestore.FieldPath.documentId(), "not-in", idsChunk);
-
-      const chunkSnapshot = await chunkQuery.get();
-      chunkSnapshot.forEach((doc) => {
-        const userData = doc.data();
-        userData.id = doc.id;
-
-        allQueriedUserIds.push(doc.id);
-        usersDataMap.set(doc.id, userData);
-      });
-    }
-
-    // Deduplicate all queried user IDs
-    const uniqueQueriedUserIds = [...new Set(allQueriedUserIds)];
-
-    // For each unique ID,
-    // check if it appears in every chunked query.
-    // If it does, it's a final user ID.
-    const finalUserIds = uniqueQueriedUserIds.filter((id) => {
-      let appearanceCount = 0;
-      chunkedExcludeIds.forEach((chunk) => {
-        if (!chunk.includes(id)) {
-          appearanceCount++;
-        }
-      });
-      return appearanceCount === chunkedExcludeIds.length;
-    });
-
-    // Retrieve user data from the previously stored map
-    const uniqueUsers = finalUserIds.map((id) => usersDataMap.get(id));
-
-    console.log("filtering out incomplete profiles");
-    const completeUsers = uniqueUsers.filter((user) => {
-      return user.mission !== null &&
-        user.mission !== "" &&
-        user.values && user.values.length === 3 &&
-        user.images && user.images.length === 3 &&
-        (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
-    });
-
-    console.log("limiting to 30 profiles or less");
-    const finalUsers = completeUsers.length > 30 ?
-      completeUsers.slice(0, 30) : completeUsers;
-
-    res.status(200).json(finalUsers);
-  } catch (error) {
-    console.error("Error fetching filtered users: ", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-
-functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
-  if (req.method !== "GET") {
-    res.status(405).send("Method Not Allowed"); // Only allow GET requests
-    return;
-  }
-
-  // try {
-  //   console.log("verifying token");
-  //   const userId = await verifyToken(req);
-  const userId = req.params.id.replace(/:/g, "");
-  // Get user id from query parameter
-  if (!userId) {
-    res.status(400).send("User ID is required");
-    return;
-  }
-
-  try {
-    // Fetch the ids of the user's "swipes" and "passes"
-    const userRef = admin.firestore().collection("users_test").doc(userId);
-    // Fetch the given user's data
-    const userSnapshot = await userRef.get();
-    if (!userSnapshot.exists) {
-      res.status(404).send("Given user not found");
-      return;
-    }
-
-    const user = userSnapshot.data();
-    // const userPreferences = user.tagPreference;
-    const userGender = user.gender;
-    let matchingUsersQuery = admin.firestore().collection("users_test")
-        .where("gender", "==", userGender)
-        .limit(1000);
-    // add limit to size
-
-    // Filter by preferences
-
-    // Filter by university student preference
-    if (user.university_student && user.preferences && user.preferences.university === true) {
-      console.log("filtering for university students");
-      matchingUsersQuery = matchingUsersQuery
-          .where("university_student.status", "==", "active");
-    }
-
-    // Further filter by tag preference
-    if (user.preferences && user.preferences.tag !== "All") {
-      console.log("filtering for users with mission tag", user.preferences.tag);
-      matchingUsersQuery = matchingUsersQuery
-          .where("mission_tag", "==", user.preferences.tag);
-    }
+    // if (user.preferences && user.preferences.tag !== "All") {
+    //   console.log("filtering for users with mission tag", user.preferences.tag);
+    //   matchingUsersQuery = matchingUsersQuery
+    //     .where("mission_tag", "==", user.preferences.tag);
+    // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
@@ -642,16 +571,172 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     console.log("filtering out incomplete profiles and flagged accounts");
 
     const completeUsers = uniqueUsers.filter((user) => {
-      return user.mission !== null &&
-        user.mission !== "" &&
+      return user.prompts && user.prompts.length > 0 &&
         user.values && user.values.length === 3 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
 
+    const compareUsers = createCompareFunction(user);
+
+    // sort users by matching values
+    console.log("sorting profiles by values and tags");
+    const sortedUsers = completeUsers.sort(compareUsers);
+
     console.log("limiting to 30 profiles or less");
-    const finalUsers = completeUsers.length > 30 ?
-      completeUsers.slice(0, 30) : completeUsers;
+    const finalUsers = sortedUsers.length > 30 ?
+      sortedUsers.slice(0, 30) : sortedUsers;
+
+    res.status(200).json(finalUsers);
+  } catch (error) {
+    console.error("Error fetching filtered users: ", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
+  if (req.method !== "GET") {
+    res.status(405).send("Method Not Allowed"); // Only allow GET requests
+    return;
+  }
+
+  // try {
+  //   console.log("verifying token");
+  //   const userId = await verifyToken(req);
+  const userId = req.params.id.replace(/:/g, "");
+  // Get user id from query parameter
+  if (!userId) {
+    res.status(400).send("User ID is required");
+    return;
+  }
+
+  try {
+    // Fetch the ids of the user's "swipes" and "passes"
+    const userRef = admin.firestore().collection("users_test").doc(userId);
+    // Fetch the given user's data
+    const userSnapshot = await userRef.get();
+    if (!userSnapshot.exists) {
+      res.status(404).send("Given user not found");
+      return;
+    }
+
+    const user = userSnapshot.data();
+    // const userPreferences = user.tagPreference;
+    const userGender = user.gender;
+    let matchingUsersQuery = admin.firestore().collection("users_test")
+        .where("gender", "==", userGender)
+        .limit(1000);
+    // add limit to size
+
+    // Filter by preferences
+
+    // Filter by university student preference
+    if (user.university_student && user.preferences && user.preferences.university === true) {
+      console.log("filtering for university students");
+      matchingUsersQuery = matchingUsersQuery
+          .where("university_student.status", "==", "active");
+    }
+
+    // no longer needed
+    // Further filter by tag preference
+    // if (user.preferences && user.preferences.tag !== "All") {
+    //   console.log("filtering for users with mission tag", user.preferences.tag);
+    //   matchingUsersQuery = matchingUsersQuery
+    //     .where("mission_tag", "==", user.preferences.tag);
+    // }
+
+    // Further filter by distance preference
+    if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
+      console.log("filtering for users in local area", user.location.state);
+      matchingUsersQuery = matchingUsersQuery
+          .where("location.state", "==", user.location.state);
+    }
+
+    // Now filter these matched users against excludeIds
+    const masterUid = functions.config().wing.master_uid;
+
+    const excludeIds = [userId, masterUid]; // Start by excluding the user and CEO themselves
+
+    const swipesSnapshot = await userRef.collection("swipes").get();
+    swipesSnapshot.forEach((doc) => {
+      excludeIds.push(doc.id);
+    });
+
+    const passesSnapshot = await userRef.collection("passes").get();
+    passesSnapshot.forEach((doc) => {
+      excludeIds.push(doc.id);
+    });
+
+    const requestsSnapshot = await userRef.collection("requests").get();
+    requestsSnapshot.forEach((doc) => {
+      excludeIds.push(doc.id);
+    });
+
+    // Fetch users excluding the ids in excludeIds
+
+    // Chunk the excludeIds into groups of 10
+    console.log("chunking ids");
+    const chunkedExcludeIds = [];
+    for (let i = 0; i < excludeIds.length; i += 10) {
+      chunkedExcludeIds.push(excludeIds.slice(i, i + 10));
+    }
+
+    const usersDataMap = new Map();
+    const allQueriedUserIds = [];
+
+    for (const idsChunk of chunkedExcludeIds) {
+      console.log("filtering for each chunk");
+      const chunkQuery = matchingUsersQuery
+          .where(admin.firestore.FieldPath.documentId(), "not-in", idsChunk);
+
+      const chunkSnapshot = await chunkQuery.get();
+      chunkSnapshot.forEach((doc) => {
+        const userData = doc.data();
+        userData.id = doc.id;
+
+        allQueriedUserIds.push(doc.id);
+        usersDataMap.set(doc.id, userData);
+      });
+    }
+
+    // Deduplicate all queried user IDs
+    const uniqueQueriedUserIds = [...new Set(allQueriedUserIds)];
+
+    // For each unique ID,
+    // check if it appears in every chunked query.
+    // If it does, it's a final user ID.
+    const finalUserIds = uniqueQueriedUserIds.filter((id) => {
+      let appearanceCount = 0;
+      chunkedExcludeIds.forEach((chunk) => {
+        if (!chunk.includes(id)) {
+          appearanceCount++;
+        }
+      });
+      return appearanceCount === chunkedExcludeIds.length;
+    });
+
+    // Retrieve user data from the previously stored map
+    const uniqueUsers = finalUserIds.map((id) => usersDataMap.get(id));
+
+    console.log("filtering out incomplete profiles and flagged accounts");
+
+    const completeUsers = uniqueUsers.filter((user) => {
+      return user.prompts && user.prompts.length > 0 &&
+        user.values && user.values.length === 3 &&
+        user.images && user.images.length === 3 &&
+        (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
+    });
+
+    const compareUsers = createCompareFunction(user);
+
+    // sort users by matching values
+    console.log("sorting profiles by values and tags");
+    const sortedUsers = completeUsers.sort(compareUsers);
+
+    console.log("limiting to 30 profiles or less");
+    const finalUsers = sortedUsers.length > 30 ?
+      sortedUsers.slice(0, 30) : sortedUsers;
 
     res.status(200).json(finalUsers);
   } catch (error) {

@@ -93,7 +93,7 @@ const StudentSetupScreen = () => {
 
                         <View style={{ padding: 20, alignItems: "center", marginBottom: 20 }}>
                             <Text style={styles.formTitle}>Join Wing University?</Text>
-                            <Text style={{ padding: 5 }}>{`(A space to exclusively match with other University students. You can change this setting later)`}</Text>
+                            <Text style={{ padding: 5, color:"grey", textAlign:"center" }}>{`A space to exclusively match with other University students.\n\nYou can change this setting later`}.</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
                                 <Text style={{ marginRight: 10, fontWeight: "bold", fontSize: 15, }}>{universityPreference ? "Yes" : "No"}</Text>
                                 <Switch

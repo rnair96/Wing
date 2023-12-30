@@ -208,6 +208,14 @@ const StackNavigator = () => {
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
             }}
           />
+          {/* <Stack.Screen
+            name="TaglinePrompt"
+            component={TaglinePromptScreen}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+              gestureDirection: 'vertical'
+            }}
+          /> */}
           {/* </Stack.Group> */}
           {/* <Stack.Group screenOptions={{ presentation: "transparentModal" }}> */}
           {/* <Stack.Screen name="Match" component={MatchScreen} /> */}

@@ -1,32 +1,42 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc, writeBatch, serverTimestamp, collection } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useNavigation } from '@react-navigation/core';
-import TagPicker from '../components/TagPicker';
+import { useNavigation, useRoute } from '@react-navigation/core';
+// import TagPicker from '../components/TagPicker';
 import Header from '../Header';
 import EulaModal from '../components/EulaModal';
 import ValuesList from '../components/ValuesList';
+import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
+import PromptModal from '../components/PromptModal';
+import PromptPicker from '../components/PromptPicker';
+
 
 
 const SetUp3Screen = () => {
   const { user } = useAuth();
-  const [mission, setMission] = useState(null);
-  const [missiontag, setMissionTag] = useState("Let's Have Fun");
   const [eulaVisible, setEulaVisible] = useState(true);
   const [values, setValues] = useState([]);
+  const [prompt, setPrompt] = useState(null)
+  const [tagline, setTagline] = useState(null);
+  const [isPromptVisible, setisPromptVisible] = useState(false);
 
   const navigation = useNavigation();
-  const incompleteform = !mission || !values || values.length < 3;
+  // const incompleteform = !mission || !values || values.length < 3;
+  const incompleteform = !tagline || !values || values.length < 3;
 
 
   const updateUserProfile = () => {
+    const promptObject = {
+      prompt: prompt,
+      tagline: tagline
+    }
+
     updateDoc(doc(db, global.users, user.uid), {
-      mission: mission,
-      mission_tag: missiontag,
       values: values,
+      prompts: [promptObject, null, null]
     }).then(() => {
       navigation.navigate("Home")
       navigation.navigate("WelcomeScreen")
@@ -47,8 +57,6 @@ const SetUp3Screen = () => {
     logout();
 
   }
-
-  //Use Header
 
   return (
     <KeyboardAvoidingView
@@ -72,25 +80,9 @@ const SetUp3Screen = () => {
 
             <Text style={{ ...styles.formTitle, fontSize: 20 }}>Nearly Done!</Text>
 
+            <PromptPicker tagline={tagline} prompt={prompt} setPromptVisible={setisPromptVisible}/>
+            <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Tip: Make it interesting. This is your hook to get a Wing's attention.</Text>
 
-            <Text style={styles.formTitle}>Define Your Mission {`(40 char max)`}</Text>
-            <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Hint: Think of a specific goal you want to achieve or activity you'd like to do with your Wing.</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
-              <Text style={styles.formTitle}>I Want To: </Text>
-              <TextInput
-                value={mission}
-                multiline
-                numberOfLines={2}
-                maxLength={40}
-                onChangeText={setMission}
-                placeholder={'Explore the local nightlife'}
-                placeholderTextColor={"grey"}
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, marginTop: 20, width: "55%", backgroundColor: "#E0E0E0" }} />
-            </View>
-
-            <Text style={styles.formTitle}>Select The Category That Best Fits The Mission</Text>
-            <Text style={{ fontSize: 12, margin: 2, color: "grey", padding: 15 }}>This will help to optimize matching you with the best Wing to assist your Mission.</Text>
-            <TagPicker tag={missiontag} setTag={setMissionTag} />
 
             <Text style={styles.formTitle}>Select Your 3 Top Values</Text>
             <ValuesList selectedValues={values} setSelectedValues={setValues} />
@@ -100,10 +92,11 @@ const SetUp3Screen = () => {
                 disabled={incompleteform}
                 style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10 }, incompleteform ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
                 onPress={updateUserProfile}>
-                <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Next</Text>
+                <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Create Account</Text>
               </TouchableOpacity>
             </View>
           </View>
+          <PromptModal setTagline={setTagline} setPrompt={setPrompt} isVisible={isPromptVisible} setIsVisible={setisPromptVisible} />
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

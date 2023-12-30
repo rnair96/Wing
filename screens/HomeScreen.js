@@ -30,7 +30,7 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp0");
             } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
                 navigation.navigate("SetUp1");
-            } else if (!snapshot.data().mission || !snapshot.data().values) {
+            } else if (!snapshot.data().prompts || !snapshot.data().values) {
                 navigation.navigate("SetUp3", { id: user.uid });
             }
 
@@ -115,18 +115,18 @@ const HomeScreen = () => {
                     // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }} 
                     onPress={() => navigation.navigate("ToggleProfile", loggedProfile)}>
                     {/* left: 20, top:10 */}
-                    <Ionicons name="person" size={30} color="#00BFFF" />
+                    <Ionicons name="person" size={30} color="#00308F" />
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{ borderRadius: 50, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white' }}
                     onPress={() => navigation.navigate("Menu", loggedProfile)}>
-                    <Image style={styles.iconcontainer} source={require("../images/logo.png")} />
+                    <Image style={styles.iconcontainer} source={require("../images/whitelogo.png")} />
                 </TouchableOpacity>
                 {/* right:20, top:10 */}
                 <TouchableOpacity
                     // style={{padding:5, borderRadius: 50, shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.3, shadowRadius: 2.41, elevation: 5, backgroundColor: 'white'}} 
                     onPress={() => navigation.navigate("ToggleChat", loggedProfile)}>
-                    <Ionicons name="chatbubbles-sharp" size={30} color="#00BFFF" />
+                    <Ionicons name="chatbubbles-sharp" size={30} color="#00308F" />
                 </TouchableOpacity>
             </View>
             {/* End of Header */}
@@ -141,9 +141,10 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         borderRadius: 50,
-        backgroundColor: "#00BFFF",
+        backgroundColor: "#00308F",
     }
 });
 
 
 export default HomeScreen
+

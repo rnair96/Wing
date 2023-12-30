@@ -69,7 +69,7 @@ const AnnouncementRow = () => {
         !loadingMessage && (
             <View style={{ padding: 10, width: "95%" }}>
                 <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements")}>
-                        <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "#00BFFF" }} source={require("../images/logo.png")} />
+                        <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "#00308F", borderWidth: 1, borderColor: "#00BFFF"}} source={require("../images/whitelogo.png")} />
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
                             <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>News & Promos</Text>
