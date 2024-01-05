@@ -55,12 +55,12 @@ const LoginScreen = () => {
                 >
                     <View style={{ height: "30%", justifyContent: "center", alignItems: "center", justifyContent: "space-evenly" }}>
                         <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 40, fontFamily: "serif", color: "#00308F", left: 13 }}>Wing</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 40, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F", left: 13 }}>Wing</Text>
                             <Image style={styles.iconcontainer} source={require("../images/darkbluelogocorrect.png")} />
                         </View>
                         <View style={{ height: "50%", top: "10%", justifyContent: "space-evenly" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: "sans-serif-condensed", color: "#00308F" }}>Find Your Wingman.</Text>
-                            <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: "sans-serif-condensed", color: "#00308F" }}>Delete Dating Apps.</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Find Your Wingman.</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Delete Dating Apps.</Text>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
@@ -75,13 +75,13 @@ const LoginScreen = () => {
                                     style={{ alignItems: "center", justifyContent: "space-evenly", height: "80%" }}
                                     keyboardVerticalOffset={5}
                                 >
-                                    <Text style={{ fontWeight: "bold", fontSize: 20, fontFamily: "sans-serif-condensed", color: "#00308F" }}>Email</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 20, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" : "Times New Roman", color: "#00308F" }}>Email</Text>
                                     <TextInput
                                         value={email}
                                         onChangeText={setEmail}
                                         placeholder={'example@example.com'}
                                         style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: 180 }} />
-                                    <Text style={{ fontWeight: "bold", fontSize: 20, fontFamily: "sans-serif-condensed", color: "#00308F" }}>Password</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 20, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" : "Times New Roman", color: "#00308F" }}>Password</Text>
                                     <TextInput
                                         value={password}
                                         onChangeText={setPassword}
@@ -107,7 +107,7 @@ const LoginScreen = () => {
                                 <TouchableOpacity style={styles.opacitycontainer} onPress={() => navigation.navigate("SignUp")}>
                                     <Text style={styles.textcontainer}>Sign Up Manually</Text>
                                 </TouchableOpacity>
-                                <Text style={{ fontWeight: "bold", fontSize: 15, fontFamily: "sans-serif-condensed", color: "#00308F" }}>Or</Text>
+                                <Text style={{ fontWeight: "bold", fontSize: 15, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" : "Times New Roman", color: "#00308F" }}>Or</Text>
 
                                 <TouchableOpacity style={styles.opacitycontainer} onPress={signInWithGoogle}>
                                     <View style={{ flexDirection: "row" }}>

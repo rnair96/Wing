@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Text, View, Image, SafeAreaView, TouchableOpacity, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import { Text, View, Image, SafeAreaView, TouchableOpacity, StyleSheet, ImageBackground, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, Ionicons } from '@expo/vector-icons';
-import missionText from '../welcome_sequence/mission';
 import welcomeText from '../welcome_sequence/welcome';
 import cultureText from '../welcome_sequence/values_etiquette';
 import storyText from '../welcome_sequence/story';
@@ -97,15 +96,15 @@ const WelcomeScreen = () => {
         source={require("../images/dudes_dancing.jpg")}>
         {!isTutorial ? (
           <View style={{ alignItems: "center", justifyContent: "center", marginTop: "10%" }}>
-            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: "Times New Roman" }}> Welcome to</Text>
+            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed":"Times New Roman" }}> Welcome to</Text>
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ color: "#00308F", fontSize: 50, fontWeight: "bold", padding: 5, fontFamily: "Times New Roman" }}> Wing</Text>
+              <Text style={{ color: "#00308F", fontSize: 50, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" :"Times New Roman" }}> Wing</Text>
               <Image style={{ height: 50, width: 50, top: 10}} source={require("../images/bluelogo.png")} />
             </View>
           </View>
         ) : (
           <View style={{ alignItems: "center", justifyContent: "center", marginTop: "15%" }}>
-            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: "Times New Roman" }}> A Quick Tutorial</Text>
+            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" :"Times New Roman" }}> A Quick Tutorial</Text>
           </View>
         )}
         {/* <Text style={{color:"white", fontSize:20, fontWeight:"bold"}}>Find your Wingman. Go on Missions.</Text> */}

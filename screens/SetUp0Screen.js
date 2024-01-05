@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, StatusBar } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { useNavigation } from '@react-navigation/core';
 import getLocation from '../lib/getLocation';
@@ -81,7 +81,7 @@ const SetUp0Screen = () => {
         <TouchableWithoutFeedback
           onPress={Keyboard.dismiss()}
         >
-          <Text style={{ color: "#00308F", fontSize: 20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
+          <Text style={{ color: "#00308F", fontSize: 20, fontWeight: "bold", padding:20, paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0}}>Account Setup 1/3</Text>
 
         
         </TouchableWithoutFeedback>

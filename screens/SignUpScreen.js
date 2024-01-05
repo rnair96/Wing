@@ -1,6 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
 import { Text, TextInput, View, TouchableOpacity, SafeAreaView, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 
@@ -13,9 +12,6 @@ const SignUpScreen = () => {
   const [confirmpassword, setConfirmPassword] = useState(null);
   const [incompleteForm, setIncompleteForm] = useState(true);
   const { signUpManually } = useAuth();
-
-
-  const navigation = useNavigation();
 
 
   useEffect(() => {
