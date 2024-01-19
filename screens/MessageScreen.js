@@ -9,6 +9,7 @@ import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, update
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import * as Sentry from "@sentry/react";
+import ChatInput from '../components/ChatInput';
 
 const MessageScreen = () => {
 
@@ -89,7 +90,7 @@ const MessageScreen = () => {
     }
   }, [messages])
 
-  const sendMessage = () => {
+  const sendMessage = (type) => {
     const name = userProfile ? userProfile.displayName : user.displayName.split(" ")[0]
     const timestamp = serverTimestamp();
 
@@ -101,6 +102,7 @@ const MessageScreen = () => {
         displayName: name,
         message: input,
         read: false,
+        type: type
       })
 
       updateDoc(doc(db, global.matches, matchedDetails.id), {
@@ -177,7 +179,7 @@ const MessageScreen = () => {
     </View> */}
 
 
-        <View
+        {/* <View
           style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
           <TextInput
             style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15 }}
@@ -192,8 +194,8 @@ const MessageScreen = () => {
           <TouchableOpacity onPress={sendMessage} style={{marginLeft:20}}>
             <Text style={{color:"#00BFFF", fontSize:15}}>Send</Text>
           </TouchableOpacity>
-          {/* <Button onPress={sendMessage} title="Send" style={{ borderRadius: 20 }} /> */}
-        </View>
+        </View> */}
+        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} fileLocation={matchedDetails.id}/>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )

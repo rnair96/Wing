@@ -41,6 +41,8 @@ import RequestMessageScreen from './screens/RequestMessageScreen';
 import AnnouncementScreen from './screens/AnnouncementScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
 import * as Sentry from "@sentry/react";
+import GroupChatScreen from './screens/GroupChatScreen';
+import GCProfileViewScreen from './screens/GCProfileViewScreen';
 
 
 const Stack = createStackNavigator();
@@ -140,6 +142,7 @@ const StackNavigator = () => {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Message" component={MessageScreen} />
+          <Stack.Screen name="GroupChat" component={GroupChatScreen} />
           <Stack.Screen name="Menu" component={MenuScreen}
             options={{
               cardStyleInterpolator: slideFromTopInterpolator,
@@ -177,6 +180,14 @@ const StackNavigator = () => {
           <Stack.Screen
             name="ProfileView"
             component={ProfileViewScreen}
+            options={{
+              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+            //   gestureDirection: 'vertical'
+            }}
+          />
+          <Stack.Screen
+            name="GCProfileView"
+            component={GCProfileViewScreen}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
             //   gestureDirection: 'vertical'

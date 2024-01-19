@@ -318,6 +318,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
 
             <Text style={styles.formTitle}>Accomplishments</Text>
+            <Text style={{ paddingBottom: 10, color: "grey" }}>List any strengths or accomplishments that you’re proud of.</Text>
             <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
                 <Text>1.</Text>

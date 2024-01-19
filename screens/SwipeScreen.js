@@ -20,7 +20,7 @@ const SwipeScreen = ({ loggedProfile }) => {
     const swipeRef = useRef(null);
     const [profiles, setProfiles] = useState([]);
     const [swipeAmount, setSwipeAmount] = useState(5);
-    const [swipeEnabled, setSwipeEnabled] = useState(true);
+    // const [swipeEnabled, setSwipeEnabled] = useState(true);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isMessageModalVisible, setMessageModalVisible] = useState(false);
@@ -36,47 +36,48 @@ const SwipeScreen = ({ loggedProfile }) => {
 
 
 
-    useEffect(() => {
+    // useEffect(() => { // must be updated with a query index in firestore
 
-        if (loggedProfile && loggedProfile !== null) {
+    //     if (loggedProfile && loggedProfile !== null) {
 
-            const setSwipes = async () => {
-                const startOfDay = new Date();
-                startOfDay.setHours(0, 0, 0, 0);
+    //         const setSwipes = async () => {
+    //             const startOfDay = new Date();
+    //             startOfDay.setHours(0, 0, 0, 0);
 
-                const endOfDay = new Date();
-                endOfDay.setHours(23, 59, 59, 999);
+    //             const endOfDay = new Date();
+    //             endOfDay.setHours(23, 59, 59, 999);
 
 
-                const userSnapshot = await getDocs(query(collection(db, global.users, user.uid, "swipes"),
-                    where("timeSwiped", ">=", startOfDay), where("timeSwiped", "<=", endOfDay),
-                    orderBy("timeSwiped", "desc")), limit(1))
-                    .catch((error) => {
-                        Sentry.captureMessage(`Error getting the last swipe of ${user.uid}, ${error.message}`)
-                    });
+    //             const userSnapshot = await getDocs(query(collection(db, global.users, user.uid, "swipes"),
+    //                 where("swipedFrom", "==", "swipe"),
+    //                 where("timeSwiped", ">=", startOfDay), where("timeSwiped", "<=", endOfDay),
+    //                 orderBy("timeSwiped", "desc")), limit(1))
+    //                 .catch((error) => {
+    //                     Sentry.captureMessage(`Error getting the last swipe of ${user.uid}, ${error.message}`)
+    //                 });
 
-                if (!userSnapshot.empty) {
-                    const latestSwipeDoc = userSnapshot.docs[0];
-                    if (latestSwipeDoc.data()?.swipedAt && (latestSwipeDoc.data().swipedAt - 1) > 0) {
-                        console.log("setting swipes to previously", (latestSwipeDoc.data().swipedAt - 1))
-                        setSwipeAmount((latestSwipeDoc.data().swipedAt - 1));
-                    } else if (latestSwipeDoc.data()?.swipedAt) {
-                        console.log("setting swipes to 0 and disabling swipes");
-                        setSwipeAmount(0);
-                        setSwipeEnabled(false);
-                        setIsModalVisible(true);
-                    } else {
-                        console.log("No swipes found today from user. Replenish swipes");
-                    }
-                } else {
-                    console.log("No swipes found today from user. Replenish swipes");
-                }
+    //             if (!userSnapshot.empty) {
+    //                 const latestSwipeDoc = userSnapshot.docs[0];
+    //                 if (latestSwipeDoc.data()?.swipedAt && (latestSwipeDoc.data().swipedAt - 1) > 0) {
+    //                     console.log("setting swipes to previously", (latestSwipeDoc.data().swipedAt - 1))
+    //                     setSwipeAmount((latestSwipeDoc.data().swipedAt - 1));
+    //                 } else if (latestSwipeDoc.data()?.swipedAt) {
+    //                     console.log("setting swipes to 0 and disabling swipes");
+    //                     setSwipeAmount(0);
+    //                     setSwipeEnabled(false);
+    //                     setIsModalVisible(true);
+    //                 } else {
+    //                     console.log("No swipes found today from user. Replenish swipes");
+    //                 }
+    //             } else {
+    //                 console.log("No swipes found today from user. Replenish swipes");
+    //             }
 
-            }
-            setSwipes();
-        }
+    //         }
+    //         setSwipes();
+    //     }
 
-    }, [db, loggedProfile])
+    // }, [db, loggedProfile])
 
     useEffect(() => {
         //check if user has any unresolved flags
@@ -221,11 +222,11 @@ const SwipeScreen = ({ loggedProfile }) => {
     }
 
     const messageSwipe = async (swipeRef) => {
-        if (swipeAmount === 0) {
-            setSwipeEnabled(false);
-            setIsModalVisible(true);
-            return;
-        }
+        // if (swipeAmount === 0) {
+        //     setSwipeEnabled(false);
+        //     setIsModalVisible(true);
+        //     return;
+        // }
         // setMessagedName(profiles[cardIndex].displayName)
         setSwipeRefMessage(swipeRef)
         setMessageModalVisible(true);
@@ -248,6 +249,7 @@ const SwipeScreen = ({ loggedProfile }) => {
             swipedAt: swipeAmount,
             timeSwiped: timestamp,
             message: requestMessage,
+            swipedFrom: "swipe"
         }
 
         setRequestMessage(null);
@@ -271,7 +273,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                         <View style={[styles.emptycardcontainer]}>
                             <View style={styles.loading}>
                                 <ActivityIndicator size="large" color="#00BFFF" />
-                                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Gathering Wings...</Text>
+                                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Fitting Your Best Wings...</Text>
                             </View>
                         </View>
 
@@ -291,7 +293,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                         verticalSwipe={false}
                         cardIndex={0}
                         horizontalSwipe={false}
-                        disableRightSwipe={!swipeEnabled}
+                        // disableRightSwipe={!swipeEnabled}
                         // disableTopSwipe={!swipeEnabled}
                         onSwipedAll={() => {
                             setProfiles([])

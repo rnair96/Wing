@@ -36,7 +36,8 @@ const WelcomeScreen = () => {
       id: masterId,
       message: chatText,
       timestamp: chat_timestamp,
-      read: false
+      read: false,
+      swipedFrom: "welcome"
     }
 
     batch.set(chatRef, requestDoc);
@@ -63,11 +64,11 @@ const WelcomeScreen = () => {
       const timestamp = new Date(Date.now() + (secondsToAdd * 1000))
       secondsToAdd++;
 
-      const contentField = file["type"] === "text" ? "message" : "picture";
+      // const contentField = file["type"] === "text" ? "message" : "picture";
 
       batch.set(docRef, {
         id: docRef.id, // Auto-generated ID
-        [contentField]: message, // Content from the text file
+        message: message, // Content from the text file
         read: false,
         timestamp: timestamp, // Current timestamp
         title: '',

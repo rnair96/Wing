@@ -8,6 +8,7 @@ import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
+import KickOutModal from '../components/KickOutModal';
 
 const SetUp0Screen = () => {
   const { user } = useAuth();
@@ -18,7 +19,8 @@ const SetUp0Screen = () => {
   const [birthdate, setBirthDate] = useState(null);
   const [token, setToken] = useState(null);
   const [notifications, setNotifications] = useState(true);
-  const [name, setName] = useState(user.displayName?.split(" ")[0]);
+  const [name, setName] = useState(user?.displayName?.split(" ")[0]);
+  const [isKOModalVisible, setIsKOModalVisible] = useState(false);
 
   const navigation = useNavigation();
 
@@ -46,6 +48,10 @@ const SetUp0Screen = () => {
   const incompleteform = !gender || !age || !locationObject || !name;
 
   const createUserProfile = () => {
+    if(gender === "female"){
+      setIsKOModalVisible(true);
+      return;
+    }
     setDoc(doc(db, global.users, user.uid), {
       id: user.uid,
       displayName: name,
@@ -87,7 +93,7 @@ const SetUp0Screen = () => {
         </TouchableWithoutFeedback>
         </SafeAreaView>
 
-          {(!user.displayName || user.displayName === "null" || user.displayName === "") && (
+          {(!user || !user?.displayName || user.displayName === "null" || user.displayName === "") && (
             <View>
               <Text style={styles.formTitle}>What's Your First Name?</Text>
               <TextInput
@@ -127,6 +133,7 @@ const SetUp0Screen = () => {
           </View>
         </View>
         {/* </View> */}
+        <KickOutModal isModalVisible={isKOModalVisible} setIsModalVisible={setIsKOModalVisible}/>
         </ScrollView>
     </KeyboardAvoidingView>
 

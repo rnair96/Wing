@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
+import { SafeAreaView, View, StyleSheet, TextInput, TouchableHighlight, Image, TouchableOpacity, Text, Modal, KeyboardAvoidingView, Keyboard, ScrollView, Platform } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import RecieverMessage from './RecieverMessage';
 import { collection, serverTimestamp, updateDoc, doc, writeBatch, getDoc } from 'firebase/firestore';
@@ -129,6 +129,7 @@ const RequestMessageScreen = () => {
                 displayName: otherProfile.displayName,
                 message: requestDetails.message,
                 read: true,
+                type: "text"
             }
 
             batch.set(messageRefOne, messageOne);
@@ -144,6 +145,7 @@ const RequestMessageScreen = () => {
                     displayName: username,
                     message: message,
                     read: false,
+                    type: "text"
                 }
 
                 batch.set(messageRefTwo, messageTwo);
@@ -300,7 +302,7 @@ const RequestMessageScreen = () => {
                 // keyboardVerticalOffset={10}
                 >
                     {/* <View style={styles.centeredView}> */}
-                    <View style={{ bottom: isKeyboardVisible ? "10%" : 0, ...styles.modalView, height: isKeyboardVisible? "50%":"30%" }}>
+                    <View style={{ bottom: isKeyboardVisible ? "10%" : 0, ...styles.modalView, height:(Platform.OS==="android" && isKeyboardVisible)? "50%": "30%"}}>
                         <Text style={{ padding: 5, fontWeight: "bold", fontSize: 17, textAlign: "center" }}>Reply and Match with {name}</Text>
                         <TextInput
                             value={message}

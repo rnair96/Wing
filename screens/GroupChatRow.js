@@ -9,27 +9,31 @@ import getTime from '../lib/getTime';
 import * as Sentry from "@sentry/react";
 
 
-const AnnouncementRow = () => {
+const GroupChatRow = ({profile, matches, requests}) => {
 
     const { user } = useAuth();
     const [lastMessage, setLastMessage] = useState(null);
-    const [read, setRead] = useState(true);
+    // const [read, setRead] = useState(true);
+    const [userMessaged, setUserMessaged] = useState("User")
     const [loadingMessage, setLoadingMessage] = useState(true);
     const [timestamp, setTimeStamp] = useState();
     const navigator = useNavigation();
 
 
     const setVars = (data) => {
-        if (data && data.type==="text" && data?.message?.length > 15) {
-            const message = data?.message?.slice(0, 15) + "..."
+        if (data && data?.message?.length > 7) {
+            const message = data?.message?.slice(0, 7) + "..."
             setLastMessage(message);
-        } else if (data && data.type==="text") {
+        } else {
             setLastMessage(data?.message)
-        } else if (data && data.type==="image"){
-            setLastMessage("Image sent")
-        } else if (data && data.type==="link"){
-            setLastMessage("Link sent")
         }
+        // else if (data && data.type==="text") {
+        //     setLastMessage(data?.message)
+        // } else if (data && data.type==="image"){
+        //     setLastMessage("Image sent")
+        // } else if (data && data.type==="link"){
+        //     setLastMessage("Link sent")
+        // }
 
         if (data && data?.timestamp) {
             let milliseconds = data?.timestamp.seconds * 1000 + Math.floor(data?.timestamp.nanoseconds / 1000000);
@@ -37,24 +41,28 @@ const AnnouncementRow = () => {
             setTimeStamp(time);
         }
 
-        if(data && data.read!==null && data.read!==undefined){
-            setRead(data.read);
+        if(data && data?.displayName){
+            setUserMessaged(data.displayName)
         }
+
+        // if(data && data.read!==null && data.read!==undefined){
+        //     setRead(data.read);
+        // }
 
         setLoadingMessage(false);
     }
 
     useEffect(() => {
         //could limit this snapshot to just one document
-        const unsub = onSnapshot(query(collection(db, global.users, user.uid, "announcements"),
+        const unsub = onSnapshot(query(collection(db, "groupChat"),
             orderBy("timestamp", "desc"), limit(1)), (snapshot) =>
             setVars({
                 id: snapshot.docs[0]?.id,
                 ...snapshot.docs[0]?.data()})
             ,
             (error) => {
-                console.log("there was an error in announcement snapshot", error)
-                Sentry.captureMessage(`error getting announcements row data for ${user.uid}, ${error.message}`)
+                console.log("there was an error in groupchat snapshot", error)
+                Sentry.captureMessage(`error getting groupchat row data for ${user.uid}, ${error.message}`)
                 
             }
         )
@@ -68,16 +76,16 @@ const AnnouncementRow = () => {
     return (
         !loadingMessage && (
             <View style={{ padding: 10, width: "95%" }}>
-                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements")}>
-                        <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "white", borderWidth: 1, borderColor: "#00BFFF"}} source={require("../images/darkbluelogocorrect.png")} />
+                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("GroupChat", {profile, matches, requests})}>
+                        <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "white", borderWidth: 1, borderColor: "#00BFFF"}} source={require("../images/bizdudes.jpg")} />
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>News & Events</Text>
-                                <Text style={{ paddingLeft: 10, fontWeight: !read? "bold":"normal" }}>{lastMessage}</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>Community</Text>
+                            <Text style={{ paddingLeft: 10, fontWeight: "normal" }}>{userMessaged}: {lastMessage}</Text>
                         </View>
                         <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
                             <Text style={{ fontSize: 10}}>{timestamp}</Text>
-                            {!read && <UnreadHighlighter />}
+                            {/* {!read && <UnreadHighlighter />} */}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -110,4 +118,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default AnnouncementRow
+export default GroupChatRow

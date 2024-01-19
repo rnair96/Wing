@@ -53,7 +53,7 @@ const ToggleChatScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.toggleIcons}>
-      <TouchableOpacity style={{paddingTop:5}} onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={{paddingTop:5}} onPress={() =>  navigation.navigate("Home", { refresh: true })}>
             <Ionicons name="chevron-back-outline" size={30} color="#00308F"/>
             </TouchableOpacity>
         <View style={{flexDirection: 'row', width:"50%", justifyContent:'space-between',right:"20%", borderBottomWidth:1, borderColor:"#E0E0E0", marginLeft:"35%" }}>
@@ -73,7 +73,7 @@ const ToggleChatScreen = () => {
         </TouchableOpacity>
         </View>
       </SafeAreaView>
-      {showMatches ? <ChatScreen profile={profile}/> : <RequestsScreen profile={profile} requests={requests}/>}
+      {showMatches ? <ChatScreen profile={profile} requests={requests}/> : <RequestsScreen profile={profile} requests={requests}/>}
     </View>
   );
 }
