@@ -9,8 +9,6 @@ Here's the simple 3 steps to meet a Wing here:
 2. Figure out if you’re a good fit and can help each other for your goals. 
 3. Decide a place and time to meet, then hit the town!
 
-Tip: If you’re struggling with deciding on a place, check out our latest promotions of establishments near you and try one out with your Wing.
-
 -----
 
 First, I want to say I truly appreciate that you're here right now. 

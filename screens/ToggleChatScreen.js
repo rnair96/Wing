@@ -22,6 +22,8 @@ const ToggleChatScreen = () => {
   
   const profile = params;
 
+  const [userProfile, setUserProfile] = useState(profile);
+
   const [ requests, setRequests] = useState([])
 
   useEffect(()=>{
@@ -49,6 +51,40 @@ const ToggleChatScreen = () => {
     };
   },[]);
 
+  useEffect(() => {
+    let isCancelled = false; // cancel flag
+
+    if (!profile) {
+      console.log("fetching user data...")
+      const fetchUserData = async () => {
+        try {
+          const userSnap = await getDoc(doc(db, global.users, user.uid));
+          setUserProfile({
+            id: user.uid,
+            ...userSnap.data()
+          })
+        } catch (error) {
+          if (!isCancelled) {
+            console.log("incomplete fetch data:", error);
+            Sentry.captureMessage(`Cancelled fetching user data in message screen of ${user.uid}, ${error.message}`)
+
+          }
+          console.log("error fetching userdata")
+          Sentry.captureMessage(`error fetching user data in message screen of ${user.uid}, ${error.message}`)
+
+        }
+
+
+      }
+
+      fetchUserData();
+
+      return () => {
+        isCancelled = true;
+      };
+    }
+  }, [profile, db])
+
 
   return (
     <View style={styles.container}>
@@ -73,7 +109,7 @@ const ToggleChatScreen = () => {
         </TouchableOpacity>
         </View>
       </SafeAreaView>
-      {showMatches ? <ChatScreen profile={profile} requests={requests}/> : <RequestsScreen profile={profile} requests={requests}/>}
+      {showMatches ? <ChatScreen profile={userProfile} requests={requests}/> : <RequestsScreen profile={userProfile} requests={requests}/>}
     </View>
   );
 }

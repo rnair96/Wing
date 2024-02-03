@@ -24,7 +24,6 @@ export const GCProfileViewScreen = () => {
     const navigation = useNavigation();
 
 
-
     useEffect(() => {
         let isCancelled = false; // cancel flag
 

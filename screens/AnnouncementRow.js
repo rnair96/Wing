@@ -9,7 +9,7 @@ import getTime from '../lib/getTime';
 import * as Sentry from "@sentry/react";
 
 
-const AnnouncementRow = () => {
+const AnnouncementRow = ({profile}) => {
 
     const { user } = useAuth();
     const [lastMessage, setLastMessage] = useState(null);
@@ -37,16 +37,16 @@ const AnnouncementRow = () => {
             setTimeStamp(time);
         }
 
-        if(data && data.read!==null && data.read!==undefined){
-            setRead(data.read);
-        }
+        // if(data && data.read!==null && data.read!==undefined){
+        //     setRead(data.read);
+        // }
 
         setLoadingMessage(false);
     }
 
     useEffect(() => {
         //could limit this snapshot to just one document
-        const unsub = onSnapshot(query(collection(db, global.users, user.uid, "announcements"),
+        const unsub = onSnapshot(query(collection(db, global.announcements),
             orderBy("timestamp", "desc"), limit(1)), (snapshot) =>
             setVars({
                 id: snapshot.docs[0]?.id,
@@ -68,16 +68,16 @@ const AnnouncementRow = () => {
     return (
         !loadingMessage && (
             <View style={{ padding: 10, width: "95%" }}>
-                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements")}>
+                <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("Announcements", {profile})}>
                         <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "white", borderWidth: 1, borderColor: "#00BFFF"}} source={require("../images/darkbluelogocorrect.png")} />
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>News & Events</Text>
-                                <Text style={{ paddingLeft: 10, fontWeight: !read? "bold":"normal" }}>{lastMessage}</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>My Announcements</Text>
+                                <Text style={{ paddingLeft: 10, fontWeight: "normal" }}>{lastMessage}</Text>
                         </View>
                         <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
                             <Text style={{ fontSize: 10}}>{timestamp}</Text>
-                            {!read && <UnreadHighlighter />}
+                            {/* {!read && <UnreadHighlighter />} */}
                         </View>
                     </View>
                 </TouchableOpacity>

@@ -7,14 +7,17 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { storage } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import WingTagModal from './WingTagModal';
 
 
 
-const ChatInput = ({ input, setInput, sendMessage, fileLocation }) => {
+const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setReplyToken, setUserIdReply, setUserNameReply }) => {
     const [isImage, setIsImage] = useState(false);
     const [contentType, setContentType] = useState("text");
     // const [image, setImage] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [isWingTagModalVisible, setWingTagModalVisible] = useState(false);
+    const [isWingSelected, setIsWingSelected] = useState(false);
 
 
     const uploadFirebase = (file, path) => {
@@ -193,7 +196,7 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation }) => {
         <View
             style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
             {isImage ? (
-                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <View style={{ alignItems: "center", justifyContent: "center", marginRight:fileLocation === "groupChat"?10:0}}>
                     <Image source={{ uri: input }} style={styles.imageContainer} />
                     <TouchableOpacity onPress={removeImage}>
                         <MaterialCommunityIcons name="close-circle" size={20} color="#fd5c63" />
@@ -201,7 +204,7 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation }) => {
                 </View>
             ) : (
                 <TextInput
-                    style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15, color: contentType === 'link' ? "blue" : "black" }}
+                    style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15, marginRight:fileLocation === "groupChat"?10:0, color: contentType === 'link' ? "blue" : "black" }}
                     placeholder="Send Message..."
                     onChangeText={setInput}
                     onSubmitEditing={sendMessage}
@@ -217,20 +220,29 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation }) => {
                     setIsImage(false);
                 }
                 setContentType("text");
-                sendMessage(contentType);
-            }} style={{}}>
+                sendMessage(contentType, isWingSelected);
+
+                if(isWingSelected){
+                    setIsWingSelected(false);
+                }
+                
+            }} style={{right:fileLocation === "groupChat"? 17: 0}}>
                 {/* <Text style={{ color: "#00BFFF", fontSize: 15 }}>Send</Text> */}
-                <Ionicons name="send" size={20} color="#00BFFF" />
+                <Ionicons name="send" size={fileLocation === "groupChat"? 17: 20} color="#00BFFF" />
             </TouchableOpacity>
             {!isImage && (
-            <View style={{flexDirection:"row"}}>
-            <TouchableOpacity style={{ paddingLeft: 5 }} onPress={selectImage}>
-                <Ionicons name="image-outline" size={20} color="#00BFFF" />
-            </TouchableOpacity>
-            <TouchableOpacity style={{ paddingLeft: 5 }} onPress={() => setContentType("link")}>
-                <Ionicons name="link-outline" size={20} color="#00BFFF" />
-            </TouchableOpacity>
-            </View>
+                <View style={{ flexDirection: "row", right:fileLocation === "groupChat"? 17:0 }}>
+                    <TouchableOpacity style={{ paddingLeft: 3 }} onPress={selectImage}>
+                        <Ionicons name="image-outline" size={fileLocation === "groupChat"? 17: 20} color="#00BFFF" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ paddingLeft: 3 }} onPress={() => contentType==="link"? setContentType("text"):setContentType("link")}>
+                        <Ionicons name="link-outline" size={fileLocation === "groupChat"? 17: 20} color="#00BFFF" />
+                    </TouchableOpacity>
+                    {fileLocation === "groupChat" && matches &&
+                        <TouchableOpacity style={{ paddingLeft:3 }} onPress={() => setWingTagModalVisible(true)}>
+                            <Ionicons name="at-outline" size={19} color="#00BFFF" />
+                        </TouchableOpacity>}
+                </View>
             )}
             {/* <Button onPress={sendMessage} title="Send" style={{ borderRadius: 20 }} /> */}
             <Modal
@@ -248,6 +260,7 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation }) => {
                     </View>
                 </View>
             </Modal>
+            <WingTagModal isVisible={isWingTagModalVisible} setIsVisible={setWingTagModalVisible} matches={matches} setInput={setInput} setReplyToken={setReplyToken} setUserIdReply={setUserIdReply} setUserNameReply={setUserNameReply} setIsWingSelected={setIsWingSelected}/>
         </View>
     );
 }

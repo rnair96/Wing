@@ -10,7 +10,7 @@ import RecieverMessage from './RecieverMessage';
 import ChatInput from '../components/ChatInput';
 
 
-const AnnouncementScreen = () => {
+const AnnouncementScreen = ({profile}) => {
 
     const { user } = useAuth();
     const [messages, setMessages] = useState([]);
@@ -18,12 +18,12 @@ const AnnouncementScreen = () => {
     const [input, setInput] = useState(null);
     const [title, setTitle] = useState(null);
 
-    const { masterAccount, masterId } = Constants.expoConfig.extra
+    // const { masterAccount, masterId } = Constants.expoConfig.extra
 
-    const canInput = (user.email === masterAccount && user.uid === masterId) ? true : false;
+    // const canInput = (user.email === masterAccount && user.uid === masterId) ? true : false;
 
     useEffect(() => {
-        const unsub = onSnapshot(query(collection(db, global.users, user.uid, "announcements"),
+        const unsub = onSnapshot(query(collection(db, global.announcements),
             orderBy("timestamp", "desc")),
             (snapshot) => {
                 setMessages(snapshot.docs.map((doc) => ({
@@ -46,27 +46,27 @@ const AnnouncementScreen = () => {
 
     }, [db]);
 
-    useEffect(() => {
-        if (messages.length > 0 && !messages[0].read) {
-            updateDoc(doc(db, global.users, user.uid, "announcements", messages[0].id), {
-                read: true
-            }).then(() => {
-                console.log("updating latest announcement as read")
-            }).catch((error) => {
-                console.log("error updating announcement as read", error)
-                Sentry.captureMessage(`Error updating latest announcement read for ${user.uid}, ${error.message}`)
-            })
-        }
-    }, [messages])
+    // useEffect(() => {
+    //     if (messages.length > 0 && !messages[0].read) {
+    //         updateDoc(doc(db, global.users, user.uid, "announcements", messages[0].id), {
+    //             read: true
+    //         }).then(() => {
+    //             console.log("updating latest announcement as read")
+    //         }).catch((error) => {
+    //             console.log("error updating announcement as read", error)
+    //             Sentry.captureMessage(`Error updating latest announcement read for ${user.uid}, ${error.message}`)
+    //         })
+    //     }
+    // }, [messages])
 
 
     //should make message, pic and link - just one field : content
     const sendMessage = (type) => {
         let messageTitle;
         if (type === "image") {
-            messageTitle = "News & Promos sent an Image"
+            messageTitle = "Wing Community shared an Image"
         } else if (type === "link") {
-            messageTitle = "News & Promos sent a Link"
+            messageTitle = "Wing Community shared a Link"
         } else {
             messageTitle = title;
         }
@@ -74,6 +74,9 @@ const AnnouncementScreen = () => {
         const timestamp = serverTimestamp();
         addDoc(collection(db, global.announcements), {
             title: messageTitle,
+            displayName: profile.displayName,
+            photoURL: profile.images[0],
+            userId: user.uid,
             message: input,
             timestamp: timestamp,
             type: type
@@ -117,7 +120,7 @@ const AnnouncementScreen = () => {
                     />
 
                 }
-                {canInput &&
+                {/* {canInput && */}
                     <View style={{ alignItems: "center"}}>
                         <TextInput
                             style={{ height: 50, width: "80%", fontSize: 15, padding: 10, borderBottomWidth: 2, borderTopWidth:2, borderColor: "grey" }}
@@ -127,9 +130,9 @@ const AnnouncementScreen = () => {
                             placeholderTextColor={"grey"}
                             value={title}
                         />
-                        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} />
+                        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} fileLocation={"announements"}/>
                     </View>
-                }
+                {/* } */}
             </KeyboardAvoidingView>
 
         </SafeAreaView>

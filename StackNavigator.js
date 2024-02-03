@@ -77,8 +77,8 @@ const StackNavigator = () => {
 
           navigation.navigate("RequestMessage", { requestDetails, otherProfile, profile });
 
-        } else if (response.notification.request.content.data.type === "announcement") {
-          navigation.navigate("Announcements");
+        } else if (response.notification.request.content.data.type === "announcement" || response.notification.request.content.data.type === "groupchat") {
+          navigation.navigate("ToggleChat");//change to groupchat later
 
         } else {
           navigation.navigate("Home");

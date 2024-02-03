@@ -40,6 +40,15 @@ const SenderMessage = ({ message }) => {
             </View>
           ) : (
             <View style={{ backgroundColor: "#A9A9A9", borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderTopLeftRadius: 20 }}>
+              {message?.tagType && message.tagType === 'reply' && message.taggedName && (
+                <Text style={{ color: "white", padding: 10, fontSize: 20, fontWeight: "bold" }}>Replied to {message.taggedName}:</Text>
+              )}
+              {message?.tagType && message.tagType === 'tag' && message.taggedName && (
+                <Text style={{ color: "white", padding: 10, fontSize: 20, fontWeight: "bold" }}>Tagged {message.taggedName}:</Text>
+              )}
+              {message?.title && (
+                <Text style={{ color: "white", padding: 10, fontSize: 20, fontWeight: "bold", textDecorationLine: "underline" }}>Announcement:</Text>
+              )}
               {((message?.type === undefined) || (message?.type && message.type === "text")) &&
                 <Text style={{ color: "white", padding: 10, fontSize: 20 }}> {message.message} </Text>
               }
@@ -54,6 +63,14 @@ const SenderMessage = ({ message }) => {
                   <Text style={{ color: 'blue', padding: 10, fontSize: 20, textDecorationLine: "underline" }}>{message.message}</Text>
                 </TouchableOpacity>
               )}
+              {/* {message?.type && message.type === 'reply' && (
+                <View style={{ alignItems: "center" }}>
+                  <View style={{ padding:5, color:"black"}}>
+                  <Text style={{ color: "white", padding: 10, fontSize: 20, fontWeight:"bold" }}>Replied to {message.taggedName}</Text>
+                  </View>
+                  <Text style={{ color: "white", padding: 10, fontSize: 20 }}>{message.message}</Text>
+                </View>
+              )} */}
             </View>
           )}
           <Text style={{ fontSize: 12, color: "grey" }}>{time}</Text>

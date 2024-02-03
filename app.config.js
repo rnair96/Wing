@@ -12,7 +12,7 @@ export default {
     splash: {
       image: "./assets/splash_darkbluewing_whitebg.png",
       resizeMode: "contain",
-      backgroundColor:"#00BFFF"
+      backgroundColor:"#FFFFFF"
     },
     updates: {
       fallbackToCacheTimeout: 0
@@ -42,7 +42,7 @@ export default {
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ],
-      package: process.env.ANDROID_CLIENT_ID
+      package: "com.wingcommunity.wing"
     },
     web: {
       favicon: "./assets/favicon.png"
@@ -55,7 +55,12 @@ export default {
         }
       ],
       "expo-build-properties",
-      "expo-updates",
+      [
+        "expo-updates",
+        {
+          "username": "rnair96"
+        }
+      ],
       "expo-apple-authentication"
     ],
     extra: {

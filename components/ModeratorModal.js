@@ -6,7 +6,7 @@ import { db } from '../firebase';
 import * as Sentry from "@sentry/react";
 
 
-const ModeratorModal = ({ isVisible, setIsVisible, message }) => {
+const ModeratorModal = ({ isVisible, setIsVisible, message, setInput, setReplyToken, setUserIdReply, setUserNameReply}) => {
     const { user } = useAuth();
 
     // const navigation = useNavigation();
@@ -47,6 +47,14 @@ const ModeratorModal = ({ isVisible, setIsVisible, message }) => {
             //   navigation.navigate("GroupChat");
         });
     }
+
+    const replyToUser = () =>{
+        const nameReply = "@" + message.displayName + " ";
+        setUserNameReply(message.displayName)
+        setUserIdReply(message.userId);
+        setReplyToken(message.userToken);
+        setInput(nameReply);
+}
 
 
     return (
@@ -92,7 +100,15 @@ const ModeratorModal = ({ isVisible, setIsVisible, message }) => {
                     >
                         <Text style={styles.textStyle}>Block Message & Flag User</Text>
                     </TouchableHighlight>
-
+                    <TouchableHighlight
+                        style={styles.opacitystyle}
+                        onPress={() => {
+                            replyToUser();
+                            setIsVisible(!isVisible)
+                        }}
+                    >
+                        <Text style={styles.textStyle}>Reply To {message?.displayName? message.displayName:"User"}</Text>
+                    </TouchableHighlight>
 
                     <TouchableHighlight
                         style={styles.opacitystyle}

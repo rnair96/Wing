@@ -65,7 +65,7 @@ const SetUp0Screen = () => {
         ...locationObject
       },      
       token: token,
-      notifications: {messages: notifications, events: notifications, emails: true},
+      notifications: {messages: notifications, announcements: notifications, groupchat: notifications, emails: true},
       flagged_status: "none",
       timestamp: serverTimestamp()
     }).then(() => {

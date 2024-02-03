@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { makeRedirectUri } from 'expo-auth-session';
+// import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, getIdToken, getCurrentUser } from "firebase/auth";
 import { auth } from '../firebase';
 import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
@@ -35,25 +37,29 @@ export const AuthProvider = ({ children }) => {
     global.announcements = prodAnnouncements;
     global.fetchcards = prodFetchCards;
     global.deleteuser = prodDeleteUser;
-
   }
 
+  // GoogleSignin.configure({
+  //   webClientId: expoClientId,
+  //   androidClientId: androidClientId,
+  //   iosClientId: iosClientId,
+  // });
 
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: androidClientId,
-    iosClientId: iosClientId,
-    expoClientId: expoClientId,
-    scopes: ["profile", "email"],
-    // redirectUri: makeRedirectUri({
-    //   scheme: 'com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2'
-    // }),
-  });
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   androidClientId: androidClientId,
+  //   iosClientId: iosClientId,
+  //   expoClientId: expoClientId,
+  //   scopes: ["profile", "email"],
+  //   redirectUri: makeRedirectUri({
+  //     scheme: 'com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2'
+  //   })
+  // });
 
 
   useEffect(() => {
     //checks the authentication state of user in firebase 
     onAuthStateChanged(auth, (authuser) => {
+
       if (authuser) {
         //logged in
         setUser(authuser);
@@ -66,55 +72,95 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
 
-  useEffect(() => {
-    if (!user && response?.type === 'success') {
-      getUserData(response.authentication.idToken, response.authentication.accessToken);
-    }
-    else if (response?.type === 'cancel') {
-      setLoading(false);
-      alert("Login incomplete. Please try again.");
+  // useEffect(() => {
+  //   if (!user && response?.type === 'success') {
+  //     getUserData(response.authentication.idToken, response.authentication.accessToken);
+  //   }
+  //   else if (response?.type === 'cancel') {
+  //     setLoading(false);
+  //     alert("Login incomplete. Please try again.");
 
-    }
+  //   }
 
-  }, [response]);
+  // }, [response]);
 
 
-  const getUserData = async (idToken, accessToken) => {
-    try {
-      const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }).then((response) => response.json());
-      setUser(userData);
+  // const getUserData = async (idToken, accessToken) => {
+  //   try {
+  //     const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     }).then((response) => response.json());
+  //     setUser(userData);
 
-      //signs in to firestore db
-      const credential = GoogleAuthProvider.credential(idToken, accessToken)
-      await signInWithCredential(auth, credential)
-        .then(() => {
-          setLoading(false);
-        });
-    } catch (e) {
-      console.log("There was an error");
-      setLoading(false);
-    }
+  //     //signs in to firestore db
+  //     const credential = GoogleAuthProvider.credential(idToken, accessToken)
+  //     await signInWithCredential(auth, credential)
+  //       .then(() => {
+  //         setLoading(false);
+  //       });
+  //   } catch (e) {
+  //     console.log("There was an error");
+  //     setLoading(false);
+  //   }
 
-  }
+  // }
 
 
   const signInWithGoogle = async () => {
-    try {
+    // try {
 
-      //gets accesstokens for Google authenticaiton
-      await promptAsync({ showInRecents: true, projectNameForProxy: projectName })
-        .then(() => {
-          setLoading(true);
-        })
+    //   //gets accesstokens for Google authenticaiton
+    //   await promptAsync({ showInRecents: true, projectNameForProxy: projectName })
+    //     .then(() => {
+    //       setLoading(true);
+    //     })
 
-    } catch (e) {
-      console.log("error with login", e);
-      setLoading(false);
-    }
+    // } catch (e) {
+    //   console.log("error with login", e);
+    //   setLoading(false);
+    // }
+
+    // try {
+    //   setLoading(true);
+
+    //   GoogleSignin.getCurrentUser()
+    //     .then((googleUser) => {
+    //       setUser(googleUser);
+    //     })
+    //     .catch((error) => {
+    //       console.log("there was an error in authentication")
+    //       console.error(error);
+    //     });
+
+    //   // Get the users ID token
+    //   const { idToken, accessToken } = await GoogleSignin.signIn();
+
+    //   // Create a Google credential with the token
+    //   // const googleCredential = auth.GoogleAuthProvider.credential(idToken, accessToken);
+    //   const googleCredential = GoogleAuthProvider.credential(idToken, accessToken)
+
+
+    //   // Sign-in the user with the credential
+    //   await signInWithCredential(auth, googleCredential);
+    //   setLoading(false);
+    // } catch (error) {
+    //   setLoading(false);
+    //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //     // user cancelled the login flow
+    //     alert("Login incomplete. Please try again.");
+    //   } else if (error.code === statusCodes.IN_PROGRESS) {
+    //     // operation (e.g. sign in) is in progress already
+    //     console.log("in progress")
+    //   } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+    //     // play services not available or outdated
+    //     console.log("services not available")
+    //   } else {
+    //     // some other error happened
+    //     console.log(error);
+    //   }
+    // }
   }
 
   // const generateNonce = () => {
@@ -228,9 +274,9 @@ export const AuthProvider = ({ children }) => {
 
         if (errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-email') {
           alert("Login was incorrect. Please try again.");
-        } else if(errorCode === 'auth/user-not-found' ){
+        } else if (errorCode === 'auth/user-not-found') {
           alert("Account was not found. Please create one.");
-        }else {
+        } else {
           alert(errorMessage);
         }
 
@@ -294,8 +340,15 @@ export const AuthProvider = ({ children }) => {
   }
 
 
-  const logout = () => {
+  const logout = async () => {
     setLoading(true);
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error(error);
+    }
     setUser(null);
     signOut(auth).catch((error) => console.error(error))
     setLoading(false);
@@ -372,7 +425,7 @@ export const AuthProvider = ({ children }) => {
         // })
         .then(response => {
           if (!response.ok) {
-              throw new Error('Network response was not ok');
+            throw new Error('Network response was not ok');
           }
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -380,7 +433,7 @@ export const AuthProvider = ({ children }) => {
           } else {
             return response.text();
           }
-      })
+        })
         .then(data => {
           // Check if the parsed response is OK
           // if (data.error) {
@@ -397,8 +450,8 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
           alert("Unable to delete account. Try again later.")
           //add sentry capture
-          });
-          
+        });
+
 
 
     }

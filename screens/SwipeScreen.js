@@ -273,7 +273,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                         <View style={[styles.emptycardcontainer]}>
                             <View style={styles.loading}>
                                 <ActivityIndicator size="large" color="#00BFFF" />
-                                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Fitting Your Best Wings...</Text>
+                                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Fitting Your Wings...</Text>
                             </View>
                         </View>
 

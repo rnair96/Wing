@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaView, View, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image, TouchableOpacity, Text, Platform } from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';

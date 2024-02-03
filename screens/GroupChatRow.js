@@ -13,27 +13,29 @@ const GroupChatRow = ({profile, matches, requests}) => {
 
     const { user } = useAuth();
     const [lastMessage, setLastMessage] = useState(null);
-    // const [read, setRead] = useState(true);
-    const [userMessaged, setUserMessaged] = useState("User")
+    const [read, setRead] = useState(true);
+    const [userMessaged, setUserMessaged] = useState("User: ")
     const [loadingMessage, setLoadingMessage] = useState(true);
     const [timestamp, setTimeStamp] = useState();
     const navigator = useNavigation();
 
 
     const setVars = (data) => {
-        if (data && data?.message?.length > 7) {
+        setRead(true);
+        
+        if (data && data?.type==="text" &&  data?.message?.length > 7) {
             const message = data?.message?.slice(0, 7) + "..."
             setLastMessage(message);
+        } else if (data && data?.type==="text") {
+            setLastMessage(data?.message)
+        } else if (data && data?.type==="image"){
+            setLastMessage("Image Shared")
+        } else if (data && data?.type==="link"){
+            setLastMessage("Link Shared")
         } else {
             setLastMessage(data?.message)
         }
-        // else if (data && data.type==="text") {
-        //     setLastMessage(data?.message)
-        // } else if (data && data.type==="image"){
-        //     setLastMessage("Image sent")
-        // } else if (data && data.type==="link"){
-        //     setLastMessage("Link sent")
-        // }
+        
 
         if (data && data?.timestamp) {
             let milliseconds = data?.timestamp.seconds * 1000 + Math.floor(data?.timestamp.nanoseconds / 1000000);
@@ -42,12 +44,25 @@ const GroupChatRow = ({profile, matches, requests}) => {
         }
 
         if(data && data?.displayName){
-            setUserMessaged(data.displayName)
+            setUserMessaged(`${data.displayName}: `)
         }
 
-        // if(data && data.read!==null && data.read!==undefined){
-        //     setRead(data.read);
-        // }
+        if(data && data?.taggedId && data?.taggedId===user.uid && data?.displayName){
+            setUserMessaged(``);
+            if(data?.tagType && data.tagType==="tag"){
+                setLastMessage(`${data.displayName} Tagged You`);
+            } else {
+                setLastMessage(`${data.displayName} Replied To You`);
+            }
+            setRead(false);
+
+        }
+
+        if(data && data?.title){
+            setUserMessaged(``);
+            setLastMessage("New Announcement")
+            setRead(false)
+        }
 
         setLoadingMessage(false);
     }
@@ -81,11 +96,11 @@ const GroupChatRow = ({profile, matches, requests}) => {
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
                             <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>Community</Text>
-                            <Text style={{ paddingLeft: 10, fontWeight: "normal" }}>{userMessaged}: {lastMessage}</Text>
+                            <Text style={{ paddingLeft: 10, fontWeight: "bold" }}>{userMessaged}{lastMessage}</Text>
                         </View>
                         <View style={{ position: "absolute", left: 170, top: 20, flexDirection: "row" }}>
                             <Text style={{ fontSize: 10}}>{timestamp}</Text>
-                            {/* {!read && <UnreadHighlighter />} */}
+                            {!read && <UnreadHighlighter />}
                         </View>
                     </View>
                 </TouchableOpacity>

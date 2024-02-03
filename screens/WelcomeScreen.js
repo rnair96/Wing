@@ -25,7 +25,7 @@ const WelcomeScreen = () => {
 
     const batch = writeBatch(db);
 
-    const { masterId, welcomeImage1, welcomeImage2} = Constants.expoConfig.extra
+    const { masterId } = Constants.expoConfig.extra
 
     const chatRef = doc(db, global.users, user.uid, "requests", masterId);
 
@@ -44,45 +44,45 @@ const WelcomeScreen = () => {
 
     console.log("set chat doc")
 
-    const textFiles = [
-      { "path": welcomeImage1, "type": 'image' },
-      { "path": welcomeText, "type": 'text' },
-      { "path": cultureText, "type": 'text' },
-      { "path": welcomeImage2, "type": 'image' },
-      { "path": storyText, "type": 'text' },
-    ];
+    // const textFiles = [
+    //   { "path": welcomeImage1, "type": 'image' },
+    //   { "path": welcomeText, "type": 'text' },
+    //   { "path": cultureText, "type": 'text' },
+    //   { "path": welcomeImage2, "type": 'image' },
+    //   { "path": storyText, "type": 'text' },
+    // ];
 
-    let secondsToAdd = 0;
+    // let secondsToAdd = 0;
 
-    for (const file of textFiles) {
-      // Read text from file
-      const message = file["path"];
+    // for (const file of textFiles) {
+    //   // Read text from file
+    //   const message = file["path"];
 
-      // Reference to a new document in the "announcements" collection for the user
-      const docRef = doc(collection(db, global.users, user.uid, "announcements"));
+    //   // Reference to a new document in the "announcements" collection for the user
+    //   const docRef = doc(collection(db, global.users, user.uid, "announcements"));
 
-      const timestamp = new Date(Date.now() + (secondsToAdd * 1000))
-      secondsToAdd++;
+    //   const timestamp = new Date(Date.now() + (secondsToAdd * 1000))
+    //   secondsToAdd++;
 
-      // const contentField = file["type"] === "text" ? "message" : "picture";
+    //   // const contentField = file["type"] === "text" ? "message" : "picture";
 
-      batch.set(docRef, {
-        id: docRef.id, // Auto-generated ID
-        message: message, // Content from the text file
-        read: false,
-        timestamp: timestamp, // Current timestamp
-        title: '',
-        type: file['type'],
-      });
+    //   batch.set(docRef, {
+    //     id: docRef.id, // Auto-generated ID
+    //     message: message, // Content from the text file
+    //     read: false,
+    //     timestamp: timestamp, // Current timestamp
+    //     title: '',
+    //     type: file['type'],
+    //   });
 
-    }
+    // }
 
     try {
       await batch.commit();
-      console.log('Announcements added successfully');
+      console.log('Chat Request added successfully');
     } catch (error) {
-      console.log('Error adding announcements: ', error);
-      Sentry.captureMessage(`Error in adding announcements for ${user.uid}, ${error.message}`)
+      console.log('Error adding chat request: ', error);
+      Sentry.captureMessage(`Error in adding chat request for ${user.uid}, ${error.message}`)
     }
     navigation.navigate("Home")
 
