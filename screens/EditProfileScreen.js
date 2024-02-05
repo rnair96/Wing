@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
+import { View, ScrollView, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button, Platform } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -14,6 +14,7 @@ import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 import PromptModal from '../components/PromptModal';
 import PromptPicker from '../components/PromptPicker';
+import InterestsList from '../components/InterestsList';
 
 
 
@@ -50,7 +51,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [url1, setUrl1] = useState(profile?.images?.[0] || null);
   const [url2, setUrl2] = useState(profile?.images?.[1] || null);
   const [url3, setUrl3] = useState(profile?.images?.[2] || null);
-  const [values, setValues] = useState(profile?.values || []);
+  // const [values, setValues] = useState(profile?.values || []);
+  const [interests, setInterests] = useState(profile?.interests || []);
+
   const [isPromptVisible, setisPromptVisible] = useState(false);
   const [isPrompt1Visible, setisPrompt1Visible] = useState(false);
   const [isPrompt2Visible, setisPrompt2Visible] = useState(false);
@@ -79,16 +82,16 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
     let form;
 
     if (activeStudent) {
-      form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !school || !tagline
+      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 3 || !school || !tagline
     } else {
-      form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !job || !tagline
+      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 3 || !job || !tagline
 
 
     }
 
     setIncompleteForm(form);
 
-  }, [activeStudent, url1, url2, url3, location, values, school, tagline, job])
+  }, [activeStudent, url1, url2, url3, location, interests, school, tagline, job])
 
 
   const updateUserProfile = () => {
@@ -131,7 +134,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       activity_tag: activitytag,
       prompts: [promptObject, promptObject1, promptObject2],
       medals: [medal1, medal2, medal3],
-      values: values,
+      // values: values,
+      interests: interests,
       location: location,
       bio: bio,
     }
@@ -361,11 +365,12 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
 
 
-            <Text style={styles.formTitle}>Values</Text>
+            <Text style={styles.formTitle}>Interests</Text>
             <Text style={{ color: "grey", textAlign: "center" }}>Pick Three. This helps us find the Wings that will best match you.</Text>
-            <ValuesList selectedValues={values} setSelectedValues={setValues} />
+            {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
+            <InterestsList selectedInterests={interests} setSelectedInterests={setInterests}/>
 
-            <Text style={styles.formTitle}>A Life Mission or Short-Term Goal</Text>
+            <Text style={styles.formTitle}>A Long-Term or Short-Term Goal</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>A Pursuit That Has Nothing To Do With Dating</Text>
             <TextInput
               value={mission}

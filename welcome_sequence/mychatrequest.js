@@ -1,6 +1,6 @@
 const chatText = `Hey, I'm Raj and I'm the Founder & CEO of Wing.
 
-Fun fact, I was a former Dating Coach that helped men find partners they aligned with based on Mission & Values. 
+Fun fact, I was a former Dating Coach that helped men find partners they aligned with based on similiar Goals and Interests. 
 Sound familiar? 
 
 Here's the simple 3 steps to meet a Wing here:

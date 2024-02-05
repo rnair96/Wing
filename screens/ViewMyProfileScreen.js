@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, ScrollView, Text, SafeAreaView, Image, StyleSheet, FlatList } from 'react-native';
-import { RankBadge } from '../lib/RankBadge';
+import { View, Text, SafeAreaView, Image, StyleSheet, FlatList } from 'react-native';
 import tagColor from '../lib/colorTag';
 
 
-const ViewProfileScreen = ({ profile }) => {
+const ViewMyProfileScreen = ({ profile }) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -77,9 +76,9 @@ const ViewProfileScreen = ({ profile }) => {
                                         </View>
                                     )}
                                     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[0]}</Text>
-                                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[1]}</Text>
-                                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[2]}</Text>
+                                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[0]}</Text>
+                                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[1]}</Text>
+                                        <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[2]}</Text>
                                     </View>
                                 </View>
                                 <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
@@ -198,14 +197,14 @@ const ViewProfileScreen = ({ profile }) => {
                                 <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                 <View style={{ flexDirection: "row", padding: 10 }}>
                                     {card.item?.mission ?
-                                        (<Text style={{ padding: 10, color: "white" }}>Mission & Values</Text>) :
-                                        (<Text style={{ padding: 10, color: "white" }}>Values</Text>)}
+                                        (<Text style={{ padding: 10, color: "white" }}>Goals & Interests</Text>) :
+                                        (<Text style={{ padding: 10, color: "white" }}>Interests</Text>)}
                                 </View>
                                 {card.item?.mission && <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>}
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[0]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[1]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.values[2]}</Text>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[0]}</Text>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[1]}</Text>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[2]}</Text>
                                 </View>
                             </View>
 
@@ -295,15 +294,10 @@ const styles = StyleSheet.create({
         borderWidth: 2
     },
     cardscontainer: {
-        //  flex: 1,
-        //  marginTop:-30,
     },
     cardcontainer: {
         backgroundColor: "#00308F",
-        // height: 600,
         borderRadius: 20,
-        // borderColor: "#002D62",
-        // borderWidth: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -327,19 +321,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     text: {
-        // position: 'absolute', 
         top: 10,  // This will place the text near the top of the image
-        // left: 0,
-        // right: 0,
         color: "white",
         fontSize: 22,
         fontWeight: 'bold',
         margin: 3
-        // textAlign: 'center',
-        // textShadowColor: 'rgba(0, 0, 0, 0.9)', // Shadow color
-        // textShadowOffset: { width: -1, height: 1 },
-        // textShadowRadius: 9
     }
 })
 
-export default ViewProfileScreen;
+export default ViewMyProfileScreen;

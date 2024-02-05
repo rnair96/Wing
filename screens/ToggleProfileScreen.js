@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Modal, TouchableHighlight } from 'react-native';
-import ViewProfileScreen from './ViewProfileScreen';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ViewMyProfileScreen from './ViewMyProfileScreen';
 import { Ionicons } from '@expo/vector-icons';
 import EditProfileScreen from './EditProfileScreen';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -37,7 +36,7 @@ const ToggleProfileScreen = () => {
           <Ionicons name="chevron-forward-outline" size={30} color="#00308F"/>
         </TouchableOpacity>
       </SafeAreaView>
-      {showEdit ? <EditProfileScreen profile={profile} setIsEditSaved={setIsEditSaved}/> : <ViewProfileScreen profile={profile} />}
+      {showEdit ? <EditProfileScreen profile={profile} setIsEditSaved={setIsEditSaved}/> : <ViewMyProfileScreen profile={profile} />}
       <Modal
         animationType="fade"
         transparent={true}

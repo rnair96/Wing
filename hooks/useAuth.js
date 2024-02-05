@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
 
   const { androidClientId, iosClientId, expoClientId, projectName, prodUsers,
-    devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards, prodDeleteUser, devDeleteUser } = Constants.expoConfig.extra
+    devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards, prodDeleteUser, devDeleteUser, devGroupChat, prodGroupChat } = Constants.expoConfig.extra
 
 
   if (__DEV__) {
@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
     global.announcements = devAnnouncements;
     global.fetchcards = devFetchCards;
     global.deleteuser = devDeleteUser;
+    global.groupchat = devGroupChat;
   } else {
     console.log('prod user signin, setting prod environment');
     global.users = prodUsers;
@@ -37,6 +38,8 @@ export const AuthProvider = ({ children }) => {
     global.announcements = prodAnnouncements;
     global.fetchcards = prodFetchCards;
     global.deleteuser = prodDeleteUser;
+    global.groupchat = prodGroupChat;
+
   }
 
   // GoogleSignin.configure({

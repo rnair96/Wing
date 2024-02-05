@@ -11,6 +11,7 @@ import generateId from '../lib/generateId'
 import { Entypo } from '@expo/vector-icons';
 import deleteRequest from '../lib/deleteRequest';
 import * as Sentry from "@sentry/react";
+import ProfileCardComponent from "../components/ProfileCardComponent"
 
 const RequestMessageScreen = () => {
 
@@ -96,17 +97,22 @@ const RequestMessageScreen = () => {
     const matchThenMove = async () => {
         const id = generateId(user.uid, requestDetails.id)
         const timestamp = serverTimestamp();
+        const from = requestDetails?.swipedFrom ? requestDetails.swipedFrom : "N/A";
+
         const matchDoc = {
             userMatched: [user.uid, requestDetails.id],
             match_timestamp: timestamp,
-            latest_message_timestamp: timestamp
+            latest_message_timestamp: timestamp,
+            matchedFrom: from
         }
+
 
         const swipedRef = doc(db, global.users, user.uid, "swipes", requestDetails.id)
         const swipeDoc = {
             id: requestDetails.id,
             message: message,
             timeSwiped: timestamp,
+            swipedFrom: from,
             isResponse: true,
             match_id: id,
             //add boolean variable for isResponse and have onswipe function deal with that
@@ -198,78 +204,9 @@ const RequestMessageScreen = () => {
                         <RecieverMessage message={requestDetails} />
 
                     </View>
-
-                    {otherProfile && otherProfile?.prompts && otherProfile?.prompts.length>0 && otherProfile?.values && otherProfile?.values.length > 2 && otherProfile?.images && otherProfile?.images.length > 2 && otherProfile?.location? (
-                        <TouchableOpacity style={styles.cardcontainer} onPress={() => navigation.navigate("ProfileView", { profile: otherProfile })}>
-                            <View style={{ alignItems: "center", padding: 10 }}>
-                                                {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
-                                                <Text style={styles.text}>{card.mission}</Text> */}
-                                                <Text style={{ color: "white", margin: 5 }}>{otherProfile.prompts[0].prompt}</Text>
-                                                <Text style={styles.text}>{otherProfile.prompts[0].tagline}</Text>
-                                            </View>
-                            <View style={{ justifyContent: "space-evenly", height: 400, width: "100%", backgroundColor: "#002D62" }}>
-                                <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
-                                    <View style={{ flexDirection: "column" }}>
-                                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{otherProfile.displayName}</Text>
-                                        <Text style={{ color: "white", fontSize: 15 }}>{otherProfile.age}</Text>
-                                        {otherProfile?.university_student && otherProfile.university_student.status === "active" ? (
-                                            <View style={{ flexDirection: "column" }}>
-                                                <Text style={{ color: "white", fontSize: 13 }}>{otherProfile.school}</Text>
-                                                <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
-                                            </View>
-                                        ) : (
-                                            <Text style={{ color: "white", fontSize: 15 }}>{otherProfile.job}</Text>
-                                        )}
-                                    </View>
-                                    <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: otherProfile?.images[0] }} />
-                                </View>
-                                {otherProfile?.medals && otherProfile.medals.length > 0 ? (
-                                    <View style={{ flexDirection: "column", marginLeft: 5, marginRight: 7 }}>
-                                        <View style={{ flexDirection: "row", padding: 10 }}>
-                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{otherProfile.medals[0]?otherProfile.medals[0]:`-- --`}</Text>
-                                        </View>
-                                        <View style={{ flexDirection: "row", padding: 10 }}>
-                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{otherProfile.medals[1]?otherProfile.medals[1]:`-- --`}</Text>
-                                        </View>
-                                        {/* <View style={{ flexDirection: "row", padding: 10 }}>
-                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{otherProfile.medals[2]?otherProfile.medals[2]:`-- --`}</Text>
-                                        </View> */}
-                                    </View>
-                                ) : (
-                                    <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>-- --</Text>
-                                        </View>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>-- --</Text>
-                                        </View>
-                                        {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>-- --</Text>
-                                        </View> */}
-                                    </View>
-                                )}
-                                <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{otherProfile.values[0]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{otherProfile.values[1]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{otherProfile.values[2]}</Text>
-                                </View>
-                            </View>
-                            <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
-                                <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
-                                <Text style={{ color: "white", fontSize: 15, left: 10 }}>{otherProfile.location.text}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ) : (
-                        <View style={{ justifyContent: "center", alignItems: "center", width: "100%", marginVertical: "50%" }}>
-                            <Text style={{ fontSize: 17 }}>User profile unable to load or no longer exists</Text>
-                        </View>
-                    )}
+                    <View style={{height:700, width:"93%", marginHorizontal:"3.5%"}}>
+                    <ProfileCardComponent profile={otherProfile} canFlag={false}/>
+                    </View>
                 </View>
             </ScrollView>
 

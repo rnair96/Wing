@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -35,7 +35,7 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp0");
             } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
                 navigation.navigate("SetUp1");
-            } else if (!snapshot.data().prompts || !snapshot.data().values) {
+            } else if (!snapshot.data().prompts || !snapshot.data().interests) {
                 navigation.navigate("SetUp3", { id: user.uid });
             }
 

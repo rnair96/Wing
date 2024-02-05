@@ -81,7 +81,7 @@ const GroupChatScreen = () => {
     }, [db, route.params?.refresh]);
 
     useEffect(() => {
-        const unsub = onSnapshot(query(collection(db, "groupChat"),
+        const unsub = onSnapshot(query(collection(db, global.groupchat),
             orderBy("timestamp", "desc")),
             (snapshot) => {
                 setMessages(snapshot.docs.map((doc) => ({

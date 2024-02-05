@@ -92,19 +92,19 @@ const sendPushBatch = async (tokens, title, body, data) => {
   }
 };
 function createCompareFunction(currentUser) {
-  const currentUserValues = currentUser.values;
+  const currentUserInterests = currentUser.interests;
   const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
 
   return function compareUsers(user1, user2) {
     // Count the matching values for user1
-    const matchingValuesUser1 = user1.values.filter((value) =>
-      currentUserValues.includes(value)).length;
+    const matchingInterestsUser1 = user1.interests.filter((interest) =>
+      currentUserInterests.includes(interest)).length;
 
     // Count the matching values for user2
-    const matchingValuesUser2 = user2.values.filter((value) =>
-      currentUserValues.includes(value)).length;
+    const matchingInterestsUser2 = user2.interests.filter((interest) =>
+      currentUserInterests.includes(interest)).length;
 
-    if ((matchingValuesUser1 === matchingValuesUser2) && currentUserTag) {
+    if ((matchingInterestsUser1 === matchingInterestsUser2) && currentUserTag) {
       const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
       const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
 
@@ -112,7 +112,7 @@ function createCompareFunction(currentUser) {
     }
 
     // Sort in descending order of matching values
-    return matchingValuesUser2 - matchingValuesUser1;
+    return matchingInterestsUser2 - matchingInterestsUser1;
   };
 }
 
@@ -276,6 +276,7 @@ exports.onSwipe = functions.firestore
 
       const message = snap.data().message;
       const timestamp = snap.data().timeSwiped;
+      const swipedFrom = snap.data().swipedFrom;
 
       // Get the ID of the user who did the swiping
       const swiperId = context.params.userId;
@@ -291,6 +292,7 @@ exports.onSwipe = functions.firestore
       id: swiperId,
       message: message,
       timestamp: timestamp,
+      swipedFrom: swipedFrom,
       read: false,
     };
 
@@ -385,6 +387,8 @@ exports.onSwipeDev = functions.firestore
 
       const message = snap.data().message;
       const timestamp = snap.data().timeSwiped;
+      const swipedFrom = snap.data().swipedFrom;
+
 
       // Get the ID of the user who did the swiping
       const swiperId = context.params.userId;
@@ -400,6 +404,7 @@ exports.onSwipeDev = functions.firestore
       id: swiperId,
       message: message,
       timestamp: timestamp,
+      swipedFrom: swipedFrom,
       read: false,
     };
 
@@ -572,7 +577,7 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
 
     const completeUsers = uniqueUsers.filter((user) => {
       return user.prompts && user.prompts.length > 0 &&
-        user.values && user.values.length === 3 &&
+        user.interests && user.interests.length === 3 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
@@ -724,7 +729,7 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
 
     const completeUsers = uniqueUsers.filter((user) => {
       return user.prompts && user.prompts.length > 0 &&
-        user.values && user.values.length === 3 &&
+        user.interests && user.interests.length === 3 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
@@ -738,6 +743,8 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     console.log("limiting to 30 profiles or less");
     const finalUsers = sortedUsers.length > 30 ?
       sortedUsers.slice(0, 30) : sortedUsers;
+
+    console.log("final users", finalUsers);
 
     res.status(200).json(finalUsers);
   } catch (error) {

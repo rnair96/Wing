@@ -4,13 +4,14 @@ import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { Entypo } from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { getDocs, setDoc, collection, onSnapshot, doc, query, where, serverTimestamp, updateDoc, limit, orderBy } from "firebase/firestore";
-import { db, auth } from '../firebase';
+import { setDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { db } from '../firebase';
 import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
 import * as Sentry from "@sentry/react";
 import SurveyModal from '../components/SurveyModal';
 import { hasThirtyDaysPassed, hasMatch } from '../lib/secondSurveyCheck';
+import ProfileCardComponent from '../components/ProfileCardComponent'
 
 
 
@@ -206,7 +207,7 @@ const SwipeScreen = ({ loggedProfile }) => {
         checkConditions();
     }, [loggedProfile, swipeAmount]);
 
-
+    
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]) { return; }
 
@@ -314,84 +315,8 @@ const SwipeScreen = ({ loggedProfile }) => {
                         containerStyle={{ backgroundColor: "transparent" }}
                         renderCard={(card) => {
                             return (
-                                <View key={card.id} style={styles.cardcontainer}>
-                                    {card?.prompts && card?.prompts.length > 0 && card?.values && card?.values.length > 2 && card?.images && card?.images.length > 2 && card?.location ? (
-                                        <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => { navigation.navigate("ProfileSwipe", { card: card }) }}>
-                                            <View style={{ alignItems: "center", bottom: 10 }}>
-                                                {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
-                                                <Text style={styles.text}>{card.mission}</Text> */}
-                                                <Text style={{ color: "white", margin: 10 }}>{card.prompts[0].prompt}</Text>
-                                                <Text style={styles.text}>{card.prompts[0].tagline}</Text>
-                                            </View>
-                                            <View style={{ justifyContent: "space-evenly", height: "65%", width: "100%", backgroundColor: "#002D62" }}>
-                                                <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
-                                                    <View style={{ flexDirection: "column" }}>
-                                                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{card.displayName}</Text>
-                                                        <Text style={{ color: "white", fontSize: 15 }}>{card.age}</Text>
-                                                        {card?.university_student && card.university_student.status === "active" ? (
-                                                            <View style={{ flexDirection: "column" }}>
-                                                                <Text style={{ color: "white", fontSize: 13 }}>{card.school}</Text>
-                                                                <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
-                                                            </View>
-                                                        ) : (
-                                                            <Text style={{ color: "white", fontSize: 15 }}>{card.job}</Text>
-                                                        )}
-                                                    </View>
-                                                    <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card?.images[0] }} />
-                                                </View>
-                                                {card?.medals && card.medals.length > 0 ? (
-                                                    <View style={{ flexDirection: "column", marginLeft: 5 }}>
-                                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                            <Text style={styles.cardtext}>{card.medals[0] ? card.medals[0] : `-- --`}</Text>
-                                                        </View>
-                                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                            <Text style={styles.cardtext}>{card.medals[1] ? card.medals[1] : `-- --`}</Text>
-                                                        </View>
-                                                        {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                            <Text style={styles.cardtext}>{card.medals[2] ? card.medals[2] : `-- --`}</Text>
-                                                        </View> */}
-                                                    </View>
-                                                ) : (
-                                                    <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
-                                                        <View style={{ flexDirection: "row", padding: 10 }}>
-                                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                            <Text style={styles.cardtext}>-- --</Text>
-                                                        </View>
-                                                        <View style={{ flexDirection: "row", padding: 10 }}>
-                                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                            <Text style={styles.cardtext}>-- --</Text>
-                                                        </View>
-                                                        {/* <View style={{ flexDirection: "row", padding: 10 }}>
-                                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                            <Text style={styles.cardtext}>-- --</Text>
-                                                        </View> */}
-                                                    </View>
-                                                )}
-
-                                                <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[0]}</Text>
-                                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[1]}</Text>
-                                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.values[2]}</Text>
-                                                </View>
-                                            </View>
-                                            {/* </View> */}
-                                            <View style={{ justifyContent: "center", flexDirection: "row", width: "100%" }}>
-                                                <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
-                                                <Text style={{ color: "white", fontSize: 15, left: 10 }}>{card.location.text}</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    ) : (
-                                        <View style={{ flexDirection: "column", marginVertical: "60%", justifyContent: "center", alignItems: "center" }}>
-                                            <Image style={{ height: 100, width: 100, borderRadius: 50, borderWidth: 1, borderColor: "red" }} source={require("../images/account.jpeg")} />
-                                            <Text style={{ fontWeight: "bold", color: "white", padding: 10 }}> Error Loading Profile...</Text>
-                                            <Text style={{ fontWeight: "bold", color: "white", padding: 10 }}> Reload App or Swipe Left</Text>
-                                            <View style={{ padding: 10, alignItems: "center" }}>
-                                            </View>
-                                        </View>
-                                    )}
+                                <View key={card.id} style={{height:"100%"}}>
+                                    <ProfileCardComponent profile={card} canFlag={true}/>
                                 </View>
                             )
                         }

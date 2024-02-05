@@ -100,7 +100,9 @@ export default {
       devDeleteUser: process.env.DEV_DELETEUSER,
       masterId: process.env.MASTER_ID,
       welcomeImage1: process.env.WELCOME_IMAGE1,
-      welcomeImage2: process.env.WELCOME_IMAGE2
+      welcomeImage2: process.env.WELCOME_IMAGE2,
+      prodGroupChat: process.env.PROD_GROUPCHAT,
+      devGroupChat: process.env.DEV_GROUPCHAT,
 
     }
   }

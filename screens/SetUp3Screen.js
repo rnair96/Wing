@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button, Platform} from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc, writeBatch, serverTimestamp, collection } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -12,20 +12,22 @@ import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 import PromptModal from '../components/PromptModal';
 import PromptPicker from '../components/PromptPicker';
+import InterestsList from '../components/InterestsList';
 
 
 
 const SetUp3Screen = () => {
   const { user } = useAuth();
   const [eulaVisible, setEulaVisible] = useState(true);
-  const [values, setValues] = useState([]);
+  // const [values, setValues] = useState([]);
+  const [interests, setInterests] = useState([]);
   const [prompt, setPrompt] = useState(null)
   const [tagline, setTagline] = useState(null);
   const [isPromptVisible, setisPromptVisible] = useState(false);
 
   const navigation = useNavigation();
   // const incompleteform = !mission || !values || values.length < 3;
-  const incompleteform = !tagline || !values || values.length < 3;
+  const incompleteform = !tagline || !interests || interests.length < 3;
 
 
   const updateUserProfile = () => {
@@ -35,7 +37,8 @@ const SetUp3Screen = () => {
     }
 
     updateDoc(doc(db, global.users, user.uid), {
-      values: values,
+      // values: values,
+      interests: interests,
       prompts: [promptObject, null, null]
     }).then(() => {
       navigation.navigate("Home")
@@ -84,8 +87,9 @@ const SetUp3Screen = () => {
             <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Tip: Make it interesting. This is your hook to get a Wing's attention.</Text>
 
 
-            <Text style={styles.formTitle}>Select Your 3 Top Values</Text>
-            <ValuesList selectedValues={values} setSelectedValues={setValues} />
+            <Text style={styles.formTitle}>Select Your 3 Top Interests</Text>
+            {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
+            <InterestsList selectedInterests={interests} setSelectedInterests={setInterests}/>
 
             <View style={{ height: 300 }}>
               <TouchableOpacity

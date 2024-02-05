@@ -69,7 +69,7 @@ const GroupChatRow = ({profile, matches, requests}) => {
 
     useEffect(() => {
         //could limit this snapshot to just one document
-        const unsub = onSnapshot(query(collection(db, "groupChat"),
+        const unsub = onSnapshot(query(collection(db, global.groupchat),
             orderBy("timestamp", "desc"), limit(1)), (snapshot) =>
             setVars({
                 id: snapshot.docs[0]?.id,

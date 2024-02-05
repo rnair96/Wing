@@ -9,7 +9,6 @@ import MenuScreen from './screens/MenuScreen';
 import useAuth from './hooks/useAuth';
 import MessageScreen from './screens/MessageScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
-import ProfileSwipeScreen from './screens/ProfileSwipeScreen';
 import MissionControlScreen from './screens/MissionControlScreen';
 import MatchingPreferences from './screens/MatchingPreferences';
 import SettingsScreen from './screens/SettingsScreen';
@@ -28,7 +27,7 @@ import FlaggedScreen from './screens/FlaggedScreen';
 import ReportOtherScreen from './screens/ReportOtherScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
-import ViewProfileScreen from './screens/ViewProfileScreen';
+import ViewProfileScreen from './screens/ViewMyProfileScreen';
 import ToggleProfileScreen from './screens/ToggleProfileScreen';
 import StudentSetupScreen from './screens/StudentSetupScreen';
 import SetUp3Screen from './screens/SetUp3Screen';
@@ -194,24 +193,12 @@ const StackNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="ProfileSwipe"
-            component={ProfileSwipeScreen}
-            options={{
-              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              // gestureDirection: 'vertical',
-            }}
-          />
-          {/* <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen} /> */}
-          <Stack.Screen
             name="ReportOther"
             component={ReportOtherScreen}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
             }}
           />
-          {/* <Stack.Screen name="ReportOther" component={ReportOtherScreen} /> */}
-
-          {/* <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} /> */}
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}

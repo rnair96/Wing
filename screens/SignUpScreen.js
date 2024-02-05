@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Text, TextInput, View, TouchableOpacity, SafeAreaView, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { Text, TextInput, View, TouchableOpacity, SafeAreaView, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native'
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 
