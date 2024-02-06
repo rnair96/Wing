@@ -4,22 +4,22 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 const InterestsList = ({selectedInterests, setSelectedInterests}) => {
   
 const interests = [
-  "Traveling", "Gym", "Work", "Sports", 
-  "Hiking", "Cooking", "Movies", "Art",
-  "Comedy", "Music", "Reading", "Writing", "Meditation",
-  "Volunteering", "Animal Lover", "Outdoors",
-  "Gaming", "Dancing", "Fashion", "Technology", "Cultures/Languages",
-  "Religion", "Science", "Politics", "Business", 
-  "History", "Podcasts", "Relationships", 
-  "Exploring Nightlife", "Cafe-Hopping", "Food/Restaurants", 
-  "Live Concerts", "Board Games", "Anime", "420",
+  "Traveling", "Gym", "Work", "Sports", "Basketball", "Football", "Soccer", "MMA", "Boxing",
+  "Hiking", "Hunting", "Fishing", "Camping", "Cooking", "Movies/Shows", "Art",
+  "Comedy", "Music", "Reading", "Writing", "Meditation", "Yoga",
+  "Volunteering", "Animal Lover", "Outdoors", "Cars",
+  "Video Games", "Dancing", "Fashion", "Sneakers", "Technology", "Cultures", "Languages",
+  "Religion", "Stoicism", "Philosophy", "Science", "Politics", "Business", "Entrepreneur", "Conspiracies",
+  "History", "Podcasts", "Books", "Relationships", 
+  "Nightlife", "Cafes", "Restaurants", 
+  "Concerts", "Board Games", "Anime", "420", "Fasting", "Nutrition", "God"
 ];
 
 
   const toggleInterests = (interest) => {
     if (selectedInterests.includes(interest)) {
       setSelectedInterests((prev) => prev.filter(v => v !== interest));
-    } else if (selectedInterests.length < 3) {
+    } else if (selectedInterests.length < 5) {
       setSelectedInterests((prev) => [...prev, interest]);
     }
   };

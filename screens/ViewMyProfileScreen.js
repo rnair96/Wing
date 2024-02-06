@@ -206,6 +206,10 @@ const ViewMyProfileScreen = ({ profile }) => {
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[1]}</Text>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[2]}</Text>
                                 </View>
+                                <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[3]}</Text>
+                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[4]}</Text>
+                                </View>
                             </View>
 
                             {card.item?.prompts && card.item.prompts.length > 2 && card.item.prompts[2]!== null && card.item.prompts[2]?.prompt && card.item.prompts[2]?.tagline &&

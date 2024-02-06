@@ -577,10 +577,22 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
 
     const completeUsers = uniqueUsers.filter((user) => {
       return user.prompts && user.prompts.length > 0 &&
-        user.interests && user.interests.length === 3 &&
+        user.interests && user.interests.length === 5 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
+
+    if (completeUsers.length === 0 && passesSnapshot.size > 0) {
+      // delete collectiono
+      const batch = admin.firestore().batch();
+      passesSnapshot.docs.forEach((doc) => batch.delete(doc.ref));
+      await batch.commit();
+
+      console.log("No unpassed users left. Passed collection deleted. Reload fetch.");
+
+      res.status(204).end();
+      return;
+    }
 
     const compareUsers = createCompareFunction(user);
 
@@ -729,10 +741,22 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
 
     const completeUsers = uniqueUsers.filter((user) => {
       return user.prompts && user.prompts.length > 0 &&
-        user.interests && user.interests.length === 3 &&
+        user.interests && user.interests.length === 5 &&
         user.images && user.images.length === 3 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
+
+    if (completeUsers.length === 0 && passesSnapshot.size > 0) {
+      // delete collectiono
+      const batch = admin.firestore().batch();
+      passesSnapshot.docs.forEach((doc) => batch.delete(doc.ref));
+      await batch.commit();
+
+      console.log("No unpassed users left. Passed collection deleted. Reload fetch.");
+
+      res.status(204).end();
+      return;
+    }
 
     const compareUsers = createCompareFunction(user);
 
@@ -743,8 +767,6 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     console.log("limiting to 30 profiles or less");
     const finalUsers = sortedUsers.length > 30 ?
       sortedUsers.slice(0, 30) : sortedUsers;
-
-    console.log("final users", finalUsers);
 
     res.status(200).json(finalUsers);
   } catch (error) {

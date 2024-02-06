@@ -67,11 +67,13 @@ export const GCProfileViewScreen = () => {
             {(!loading && profile) ? (
                 <View>
                     <ProfileViewComponent profile={profile} setFlag={true} flagged_type={"groupchat"} />
-                    <View style={{ alignItems: "center", bottom:200 }}>
-                        <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => setIsMessageModalVisible(true)}>
-                            <Entypo name="mail" size={17} color="green" />
-                        </TouchableOpacity>
-                    </View>
+                    {!(profile?.flagged_status && profile?.flagged_status === "unresolved") &&
+                        <View style={{ alignItems: "center", bottom: 200 }}>
+                            <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => setIsMessageModalVisible(true)}>
+                                <Entypo name="mail" size={17} color="green" />
+                            </TouchableOpacity>
+                        </View>
+                    }
                     <GCMessageModal isVisible={isMessageModalVisible} setIsVisible={setIsMessageModalVisible} profile={profile} swipes={swipes} matches={matches} requests={requests} />
                 </View>
             ) : (

@@ -34,6 +34,7 @@ const SwipeScreen = ({ loggedProfile }) => {
     const [surveyVisible, setSurveyVisible] = useState(false);
     const [surveyType, setSurveyType] = useState("initial")
     const [surveyOtherInfo, setSurveyOtherInfo] = useState(null);
+    const [loadingMessage, setLoadingMessage] = useState("Fitting Your Wings...")
 
 
 
@@ -152,16 +153,27 @@ const SwipeScreen = ({ loggedProfile }) => {
                     //     }
                     // })
                     .then(response => {
-                        if (!response.ok) {
+                        if (!response.ok && response.status !== 204) {//check against 205
                             throw new Error('Network response was not ok');
+                        } else if (response.status === 204) {
+                            console.log("Reloading skipped deck");
+                            setLoadingMessage("Reloading Skipped Wings...");
+                            fetchCards();
+                            return;
                         }
                         return response.json();
+
                     })
                     .then(data => {
-                        setProfiles(data);  // Set the fetched profiles to your state variable
-                        setCurrentCard(data[0])
-                        console.log("cards fetched")
-                        setloadingFetch(false);
+                        if (data) {
+                            setProfiles(data);  // Set the fetched profiles to your state variable
+                            setCurrentCard(data[0])
+                            console.log("cards fetched")
+                            setloadingFetch(false);
+                        } else{
+                            console.log("No data retrieived")
+                        }
+
                     })
                     .catch(error => {
                         console.log("Error fetching profiles:", error);
@@ -189,7 +201,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                 console.log("first survey")
                 setSurveyVisible(true);
                 // Add other conditions to check if thirty days have passed since account creation
-            } else if (loggedProfile && loggedProfile?.surveyInfo && loggedProfile.gender === "male" 
+            } else if (loggedProfile && loggedProfile?.surveyInfo && loggedProfile.gender === "male"
                 && !loggedProfile.surveyInfo?.thirtydays
                 && hasThirtyDaysPassed(loggedProfile.timestamp)) {
                 console.log("thirty days passed")
@@ -207,7 +219,7 @@ const SwipeScreen = ({ loggedProfile }) => {
         checkConditions();
     }, [loggedProfile, swipeAmount]);
 
-    
+
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]) { return; }
 
@@ -274,13 +286,14 @@ const SwipeScreen = ({ loggedProfile }) => {
                         <View style={[styles.emptycardcontainer]}>
                             <View style={styles.loading}>
                                 <ActivityIndicator size="large" color="#00BFFF" />
-                                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Fitting Your Wings...</Text>
+                                <Text style={{ fontWeight: "bold", fontSize: 20 }}>{loadingMessage}</Text>
                             </View>
                         </View>
 
                     ) : (
                         <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20 }}>No Wings Around... Try Again Later</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20, margin:5}}>No Wings Around... </Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20, margin:5}}>Reload For Skipped Or Try Again Later</Text>
                             <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
                         </View>
                     )}
@@ -315,8 +328,8 @@ const SwipeScreen = ({ loggedProfile }) => {
                         containerStyle={{ backgroundColor: "transparent" }}
                         renderCard={(card) => {
                             return (
-                                <View key={card.id} style={{height:"100%"}}>
-                                    <ProfileCardComponent profile={card} canFlag={true}/>
+                                <View key={card.id} style={{ height: "100%" }}>
+                                    <ProfileCardComponent profile={card} canFlag={true} />
                                 </View>
                             )
                         }
@@ -327,7 +340,8 @@ const SwipeScreen = ({ loggedProfile }) => {
 
             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                 <TouchableOpacity style={styles.swipeButtonCross} onPress={() => swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft() : console.log("no action")}>
-                    <Entypo name="cross" size={24} color="red" />
+                    {/* <Entypo name="cross" size={24} color="red" /> */}
+                    <Text style={{color:"#9A2A2A"}}>Skip</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => swipeRef && swipeRef?.current ? messageSwipe(swipeRef) : console.log("no action")}>
@@ -413,7 +427,9 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#FF5864",
+        // borderColor: "#FF5864",
+        backgroundColor:"#FF5864",
+        // borderWidth:1,
         // shadowColor: "#000",
         shadowOffset: {
             width: 0,

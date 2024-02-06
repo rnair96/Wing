@@ -10,77 +10,81 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
 
     return (
         <View style={styles.cardcontainer}>
-            {profile && profile?.prompts && profile?.prompts.length>0 && profile?.interests && profile?.interests.length > 2 && profile?.images && profile?.images.length > 2 && profile?.location? (
-                        <TouchableOpacity style={{justifyContent: "space-evenly", height: "100%", width: "100%"}} onPress={() => navigation.navigate("ProfileView", { profile: profile, canFlag: canFlag})}>
-                            <View style={{ alignItems: "center", padding: 20 }}>
-                                                {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
+            {profile && profile?.prompts && profile?.prompts.length > 0 && profile?.interests && profile?.interests.length > 4 && profile?.images && profile?.images.length > 2 && profile?.location ? (
+                <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => navigation.navigate("ProfileView", { profile: profile, canFlag: canFlag })}>
+                    <View style={{ alignItems: "center", padding: 20 }}>
+                        {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>
                                                 <Text style={styles.text}>{card.mission}</Text> */}
-                                                <Text style={{ color: "white", margin: 5 }}>{profile.prompts[0].prompt}</Text>
-                                                <Text style={styles.text}>{profile.prompts[0].tagline}</Text>
-                                            </View>
-                            <View style={{ justifyContent: "space-evenly", height: "70%", width: "100%", backgroundColor: "#002D62" }}>
-                                <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
+                        <Text style={{ color: "white", margin: 5 }}>{profile.prompts[0].prompt}</Text>
+                        <Text style={styles.text}>{profile.prompts[0].tagline}</Text>
+                    </View>
+                    <View style={{ justifyContent: "space-evenly", height: "70%", width: "100%", backgroundColor: "#002D62" }}>
+                        <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
+                            <View style={{ flexDirection: "column" }}>
+                                <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{profile.displayName}</Text>
+                                <Text style={{ color: "white", fontSize: 15 }}>{profile.age}</Text>
+                                {profile?.university_student && profile.university_student.status === "active" ? (
                                     <View style={{ flexDirection: "column" }}>
-                                        <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{profile.displayName}</Text>
-                                        <Text style={{ color: "white", fontSize: 15 }}>{profile.age}</Text>
-                                        {profile?.university_student && profile.university_student.status === "active" ? (
-                                            <View style={{ flexDirection: "column" }}>
-                                                <Text style={{ color: "white", fontSize: 13 }}>{profile.school}</Text>
-                                                <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
-                                            </View>
-                                        ) : (
-                                            <Text style={{ color: "white", fontSize: 15 }}>{profile.job}</Text>
-                                        )}
+                                        <Text style={{ color: "white", fontSize: 13 }}>{profile.school}</Text>
+                                        <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
                                     </View>
-                                    <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
+                                ) : (
+                                    <Text style={{ color: "white", fontSize: 15 }}>{profile.job}</Text>
+                                )}
+                            </View>
+                            <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
+                        </View>
+                        {profile?.medals && profile.medals.length > 0 ? (
+                            <View style={{ flexDirection: "column", marginLeft: 5, marginRight: 7 }}>
+                                <View style={{ flexDirection: "row", padding: 10 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>{profile.medals[0] ? profile.medals[0] : `-- --`}</Text>
                                 </View>
-                                {profile?.medals && profile.medals.length > 0 ? (
-                                    <View style={{ flexDirection: "column", marginLeft: 5, marginRight: 7 }}>
-                                        <View style={{ flexDirection: "row", padding: 10 }}>
-                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{profile.medals[0]?profile.medals[0]:`-- --`}</Text>
-                                        </View>
-                                        <View style={{ flexDirection: "row", padding: 10 }}>
-                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{profile.medals[1]?profile.medals[1]:`-- --`}</Text>
-                                        </View>
-                                        {/* <View style={{ flexDirection: "row", padding: 10 }}>
+                                <View style={{ flexDirection: "row", padding: 10 }}>
+                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>{profile.medals[1] ? profile.medals[1] : `-- --`}</Text>
+                                </View>
+                                {/* <View style={{ flexDirection: "row", padding: 10 }}>
                                             <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>{profile.medals[2]?profile.medals[2]:`-- --`}</Text>
                                         </View> */}
-                                    </View>
-                                ) : (
-                                    <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>-- --</Text>
-                                        </View>
-                                        <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>-- --</Text>
-                                        </View>
-                                        {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                            </View>
+                        ) : (
+                            <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>-- --</Text>
+                                </View>
+                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
+                                    <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
+                                    <Text style={styles.cardtext}>-- --</Text>
+                                </View>
+                                {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
                                             <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                             <Text style={styles.cardtext}>-- --</Text>
                                         </View> */}
-                                    </View>
-                                )}
-                                <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[0]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[1]}</Text>
-                                    <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[2]}</Text>
-                                </View>
                             </View>
-                            <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
-                                <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
-                                <Text style={{ color: "white", fontSize: 15, left: 10 }}>{profile.location.text}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ) : (
-                        <View style={{ justifyContent: "center", alignItems: "center", width: "100%", marginVertical: "50%" }}>
-                            <Text style={{ fontSize: 17 }}>User profile unable to load or no longer exists</Text>
+                        )}
+                        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                            <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[0]}</Text>
+                            <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[1]}</Text>
+                            <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[2]}</Text>
                         </View>
-                    )}
+                    </View>
+                    <View style={{ justifyContent: "center", flexDirection: "row", width: "100%", padding: 20 }}>
+                        <Image style={{ height: 25, width: 10 }} source={require("../images/droppin_white.png")}></Image>
+                        <Text style={{ color: "white", fontSize: 15, left: 10 }}>{profile.location.text}</Text>
+                    </View>
+                </TouchableOpacity>
+            ) : (
+                <View style={{ flexDirection: "column", marginVertical: "60%", justifyContent: "center", alignItems: "center" }}>
+                    <Image style={{ height: 100, width: 100, borderRadius: 50, borderWidth: 1, borderColor: "red" }} source={require("../images/account.jpeg")} />
+                    <Text style={{ fontWeight: "bold", color: "white", padding: 10 }}> Error Loading Profile Or Profile Flagged...</Text>
+                    <Text style={{ fontWeight: "bold", color: "white", padding: 10 }}> Try Again Later or Swipe Left</Text>
+                    <View style={{ padding: 10, alignItems: "center" }}>
+                    </View>
+                </View>
+            )}
         </View>
     )
 }
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.41,
         elevation: 5
     },
-   
+
     infocontainer: {
         //  bottom:70 ,
         paddingVertical: 15,
@@ -141,7 +145,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 'bold',
         margin: 3
-        
+
     },
     centeredView: {
         flex: 1,

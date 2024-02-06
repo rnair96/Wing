@@ -117,9 +117,10 @@ const HomeScreen = () => {
             const fetchUserCount = async () => {
                 try {
                     const usersRef = collection(db, global.users);
-                    const q = query(usersRef, where("location.state", "==", "DC"));
+                    const q = query(usersRef, where("location.state", "in", ["DC", "MD", "VA"]));
 
                     const querySnapshot = await getDocs(q);
+                    console.log("number of users", querySnapshot.docs.length);
                     if (querySnapshot.docs.length < 4){//change to 100
                         setIsWaitlistModalVisible(true)
                         setUserNumber(querySnapshot.docs.length);
