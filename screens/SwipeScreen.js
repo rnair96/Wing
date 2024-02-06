@@ -341,7 +341,7 @@ const SwipeScreen = ({ loggedProfile }) => {
             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                 <TouchableOpacity style={styles.swipeButtonCross} onPress={() => swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft() : console.log("no action")}>
                     {/* <Entypo name="cross" size={24} color="red" /> */}
-                    <Text style={{color:"#9A2A2A"}}>Skip</Text>
+                    <Text style={{color:"#9A2A2A", fontWeight:"bold"}}>Skip</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => swipeRef && swipeRef?.current ? messageSwipe(swipeRef) : console.log("no action")}>

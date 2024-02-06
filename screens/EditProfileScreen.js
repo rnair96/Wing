@@ -82,9 +82,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
     let form;
 
     if (activeStudent) {
-      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 3 || !school || !tagline
+      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 5 || !school || !tagline
     } else {
-      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 3 || !job || !tagline
+      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 5 || !job || !tagline
 
 
     }
@@ -366,7 +366,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
 
             <Text style={styles.formTitle}>Interests</Text>
-            <Text style={{ color: "grey", textAlign: "center" }}>Pick Three. This helps us find the Wings that will best match you.</Text>
+            <Text style={{ color: "grey", textAlign: "center" }}>Pick Five. This helps us find the Wings that will best match you.</Text>
             {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
             <InterestsList selectedInterests={interests} setSelectedInterests={setInterests}/>
 

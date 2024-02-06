@@ -193,7 +193,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[1].tagline}</Text>
                                 </View>}
 
-                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                            <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                 <View style={{ flexDirection: "row", padding: 10 }}>
                                     {card.item?.mission ?
@@ -220,7 +220,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                             }
 
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                <Image style={{ margin: 10, ...styles.imagecontainer }} source={{ uri: card.item.images[2] }} />
+                                <Image style={styles.imagecontainer} source={{ uri: card.item.images[2] }} />
                                 <View style={{ margin: 10, alignItems: "center", paddingBottom: 10 }}>
                                     <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
                                     {card.item?.medals && card.item.medals.length > 0 ? (
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     },
     imagecontainer: {
         height: 440,
-        width: "90%",
+        width: "100%",
         borderRadius: 20,
         borderWidth: 1,
         borderColor: "#00BFFF"

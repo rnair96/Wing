@@ -32,7 +32,7 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                                         </View>
                                     }
 
-                                    <Image style={{...styles.imagecontainer, borderTopRightRadius:0, borderTopLeftRadius:0}} source={{ uri: card.item.images[0] }} />
+                                    <Image style={styles.imagecontainer} source={{ uri: card.item.images[0] }} />
                                 </View>
                                 <View style={styles.infocontainer}>
                                     <View>
@@ -222,12 +222,17 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
 
 const styles = StyleSheet.create({
     imagecontainer: {
+        // height: 440,
+        // width: "100%",
+        // borderWidth:1,
+        // borderColor: "#00BFFF",
+        // borderTopRightRadius:20,
+        // borderTopLeftRadius:20,
         height: 440,
         width: "100%",
-        borderWidth:1,
-        borderColor: "#00BFFF",
-        borderTopRightRadius:20,
-        borderTopLeftRadius:20,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: "#00BFFF"
         
     },
     iconcontainer: {
