@@ -40,7 +40,7 @@ const ChatList = ({ profile, requests }) => {
   }, [user]);
 
   return (
-    <View>
+    <View style={{paddingBottom:100}}>
       <GroupChatRow profile={profile} matches={matches} requests={requests}/>
       {matches.length > 0 && (
         <FlatList

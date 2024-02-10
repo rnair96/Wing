@@ -31,10 +31,10 @@ const ChatRow = ({ matchedDetails, profile }) => {
 
     const setVars = (data) => {
 
-        if (data && data?.type==="text" && data?.message?.length > 15) {
+        if (data && (!data?.type || data?.type==="text") && data?.message?.length > 15) {
             const message = data?.message?.slice(0, 15) + "..."
             setLastMessage(message);
-        } else if (data && data?.type==="text") {
+        } else if (data && (!data?.type || data?.type==="text")) {
             setLastMessage(data?.message)
         } else if (data && data?.type==="image"){
             setLastMessage("Image Shared")

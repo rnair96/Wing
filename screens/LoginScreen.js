@@ -58,9 +58,9 @@ const LoginScreen = () => {
                             <Text style={{ fontWeight: "bold", fontSize: 40, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F", left: 13 }}>Wing</Text>
                             <Image style={styles.iconcontainer} source={require("../images/darkbluelogocorrect.png")} />
                         </View>
-                        <View style={{ height: "50%", top: "10%", justifyContent: "space-evenly" }}>
+                        <View style={{ height: "40%", top: "10%", justifyContent: "space-evenly" }}>
                             <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Find Your Wingman.</Text>
-                            <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Delete Dating Apps.</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Ditch Dating Apps.</Text>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>

@@ -45,7 +45,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                                         <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card.item?.images[0] }} />
                                     </View>
                                     {card.item?.medals && card.item?.medals.length > 0 ? (
-                                        <View style={{ flexDirection: "column", marginLeft: 5 }}>
+                                        <View style={{ flexDirection: "column", marginLeft: 5, width:"95%" }}>
                                             <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
                                                 <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                                 <Text style={styles.cardtext}>{card.item.medals[0] ? card.item.medals[0] : `-- --`}</Text>
@@ -181,6 +181,12 @@ const ViewMyProfileScreen = ({ profile }) => {
                                                     <Text style={{ color: "white" }}>-- --</Text>
                                                 )}
                                         </View>
+                                        {card.item?.group && (
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                                <Image style={{ height: 25, width: 25 }} source={require("../images/group.png")} />
+                                                <Text style={{ color: "white" }}>{card.item.group}</Text>
+                                            </View>
+                                        )}
                                     </View>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text>
 

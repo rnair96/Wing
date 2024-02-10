@@ -10,7 +10,6 @@ import TagPicker from '../components/TagPicker';
 import ValuesList from '../components/ValuesList';
 import ClassLevelPicker from '../components/ClassLevelPicker';
 import GradYearPicker from '../components/GradYearPicker';
-import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 import PromptModal from '../components/PromptModal';
 import PromptPicker from '../components/PromptPicker';
@@ -57,8 +56,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [isPromptVisible, setisPromptVisible] = useState(false);
   const [isPrompt1Visible, setisPrompt1Visible] = useState(false);
   const [isPrompt2Visible, setisPrompt2Visible] = useState(false);
-
-
+  const group = profile?.group ? profile.group : null;
 
   const navigation = useNavigation();
 
@@ -196,14 +194,17 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
               <View style={{ alignItems: "center" }}>
                 <Text style={styles.formTitle}>Gender</Text>
-
-                {/* {!profile?.gender ? (
-        <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
-      ):( */}
                 <Text>{gender}</Text>
-                {/* )} */}
               </View>
             </View>
+
+            {group &&
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.formTitle}>Group</Text>
+                <Text>{group}</Text>
+                <Text style={{color:"grey", padding:10}}>To Edit Group Go To Account in Settings</Text>
+              </View>
+            }
 
             <View style={{ flexDirection: "column", padding: 10 }}>
 
@@ -300,7 +301,6 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                 </View>
               )}
 
-
             <View style={{ flexDirection: "row", paddingBottom: 10, paddingTop: 10 }}>
               <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
               <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
@@ -368,7 +368,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             <Text style={styles.formTitle}>Interests</Text>
             <Text style={{ color: "grey", textAlign: "center" }}>Pick Five. This helps us find the Wings that will best match you.</Text>
             {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
-            <InterestsList selectedInterests={interests} setSelectedInterests={setInterests}/>
+            <InterestsList selectedInterests={interests} setSelectedInterests={setInterests} />
 
             <Text style={styles.formTitle}>A Long-Term or Short-Term Goal</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>A Pursuit That Has Nothing To Do With Dating</Text>

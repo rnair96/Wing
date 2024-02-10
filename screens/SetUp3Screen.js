@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button, Platform} from 'react-native';
 import useAuth from '../hooks/useAuth';
-import { updateDoc, doc, writeBatch, serverTimestamp, collection } from 'firebase/firestore';
+import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 // import TagPicker from '../components/TagPicker';
 import Header from '../Header';
 import EulaModal from '../components/EulaModal';
-import ValuesList from '../components/ValuesList';
-import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 import PromptModal from '../components/PromptModal';
 import PromptPicker from '../components/PromptPicker';
@@ -27,19 +25,20 @@ const SetUp3Screen = () => {
 
   const navigation = useNavigation();
   // const incompleteform = !mission || !values || values.length < 3;
-  const incompleteform = !tagline || !interests || interests.length < 3;
+  const incompleteform = !tagline || !interests || interests.length < 5;
 
 
   const updateUserProfile = () => {
     const promptObject = {
       prompt: prompt,
-      tagline: tagline
+      tagline: tagline,
     }
 
     updateDoc(doc(db, global.users, user.uid), {
       // values: values,
       interests: interests,
-      prompts: [promptObject, null, null]
+      prompts: [promptObject, null, null],
+      completed_setup:true
     }).then(() => {
       navigation.navigate("Home")
       navigation.navigate("WelcomeScreen")
@@ -87,7 +86,7 @@ const SetUp3Screen = () => {
             <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>Tip: Make it interesting. This is your hook to get a Wing's attention.</Text>
 
 
-            <Text style={styles.formTitle}>Select Your 3 Top Interests</Text>
+            <Text style={styles.formTitle}>Select Your Top 5 Interests</Text>
             {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
             <InterestsList selectedInterests={interests} setSelectedInterests={setInterests}/>
 

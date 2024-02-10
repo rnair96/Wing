@@ -10,7 +10,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import WingTagModal from './WingTagModal';
 
 
-
 const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setReplyToken, setUserIdReply, setUserNameReply }) => {
     const [isImage, setIsImage] = useState(false);
     const [contentType, setContentType] = useState("text");
@@ -218,10 +217,9 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setRep
             <TouchableOpacity onPress={() => {
                 if (isImage) {
                     setIsImage(false);
-                }
+                }         
                 setContentType("text");
                 sendMessage(contentType, isWingSelected);
-
                 if(isWingSelected){
                     setIsWingSelected(false);
                 }

@@ -91,28 +91,76 @@ const sendPushBatch = async (tokens, title, body, data) => {
     return null;
   }
 };
+
 function createCompareFunction(currentUser) {
   const currentUserInterests = currentUser.interests;
   const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
+  const currentUserGroup = currentUser.group && currentUser.preferences && currentUser.preferences.group? currentUser.group : null;
 
   return function compareUsers(user1, user2) {
-    // Count the matching values for user1
-    const matchingInterestsUser1 = user1.interests.filter((interest) =>
-      currentUserInterests.includes(interest)).length;
+    if (currentUserGroup) {
+      const user1GroupMatch = user1.group && (user1.group === currentUserGroup) ? 1 : 0;
+      const user2GroupMatch = user2.group && (user2.group === currentUserGroup) ? 1 : 0;
 
-    // Count the matching values for user2
-    const matchingInterestsUser2 = user2.interests.filter((interest) =>
-      currentUserInterests.includes(interest)).length;
+      if ((user1GroupMatch === user2GroupMatch) && currentUserTag) {
+        const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
+        const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
 
-    if ((matchingInterestsUser1 === matchingInterestsUser2) && currentUserTag) {
+        if (user1ActivityMatch === user2ActivityMatch) {
+          const matchingInterestsUser1 = user1.interests.filter((interest) =>
+            currentUserInterests.includes(interest)).length;
+
+          // Count the matching values for user2
+          const matchingInterestsUser2 = user2.interests.filter((interest) =>
+            currentUserInterests.includes(interest)).length;
+
+          // Sort in descending order of matching values
+          return matchingInterestsUser2 - matchingInterestsUser1;
+        }
+
+        return user2ActivityMatch - user1ActivityMatch;
+      } else if (user1GroupMatch === user2GroupMatch) {
+        const matchingInterestsUser1 = user1.interests.filter((interest) =>
+          currentUserInterests.includes(interest)).length;
+
+        // Count the matching values for user2
+        const matchingInterestsUser2 = user2.interests.filter((interest) =>
+          currentUserInterests.includes(interest)).length;
+
+        // Sort in descending order of matching values
+        return matchingInterestsUser2 - matchingInterestsUser1;
+      }
+
+      return user2GroupMatch - user1GroupMatch;
+    } else if (currentUserTag) {
       const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
       const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
 
-      return user2ActivityMatch - user1ActivityMatch;
-    }
+      if (user1ActivityMatch === user2ActivityMatch) {
+        const matchingInterestsUser1 = user1.interests.filter((interest) =>
+          currentUserInterests.includes(interest)).length;
 
-    // Sort in descending order of matching values
-    return matchingInterestsUser2 - matchingInterestsUser1;
+        // Count the matching values for user2
+        const matchingInterestsUser2 = user2.interests.filter((interest) =>
+          currentUserInterests.includes(interest)).length;
+
+        // Sort in descending order of matching values
+        return matchingInterestsUser2 - matchingInterestsUser1;
+      }
+
+      return user2ActivityMatch - user1ActivityMatch;
+    } else {
+      // Count the matching values for user1
+      const matchingInterestsUser1 = user1.interests.filter((interest) =>
+        currentUserInterests.includes(interest)).length;
+
+      // Count the matching values for user2
+      const matchingInterestsUser2 = user2.interests.filter((interest) =>
+        currentUserInterests.includes(interest)).length;
+
+      // Sort in descending order of matching values
+      return matchingInterestsUser2 - matchingInterestsUser1;
+    }
   };
 }
 
@@ -189,16 +237,61 @@ exports.aggregateSurveyResponses = functions.firestore
       if (newData.surveyInfo && newData.surveyInfo.initial && !oldData.surveyInfo) {
         console.log("initial survey set checked");
         objectentries = newData.surveyInfo.initial;
-      } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.thirtydays && !oldData.surveyInfo.thirtydays) {
-        console.log("thirty days survey set checked");
-        surveyDoc = "thirtydaysSurveyData";
-        objectentries = newData.surveyInfo.thirtydays;
+      } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.sixtydays && !oldData.surveyInfo.sixtydays) {
+        console.log("sixty days survey set checked");
+        surveyDoc = "sixtydaysSurveyData";
+        objectentries = newData.surveyInfo.sixtydays;
       } else {
         return null;
       }
 
       // Aggregate data document reference
       const aggregateDocRef = db.collection("userData").doc(surveyDoc);
+
+      // Transaction to ensure atomic update
+      return db.runTransaction(async (transaction) => {
+        const aggregateDoc = await transaction.get(aggregateDocRef);
+        const aggregateData = aggregateDoc.exists ? aggregateDoc.data() : {};
+
+        // Iterate over each question in the surveyInfo
+        for (const [question, answer] of Object.entries(objectentries)) {
+        // Initialize question data structure if not present
+          if (!aggregateData[question]) {
+            aggregateData[question] = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0};
+          }
+
+          console.log("incrementing data for ", question);
+          // Increment the count for the given answer
+          aggregateData[question][answer]++;
+        }
+
+        // Update the aggregate data document
+        transaction.set(aggregateDocRef, aggregateData);
+      });
+    });
+
+exports.aggregateSurveyResponsesDev = functions.firestore
+    .document("users_test/{userId}")
+    .onUpdate(async (change, context) => {
+      const newData = change.after.data();
+      const oldData = change.before.data();
+      let surveyDoc = "initialSurveyData";
+      let objectentries;
+
+
+      if (newData.surveyInfo && newData.surveyInfo.initial && !oldData.surveyInfo) {
+        console.log("initial survey set checked");
+        objectentries = newData.surveyInfo.initial;
+      } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.sixtydays && !oldData.surveyInfo.sixtydays) {
+        console.log("sixty days survey set checked");
+        surveyDoc = "sixtydaysSurveyData";
+        objectentries = newData.surveyInfo.sixtydays;
+      } else {
+        return null;
+      }
+
+      // Aggregate data document reference
+      const aggregateDocRef = db.collection("userData_test").doc(surveyDoc);
 
       // Transaction to ensure atomic update
       return db.runTransaction(async (transaction) => {
@@ -477,10 +570,9 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
 
     const user = userSnapshot.data();
     // const userPreferences = user.tagPreference;
-    const userGender = user.gender;
     let matchingUsersQuery = admin.firestore().collection("users")
-        .where("gender", "==", userGender)
-        .limit(1000);
+        .where("completed_setup", "==", true)
+        .limit(500);
     // add limit to size
 
     // Filter by preferences
@@ -491,14 +583,6 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
       matchingUsersQuery = matchingUsersQuery
           .where("university_student.status", "==", "active");
     }
-
-    // no longer needed
-    // Further filter by tag preference
-    // if (user.preferences && user.preferences.tag !== "All") {
-    //   console.log("filtering for users with mission tag", user.preferences.tag);
-    //   matchingUsersQuery = matchingUsersQuery
-    //     .where("mission_tag", "==", user.preferences.tag);
-    // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
@@ -640,10 +724,9 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
 
     const user = userSnapshot.data();
     // const userPreferences = user.tagPreference;
-    const userGender = user.gender;
     let matchingUsersQuery = admin.firestore().collection("users_test")
-        .where("gender", "==", userGender)
-        .limit(1000);
+        .where("completed_setup", "==", true)
+        .limit(500);
     // add limit to size
 
     // Filter by preferences
@@ -654,14 +737,6 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
       matchingUsersQuery = matchingUsersQuery
           .where("university_student.status", "==", "active");
     }
-
-    // no longer needed
-    // Further filter by tag preference
-    // if (user.preferences && user.preferences.tag !== "All") {
-    //   console.log("filtering for users with mission tag", user.preferences.tag);
-    //   matchingUsersQuery = matchingUsersQuery
-    //     .where("mission_tag", "==", user.preferences.tag);
-    // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
@@ -816,16 +891,13 @@ exports.sendAnnouncementNotification = functions.firestore
       console.log("cycling through each user chunk for announcements");
 
       for (const userChunk of userChunks) {
-        // const batch = admin.firestore().batch();
+      // const batch = admin.firestore().batch();
 
         userChunk.forEach((doc) => {
-          // const userID = doc.id;
+        // const userID = doc.id;
           const userData = doc.data();
 
-          // const announcementRef = admin.firestore().collection("users")
-          //     .doc(userID).collection("announcements").doc(announcementId);
 
-          // batch.set(announcementRef, announcementDoc);
 
           if (userData.notifications &&
           userData.notifications.announcements &&
@@ -835,14 +907,6 @@ exports.sendAnnouncementNotification = functions.firestore
           }
         });
 
-        // try {
-        //   console.log("writing all the new announcements to users");
-        //   await batch.commit();
-        // } catch (error) {
-        //   console.error("Error adding announcement to users:", error);
-        // Handle the error appropriately.
-        // Maybe retry or notify you about the failure.
-        // }
       }
 
       if (tokens.length > 0) {
@@ -955,7 +1019,7 @@ functionCall.delete("/deleteUserDev/:id", async (req, res) => {
 
   try {
     console.log("deleting collections");
-    const collectionsToDelete = ["requests", "swipes", "passes", "announcements"];
+    const collectionsToDelete = ["requests", "swipes", "passes"];
     for (const collection of collectionsToDelete) {
       const snapshot = await userDocRef.collection(collection).get();
       if (!snapshot.empty) {
@@ -1021,7 +1085,7 @@ functionCall.delete("/deleteUser/:id", async (req, res) => {
 
   try {
     console.log("deleting collections");
-    const collectionsToDelete = ["requests", "swipes", "passes", "announcements"];
+    const collectionsToDelete = ["requests", "swipes", "passes"];
     for (const collection of collectionsToDelete) {
       const snapshot = await userDocRef.collection(collection).get();
       if (!snapshot.empty) {

@@ -35,7 +35,7 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                             <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
                         </View>
                         {profile?.medals && profile.medals.length > 0 ? (
-                            <View style={{ flexDirection: "column", marginLeft: 5, marginRight: 7 }}>
+                            <View style={{ flexDirection: "column", width:"95%", marginLeft: 5 }}>
                                 <View style={{ flexDirection: "row", padding: 10 }}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{profile.medals[0] ? profile.medals[0] : `-- --`}</Text>

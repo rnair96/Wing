@@ -35,8 +35,10 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp0");
             } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
                 navigation.navigate("SetUp1");
-            } else if (!snapshot.data().prompts || !snapshot.data().interests) {
+            } else if (!snapshot.data().prompts || !snapshot.data().interests || !snapshot.data().completed_setup) {
                 navigation.navigate("SetUp3", { id: user.uid });
+            } else if (!snapshot.data().completed_welcome){
+                navigation.navigate("WelcomeScreen");
             }
 
             else {
@@ -117,11 +119,12 @@ const HomeScreen = () => {
             const fetchUserCount = async () => {
                 try {
                     const usersRef = collection(db, global.users);
-                    const q = query(usersRef, where("location.state", "in", ["DC", "MD", "VA"]));
+                    const q = query(usersRef, where("location.state", "in", ["DC", "MD", "VA"]),
+                    where("completed_setup", "==", true));
 
                     const querySnapshot = await getDocs(q);
                     console.log("number of users", querySnapshot.docs.length);
-                    if (querySnapshot.docs.length < 4){//change to 100
+                    if (querySnapshot.docs.length < 100){//change to 100
                         setIsWaitlistModalVisible(true)
                         setUserNumber(querySnapshot.docs.length);
                     }

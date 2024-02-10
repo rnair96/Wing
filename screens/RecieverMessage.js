@@ -51,7 +51,7 @@ const RecieverMessage = ({ message }) => {
             {((message?.type === undefined) || (message?.type && message.type === "text")) &&
               <Text style={{ color: "white", padding: 10, fontSize: 20 }}> {message.message} </Text>
             }
-            {message?.type && message.type === "image" &&
+            {message?.type && message.type === "image" && message?.message &&
               <TouchableOpacity onPress={() => setIsExpandedImageVisible(!isExpandedImageVisible)}>
                 <Image source={{ uri: message.message }} style={{ width: 200, height: 200, borderRadius: 5, margin: 10 }} />
               </TouchableOpacity>

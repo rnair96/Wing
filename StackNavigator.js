@@ -42,6 +42,9 @@ import NotificationsScreen from './screens/NotificationsScreen';
 import * as Sentry from "@sentry/react";
 import GroupChatScreen from './screens/GroupChatScreen';
 import GCProfileViewScreen from './screens/GCProfileViewScreen';
+import GroupsScreen from './screens/GroupsScreen';
+import SetUpGroupScreen from './screens/SetupGroupScreen';
+import GroupsAccountScreen from './screens/GroupsAccountScreen';
 
 
 const Stack = createStackNavigator();
@@ -173,7 +176,11 @@ const StackNavigator = () => {
           <Stack.Screen name="RequestMessage" component={RequestMessageScreen} />
           <Stack.Screen name="Announcements" component={AnnouncementScreen} />
           <Stack.Screen name="Notifications" component={NotificationsScreen} />
+          <Stack.Screen name="Groups" component={GroupsScreen} />
           <Stack.Screen name="Flagged" component={FlaggedScreen} />
+          <Stack.Screen name="SetUpGroup" component={SetUpGroupScreen} />
+          <Stack.Screen name="GroupAccount" component={GroupsAccountScreen} />
+
           {/* </Stack.Group> */}
           {/* <Stack.Group screenOptions={{ presentation: "modal" }}> */}
           <Stack.Screen
@@ -206,18 +213,6 @@ const StackNavigator = () => {
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
             }}
           />
-          {/* <Stack.Screen
-            name="TaglinePrompt"
-            component={TaglinePromptScreen}
-            options={{
-              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              gestureDirection: 'vertical'
-            }}
-          /> */}
-          {/* </Stack.Group> */}
-          {/* <Stack.Group screenOptions={{ presentation: "transparentModal" }}> */}
-          {/* <Stack.Screen name="Match" component={MatchScreen} /> */}
-          {/* </Stack.Group> */}
         </>
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />

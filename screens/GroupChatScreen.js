@@ -4,7 +4,7 @@ import { SafeAreaView, View, TextInput, KeyboardAvoidingView, TouchableWithoutFe
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc, limit } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import * as Sentry from "@sentry/react";
@@ -82,7 +82,7 @@ const GroupChatScreen = () => {
 
     useEffect(() => {
         const unsub = onSnapshot(query(collection(db, global.groupchat),
-            orderBy("timestamp", "desc")),
+            orderBy("timestamp", "desc"), limit(100)),
             (snapshot) => {
                 setMessages(snapshot.docs.map((doc) => ({
                     id: doc.id,

@@ -38,7 +38,7 @@ const SurveyModal = ({ type, isVisible, setIsVisible, otherInfo }) => {
                 } :
                 {
                     ...otherInfo,
-                    "thirtydays":
+                    "sixtydays":
                     {
                         "Wing Going Out Rate": selectedAnswer1,
                         "Wing Approach Ease": selectedAnswer2,

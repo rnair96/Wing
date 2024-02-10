@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native'
 import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
-import UnreadHighlighter from '../components/UnreadHighlighter';
 import getTime from '../lib/getTime';
 import * as Sentry from "@sentry/react";
 
@@ -13,7 +12,7 @@ const AnnouncementRow = ({profile}) => {
 
     const { user } = useAuth();
     const [lastMessage, setLastMessage] = useState(null);
-    const [read, setRead] = useState(true);
+    // const [read, setRead] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState(true);
     const [timestamp, setTimeStamp] = useState();
     const navigator = useNavigation();

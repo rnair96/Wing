@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Modal, TouchableHighlight, StyleSheet } from 'react-native';
+import { Text, View, Modal, StyleSheet } from 'react-native';
 
 
 const WaitlistModal = ({ isModalVisible, usersNumber}) => {
@@ -13,7 +13,7 @@ const WaitlistModal = ({ isModalVisible, usersNumber}) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, textAlign:"center" }}>Features Unlock After 100 DC Users Sign Up</Text>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, textAlign:"center" }}>Features Unlock After 100 Users In DC/MD/VA Metro Area Sign Up</Text>
                         <Text style={{ padding: 5, fontWeight: "800", fontSize: 13}}>Current Number of Users:</Text>
                         <View style={{backgroundColor: "#00308F", borderRadius:20, padding:10}}>
                         <Text style={{ padding: 5, fontWeight: "800", fontSize: 25, color:"white"}}>{usersNumber}</Text>

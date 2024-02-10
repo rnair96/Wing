@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, TouchableOpacity, View, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, TextInput, Switch } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, TouchableOpacity, View, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, TextInput, Switch, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
@@ -29,14 +29,13 @@ const StudentSetupScreen = () => {
             },
             school: college,
             preferences: {
-                tag: "All",
                 university: universityPreference,
                 distance: "Global"
             },
             images: [url1, url2, url3]
         }).then(() => {
 
-            navigation.navigate("SetUp3")
+            navigation.navigate("SetUpGroup")
         }).catch((error) => {
             alert("Error updating profile. Try again later.")
             Sentry.captureMessage(`Error setting up data in student setup screen for ${user.uid}, ${error.message}`)
@@ -57,7 +56,7 @@ const StudentSetupScreen = () => {
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", paddingBottom: 50 }}>
 
                         <SafeAreaView>
-                            <Header style={{ right: "40%" }} title={"Account Setup 2/3"} />
+                            <Header style={{marginHorizontal: "17%", right: "40%"}} title={"Account Setup 2/3"} />
                         </SafeAreaView>
 
                         <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>

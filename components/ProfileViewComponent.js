@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import tagColor from '../lib/colorTag';
 import FlagModal from '../components/FlagModal';
@@ -103,6 +103,12 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                                                     <Text style={{ color: "white" }}>-- --</Text>
                                                 )}
                                         </View>
+                                        {card.item?.group && (
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 10 }}>
+                                                <Image style={{ height: 25, width: 25 }} source={require("../images/group.png")} />
+                                                <Text style={{ color: "white" }}>{card.item.group}</Text>
+                                            </View>
+                                        )}
                                     </View>
                                     {card.item?.bio ?
                                         (
@@ -197,12 +203,11 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                             </View>
                             {setFlag && (
                                 <View style={{ padding: 10, alignItems: "center", paddingBottom: 70 }}>
-                                    <TouchableOpacity style={{ padding: 30, backgroundColor: "white", borderRadius: 10, borderWidth: 2, borderColor: "#00BFFF", width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={()=>setIsFlagModalVisible(true)}>
+                                    <TouchableOpacity style={{ padding: 30, backgroundColor: "white", borderRadius: 10, borderWidth: 2, borderColor: "#00BFFF", width: "95%", alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }} onPress={() => setIsFlagModalVisible(true)}>
                                         <Text style={{ color: "#00BFFF", fontWeight: "bold", fontSize: 17 }}>Report {card.item.displayName}</Text>
                                     </TouchableOpacity>
-                            </View>
+                                </View>
                             )}
-                            
                             <FlagModal other_user={profile} isVisible={isFlagModalVisible} setIsVisible={setIsFlagModalVisible} detailsId={null} type={flagged_type} />
                         </View>
                         // </View>
@@ -222,18 +227,11 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
 
 const styles = StyleSheet.create({
     imagecontainer: {
-        // height: 440,
-        // width: "100%",
-        // borderWidth:1,
-        // borderColor: "#00BFFF",
-        // borderTopRightRadius:20,
-        // borderTopLeftRadius:20,
         height: 440,
         width: "100%",
         borderRadius: 20,
         borderWidth: 1,
         borderColor: "#00BFFF"
-        
     },
     iconcontainer: {
         height: 60,

@@ -90,7 +90,7 @@ const KickOutModal = ({ isModalVisible, setIsModalVisible }) => {
                                 getHerDigits();
                             }}
                         >
-                            <Text style={{ color: "white", fontWeight:"bold" }}>{`*eyes roll* Sure, Fine.`}</Text>
+                            <Text style={{ color: "white", fontWeight:"bold" }}>{`*Eyes Roll* Sure, Fine.`}</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
                             style={{ backgroundColor: "#00308F", width: "80%", padding:25, alignItems: "center", borderRadius: 10, justifyContent: "center", margin:10}}
@@ -104,15 +104,15 @@ const KickOutModal = ({ isModalVisible, setIsModalVisible }) => {
                     </View>
                 ) : (
                     <View style={styles.modalView}>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, textAlign: "center" }}>Sorry Sweetheart, It's A Boys Club Only Right Now.</Text>
-                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, paddingBottom: 10, textAlign: "center" }}>You Understand Don't You? 😘</Text>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, textAlign: "center" }}>Sorry, This Is Currently A Networking App For Men As Our Priority Is Helping With Men's Dating And Mental Health Issues.</Text>
+                        <Text style={{ padding: 5, fontWeight: "800", fontSize: 15, paddingBottom: 10, textAlign: "center" }}>Trust Me, You'll Thank Us For This.</Text>
                         <TouchableHighlight
                             style={{ backgroundColor: "#00308F", width: "70%", height: "20%", alignItems: "center", borderRadius: 10, justifyContent: "center" }}
                             onPress={() => {
                                 setAskOutText(true);
                             }}
                         >
-                            <Text style={{ color: "white", fontWeight:"bold" }}>Yes Sir</Text>
+                            <Text style={{ color: "white", fontWeight:"bold" }}>Ok</Text>
                         </TouchableHighlight>
                     </View>
                 )}

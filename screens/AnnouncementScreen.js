@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, FlatList, Image } from 'react-native';
+import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, FlatList, Image, Platform } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Header from '../Header';
-import Constants from 'expo-constants';
 import * as Sentry from "@sentry/react";
 import RecieverMessage from './RecieverMessage';
 import ChatInput from '../components/ChatInput';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
-const AnnouncementScreen = ({profile}) => {
+const AnnouncementScreen = () => {
 
     const { user } = useAuth();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [input, setInput] = useState(null);
     const [title, setTitle] = useState(null);
+    const { params } = useRoute();
+    const { profile } = params;
 
     // const { masterAccount, masterId } = Constants.expoConfig.extra
 
@@ -62,6 +64,7 @@ const AnnouncementScreen = ({profile}) => {
 
     //should make message, pic and link - just one field : content
     const sendMessage = (type) => {
+
         let messageTitle;
         if (type === "image") {
             messageTitle = "Wing Community shared an Image"
@@ -71,20 +74,25 @@ const AnnouncementScreen = ({profile}) => {
             messageTitle = title;
         }
 
-        const timestamp = serverTimestamp();
-        addDoc(collection(db, global.announcements), {
-            title: messageTitle,
-            displayName: profile.displayName,
-            photoURL: profile.images[0],
-            userId: user.uid,
-            message: input,
-            timestamp: timestamp,
-            type: type
-        }).catch((error) => {
-            console.log("error sending announcement", error)
-            alert("Error sending announcement.")
-            Sentry.captureMessage(`Error sending announcement, ${error.message}`)
-        })
+        if (profile && profile?.displayName && profile?.images) {
+            const timestamp = serverTimestamp();
+            addDoc(collection(db, global.announcements), {
+                title: messageTitle,
+                displayName: profile.displayName,
+                photoURL: profile.images[0],
+                userId: user.uid,
+                message: input,
+                timestamp: timestamp,
+                type: type
+            }).catch((error) => {
+                console.log("error sending announcement", error)
+                alert("Error sending announcement.")
+                Sentry.captureMessage(`Error sending announcement, ${error.message}`)
+            })
+        } else {
+            alert("Error sending announcement. Try again later");
+            Sentry.captureMessage(`Error sending announcement, profile for ${user.uid} did not load`);
+        }
 
         setInput("");
         setTitle("")
@@ -121,17 +129,17 @@ const AnnouncementScreen = ({profile}) => {
 
                 }
                 {/* {canInput && */}
-                    <View style={{ alignItems: "center"}}>
-                        <TextInput
-                            style={{ height: 50, width: "80%", fontSize: 15, padding: 10, borderBottomWidth: 2, borderTopWidth:2, borderColor: "grey" }}
-                            placeholder="Set Announcement Title"
-                            onChangeText={setTitle}
-                            onSubmitEditing={sendMessage}
-                            placeholderTextColor={"grey"}
-                            value={title}
-                        />
-                        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} fileLocation={"announements"}/>
-                    </View>
+                <View style={{ alignItems: "center" }}>
+                    <TextInput
+                        style={{ height: 50, width: "80%", fontSize: 15, padding: 10, borderBottomWidth: 2, borderTopWidth: 2, borderColor: "grey" }}
+                        placeholder="Set Announcement Title"
+                        onChangeText={setTitle}
+                        onSubmitEditing={sendMessage}
+                        placeholderTextColor={"grey"}
+                        value={title}
+                    />
+                    <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} fileLocation={"announcements"} />
+                </View>
                 {/* } */}
             </KeyboardAvoidingView>
 

@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight } from 'react-native';
+import { Text, View, SafeAreaView, TouchableOpacity, StyleSheet, TextInput, Modal, TouchableHighlight, Keyboard, Platform } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import Header from '../Header';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import * as Sentry from "@sentry/react";
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const AccountScreen = () => {
     const { user, deleteAll, logout } = useAuth();
     const navigation = useNavigation();
-
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [pwdmodalVisible, setpwdModalVisible] = useState(false);
@@ -32,6 +33,26 @@ const AccountScreen = () => {
         }
 
     }, [profile])
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
 
 
@@ -54,8 +75,7 @@ const AccountScreen = () => {
         await updateDoc(doc(db, global.users, user.uid), {
             preferences: {
                 university: false,
-                tag: profile.preferences.tag,
-                distance: profile.preferences.distance
+                ...profile.preferences
             },
             university_student: {
                 status: "inactive"
@@ -86,7 +106,7 @@ const AccountScreen = () => {
             <SafeAreaView>
                 <Header title={"Account"} />
             </SafeAreaView>
-            <View style={{ height: "90%", width: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
+            <View style={{height:"85%", width: "100%",alignItems: "center", justifyContent: "space-evenly" }}>
 
                 {activeStudent && (
                     <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 10, height: "20%", width: "100%" }}>
@@ -115,6 +135,10 @@ const AccountScreen = () => {
 
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Notifications", profile)}>
                     <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Location & Notifications</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("GroupAccount", profile)}>
+                    <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Edit Group</Text>
                 </TouchableOpacity>
 
                 {/* should actually cycle through all providerData for potential password authentication */}
@@ -186,7 +210,7 @@ const AccountScreen = () => {
                 }}
             >
                 <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                    <View style={{height: (Platform.OS === "android" && isKeyboardVisible) ? "50%" : "30%", bottom: isKeyboardVisible ? "10%" : 0, ...styles.modalView}}>
                         <Text style={{ fontSize: 15, textAlign: "center", fontWeight: "bold" }}>Please input your password to confirm deletion.</Text>
                         <TextInput
                             value={password}

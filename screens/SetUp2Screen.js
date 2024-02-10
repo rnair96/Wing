@@ -27,12 +27,11 @@ const SetUp2Screen = () => {
             job: job,
             images: [url1, url2, url3],
             preferences: {
-                tag: "All",
                 distance: "Global"
-            },
+            }
         }).then(() => {
 
-            navigation.navigate("SetUp3")
+            navigation.navigate("SetUpGroup")
         }).catch((error) => {
             alert("Error updating profile. Try again later.")
             Sentry.captureMessage(`Error setting up data in screen 2 for ${user.uid}, ${error.message}`)
@@ -50,10 +49,10 @@ const SetUp2Screen = () => {
             <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly" }}>
 
                 <TouchableWithoutFeedback
-                    // onPress={Keyboard.dismiss()}
+                    onPress={()=> Keyboard.dismiss()}
                 >
                     <View>
-                        <Header style={{right:"25%"}} title={"Account Setup 2/3"} />
+                        <Header style={{marginHorizontal: "17%", right: "40%"}} title={"Account Setup 2/3"} />
                     </View>
                 </TouchableWithoutFeedback>
 

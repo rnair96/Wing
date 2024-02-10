@@ -1,14 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { makeRedirectUri } from 'expo-auth-session';
-// import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, getIdToken, getCurrentUser } from "firebase/auth";
 import { auth } from '../firebase';
 import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db } from '../firebase';
 import Constants from 'expo-constants';
 import { ImageBackground } from 'react-native';
+import * as Sentry from "@sentry/react";
 
 
 const AuthContext = createContext({});
@@ -19,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
 
-  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers,
+  const { androidClientId, iosClientId, expoClientId, prodUsers,
     devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards, prodDeleteUser, devDeleteUser, devGroupChat, prodGroupChat } = Constants.expoConfig.extra
 
 
@@ -42,21 +41,11 @@ export const AuthProvider = ({ children }) => {
 
   }
 
-  // GoogleSignin.configure({
-  //   webClientId: expoClientId,
-  //   androidClientId: androidClientId,
-  //   iosClientId: iosClientId,
-  // });
-
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   androidClientId: androidClientId,
-  //   iosClientId: iosClientId,
-  //   expoClientId: expoClientId,
-  //   scopes: ["profile", "email"],
-  //   redirectUri: makeRedirectUri({
-  //     scheme: 'com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2'
-  //   })
-  // });
+  GoogleSignin.configure({
+    webClientId: expoClientId,
+    androidClientId: androidClientId,
+    iosClientId: iosClientId,
+  });
 
 
   useEffect(() => {
@@ -75,101 +64,56 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
 
-  // useEffect(() => {
-  //   if (!user && response?.type === 'success') {
-  //     getUserData(response.authentication.idToken, response.authentication.accessToken);
-  //   }
-  //   else if (response?.type === 'cancel') {
-  //     setLoading(false);
-  //     alert("Login incomplete. Please try again.");
-
-  //   }
-
-  // }, [response]);
-
-
-  // const getUserData = async (idToken, accessToken) => {
-  //   try {
-  //     const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     }).then((response) => response.json());
-  //     setUser(userData);
-
-  //     //signs in to firestore db
-  //     const credential = GoogleAuthProvider.credential(idToken, accessToken)
-  //     await signInWithCredential(auth, credential)
-  //       .then(() => {
-  //         setLoading(false);
-  //       });
-  //   } catch (e) {
-  //     console.log("There was an error");
-  //     setLoading(false);
-  //   }
-
-  // }
-
-
   const signInWithGoogle = async () => {
-    // try {
 
-    //   //gets accesstokens for Google authenticaiton
-    //   await promptAsync({ showInRecents: true, projectNameForProxy: projectName })
-    //     .then(() => {
-    //       setLoading(true);
-    //     })
+    try {
+      setLoading(true);
 
-    // } catch (e) {
-    //   console.log("error with login", e);
-    //   setLoading(false);
-    // }
+      GoogleSignin.getCurrentUser()
+        .then((googleUser) => {
+          setUser(googleUser);
+        })
+        .catch((error) => {
+          console.log("there was an error in authentication")
+          alert("There was an error. Please try again.")
+          console.error(error);
+          Sentry.captureMessage(`Error during login with google`, error.code)
 
-    // try {
-    //   setLoading(true);
+        });
 
-    //   GoogleSignin.getCurrentUser()
-    //     .then((googleUser) => {
-    //       setUser(googleUser);
-    //     })
-    //     .catch((error) => {
-    //       console.log("there was an error in authentication")
-    //       console.error(error);
-    //     });
+      // Get the users ID token
+      const { idToken, accessToken } = await GoogleSignin.signIn();
 
-    //   // Get the users ID token
-    //   const { idToken, accessToken } = await GoogleSignin.signIn();
-
-    //   // Create a Google credential with the token
-    //   // const googleCredential = auth.GoogleAuthProvider.credential(idToken, accessToken);
-    //   const googleCredential = GoogleAuthProvider.credential(idToken, accessToken)
+      // Create a Google credential with the token
+      const googleCredential = GoogleAuthProvider.credential(idToken, accessToken)
 
 
-    //   // Sign-in the user with the credential
-    //   await signInWithCredential(auth, googleCredential);
-    //   setLoading(false);
-    // } catch (error) {
-    //   setLoading(false);
-    //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    //     // user cancelled the login flow
-    //     alert("Login incomplete. Please try again.");
-    //   } else if (error.code === statusCodes.IN_PROGRESS) {
-    //     // operation (e.g. sign in) is in progress already
-    //     console.log("in progress")
-    //   } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-    //     // play services not available or outdated
-    //     console.log("services not available")
-    //   } else {
-    //     // some other error happened
-    //     console.log(error);
-    //   }
-    // }
+      // Sign-in the user with the credential
+      await signInWithCredential(auth, googleCredential);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        alert("Login incomplete. Please try again.");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log("in progress")
+        Sentry.captureMessage(`Error authenticating login with google - in progress`, error.code)
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("services not available")
+        Sentry.captureMessage(`Error authenticating login with google- services not available`, error.code)
+      } else {
+        // some other error happened
+        console.log(error);
+        Sentry.captureMessage(`Error authenticating login with google`, error.code)
+
+      }
+    }
   }
 
-  // const generateNonce = () => {
-  //   return uuidv4();
-  // };
-
+ 
   const signInWithApple = async () => {
 
     // Generate the nonce
@@ -267,7 +211,7 @@ export const AuthProvider = ({ children }) => {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        console.log("user logged in", user)
+        console.log("user logged in")
         setUser(user)
       })
       .catch((error) => {
@@ -444,13 +388,9 @@ export const AuthProvider = ({ children }) => {
           // }
           console.log("user deleted", data);
           setUser(null);
-          // deleteUserAuth();
-          // setLoading(false);//perhaps move it to the end of deleteUserAuth
-          setLoading(false);
         })
         .catch(error => {
           console.error("Error deleting user", error);
-          setLoading(false);
           alert("Unable to delete account. Try again later.")
           //add sentry capture
         });
@@ -458,6 +398,7 @@ export const AuthProvider = ({ children }) => {
 
 
     }
+    setLoading(false);
   }
 
 

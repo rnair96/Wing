@@ -45,7 +45,7 @@ const SetUp0Screen = () => {
   },[token])
 
 
-  const incompleteform = !gender || !age || !locationObject || !name;
+  const incompleteform = !gender || !(age && age >= 18 )|| !locationObject || !name;
 
   const createUserProfile = () => {
     if(gender === "female"){
@@ -106,6 +106,10 @@ const SetUp0Screen = () => {
           <Text style={styles.formTitle}>Enter Your BirthDate</Text>
           <BirthdayInput setAge={setAge} birthdate={birthdate} setBirthDate={setBirthDate} />
           <Text style={{color:"grey", paddingBottom:20}}>Ensure format is correct, i.e: 11/20/2023</Text>
+          {age && age < 18 &&
+          <Text style={{color:"red", paddingBottom:20}}>Age For Use Must Be 18 Or Older</Text>
+          }
+          
 
 
           <Text style={styles.formTitle}>Select Gender</Text>

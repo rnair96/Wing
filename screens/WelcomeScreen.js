@@ -15,7 +15,7 @@ import * as Sentry from "@sentry/react";
 
 
 const WelcomeScreen = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const navigation = useNavigation();
   const [isTutorial, setIsTutorial] = useState(false);
 
@@ -43,6 +43,13 @@ const WelcomeScreen = () => {
     batch.set(chatRef, requestDoc);
 
     console.log("set chat doc")
+
+    const userRef = doc(db, global.users, user.uid);
+
+    // Add an update operation to the batch
+    batch.update(userRef, { completed_welcome: true });
+
+    console.log("updated setup/welcome")
 
     // const textFiles = [
     //   { "path": welcomeImage1, "type": 'image' },
@@ -88,7 +95,7 @@ const WelcomeScreen = () => {
 
   }
 
-  
+
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "space-evenly" }}>
       <ImageBackground
@@ -97,15 +104,15 @@ const WelcomeScreen = () => {
         source={require("../images/dudes_dancing.jpg")}>
         {!isTutorial ? (
           <View style={{ alignItems: "center", justifyContent: "center", marginTop: "10%" }}>
-            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed":"Times New Roman" }}> Welcome to</Text>
+            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" : "Times New Roman" }}> Welcome to</Text>
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ color: "#00308F", fontSize: 50, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" :"Times New Roman" }}> Wing</Text>
-              <Image style={{ height: 50, width: 50, top: 10}} source={require("../images/bluelogo.png")} />
+              <Text style={{ color: "#00308F", fontSize: 50, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" : "Times New Roman" }}> Wing</Text>
+              <Image style={{ height: 50, width: 50, top: 10 }} source={require("../images/bluelogo.png")} />
             </View>
           </View>
         ) : (
           <View style={{ alignItems: "center", justifyContent: "center", marginTop: "15%" }}>
-            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" :"Times New Roman" }}> A Quick Tutorial</Text>
+            <Text style={{ color: "#00308F", fontSize: 40, fontWeight: "bold", padding: 5, fontFamily: Platform.OS === "android" ? "sans-serif-condensed" : "Times New Roman" }}> A Quick Tutorial</Text>
           </View>
         )}
         {/* <Text style={{color:"white", fontSize:20, fontWeight:"bold"}}>Find your Wingman. Go on Missions.</Text> */}
@@ -120,13 +127,13 @@ const WelcomeScreen = () => {
             <View style={{ padding: 5 }}>
               <Text style={styles.boldtext}>Find a Wing.</Text>
               <Text style={styles.boldtext}>Hit The Town.</Text>
-              <Text style={styles.boldtext}>Delete Dating Apps.</Text>
+              <Text style={styles.boldtext}>Ditch Dating Apps.</Text>
             </View>
 
             <TouchableOpacity style={{ borderRadius: 10, borderWidth: 3, padding: 10, top: 10, borderColor: "white" }} onPress={() => { setIsTutorial(true) }}>{/*, navigate to TutorialScreen */}
               <Text style={{ color: "white", fontSize: 17 }}>Take A Quick Tutorial</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ borderRadius: 10, borderWidth: 3, padding: 10, top: 10, borderColor: "white" }} onPress={() =>  setUp() }>{/*, {tutorial_bool: false} */}
+            <TouchableOpacity style={{ borderRadius: 10, borderWidth: 3, padding: 10, top: 10, borderColor: "white" }} onPress={() => setUp()}>{/*, {tutorial_bool: false} */}
               <Text style={{ color: "white", fontSize: 17 }}>Start Swiping!</Text>
             </TouchableOpacity>
           </View>
@@ -138,7 +145,7 @@ const WelcomeScreen = () => {
                 <Text style={styles.boldtext}>1. Swiping through Wings</Text>
                 <Text style={styles.tutorialText}>This is your Swipe Screen, where you will be given a list of Wing profiles to swipe through.</Text>
                 {/* <View style={{justifyContent:"center", width:"100%"}}> */}
-                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/swipescreen.png")} />
+                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/newhome.png")} />
                 {/* </View> */}
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
                   <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>Press </Text>
@@ -150,11 +157,13 @@ const WelcomeScreen = () => {
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
                   <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>Press </Text>
                   <View style={styles.swipeButtonCross}>
-                    <Entypo name="cross" size={12} color="red" />
+                    {/* <Entypo name="cross" size={12} color="red" /> */}
+                    <Text style={{ color: "#9A2A2A", fontWeight: "bold", fontSize: 12 }}>Skip</Text>
                   </View>
                 </View>
-                <Text style={styles.tutorialText}>To pass a profile you don’t like.</Text>
+                <Text style={styles.tutorialText}>To skip a profile you don’t like.</Text>
                 <Text style={styles.tutorialText}>You can also tap the profile to get more details about them.</Text>
+                <Text style={styles.tutorialText}>At the end of swiping through profiles, you can press skip or reload the app to return to skipped profiles.</Text>
                 <Text style={styles.boldtext}>2. Respond & Chat</Text>
                 <Text style={styles.tutorialText}>To see your Active Chats and Requests that other users have sent you,</Text>
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
@@ -165,10 +174,11 @@ const WelcomeScreen = () => {
                 </View>
                 <Text style={styles.tutorialText}>Responding to a Request will move that user to your Active Chats and create a new chat thread.</Text>
                 <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/request_response.png")} />
-                <Text style={styles.boldtext}>3. Local Deals & Events</Text>
-                <Text style={styles.tutorialText}>Get exclusive access to promotional deals with bars, restuarants, events and other local establishments that you can explore with your Wing!</Text>
-                <Text style={styles.tutorialText}>Simply check the News & Promos thread in your Active Chats to take advantage of the latest deals.</Text>
-                <Image style={{ height: 150, width: 250, margin: 10, padding: 10 }} source={require("../images/local_deals.png")} />
+                <Text style={styles.boldtext}>3. Community Chat</Text>
+                <Text style={styles.tutorialText}>Get to know all the Wings in your local area {`(and beyond)`} through our Community Chat.</Text>
+                <Text style={styles.tutorialText}>Share wins, stories, and strategy as well as participate in exclusive Community Challenges and Events together.</Text>
+                <Text style={styles.tutorialText}>Simply check the Community thread in your Active Chats to get the full Wing Community experience!</Text>
+                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/groupchatshot.png")} />
                 <Text style={styles.boldtext}>4. More Options</Text>
                 <Text style={styles.tutorialText}>To edit and view your own profile,</Text>
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>

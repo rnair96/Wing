@@ -10,7 +10,7 @@ import MessageModal from '../components/MessageModal';
 import RequestCapModal from '../components/RequestCapModal';
 import * as Sentry from "@sentry/react";
 import SurveyModal from '../components/SurveyModal';
-import { hasThirtyDaysPassed, hasMatch } from '../lib/secondSurveyCheck';
+import { hasSixtyDaysPassed, hasMatch } from '../lib/secondSurveyCheck';
 import ProfileCardComponent from '../components/ProfileCardComponent'
 
 
@@ -35,6 +35,7 @@ const SwipeScreen = ({ loggedProfile }) => {
     const [surveyType, setSurveyType] = useState("initial")
     const [surveyOtherInfo, setSurveyOtherInfo] = useState(null);
     const [loadingMessage, setLoadingMessage] = useState("Fitting Your Wings...")
+    const [reload, setReload] = useState(false)
 
 
 
@@ -124,7 +125,7 @@ const SwipeScreen = ({ loggedProfile }) => {
     useEffect(() => {
         let unsub;
 
-        if (loggedProfile && loggedProfile !== null) {
+        if (user && loggedProfile && loggedProfile !== null) {
 
             const fetchCards = async () => {
 
@@ -192,7 +193,7 @@ const SwipeScreen = ({ loggedProfile }) => {
             };
         }
 
-    }, [loggedProfile]);//loggedProfile?.ageMin, loggedProfile?.ageMax,
+    }, [user, loggedProfile, reload]);//loggedProfile?.ageMin, loggedProfile?.ageMax,
 
     useEffect(() => {
         // Define an async function within the useEffect
@@ -202,13 +203,13 @@ const SwipeScreen = ({ loggedProfile }) => {
                 setSurveyVisible(true);
                 // Add other conditions to check if thirty days have passed since account creation
             } else if (loggedProfile && loggedProfile?.surveyInfo && loggedProfile.gender === "male"
-                && !loggedProfile.surveyInfo?.thirtydays
-                && hasThirtyDaysPassed(loggedProfile.timestamp)) {
-                console.log("thirty days passed")
+                && !loggedProfile.surveyInfo?.sixtydays
+                && hasSixtyDaysPassed(loggedProfile.timestamp)) {
+                console.log("sixty days passed")
                 const hasAMatch = await hasMatch(user.uid);
                 if (hasAMatch) {
                     console.log("second survey")
-                    setSurveyType("thirtydays");
+                    setSurveyType("sixtydays");
                     setSurveyOtherInfo(loggedProfile?.surveyInfo)
                     setSurveyVisible(true)
                 }
@@ -293,8 +294,9 @@ const SwipeScreen = ({ loggedProfile }) => {
                     ) : (
                         <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
                             <Text style={{ fontWeight: "bold", fontSize: 20, margin:5}}>No Wings Around... </Text>
-                            <Text style={{ fontWeight: "bold", fontSize: 20, margin:5}}>Reload For Skipped Or Try Again Later</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, margin:5}}>Reload For Skipped Wings Or Press Skip</Text>
                             <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
+                            <Text style={{ fontWeight: "bold", fontSize: 15, margin:5}}>Or Wait For New Wings Later</Text>
                         </View>
                     )}
                 </View>
@@ -339,7 +341,7 @@ const SwipeScreen = ({ loggedProfile }) => {
             )}
 
             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                <TouchableOpacity style={styles.swipeButtonCross} onPress={() => swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft() : console.log("no action")}>
+                <TouchableOpacity style={styles.swipeButtonCross} onPress={() => swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft() : setReload(!reload)}>
                     {/* <Entypo name="cross" size={24} color="red" /> */}
                     <Text style={{color:"#9A2A2A", fontWeight:"bold"}}>Skip</Text>
                 </TouchableOpacity>

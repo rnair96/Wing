@@ -32,7 +32,7 @@ const SignUpScreen = () => {
       style={{ flex: 1, backgroundColor: "white" }}
       keyboardVerticalOffset={10}>
       <TouchableWithoutFeedback
-      // onPress={Keyboard.dismiss}
+      onPress={()=>Keyboard.dismiss}
       >
         <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly" }}>
           <View style={{ alignItems: "center" }}>
