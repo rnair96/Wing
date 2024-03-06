@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, SafeAreaView, Image, StyleSheet, FlatList } from 'react-native';
-import tagColor from '../lib/colorTag';
 
 
 const ViewMyProfileScreen = ({ profile }) => {
@@ -44,37 +43,16 @@ const ViewMyProfileScreen = ({ profile }) => {
                                         </View>
                                         <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card.item?.images[0] }} />
                                     </View>
-                                    {card.item?.medals && card.item?.medals.length > 0 ? (
-                                        <View style={{ flexDirection: "column", marginLeft: 5, width:"95%" }}>
-                                            <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                <Text style={styles.cardtext}>{card.item.medals[0] ? card.item.medals[0] : `-- --`}</Text>
-                                            </View>
-                                            <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                <Text style={styles.cardtext}>{card.item.medals[1] ? card.item.medals[1] : `-- --`}</Text>
-                                            </View>
-                                            {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 10 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>{card.item.medals[2]?card.item.medals[2]:`-- --`}</Text>
-                                                    </View> */}
+                                    <View style={{ flexDirection: "column", width: "80%", marginLeft: 15 }}>
+                                        <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                            <Image style={{ height: 20, width: 20, alignItems: "center" }} source={require("../images/bicep.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.strength ? card.item.strength : `-- --`}</Text>
                                         </View>
-                                    ) : (
-                                        <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
-                                            <View style={{ flexDirection: "row", padding: 10 }}>
-                                                <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                <Text style={styles.cardtext}>-- --</Text>
-                                            </View>
-                                            <View style={{ flexDirection: "row", padding: 10 }}>
-                                                <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                <Text style={styles.cardtext}>-- --</Text>
-                                            </View>
-                                            {/* <View style={{ flexDirection: "row", padding: 10 }}>
-                                                        <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                                        <Text style={styles.cardtext}>-- --</Text>
-                                                    </View> */}
+                                        <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                            <Image style={{ height: 30, width: 20, alignItems: "center" }} source={require("../images/cracked_shield.png")}></Image>
+                                            <Text style={styles.cardtext}>{card.item.weakness ? card.item.weakness : `-- --`}</Text>
                                         </View>
-                                    )}
+                                    </View>
                                     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[0]}</Text>
                                         <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[1]}</Text>
@@ -100,11 +78,6 @@ const ViewMyProfileScreen = ({ profile }) => {
                                     </View>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[0].tagline}</Text>
 
-                                    {card.item?.activity_tag && card.item.activity_tag !== "None" &&
-                                        <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.activity_tag) }}>
-                                            <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.activity_tag}</Text>
-                                        </View>
-                                    }
 
                                     <Image style={styles.imagecontainer} source={{ uri: card.item.images[0] }} />
                                 </View>
@@ -193,7 +166,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                                 </View>
                             </View>
 
-                            {card.item?.prompts && card.item.prompts.length > 1 && card.item.prompts[1]!== null && card.item.prompts[1]?.prompt && card.item.prompts[1]?.tagline &&
+                            {card.item?.prompts && card.item.prompts.length > 1 && card.item.prompts[1] !== null && card.item.prompts[1]?.prompt && card.item.prompts[1]?.tagline &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                     <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[1].prompt}</Text>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[1].tagline}</Text>
@@ -202,11 +175,27 @@ const ViewMyProfileScreen = ({ profile }) => {
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                 <View style={{ flexDirection: "row", padding: 10 }}>
-                                    {card.item?.mission ?
-                                        (<Text style={{ padding: 10, color: "white" }}>Goals & Interests</Text>) :
+                                    {card.item?.strength || card.item?.weakness ?
+                                        (<Text style={{ padding: 10, color: "white" }}>Attributes & Interests</Text>) :
                                         (<Text style={{ padding: 10, color: "white" }}>Interests</Text>)}
                                 </View>
-                                {card.item?.mission && <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>}
+                                {(card.item.strength || card.item.weakness) && (
+                                    <View style={{ flexDirection: "column", width: "80%", marginLeft: 15 }}>
+
+                                        {card.item?.strength &&
+                                            <View style={{ flexDirection: "row", padding: 10 }}>
+                                                <Image style={{ height: 25, width: 20, right: 5, alignItems: "center" }} source={require("../images/bicep.png")}></Image>
+                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.strength}</Text>
+                                            </View>
+                                        }
+                                        {card.item?.weakness &&
+                                            <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                                <Image style={{ height: 30, width: 20, right: 5, alignItems: "center" }} source={require("../images/cracked_shield.png")}></Image>
+                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.weakness}</Text>
+                                            </View>
+                                        }
+                                    </View>
+                                )}
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[0]}</Text>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[1]}</Text>
@@ -218,7 +207,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                                 </View>
                             </View>
 
-                            {card.item?.prompts && card.item.prompts.length > 2 && card.item.prompts[2]!== null && card.item.prompts[2]?.prompt && card.item.prompts[2]?.tagline &&
+                            {card.item?.prompts && card.item.prompts.length > 2 && card.item.prompts[2] !== null && card.item.prompts[2]?.prompt && card.item.prompts[2]?.tagline &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                     <Text style={{ padding: 10, color: "white" }}>{card.item.prompts[2].prompt}</Text>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.prompts[2].tagline}</Text>
@@ -326,6 +315,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30
     },
     cardtext: {
+        left: 10,
         color: "white",
         fontSize: 15,
         fontWeight: "bold"

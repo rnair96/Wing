@@ -133,18 +133,23 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                                         (<Text style={{ padding: 10, color: "white" }}>Attributes & Interests</Text>) :
                                         (<Text style={{ padding: 10, color: "white" }}>Interests</Text>)}
                                 </View>
-                                {card.item?.strength && 
-                                <View style={{ flexDirection: "row", padding: 10 }}>
-                                    <Image style={{ height: 25, width: 20, right: 5, alignItems:"center"}} source={require("../images/bicep.png")}></Image>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.strength}</Text>
-                                </View>
-                                }
-                                {card.item?.weakness && 
-                                <View style={{ flexDirection: "row", padding: 10, alignItems:"center" }}>
-                                    <Image style={{ height: 30, width: 20, right: 5, alignItems:"center" }} source={require("../images/cracked_shield.png")}></Image>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.weakness}</Text>
-                                </View>
-                                }
+                                {(card.item.strength || card.item.weakness) && (
+                                    <View style={{ flexDirection: "column", width: "80%", marginLeft: 15 }}>
+                                        {card.item?.strength &&
+                                            <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                                <Image style={{ height: 20, width: 20, alignItems: "center" }} source={require("../images/bicep.png")}></Image>
+                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white", left:10 }}>{card.item.strength}</Text>
+                                            </View>
+                                        }
+                                        {card.item?.weakness &&
+                                            <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                                <Image style={{ height: 30, width: 20, alignItems: "center" }} source={require("../images/cracked_shield.png")}></Image>
+                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white", left: 10}}>{card.item.weakness}</Text>
+                                            </View>
+                                        }
+                                    </View>
+                                )}
+
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[0]}</Text>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[1]}</Text>

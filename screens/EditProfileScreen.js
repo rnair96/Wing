@@ -211,7 +211,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               <View style={{ alignItems: "center" }}>
                 <Text style={styles.formTitle}>Group</Text>
                 <Text>{group}</Text>
-                <Text style={{color:"grey", padding:10}}>To Edit Group Go To Account in Settings</Text>
+                <Text style={{ color: "grey", padding: 10 }}>To Edit Group Go To Account in Settings</Text>
               </View>
             }
 
@@ -329,34 +329,35 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
 
 
-            <Text style={styles.formTitle}>Strengths & Weaknesses</Text>
-            <Text style={{ paddingBottom: 10, color: "grey" }}>Tell us one strength/skill you're proud of and one weakness you'd like to improve on. This helps a Wing understand how to work with you.</Text>
-            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
-              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text>Strength: </Text>
-                <TextInput
-                  value={strength}
-                  multiline
-                  numberOfLines={2}
-                  maxLength={50}
-                  onChangeText={setStrength}
-                  placeholder={"I'm great at hosting parties"}
-                  placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
-              </View>
+            <Text style={styles.formTitle}>Attributes</Text>
+            <Text style={{ paddingBottom: 10, color: "grey", width:"80%" }}>Tell us at least one strength/skill you have a Wing might find useful.</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+              <Text>Skill: </Text>
+              <TextInput
+                value={strength}
+                multiline
+                numberOfLines={2}
+                maxLength={50}
+                onChangeText={setStrength}
+                placeholder={"I'm great at hosting parties"}
+                placeholderTextColor="#888888"
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+            </View>
 
-              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
-                <Text>Weakness: </Text>
-                <TextInput
-                  value={weakness}
-                  multiline
-                  numberOfLines={2}
-                  maxLength={50}
-                  onChangeText={setWeakness}
-                  placeholder={"I'm terrible at making jokes"}
-                  placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
-              </View>
+            {/* <Text style={styles.formTitle}>Problem</Text> */}
+            <Text style={{ paddingBottom: 10, color: "grey", width:"80%" }}>Tell us one problem a Wing can assist you on. {`(We all got one).`}</Text>
+            {/* <Text style={{ paddingBottom: 10, color: "grey" }}>{`(We all got one)`}</Text> */}
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+              <Text>Problem: </Text>
+              <TextInput
+                value={weakness}
+                multiline
+                numberOfLines={2}
+                maxLength={50}
+                onChangeText={setWeakness}
+                placeholder={"I'm terrible at making jokes"}
+                placeholderTextColor="#888888"
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
             </View>
 
 

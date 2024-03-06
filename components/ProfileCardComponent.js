@@ -35,39 +35,16 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                             </View>
                             <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
                         </View>
-                        <View style={{ flexDirection: "column", width:"95%", marginLeft: 5 }}>
-                                <View style={{ flexDirection: "row", padding: 10 }}>
-                                    <Image style={{ height: 25, width: 20, right: 5, alignItems:"center"}} source={require("../images/bicep.png")}></Image>
+                        <View style={{ flexDirection: "column", width:"80%", marginLeft:15 }}>
+                                <View style={{ flexDirection: "row", padding: 10, alignItems:"center" }}>
+                                    <Image style={{ height: 20, width: 20, alignItems:"center"}} source={require("../images/bicep.png")}></Image>
                                     <Text style={styles.cardtext}>{profile.strength ? profile.strength : `-- --`}</Text>
                                 </View>
                                 <View style={{ flexDirection: "row", padding: 10, alignItems:"center" }}>
-                                    <Image style={{ height: 30, width: 20, right: 5, alignItems:"center" }} source={require("../images/cracked_shield.png")}></Image>
+                                    <Image style={{ height: 30, width: 20, alignItems:"center" }} source={require("../images/cracked_shield.png")}></Image>
                                     <Text style={styles.cardtext}>{profile.weakness ? profile.weakness : `-- --`}</Text>
                                 </View>
                         </View>
-                        {/* {profile?.medals && profile.medals.length > 0 ? (
-                            <View style={{ flexDirection: "column", width:"95%", marginLeft: 5 }}>
-                                <View style={{ flexDirection: "row", padding: 10 }}>
-                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                    <Text style={styles.cardtext}>{profile.medals[0] ? profile.medals[0] : `-- --`}</Text>
-                                </View>
-                                <View style={{ flexDirection: "row", padding: 10 }}>
-                                    <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                    <Text style={styles.cardtext}>{profile.medals[1] ? profile.medals[1] : `-- --`}</Text>
-                                </View>
-                            </View>
-                        ) : (
-                            <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
-                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                    <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                    <Text style={styles.cardtext}>-- --</Text>
-                                </View>
-                                <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                    <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                    <Text style={styles.cardtext}>-- --</Text>
-                                </View>
-                            </View>
-                        )} */}
                         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                             <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[0]}</Text>
                             <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[1]}</Text>
@@ -137,6 +114,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30
     },
     cardtext: {
+        left:10,
         color: "white",
         fontSize: 15,
         fontWeight: "bold"
