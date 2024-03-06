@@ -407,7 +407,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
 
             <Text style={styles.formTitle}>Interests</Text>
-            <Text style={{ color: "grey", textAlign: "center" }}>Pick Five. This helps us find the Wings that will best match you.</Text>
+            <Text style={{ color: "grey", textAlign: "center" }}>Must have five selected. Can add your own as well.</Text>
             {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
             <InterestsList selectedInterests={interests} setSelectedInterests={setInterests} />
 

@@ -87,6 +87,7 @@ const SetUp3Screen = () => {
 
 
             <Text style={styles.formTitle}>Select Your Top 5 Interests</Text>
+            <Text style={{ fontSize: 12, margin: 20, color: "grey" }}>You may add your own as well.</Text>
             {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
             <InterestsList selectedInterests={interests} setSelectedInterests={setInterests}/>
 

@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Button } from 'react-native';
 
 const InterestsList = ({ selectedInterests, setSelectedInterests }) => {
-  const [interests, setInterests] = useState([
+  const [canAdd, setCanAdd] = useState(false);
+
+  const initialInterests = [
     "Traveling", "Gym", "Work", "Sports", "Basketball", "Football", "Soccer", "MMA", "Boxing",
     "Hiking", "Hunting", "Fishing", "Camping", "Cooking", "Movies/Shows", "Art",
     "Comedy", "Music", "Reading", "Writing", "Meditation", "Yoga",
     "Volunteering", "Animal Lover", "Outdoors", "Cars",
     "Video Games", "Dancing", "Fashion", "Sneakers", "Technology", "Cultures", "Languages",
     "Religion", "Stoicism", "Philosophy", "Science", "Politics", "Business", "Entrepreneur", "Conspiracies",
-    "History", "Podcasts", "Books", "Relationships",
-    "Nightlife", "Cafes", "Restaurants",
+    "History", "Podcasts", "Books", "Relationships", 
+    "Nightlife", "Cafes", "Restaurants", 
     "Concerts", "Board Games", "Anime", "420", "Fasting", "Nutrition", "God"
-  ]);
+  ];
+  
+  // State to hold combined list of initial and selected interests
   const [newInterest, setNewInterest] = useState('');
+
+  // Merge initial interests with selected ones that are not present in the initial list
+    const combinedInterests = [...new Set([...initialInterests, ...selectedInterests])];
+    const [interests, setInterests] = useState(combinedInterests);
 
   const toggleInterests = (interest) => {
     if (selectedInterests.includes(interest)) {
@@ -32,17 +40,22 @@ const InterestsList = ({ selectedInterests, setSelectedInterests }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Add Custom Interest"
-          maxLength={13}
-          value={newInterest}
-          onChangeText={setNewInterest}
-        />
-        <Button title="Add" onPress={addInterest} />
-      </View>
+    <View style={{...styles.container, flexDirection:canAdd?"column":"row", alignItems: "center"}}>
+      {canAdd && 
+       <View style={styles.inputContainer}>
+       <TextInput
+         style={styles.input}
+         placeholder="Add Custom Interest"
+         maxLength={13}
+         value={newInterest}
+         onChangeText={setNewInterest}
+       />
+       <Button title="Add" onPress={addInterest} />
+     </View>
+      }
+      <TouchableOpacity style={{borderWidth: 1, borderColor: 'gray', borderRadius: 20, padding: 10,}} onPress={()=>setCanAdd(!canAdd)}>
+      <Text style ={{color:"blue", fontSize:14}}>{canAdd?"-":"+"}</Text>
+      </TouchableOpacity>
       {interests.map((interest) => (
         <TouchableOpacity
           key={interest}
@@ -59,8 +72,8 @@ const InterestsList = ({ selectedInterests, setSelectedInterests }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     padding: 10,
   },
   inputContainer: {
@@ -81,7 +94,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     margin: 5,
     borderRadius: 20,
-    width: '45%', // Adjust size for better alignment
+    // width: '45%', // Adjust size for better alignment
   },
   selected: {
     backgroundColor: '#00BFFF',
