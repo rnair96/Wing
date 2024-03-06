@@ -6,14 +6,15 @@ import { db } from '../firebase';
 import ImageUpload from '../components/ImageUpload';
 // import registerNotifications from '../lib/registerNotifications';
 import { useNavigation } from '@react-navigation/core';
-import TagPicker from '../components/TagPicker';
-import ValuesList from '../components/ValuesList';
+// import TagPicker from '../components/TagPicker';
+// import ValuesList from '../components/ValuesList';
 import ClassLevelPicker from '../components/ClassLevelPicker';
 import GradYearPicker from '../components/GradYearPicker';
 import * as Sentry from "@sentry/react";
 import PromptModal from '../components/PromptModal';
 import PromptPicker from '../components/PromptPicker';
 import InterestsList from '../components/InterestsList';
+// import StyleSelecterModal from '../components/StyleSelecterModal';
 
 
 
@@ -24,8 +25,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const gender = profile?.gender || "male";
   const activeStudent = profile?.university_student?.status === "active";
 
-  const [mission, setMission] = useState(profile?.mission || null);
-  const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
+  // const [mission, setMission] = useState(profile?.mission || null);
+  // const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
+  // const [style, setStyle] = useState(profile?.style_tag || "None")
 
   const [prompt, setPrompt] = useState(profile?.prompts?.[0]?.prompt || null);
   const [tagline, setTagline] = useState(profile?.prompts?.[0]?.tagline || null);
@@ -38,7 +40,12 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [medal1, setMedal1] = useState(profile?.medals?.[0] || null);
   const [medal2, setMedal2] = useState(profile?.medals?.[1] || null);
   const [medal3, setMedal3] = useState(profile?.medals?.[2] || null);
-  const [bio, setBio] = useState(profile?.bio || null);
+
+  const [weakness, setWeakness] = useState(profile?.weakness || null);
+  const [strength, setStrength] = useState(profile?.strength || null);
+
+  // const [bio, setBio] = useState(profile?.bio || null);
+
   const [location, setLocation] = useState(profile?.location || null);
   const [hometown, setHometown] = useState(profile?.hometown || null);
   const [job, setJob] = useState(activeStudent ? null : profile?.job || null);
@@ -128,14 +135,16 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       images: [url1, url2, url3],
       school: school,
       hometown: hometown,
-      mission: mission,
-      activity_tag: activitytag,
+      // mission: mission,
+      // style_tag: style,
+      weakness: weakness,
+      strength: strength,
       prompts: [promptObject, promptObject1, promptObject2],
       medals: [medal1, medal2, medal3],
       // values: values,
       interests: interests,
       location: location,
-      bio: bio,
+      // bio: bio,
     }
 
     if (activeStudent) {
@@ -307,8 +316,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
             </View>
 
-            <Text style={{ ...styles.formTitle, textAlign: "center" }}>Set a Tag for Activities You'd Be Open To Do With A Wing</Text>
-            <TagPicker tag={activitytag} setTag={setActivityTag} />
+            {/* <Text style={{ ...styles.formTitle, textAlign: "center" }}>Select The Wing Style That Best Suits Your Personality</Text>
+            <Text style={{ color: "grey" }}>This will help us find you complimentary Wings.</Text>
+            <StyleSelecterModal selectedStyle={style} setSelectedStyle={setStyle} /> */}
 
             <Text style={styles.formTitle}>Prompts</Text>
             <Text style={{ color: "grey" }}>Must have at least one.</Text>
@@ -319,10 +329,40 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
 
 
+            <Text style={styles.formTitle}>Strengths & Weaknesses</Text>
+            <Text style={{ paddingBottom: 10, color: "grey" }}>Tell us one strength/skill you're proud of and one weakness you'd like to improve on. This helps a Wing understand how to work with you.</Text>
+            <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+                <Text>Strength: </Text>
+                <TextInput
+                  value={strength}
+                  multiline
+                  numberOfLines={2}
+                  maxLength={50}
+                  onChangeText={setStrength}
+                  placeholder={"I'm great at hosting parties"}
+                  placeholderTextColor="#888888"
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+              </View>
+
+              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+                <Text>Weakness: </Text>
+                <TextInput
+                  value={weakness}
+                  multiline
+                  numberOfLines={2}
+                  maxLength={50}
+                  onChangeText={setWeakness}
+                  placeholder={"I'm terrible at making jokes"}
+                  placeholderTextColor="#888888"
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+              </View>
+            </View>
+
 
 
             <Text style={styles.formTitle}>Accomplishments</Text>
-            <Text style={{ paddingBottom: 10, color: "grey" }}>List any strengths or accomplishments that you’re proud of.</Text>
+            <Text style={{ paddingBottom: 10, color: "grey" }}>List any accomplishments that you’re proud of.</Text>
             <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
                 <Text>1.</Text>
@@ -370,7 +410,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
             <InterestsList selectedInterests={interests} setSelectedInterests={setInterests} />
 
-            <Text style={styles.formTitle}>A Long-Term or Short-Term Goal</Text>
+            {/* <Text style={styles.formTitle}>A Long-Term or Short-Term Goal</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>A Pursuit That Has Nothing To Do With Dating</Text>
             <TextInput
               value={mission}
@@ -380,9 +420,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               onChangeText={setMission}
               placeholder={'Write A Novel'}
               placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} /> */}
 
-            <Text style={styles.formTitle}>Bio</Text>
+            {/* <Text style={styles.formTitle}>Bio</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>Share anything fun about you, i.e hobbies/passions</Text>
             <TextInput
               value={bio}
@@ -392,7 +432,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               onChangeText={setBio}
               placeholder={'I love kayaking and drinking beers by the river.'}
               placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} /> */}
 
             < View style={{ height: 150 }}>
               <TouchableOpacity

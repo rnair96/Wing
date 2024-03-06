@@ -24,17 +24,28 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                                 <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{profile.displayName}</Text>
                                 <Text style={{ color: "white", fontSize: 15 }}>{profile.age}</Text>
                                 {profile?.university_student && profile.university_student.status === "active" ? (
-                                    <View style={{ flexDirection: "column" }}>
-                                        <Text style={{ color: "white", fontSize: 13 }}>{profile.school}</Text>
-                                        <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
-                                    </View>
+                                        <Text style={{ color: "white", fontSize: 15 }}>{profile.school}</Text>
+                                    // <View style={{ flexDirection: "column" }}>
+                                    //     <Text style={{ color: "white", fontSize: 13 }}>{profile.school}</Text>
+                                    //     <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
+                                    // </View>
                                 ) : (
                                     <Text style={{ color: "white", fontSize: 15 }}>{profile.job}</Text>
                                 )}
                             </View>
                             <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
                         </View>
-                        {profile?.medals && profile.medals.length > 0 ? (
+                        <View style={{ flexDirection: "column", width:"95%", marginLeft: 5 }}>
+                                <View style={{ flexDirection: "row", padding: 10 }}>
+                                    <Image style={{ height: 25, width: 20, right: 5, alignItems:"center"}} source={require("../images/bicep.png")}></Image>
+                                    <Text style={styles.cardtext}>{profile.strength ? profile.strength : `-- --`}</Text>
+                                </View>
+                                <View style={{ flexDirection: "row", padding: 10, alignItems:"center" }}>
+                                    <Image style={{ height: 30, width: 20, right: 5, alignItems:"center" }} source={require("../images/cracked_shield.png")}></Image>
+                                    <Text style={styles.cardtext}>{profile.weakness ? profile.weakness : `-- --`}</Text>
+                                </View>
+                        </View>
+                        {/* {profile?.medals && profile.medals.length > 0 ? (
                             <View style={{ flexDirection: "column", width:"95%", marginLeft: 5 }}>
                                 <View style={{ flexDirection: "row", padding: 10 }}>
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
@@ -44,10 +55,6 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                                     <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>{profile.medals[1] ? profile.medals[1] : `-- --`}</Text>
                                 </View>
-                                {/* <View style={{ flexDirection: "row", padding: 10 }}>
-                                            <Image style={{ height: 25, width: 20, right: 3 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>{profile.medals[2]?profile.medals[2]:`-- --`}</Text>
-                                        </View> */}
                             </View>
                         ) : (
                             <View style={{ flexDirection: "column", width: "100%", alignItems: "center" }}>
@@ -59,12 +66,8 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                                     <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
                                     <Text style={styles.cardtext}>-- --</Text>
                                 </View>
-                                {/* <View style={{ flexDirection: "row", padding: 10, marginRight: 7 }}>
-                                            <Image style={{ height: 25, width: 20, right: 20 }} source={require("../images/medals_white.png")}></Image>
-                                            <Text style={styles.cardtext}>-- --</Text>
-                                        </View> */}
                             </View>
-                        )}
+                        )} */}
                         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                             <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[0]}</Text>
                             <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[1]}</Text>

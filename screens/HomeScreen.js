@@ -124,7 +124,7 @@ const HomeScreen = () => {
 
                     const querySnapshot = await getDocs(q);
                     console.log("number of users", querySnapshot.docs.length);
-                    if (querySnapshot.docs.length < 100){//change to 100
+                    if (querySnapshot.docs.length < 0){//change to 100
                         setIsWaitlistModalVisible(true)
                         setUserNumber(querySnapshot.docs.length);
                     }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import tagColor from '../lib/colorTag';
+// import tagColor from '../lib/colorTag';
 import FlagModal from '../components/FlagModal';
 
 
@@ -26,11 +26,11 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                                     </View>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.prompts[0].tagline}</Text>
 
-                                    {card.item?.activity_tag && card.item.activity_tag !== "None" &&
+                                    {/* {card.item?.activity_tag && card.item.activity_tag !== "None" &&
                                         <View style={{ margin: 10, padding: 10, borderRadius: 50, backgroundColor: tagColor(card.item.activity_tag) }}>
                                             <Text style={{ fontWeight: "bold", fontSize: 12, color: "white" }}>{card.item.activity_tag}</Text>
                                         </View>
-                                    }
+                                    } */}
 
                                     <Image style={styles.imagecontainer} source={{ uri: card.item.images[0] }} />
                                 </View>
@@ -110,13 +110,13 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                                             </View>
                                         )}
                                     </View>
-                                    {card.item?.bio ?
+                                    {/* {card.item?.bio ?
                                         (
                                             <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text>
                                         ) : (
                                             <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>-- --</Text>
 
-                                        )}
+                                        )} */}
                                 </View>
                             </View>
 
@@ -129,11 +129,22 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
                                 <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
                                 <View style={{ flexDirection: "row", padding: 10 }}>
-                                    {card.item?.mission ?
-                                        (<Text style={{ padding: 10, color: "white" }}>Goals & Interests</Text>) :
+                                    {card.item?.strength || card.item?.weakness ?
+                                        (<Text style={{ padding: 10, color: "white" }}>Attributes & Interests</Text>) :
                                         (<Text style={{ padding: 10, color: "white" }}>Interests</Text>)}
                                 </View>
-                                {card.item?.mission && <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.mission}</Text>}
+                                {card.item?.strength && 
+                                <View style={{ flexDirection: "row", padding: 10 }}>
+                                    <Image style={{ height: 25, width: 20, right: 5, alignItems:"center"}} source={require("../images/bicep.png")}></Image>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.strength}</Text>
+                                </View>
+                                }
+                                {card.item?.weakness && 
+                                <View style={{ flexDirection: "row", padding: 10, alignItems:"center" }}>
+                                    <Image style={{ height: 30, width: 20, right: 5, alignItems:"center" }} source={require("../images/cracked_shield.png")}></Image>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.weakness}</Text>
+                                </View>
+                                }
                                 <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%", padding: 10 }}>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[0]}</Text>
                                     <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{card.item.interests[1]}</Text>

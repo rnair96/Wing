@@ -94,7 +94,7 @@ const sendPushBatch = async (tokens, title, body, data) => {
 
 function createCompareFunction(currentUser) {
   const currentUserInterests = currentUser.interests;
-  const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
+  // const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
   const currentUserGroup = currentUser.group && currentUser.preferences && currentUser.preferences.group? currentUser.group : null;
 
   return function compareUsers(user1, user2) {
@@ -102,24 +102,25 @@ function createCompareFunction(currentUser) {
       const user1GroupMatch = user1.group && (user1.group === currentUserGroup) ? 1 : 0;
       const user2GroupMatch = user2.group && (user2.group === currentUserGroup) ? 1 : 0;
 
-      if ((user1GroupMatch === user2GroupMatch) && currentUserTag) {
-        const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
-        const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
+      // if ((user1GroupMatch === user2GroupMatch) && currentUserTag) {
+      //   const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
+      //   const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
 
-        if (user1ActivityMatch === user2ActivityMatch) {
-          const matchingInterestsUser1 = user1.interests.filter((interest) =>
-            currentUserInterests.includes(interest)).length;
+      //   if (user1ActivityMatch === user2ActivityMatch) {
+      //     const matchingInterestsUser1 = user1.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
 
-          // Count the matching values for user2
-          const matchingInterestsUser2 = user2.interests.filter((interest) =>
-            currentUserInterests.includes(interest)).length;
+      //     // Count the matching values for user2
+      //     const matchingInterestsUser2 = user2.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
 
-          // Sort in descending order of matching values
-          return matchingInterestsUser2 - matchingInterestsUser1;
-        }
+      //     // Sort in descending order of matching values
+      //     return matchingInterestsUser2 - matchingInterestsUser1;
+      //   }
 
-        return user2ActivityMatch - user1ActivityMatch;
-      } else if (user1GroupMatch === user2GroupMatch) {
+      //   return user2ActivityMatch - user1ActivityMatch;
+      // } else
+      if (user1GroupMatch === user2GroupMatch) {
         const matchingInterestsUser1 = user1.interests.filter((interest) =>
           currentUserInterests.includes(interest)).length;
 
@@ -132,23 +133,23 @@ function createCompareFunction(currentUser) {
       }
 
       return user2GroupMatch - user1GroupMatch;
-    } else if (currentUserTag) {
-      const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
-      const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
+      // } else if (currentUserTag) {
+      //   const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
+      //   const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
 
-      if (user1ActivityMatch === user2ActivityMatch) {
-        const matchingInterestsUser1 = user1.interests.filter((interest) =>
-          currentUserInterests.includes(interest)).length;
+      //   if (user1ActivityMatch === user2ActivityMatch) {
+      //     const matchingInterestsUser1 = user1.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
 
-        // Count the matching values for user2
-        const matchingInterestsUser2 = user2.interests.filter((interest) =>
-          currentUserInterests.includes(interest)).length;
+      //     // Count the matching values for user2
+      //     const matchingInterestsUser2 = user2.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
 
-        // Sort in descending order of matching values
-        return matchingInterestsUser2 - matchingInterestsUser1;
-      }
+      //     // Sort in descending order of matching values
+      //     return matchingInterestsUser2 - matchingInterestsUser1;
+      //   }
 
-      return user2ActivityMatch - user1ActivityMatch;
+    //   return user2ActivityMatch - user1ActivityMatch;
     } else {
       // Count the matching values for user1
       const matchingInterestsUser1 = user1.interests.filter((interest) =>
@@ -578,11 +579,11 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
     // Filter by preferences
 
     // Filter by university student preference
-    if (user.university_student && user.preferences && user.preferences.university === true) {
-      console.log("filtering for university students");
-      matchingUsersQuery = matchingUsersQuery
-          .where("university_student.status", "==", "active");
-    }
+    // if (user.university_student && user.preferences && user.preferences.university === true) {
+    //   console.log("filtering for university students");
+    //   matchingUsersQuery = matchingUsersQuery
+    //       .where("university_student.status", "==", "active");
+    // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
@@ -732,11 +733,11 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     // Filter by preferences
 
     // Filter by university student preference
-    if (user.university_student && user.preferences && user.preferences.university === true) {
-      console.log("filtering for university students");
-      matchingUsersQuery = matchingUsersQuery
-          .where("university_student.status", "==", "active");
-    }
+    // if (user.university_student && user.preferences && user.preferences.university === true) {
+    //   console.log("filtering for university students");
+    //   matchingUsersQuery = matchingUsersQuery
+    //       .where("university_student.status", "==", "active");
+    // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
@@ -898,7 +899,6 @@ exports.sendAnnouncementNotification = functions.firestore
           const userData = doc.data();
 
 
-
           if (userData.notifications &&
           userData.notifications.announcements &&
           userData.token && userData.token !== "testing" &&
@@ -906,7 +906,6 @@ exports.sendAnnouncementNotification = functions.firestore
             tokens.push(userData.token);
           }
         });
-
       }
 
       if (tokens.length > 0) {

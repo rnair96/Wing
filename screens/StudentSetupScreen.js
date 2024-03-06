@@ -13,7 +13,6 @@ import * as Sentry from "@sentry/react";
 const StudentSetupScreen = () => {
     const { user } = useAuth();
     const [college, setCollege] = useState(null);
-    const [universityPreference, setUniversityPreference] = useState(true);
     const [url1, setUrl1] = useState(null);
     const [url2, setUrl2] = useState(null);
     const [url3, setUrl3] = useState(null);
@@ -29,7 +28,7 @@ const StudentSetupScreen = () => {
             },
             school: college,
             preferences: {
-                university: universityPreference,
+                university: false,
                 distance: "Global"
             },
             images: [url1, url2, url3]
@@ -90,7 +89,7 @@ const StudentSetupScreen = () => {
                             <GradYearPicker selectedYear={grad_year} setSelectedYear={setGradYear} />
                         </View> */}
 
-                        <View style={{ padding: 20, alignItems: "center", marginBottom: 20 }}>
+                        {/* <View style={{ padding: 20, alignItems: "center", marginBottom: 20 }}>
                             <Text style={styles.formTitle}>Join Wing University?</Text>
                             <Text style={{ padding: 5, color:"grey", textAlign:"center" }}>{`A space to exclusively match with other University students.\n\nYou can change this setting later`}.</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
@@ -102,7 +101,7 @@ const StudentSetupScreen = () => {
                                     value={universityPreference}
                                 />
                             </View>
-                        </View>
+                        </View> */}
 
                         <TouchableOpacity
                             disabled={incompleteform}

@@ -68,14 +68,16 @@ const GroupsScreen = () => {
                     setGroup(documentSnapshot.data()?.group)
                 } else {
                     console.log("can't find group")
+                    alert("Can't find group. Please try again.")
                 }
             } else {
                 console.log('No matching documents.');
+                alert("Can't find group. Please try again.")
             }
         } catch (error) {
             console.error('Error fetching document:', error);
             Sentry.captureMessage(`Error fetching group ${groupCode} for ${user.uid}, ${error.message}`)
-
+            alert("Error find group. Please try again.")
         }
         setLoading(false);
         //check if code exists in collection "groups"

@@ -129,7 +129,7 @@ const MatchingPreferences = () => {
         </View>
 
 
-        {activeStudent && (
+        {/* {activeStudent && (
           <View style={{ alignItems: "center", padding: 10 }}>
             <Text style={{ fontSize: 15, fontWeight: "bold", padding: 5 }}>Only See Users In Wing-U?</Text>
             <Text style={{ fontSize: 12, padding: 20 }}>{`(Exclusively match with university students)`}</Text>
@@ -143,7 +143,7 @@ const MatchingPreferences = () => {
               />
             </View>
           </View>
-        )}
+        )} */}
 
         {group && (
           <View style={{ alignItems: "center", padding: 10 }}>
@@ -161,9 +161,9 @@ const MatchingPreferences = () => {
           </View>
         )}
 
-        {groupMatch && wingUni && (
+        {/* {groupMatch && wingUni && (
           <Text style={{ fontSize: 12, padding: 20, color:"red" }}>May not see all users in your group while Wing-U is on. Consider switching it off for maximum reach.</Text>
-        )}
+        )} */}
 
         <View style={{ height: 150 }}>
           <TouchableOpacity
