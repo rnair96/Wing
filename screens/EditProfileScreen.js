@@ -271,7 +271,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   </View>
 
                   <View style={{ margin: 20, padding: 10, justifyContent: "center", alignItems: "center" }}>
-                    <Text style={{ fontSize: 13, textAlign: "center", padding: 10, }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
+                    <Text style={{ color: "grey", padding: 10, textAlign: "center" }}>To show Professional options in profile, go to Account in Settings.</Text>
+                    {/* <Text style={{ fontSize: 13, textAlign: "center", padding: 10, }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text> */}
                     <View style={{ width: "90%", backgroundColor: "#00BFFF", height: 2 }} />
                   </View>
 
@@ -330,7 +331,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
 
             <Text style={styles.formTitle}>Attributes</Text>
-            <Text style={{ paddingBottom: 10, color: "grey", width:"80%" }}>Tell us at least one strength/skill you have a Wing might find useful.</Text>
+            <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us at least one strength/skill you have a Wing might find useful.</Text>
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
               <Text>Skill: </Text>
               <TextInput
@@ -345,7 +346,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
 
             {/* <Text style={styles.formTitle}>Problem</Text> */}
-            <Text style={{ paddingBottom: 10, color: "grey", width:"80%" }}>Tell us one problem a Wing can assist you on. {`(We all got one).`}</Text>
+            <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us one problem a Wing can assist you on. {`(We all got one).`}</Text>
             {/* <Text style={{ paddingBottom: 10, color: "grey" }}>{`(We all got one)`}</Text> */}
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
               <Text>Problem: </Text>

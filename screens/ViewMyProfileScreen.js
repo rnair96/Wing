@@ -35,7 +35,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                                             {card.item?.university_student && card.item.university_student.status === "active" ? (
                                                 <View style={{ flexDirection: "column" }}>
                                                     <Text style={{ color: "white", fontSize: 13 }}>{card.item.school}</Text>
-                                                    <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
+                                                    {/* <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text> */}
                                                 </View>
                                             ) : (
                                                 <Text style={{ color: "white", fontSize: 15 }}>{card.item.job}</Text>

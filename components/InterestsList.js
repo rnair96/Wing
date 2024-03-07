@@ -40,7 +40,7 @@ const InterestsList = ({ selectedInterests, setSelectedInterests }) => {
   };
 
   return (
-    <View style={{...styles.container, flexDirection:canAdd?"column":"row", alignItems: "center"}}>
+    <View style={{...styles.container, flexDirection:"row", alignItems: "center"}}>
       {canAdd && 
        <View style={styles.inputContainer}>
        <TextInput
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     marginBottom: 20,
+    width:"90%"
   },
   input: {
     borderWidth: 1,
