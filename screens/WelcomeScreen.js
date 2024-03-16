@@ -41,6 +41,18 @@ const WelcomeScreen = () => {
 
     console.log("set chat doc")
 
+    const swipeDoc = {
+      id: user.uid,
+      swipedAt: 0,
+      timeSwiped: chat_timestamp,
+      message: 'welcome_text',
+      swipedFrom: "welcome"
+  }
+
+  batch.set(doc(db, global.users, masterId, "swipes", user.uid), swipeDoc)
+
+  console.log("set swipe doc for master user")
+
     const userRef = doc(db, global.users, user.uid);
 
     // Add an update operation to the batch

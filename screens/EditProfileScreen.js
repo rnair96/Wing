@@ -332,7 +332,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
             <Text style={styles.formTitle}>Attributes</Text>
             <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us at least one strength/skill you have a Wing might find useful.</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10, width:"90%" }}>
               <Text>Skill: </Text>
               <TextInput
                 value={strength}
@@ -348,7 +348,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             {/* <Text style={styles.formTitle}>Problem</Text> */}
             <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us one problem a Wing can assist you on. {`(We all got one).`}</Text>
             {/* <Text style={{ paddingBottom: 10, color: "grey" }}>{`(We all got one)`}</Text> */}
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10, width:"90%" }}>
               <Text>Problem: </Text>
               <TextInput
                 value={weakness}
