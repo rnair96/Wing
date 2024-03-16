@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as AppleAuthentication from 'expo-apple-authentication';
-// import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, getIdToken, getCurrentUser } from "firebase/auth";
 import { auth } from '../firebase';
 import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
@@ -41,11 +41,11 @@ export const AuthProvider = ({ children }) => {
 
   }
 
-  // GoogleSignin.configure({
-  //   webClientId: expoClientId,
-  //   androidClientId: androidClientId,
-  //   iosClientId: iosClientId,
-  // });
+  GoogleSignin.configure({
+    webClientId: expoClientId,
+    androidClientId: androidClientId,
+    iosClientId: iosClientId,
+  });
 
 
   useEffect(() => {
@@ -66,51 +66,51 @@ export const AuthProvider = ({ children }) => {
 
   const signInWithGoogle = async () => {
 
-    // try {
-    //   setLoading(true);
+    try {
+      setLoading(true);
 
-    //   GoogleSignin.getCurrentUser()
-    //     .then((googleUser) => {
-    //       setUser(googleUser);
-    //     })
-    //     .catch((error) => {
-    //       console.log("there was an error in authentication")
-    //       alert("There was an error. Please try again.")
-    //       console.error(error);
-    //       Sentry.captureMessage(`Error during login with google`, error.code)
+      GoogleSignin.getCurrentUser()
+        .then((googleUser) => {
+          setUser(googleUser);
+        })
+        .catch((error) => {
+          console.log("there was an error in authentication")
+          alert("There was an error. Please try again.")
+          console.error(error);
+          Sentry.captureMessage(`Error during login with google`, error.code)
 
-    //     });
+        });
 
-    //   // Get the users ID token
-    //   const { idToken, accessToken } = await GoogleSignin.signIn();
+      // Get the users ID token
+      const { idToken, accessToken } = await GoogleSignin.signIn();
 
-    //   // Create a Google credential with the token
-    //   const googleCredential = GoogleAuthProvider.credential(idToken, accessToken)
+      // Create a Google credential with the token
+      const googleCredential = GoogleAuthProvider.credential(idToken, accessToken)
 
 
-    //   // Sign-in the user with the credential
-    //   await signInWithCredential(auth, googleCredential);
-    //   setLoading(false);
-    // } catch (error) {
-    //   setLoading(false);
-    //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    //     // user cancelled the login flow
-    //     alert("Login incomplete. Please try again.");
-    //   } else if (error.code === statusCodes.IN_PROGRESS) {
-    //     // operation (e.g. sign in) is in progress already
-    //     console.log("in progress")
-    //     Sentry.captureMessage(`Error authenticating login with google - in progress`, error.code)
-    //   } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-    //     // play services not available or outdated
-    //     console.log("services not available")
-    //     Sentry.captureMessage(`Error authenticating login with google- services not available`, error.code)
-    //   } else {
-    //     // some other error happened
-    //     console.log(error);
-    //     Sentry.captureMessage(`Error authenticating login with google`, error.code)
+      // Sign-in the user with the credential
+      await signInWithCredential(auth, googleCredential);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        alert("Login incomplete. Please try again.");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log("in progress")
+        Sentry.captureMessage(`Error authenticating login with google - in progress`, error.code)
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("services not available")
+        Sentry.captureMessage(`Error authenticating login with google- services not available`, error.code)
+      } else {
+        // some other error happened
+        console.log(error);
+        Sentry.captureMessage(`Error authenticating login with google`, error.code)
 
-    //   }
-    // }
+      }
+    }
   }
 
  

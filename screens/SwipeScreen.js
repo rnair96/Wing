@@ -12,6 +12,7 @@ import * as Sentry from "@sentry/react";
 import SurveyModal from '../components/SurveyModal';
 import { hasSixtyDaysPassed, hasMatch } from '../lib/secondSurveyCheck';
 import ProfileCardComponent from '../components/ProfileCardComponent'
+import SkillProblemModal from '../components/SkillProblemModal';
 
 
 
@@ -20,7 +21,9 @@ const SwipeScreen = ({ loggedProfile }) => {
     const { user } = useAuth();
     const swipeRef = useRef(null);
     const [profiles, setProfiles] = useState([]);
-    const [swipeAmount, setSwipeAmount] = useState(5);
+    const [swipeAmount, setSwipeAmount] = useState(0);
+    const [passAmount, setPassAmount] = useState(0);
+
     // const [swipeEnabled, setSwipeEnabled] = useState(true);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -198,11 +201,18 @@ const SwipeScreen = ({ loggedProfile }) => {
     useEffect(() => {
         // Define an async function within the useEffect
         const checkConditions = async () => {
-            if (loggedProfile && !loggedProfile?.surveyInfo && loggedProfile.gender === "male" && swipeAmount !== 5) {
+
+            if (loggedProfile && !loggedProfile?.strength && (swipeAmount + passAmount) > 0) {
+                console.log("activate skills problem modal")
+                setIsModalVisible(true);
+            }
+
+
+            if (loggedProfile && !loggedProfile?.surveyInfo && (swipeAmount + passAmount) > 1) {
                 console.log("first survey")
                 setSurveyVisible(true);
                 // Add other conditions to check if thirty days have passed since account creation
-            } else if (loggedProfile && loggedProfile?.surveyInfo && loggedProfile.gender === "male"
+            } else if (loggedProfile && loggedProfile?.surveyInfo
                 && !loggedProfile.surveyInfo?.sixtydays
                 && hasSixtyDaysPassed(loggedProfile.timestamp)) {
                 console.log("sixty days passed")
@@ -218,13 +228,16 @@ const SwipeScreen = ({ loggedProfile }) => {
 
         // Call the async function
         checkConditions();
-    }, [loggedProfile, swipeAmount]);
+    }, [loggedProfile, swipeAmount, passAmount]);
 
 
     const swipeLeft = (cardIndex) => {
         if (!profiles[cardIndex]) { return; }
 
         console.log("you swiped left on", profiles[cardIndex].displayName);
+
+        setPassAmount((passAmount + 1));
+        console.log("pass number at", (passAmount + 1));
 
         setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), { id: profiles[cardIndex].id })
             .catch((error) => {
@@ -267,8 +280,8 @@ const SwipeScreen = ({ loggedProfile }) => {
         }
 
         setRequestMessage(null);
-        setSwipeAmount((swipeAmount - 1));
-        console.log("swipe number at", (swipeAmount - 1));
+        setSwipeAmount((swipeAmount + 1));
+        console.log("swipe number at", (swipeAmount + 1));
 
         setDoc(doc(db, global.users, user.uid, "swipes", userSwiped.id), swipedUser)
             .catch(() => {
@@ -330,9 +343,18 @@ const SwipeScreen = ({ loggedProfile }) => {
                         containerStyle={{ backgroundColor: "transparent" }}
                         renderCard={(card) => {
                             return (
-                                <View key={card.id} style={{ height: "100%" }}>
+                                <View style={{ height: "100%" }}>
+                                {card && card?.id ?(
+                                    <View key={card.id} style={{ height: "100%" }}>
                                     <ProfileCardComponent profile={card} canFlag={true} />
                                 </View>
+                                ):(
+                                    <View key={card.id} style={{ height: "100%" }}>
+                                    <ProfileCardComponent profile={null} canFlag={true} />
+                                </View>
+                                )}
+                                </View>
+                                
                             )
                         }
                         }
@@ -351,8 +373,9 @@ const SwipeScreen = ({ loggedProfile }) => {
                 </TouchableOpacity>
             </View>
             <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} currentCard={currentCard} />
-            <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
-            <SurveyModal type={surveyType} isVisible={surveyVisible} setIsVisible={setSurveyVisible} otherInfo={surveyOtherInfo} />
+            {/* <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} /> */}
+            <SkillProblemModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} reload={reload} setReload={setReload}/>
+            <SurveyModal type={surveyType} isVisible={surveyVisible} setIsVisible={setSurveyVisible} otherInfo={surveyOtherInfo} reload={reload} setReload={setReload}/>
 
         </View>
     )

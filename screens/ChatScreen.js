@@ -12,6 +12,7 @@ const ChatScreen = ({ profile, requests }) => {
   const { masterAccount, masterId } = Constants.expoConfig.extra
 
   const canInput = (user.email === masterAccount && user.uid === masterId) ? true : false;
+  // const canInput = true;
 
 
   return (

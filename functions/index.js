@@ -95,7 +95,7 @@ const sendPushBatch = async (tokens, title, body, data) => {
 function createCompareFunction(currentUser) {
   const currentUserInterests = currentUser.interests;
   // const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
-  const currentUserGroup = currentUser.group && currentUser.preferences && currentUser.preferences.group? currentUser.group : null;
+  const currentUserGroup = currentUser.group && currentUser.preferences && currentUser.preferences.group ? currentUser.group : null;
 
   return function compareUsers(user1, user2) {
     if (currentUserGroup) {
@@ -149,7 +149,7 @@ function createCompareFunction(currentUser) {
       //     return matchingInterestsUser2 - matchingInterestsUser1;
       //   }
 
-    //   return user2ActivityMatch - user1ActivityMatch;
+      //   return user2ActivityMatch - user1ActivityMatch;
     } else {
       // Count the matching values for user1
       const matchingInterestsUser1 = user1.interests.filter((interest) =>
@@ -868,7 +868,7 @@ exports.sendAnnouncementNotification = functions.firestore
       };
 
       // add groupchatDoc to groupChat
-      const groupchatRef = admin.firestore().collection("groupChat");
+      const groupchatRef = admin.firestore().collection("groupChat_prod");
 
       groupchatRef.add(groupchatDoc);
 
@@ -877,7 +877,7 @@ exports.sendAnnouncementNotification = functions.firestore
       const tokens = [];
 
       const usersSnapshot = await admin.firestore()
-          .collection("users").get();
+          .collection("users").get();// change back to users
 
       const users = usersSnapshot.docs;
 
@@ -999,6 +999,80 @@ exports.sendAnnouncementNotificationDev = functions.firestore
         }
       }
       return null;
+    });
+
+exports.sendWelcomeChallenge = functions.firestore
+    .document("userData/welcome_challenge")
+    .onCreate(async (snap, context) => {
+    // check if welcome challenge already sent
+      console.log("checking if welcome challenge was already sent on server side");
+      const welcomeChallengeRef = db.collection("userData").doc("welcome_challenge");
+      const welcomeChallengeSnap = await welcomeChallengeRef.get();
+
+      if (welcomeChallengeSnap.exists && welcomeChallengeSnap.data().sent) {
+        console.log("Welcome challenge already sent.");
+        return; // Stop execution if challenge has already been sent
+      }
+
+      // // Query to count users in DC, MD, or VA
+
+      console.log("sending welcome challenge");
+      const batch = admin.firestore().batch();
+      const masterUid = functions.config().wing.master_uid;
+      const masterName = functions.config().wing.master_name;
+
+      const timestamp1 = new Date(Date.now() + (0 * 1000));
+
+      const timestamp2 = new Date(Date.now() + (1 * 1000));
+
+      const timestamp3 = new Date(Date.now() + (2 * 1000));
+
+
+      const announcement1 = {
+        displayName: masterName,
+        photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
+        type: "text",
+        userId: masterUid,
+        title: "Welcome New Wings!",
+        message: "Welcome new Wings!\n\n You're officially part of the 100 founding members of this community which you will have free access to for LIFE.\n\n This is just the Beta Launch and so you all have a strong role in shaping how this community grows. So with that said, let's kick things off with our Welcome Challenge!\n\n Here’s the Challenge:\n\n 1. Match with a Wing who can best help you.\n\n 2. Set a plan to go out.\n\n 3. Tag your Wing on this community chat and tell us what’s the first place you guys are going to go meet women at. (Only one of you needs to do this, so just coin flip it :))\n\n That’s it! Easy peasy.",
+        timestamp: timestamp1,
+      };
+
+      const announcement2 = {
+        displayName: masterName,
+        photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
+        type: "text",
+        userId: masterUid,
+        title: "Tips To Get Started",
+        message: "Here’s an example:\n\n 'Hey guys, Here’s my Wing: @Darren. We’re going to hit up Cafe Citron this weekend.'\n\n You can use the @ icon in the message input to tag your matched Wings.\n\n Here’s a tip to make finding a Wing easy:\n\n Set your skills and problems (attributes) in your profile and find a Wing that can best help your problem and/or benefit from your skill.\n\n You can also check out my chat request where I drop a tip on how to send a chat request to a Wing.\n\n Accept my request and let me know if you are still having any issues.",
+        timestamp: timestamp2,
+      };
+
+      const announcement3 = {
+        displayName: masterName,
+        photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
+        type: "text",
+        userId: masterUid,
+        title: "Taking Over DC",
+        message: "DC is notoriously known to be one of the loneliest areas in the US, with men at the forefront of this epidemic.\n\n Our mission is to change that story, get men AND women enjoying meeting each other more, take over DC and make our network the most fun men’s networking app available!\n\n That starts with having a blast with your Wing this weekend! So LET’S GET IT!",
+        timestamp: timestamp3,
+      };
+
+
+      // Add the announcement to the "announcements" collection
+      const docRef1 = admin.firestore().collection("announcements").doc();
+      const docRef2 = admin.firestore().collection("announcements").doc();
+      const docRef3 = admin.firestore().collection("announcements").doc();
+
+      batch.set(docRef1, announcement1);
+      batch.set(docRef2, announcement2);
+      batch.set(docRef3, announcement3);
+
+      batch.update(welcomeChallengeRef, {sent: true});
+
+      await batch.commit();
+      console.log("Announcements sent");
+    // }
     });
 
 

@@ -45,6 +45,8 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                 {/* <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss()}
                 > */}
+                <TouchableWithoutFeedback
+                onPress={()=>Keyboard.dismiss()}>
                     <View style={{ height:(Platform.OS==="android" && isKeyboardVisible)? "50%": "30%", bottom: isKeyboardVisible? "10%": 0, ...styles.modalView }}>
                         <Text style={{ padding: 5, fontWeight: "800", fontSize: 15 }}>Send {name} a Chat Request</Text>
                         <TextInput
@@ -75,6 +77,7 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                             <Text style={{color:"white"}}>Cancel</Text>
                         </TouchableHighlight>
                     </View>
+                    </TouchableWithoutFeedback>
                     {/* </View> */}
                 {/* </TouchableWithoutFeedback> */}
             </KeyboardAvoidingView>

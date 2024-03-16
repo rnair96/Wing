@@ -57,7 +57,7 @@ const WingTagModal = ({ isVisible, setIsVisible, matches, setInput, setReplyToke
                         {matchedWings.length > 0 &&
                             <FlatList
                                 data={matchedWings}
-                                style={{borderTopWidth:0.5, borderBottomWidth:0.5, borderColor:"grey"}}
+                                style={{borderTopWidth:0.5, borderBottomWidth:0.5, borderColor:"grey", height:"65%"}}
                                 keyExtractor={item => item}
                                 renderItem={({ item }) => <WingTagRow wingId={item} selectWing={selectWing} />}
                                 // renderItem={({ item }) => renderItem(item)}

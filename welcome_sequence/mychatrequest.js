@@ -1,4 +1,4 @@
-const chatText = `Hey, I'm Raj and I'm the Founder & CEO of Wing.
+const chatText = `Hey, I'm Raj and I'm the Creator of Wing.
 
 Fun fact, I was a former Dating Coach that helped men find partners they aligned with based on similiar Goals and Interests. 
 Sound familiar? 

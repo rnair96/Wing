@@ -43,7 +43,7 @@ const ReplyModal = ({ isVisible, setIsVisible, message, setInput, setReplyToken,
                     >
                         <Text style={styles.textStyle}>Reply To {message?.displayName? message.displayName:"User"}</Text>
                     </TouchableHighlight>
-                    {message?.taggedName && message.taggedId!==user.uid && (
+                    {message?.taggedName && message?.taggedName!=="N/A" && message.taggedId!==user.uid && (
                         <TouchableHighlight
                         style={styles.opacitystyle}
                         onPress={() => {

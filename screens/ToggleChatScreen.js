@@ -4,7 +4,7 @@ import { Ionicons} from '@expo/vector-icons';
 import ChatScreen from './ChatScreen'
 import { useNavigation, useRoute} from '@react-navigation/core';
 import RequestsScreen from './RequestsScreen';
-import { onSnapshot, collection, query, orderBy } from 'firebase/firestore';
+import { onSnapshot, collection, query, orderBy, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useAuth from '../hooks/useAuth';

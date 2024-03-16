@@ -33,7 +33,7 @@ const NotificationsScreen = () => {
                 setMessageNotifications(profile.notifications.messages);
             }
 
-            if (profile?.notifications && profile.notifications?.events!==undefined && profile.notifications?.announcements!==null) {
+            if (profile?.notifications && profile.notifications?.announcements!==undefined && profile.notifications?.announcements!==null) {
                 setAnnouncementNotifications(profile.notifications.announcements);
             }
 

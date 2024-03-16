@@ -34,7 +34,7 @@ const GroupChatScreen = () => {
     const [userIdTagged, setUserIdTagged] = useState(null);
     const [userNameTagged, setUserNameTagged] = useState(null);
     const [taggedToken, setTaggedToken] = useState(null);
-    const messageToken = (profile && profile?.notifications && profile.notifications.messages && profile.token && profile.token !== "testing" && profile.token !== "not_granted") ? profile.token : null;
+    const messageToken = (profile && profile?.notifications && profile.notifications.groupchat && profile.token && profile.token !== "testing" && profile.token !== "not_granted") ? profile.token : null;
     //add notification block addition for groupchat messages and replies
 
 
@@ -121,16 +121,16 @@ const GroupChatScreen = () => {
 
         try {
 
-            addDoc(collection(db, "groupChat"), {
+            addDoc(collection(db, global.groupchat), {
                 timestamp: timestamp,
                 userId: user.uid,
                 photoURL: profile.images[0],
                 displayName: name,
                 message: input,
                 userToken: messageToken,
-                taggedId: userIdTagged !== null ? userIdTagged : "N/A",
-                taggedName: userNameTagged !== null ? userNameTagged : "N/A",
-                tagType: userNameTagged ? (isTagged ? "tag" : "reply") : "N/A",
+                taggedId: userIdTagged,
+                taggedName: userNameTagged,
+                tagType: userNameTagged ? (isTagged ? "tag" : "reply") : null,
                 type: type
             })
 

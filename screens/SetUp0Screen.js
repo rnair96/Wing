@@ -59,6 +59,7 @@ const SetUp0Screen = () => {
       age: age,
       birthdate: birthdate,
       last_year_celebrated: 2022,
+      founding_member: true,
       gender: gender,
       location: {
         permission: "Only Once",

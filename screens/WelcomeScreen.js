@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import { Text, View, Image, SafeAreaView, TouchableOpacity, StyleSheet, ImageBackground, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, Ionicons } from '@expo/vector-icons';
-import welcomeText from '../welcome_sequence/welcome';
-import cultureText from '../welcome_sequence/values_etiquette';
-import storyText from '../welcome_sequence/story';
 import chatText from '../welcome_sequence/mychatrequest';
 import useAuth from '../hooks/useAuth';
 import { writeBatch, serverTimestamp, collection, doc } from 'firebase/firestore';
@@ -145,7 +142,7 @@ const WelcomeScreen = () => {
                 <Text style={styles.boldtext}>1. Swiping through Wings</Text>
                 <Text style={styles.tutorialText}>This is your Swipe Screen, where you will be given a list of Wing profiles to swipe through.</Text>
                 {/* <View style={{justifyContent:"center", width:"100%"}}> */}
-                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/newhome.png")} />
+                <Image style={{ height: 500, width: 250, margin: 10, padding: 10 }} source={require("../images/newhome.jpg")} />
                 {/* </View> */}
                 <View style={{ flexDirection: "row", margin: 10, padding: 3 }}>
                   <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>Press </Text>

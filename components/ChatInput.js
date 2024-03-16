@@ -195,7 +195,7 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setRep
         <View
             style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
             {isImage ? (
-                <View style={{ alignItems: "center", justifyContent: "center", marginRight:fileLocation === "groupChat"?10:0}}>
+                <View style={{ alignItems: "center", justifyContent: "center", marginRight: fileLocation === "groupChat" ? 10 : 0 }}>
                     <Image source={{ uri: input }} style={styles.imageContainer} />
                     <TouchableOpacity onPress={removeImage}>
                         <MaterialCommunityIcons name="close-circle" size={20} color="#fd5c63" />
@@ -203,7 +203,7 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setRep
                 </View>
             ) : (
                 <TextInput
-                    style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15, marginRight:fileLocation === "groupChat"?10:0, color: contentType === 'link' ? "blue" : "black" }}
+                    style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15, marginRight: fileLocation === "groupChat" ? 10 : 0, color: contentType === 'link' ? "blue" : "black" }}
                     placeholder="Send Message..."
                     onChangeText={setInput}
                     onSubmitEditing={sendMessage}
@@ -217,28 +217,33 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setRep
             <TouchableOpacity onPress={() => {
                 if (isImage) {
                     setIsImage(false);
-                }         
+                }
                 setContentType("text");
-                sendMessage(contentType, isWingSelected);
-                if(isWingSelected){
+                if (input !== "" && input !== null && input !== undefined) {
+                    sendMessage(contentType, isWingSelected);
+                }
+
+                if (isWingSelected) {
                     setIsWingSelected(false);
                 }
-                
-            }} style={{right:fileLocation === "groupChat"? 17: 0}}>
+
+            }} style={{ right: fileLocation === "groupChat" ? 17 : 0 }}>
                 {/* <Text style={{ color: "#00BFFF", fontSize: 15 }}>Send</Text> */}
-                <Ionicons name="send" size={fileLocation === "groupChat"? 17: 20} color="#00BFFF" />
+                <Ionicons name="send" size={fileLocation === "groupChat" ? 25 : 30} color="#00BFFF" />
             </TouchableOpacity>
             {!isImage && (
-                <View style={{ flexDirection: "row", right:fileLocation === "groupChat"? 17:0 }}>
+                <View style={{ flexDirection: "row", right: fileLocation === "groupChat" ? 17 : 0 }}>
                     <TouchableOpacity style={{ paddingLeft: 3 }} onPress={selectImage}>
-                        <Ionicons name="image-outline" size={fileLocation === "groupChat"? 17: 20} color="#00BFFF" />
+                        <Ionicons name="image-outline" size={fileLocation === "groupChat" ? 20 : 20} color="#00BFFF" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingLeft: 3 }} onPress={() => contentType==="link"? setContentType("text"):setContentType("link")}>
-                        <Ionicons name="link-outline" size={fileLocation === "groupChat"? 17: 20} color="#00BFFF" />
-                    </TouchableOpacity>
+                    {fileLocation === "announcements" &&
+                        <TouchableOpacity style={{ paddingLeft: 3 }} onPress={() => contentType === "link" ? setContentType("text") : setContentType("link")}>
+                            <Ionicons name="link-outline" size={20} color="#00BFFF" />
+                        </TouchableOpacity>}
+
                     {fileLocation === "groupChat" && matches &&
-                        <TouchableOpacity style={{ paddingLeft:3 }} onPress={() => setWingTagModalVisible(true)}>
-                            <Ionicons name="at-outline" size={19} color="#00BFFF" />
+                        <TouchableOpacity style={{ paddingLeft: 3 }} onPress={() => setWingTagModalVisible(true)}>
+                            <Ionicons name="at-outline" size={20} color="#00BFFF" />
                         </TouchableOpacity>}
                 </View>
             )}
@@ -258,7 +263,7 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setRep
                     </View>
                 </View>
             </Modal>
-            <WingTagModal isVisible={isWingTagModalVisible} setIsVisible={setWingTagModalVisible} matches={matches} setInput={setInput} setReplyToken={setReplyToken} setUserIdReply={setUserIdReply} setUserNameReply={setUserNameReply} setIsWingSelected={setIsWingSelected}/>
+            <WingTagModal isVisible={isWingTagModalVisible} setIsVisible={setWingTagModalVisible} matches={matches} setInput={setInput} setReplyToken={setReplyToken} setUserIdReply={setUserIdReply} setUserNameReply={setUserNameReply} setIsWingSelected={setIsWingSelected} />
         </View>
     );
 }
