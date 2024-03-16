@@ -290,8 +290,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setLoading(true);
     try {
-      // await GoogleSignin.revokeAccess();
-      // await GoogleSignin.signOut();
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
       setUser(null);
     } catch (error) {
       console.error(error);
