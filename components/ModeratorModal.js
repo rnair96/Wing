@@ -12,7 +12,7 @@ const ModeratorModal = ({ isVisible, setIsVisible, message, setInput, setReplyTo
     // const navigation = useNavigation();
 
     const blockMessageAndFlagUser = () => {
-        updateDoc(doc(db, "groupChat", message.id), {
+        updateDoc(doc(db, global.groupchat, message.id), {
             status: "blocked"
         }).catch((error) => {
             console.log(error.message)
@@ -36,7 +36,7 @@ const ModeratorModal = ({ isVisible, setIsVisible, message, setInput, setReplyTo
     }
 
     const changeMessageStatus = (status) =>{
-        updateDoc(doc(db, "groupChat", message.id), {
+        updateDoc(doc(db, global.groupchat, message.id), {
             status: status
         }).then(() => {
             alert("The message status has been updated.");
