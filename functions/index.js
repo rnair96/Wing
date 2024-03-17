@@ -1025,7 +1025,7 @@ exports.sendWelcomeChallenge = functions.firestore
 
       const timestamp2 = new Date(Date.now() + (1 * 1000));
 
-      const timestamp3 = new Date(Date.now() + (2 * 1000));
+      // const timestamp3 = new Date(Date.now() + (2 * 1000));
 
 
       const announcement1 = {
@@ -1034,7 +1034,7 @@ exports.sendWelcomeChallenge = functions.firestore
         type: "text",
         userId: masterUid,
         title: "Welcome New Wings!",
-        message: "Welcome new Wings!\n\n You're officially part of the 100 founding members of this community which you will have free access to for LIFE.\n\n This is just the Beta Launch and so you all have a strong role in shaping how this community grows. So with that said, let's kick things off with our Welcome Challenge!\n\n Here’s the Challenge:\n\n 1. Match with a Wing who can best help you.\n\n 2. Set a plan to go out.\n\n 3. Tag your Wing on this community chat and tell us what’s the first place you guys are going to go meet women at. (Only one of you needs to do this, so just coin flip it :))\n\n That’s it! Easy peasy.",
+        message: "Welcome new Wings!\n\n You are officially part of the 100 founding members of this community which you will have free access to for LIFE.\n\n As some of you know, DC is notoriously known for being one of the loneliest areas of the US, especially for men. So our goal is to change that by having our community make this the BEST area for men and women to meet up and have fun!\n\n With that said, let's kick things off with our Welcome Challenge!\n\n Here’s the Challenge:\n\n 1. Match with a Wingman who can best help you.\n\n 2. Set a plan to go out and meet women somewhere. (Can be for tonight, tomorrow, or next week, it doesn’t matter)\n\n That’s it!",
         timestamp: timestamp1,
       };
 
@@ -1044,29 +1044,29 @@ exports.sendWelcomeChallenge = functions.firestore
         type: "text",
         userId: masterUid,
         title: "Tips To Get Started",
-        message: "Here’s an example:\n\n 'Hey guys, Here’s my Wing: @Darren. We’re going to hit up Cafe Citron this weekend.'\n\n You can use the @ icon in the message input to tag your matched Wings.\n\n Here’s a tip to make finding a Wing easy:\n\n Set your skills and problems (attributes) in your profile and find a Wing that can best help your problem and/or benefit from your skill.\n\n You can also check out my chat request where I drop a tip on how to send a chat request to a Wing.\n\n Accept my request and let me know if you are still having any issues.",
+        message: "Here’s some tips to make finding a Wing easy:\n\n Tip 1: Set your skills and problems (attributes) in your profile. This will help Wings know how to best Wingman you and how you will best Wingman them.\n\n Tip 2: Introduce yourself on the group chat. Share a fun fact or what a fun night looks like for you and your Wing. Be creative!\n\n Tip 3: Check out my chat request where I drop a tip on how to send a chat request to a Wing.\n\n Other than that, have fun Winging!",
         timestamp: timestamp2,
       };
 
-      const announcement3 = {
-        displayName: masterName,
-        photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
-        type: "text",
-        userId: masterUid,
-        title: "Taking Over DC",
-        message: "DC is notoriously known to be one of the loneliest areas in the US, with men at the forefront of this epidemic.\n\n Our mission is to change that story, get men AND women enjoying meeting each other more, take over DC and make our network the most fun men’s networking app available!\n\n That starts with having a blast with your Wing this weekend! So LET’S GET IT!",
-        timestamp: timestamp3,
-      };
+      // const announcement3 = {
+      //   displayName: masterName,
+      //   photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
+      //   type: "text",
+      //   userId: masterUid,
+      //   title: "Taking Over DC",
+      //   message: "DC is notoriously known to be one of the loneliest areas in the US, with men at the forefront of this epidemic.\n\n Our mission is to change that story, get men AND women enjoying meeting each other more, take over DC and make our network the most fun men’s networking app available!\n\n That starts with having a blast with your Wing this weekend! So LET’S GET IT!",
+      //   timestamp: timestamp3,
+      // };
 
 
       // Add the announcement to the "announcements" collection
       const docRef1 = admin.firestore().collection("announcements").doc();
       const docRef2 = admin.firestore().collection("announcements").doc();
-      const docRef3 = admin.firestore().collection("announcements").doc();
+      // const docRef3 = admin.firestore().collection("announcements").doc();
 
       batch.set(docRef1, announcement1);
       batch.set(docRef2, announcement2);
-      batch.set(docRef3, announcement3);
+      // batch.set(docRef3, announcement3);
 
       batch.update(welcomeChallengeRef, {sent: true});
 

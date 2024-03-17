@@ -29,29 +29,29 @@ const WelcomeScreen = () => {
 
     const chat_timestamp = serverTimestamp();
 
-    const requestDoc = {
-      id: masterId,
-      message: chatText,
-      timestamp: chat_timestamp,
-      read: false,
-      swipedFrom: "welcome"
-    }
+    // const requestDoc = {
+    //   id: masterId,
+    //   message: chatText,
+    //   timestamp: chat_timestamp,
+    //   read: false,
+    //   swipedFrom: "welcome"
+    // }
 
-    batch.set(chatRef, requestDoc);
+    // batch.set(chatRef, requestDoc);
 
-    console.log("set chat doc")
+    // console.log("set chat doc")
 
     const swipeDoc = {
       id: user.uid,
       swipedAt: 0,
       timeSwiped: chat_timestamp,
-      message: 'welcome_text',
+      message: chatText,
       swipedFrom: "welcome"
-  }
+    }
 
-  batch.set(doc(db, global.users, masterId, "swipes", user.uid), swipeDoc)
+    batch.set(doc(db, global.users, masterId, "swipes", user.uid), swipeDoc)
 
-  console.log("set swipe doc for master user")
+    console.log("set swipe doc for master user")
 
     const userRef = doc(db, global.users, user.uid);
 

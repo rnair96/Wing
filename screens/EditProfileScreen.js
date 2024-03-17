@@ -332,7 +332,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
             <Text style={styles.formTitle}>Attributes</Text>
             <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us at least one strength/skill you have a Wing might find useful.</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10, width:"90%" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
               <Text>Skill: </Text>
               <TextInput
                 value={strength}
@@ -342,23 +342,23 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                 onChangeText={setStrength}
                 placeholder={"I'm great at hosting parties"}
                 placeholderTextColor="#888888"
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"60%"}} />
             </View>
 
             {/* <Text style={styles.formTitle}>Problem</Text> */}
             <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us one problem a Wing can assist you on. {`(We all got one).`}</Text>
             {/* <Text style={{ paddingBottom: 10, color: "grey" }}>{`(We all got one)`}</Text> */}
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10, width:"90%" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
               <Text>Problem: </Text>
               <TextInput
                 value={weakness}
                 multiline
-                numberOfLines={2}
+                numberOfLines={3}
                 maxLength={50}
                 onChangeText={setWeakness}
                 placeholder={"I'm terrible at making jokes"}
                 placeholderTextColor="#888888"
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", width:"60%"}} />
             </View>
 
 
@@ -376,7 +376,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal1}
                   placeholder={"I completed a marathon."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"80%"}} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -389,7 +389,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal2}
                   placeholder={"I won a hotdog eating contest"}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"80%"}} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -402,7 +402,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal3}
                   placeholder={"I have a Youtube channel with 3k subscribers."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"80%"}} />
               </View>
             </View>
 

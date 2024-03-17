@@ -180,8 +180,10 @@ const SwipeScreen = ({ loggedProfile }) => {
 
                     })
                     .catch(error => {
+                        setProfiles([])
+                        setCurrentCard(null)
                         console.log("Error fetching profiles:", error);
-                        alert("Error gathering Wings. Try again later.")
+                        alert("Error gathering Wings. Try again.")
                         Sentry.captureMessage(`Error gathering Wings for ${user.uid}, ${error.message}`)
                         setloadingFetch(false);
                     });
