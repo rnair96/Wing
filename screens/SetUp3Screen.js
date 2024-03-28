@@ -16,7 +16,7 @@ import InterestsList from '../components/InterestsList';
 
 const SetUp3Screen = () => {
   const { user } = useAuth();
-  const [eulaVisible, setEulaVisible] = useState(true);
+  const [eulaVisible, setEulaVisible] = useState(false);
   // const [values, setValues] = useState([]);
   const [interests, setInterests] = useState([]);
   const [prompt, setPrompt] = useState(null)
@@ -26,6 +26,10 @@ const SetUp3Screen = () => {
   const navigation = useNavigation();
   // const incompleteform = !mission || !values || values.length < 3;
   const incompleteform = !tagline || !interests || interests.length < 5;
+
+  const triggerEula = () =>{
+    setEulaVisible(true);
+  }
 
 
   const updateUserProfile = () => {
@@ -45,12 +49,14 @@ const SetUp3Screen = () => {
     }).catch((error) => {
       alert("Error updating profile. Try again later.")
       Sentry.captureMessage(`Error setting up data in screen 3 for ${user.uid}, ${error.message}`)
+      Sentry.captureException(error)
     });
   }
 
   function handleAccept() {
     // handle user acceptance of EULA
     setEulaVisible(false); // hide the EULA modal after acceptance
+    updateUserProfile();
   }
 
   function handleReject() {
@@ -95,7 +101,7 @@ const SetUp3Screen = () => {
               <TouchableOpacity
                 disabled={incompleteform}
                 style={[{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10 }, incompleteform ? { backgroundColor: "grey" } : { backgroundColor: "#00308F" }]}
-                onPress={updateUserProfile}>
+                onPress={triggerEula}>
                 <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Create Account</Text>
               </TouchableOpacity>
             </View>

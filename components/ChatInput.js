@@ -8,6 +8,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { storage } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import WingTagModal from './WingTagModal';
+import * as Sentry from "@sentry/react";
+
 
 
 const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setReplyToken, setUserIdReply, setUserNameReply }) => {
@@ -21,175 +23,200 @@ const ChatInput = ({ input, setInput, sendMessage, fileLocation, matches, setRep
 
     const uploadFirebase = (file, path) => {
         try {
-
-            const metadata = {
-                contentType: 'image/jpeg',
-            };
-
-            const storageRef = ref(storage, `/images/${path}`);
-            const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
+    
+          const metadata = {
+            contentType: 'image/jpeg',
+          };
+    
+          const storageRef = ref(storage, `/images/${path}`);
+          const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+    
+          return new Promise((resolve, reject) => {
             uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                    const progressbar = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                    // setProgress(progressbar);
-                    setModalVisible(true);
-
-                    // progressBar.style.width = `${progress}%`;
-                    console.log('Upload is ' + progressbar + '% done');
-                    switch (snapshot.state) {
-                        case 'paused':
-                            throw new Error('Paused during Image upload');
-                        case 'running':
-                            console.log('Upload is running');
-                            break;
-                    }
-                },
-                (error) => {
-                    throw new Error('Error uploading Image', error);
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                        setModalVisible(false);
-                        setInput(url);
-                        setIsImage(true);
-                        setContentType("image")
-                        file.close();
-
-
-                    });
+              "state_changed",
+              (snapshot) => {
+                const progressbar = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                // setProgress(progressbar);
+                // setModalVisible(true);
+    
+                // progressBar.style.width = `${progress}%`;
+                console.log('Upload is ' + progressbar + '% done');
+                switch (snapshot.state) {
+                  case 'paused':
+                    throw new Error('Paused during Image upload');
+                  case 'running':
+                    console.log('Upload is running');
+                    break;
                 }
+              },
+              (error) => {
+                reject(error);
+              },
+              () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                  // setModalVisible(false);
+                  // setImage(url);
+                  // setURL(url);
+                  // file.close();
+                  resolve(url);
+    
+                });
+              }
             );
-
+          });
+    
         } catch (e) {
-            // setProgress(null);
-            setModalVisible(false);
-            alert("There was an error uploading your image. Please try again.")
+          // setProgress(null);
+          // setModalVisible(false);
+          Sentry.captureMessage(`Error uploading image in chat input`)
+          Sentry.captureException(e); // Ensure errors are logged to Sentry or your preferred logging service
+          throw e; // Re-throw the error to be caught by the calling function
         }
-
-    }
-
-    const selectImage = async () => {
+    
+      }
+    
+      const selectImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 0,
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 0,
         });
-
-        if (!result.canceled) {
-            const path = result.assets[0].uri;
-            const fileName = path.split("/").pop();
-            const maxSizeInBytes = 4 * 1024 * 1024; // 4 MB in bytes
-
-            try {
-                //   const isAppropriate = await checkInappropriateContent(path);
-                //     if (!isAppropriate) {
-                //       throw new Error("image-not-appropriate");
-                //       // alert('Inappropriate content detected. Please choose another image.');
-                //     // return;
-                // }
-
-                if (!(path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png'))) {
-                    throw new Error("file-not-image");
-                }
-
-                const fileInfo = await FileSystem.getInfoAsync(path);
-
-
-                // console.log("image size",fileInfo.size);
-
-                let uri;
-
-                if (fileInfo.size < maxSizeInBytes) {
-
-                    uri = path;
-
-                } else {
-
-                    const compression = maxSizeInBytes / fileInfo.size;
-
-                    // Compress the image again with the calculated compression level
-                    const compressedImage = ImageManipulator.manipulateAsync(path, [], {
-                        compress: compression,
-                        // format: ImageManipulator.SaveFormat.PNG
-                    });
-
-                    const compressedImageInfo = await FileSystem.getInfoAsync(
-                        compressedImage.uri
-                    );
-
-                    // console.log("compressed image size", compressedImageInfo.size)
-
-
-                    // const imageResult = await compressImage(uri);
-                    // const smallerThanMaxSize = await sizeIsLessThanMB(imageResult.uri, MAX_FILE_SIZE_MB);
-                    if (compressedImageInfo.size > maxSizeInBytes) {
-                        throw new Error('image-too-large');
-                    }
-                    // imageBlob = await getImageBlob(imageResult.uri);
-                    uri = (await compressedImage).uri
-                }
-
-
-                const response = await fetch(uri);
-                const blob = await response.blob();
-
-                const fileNameFull = fileLocation + "/" + fileName
-                uploadFirebase(blob, fileNameFull);
-
-            } catch (e) {
-                if (e.message.includes('image-too-large')) {
-                    alert("Image was too large");
-                    return;
-                }
-                else if (e.message.includes('file-not-image')) {
-                    alert("Please upload only images");
-                    return;
-                } else if (e.message.includes('image-not-appropriate')) {
-                    alert('Inappropriate content detected. Please choose another image.');
-                    return;
-                } else {
-                    console.log("there was an error", e);
-
-                }
-                setIsImage(false);
-                setContentType("image");
-            }
+    
+        if (result.canceled) {
+          return;
         }
+    
+        // if (!result.canceled) {
+        const path = result.assets[0].uri;
+        const fileName = path.split("/").pop();
+        const maxSizeInBytes = 4 * 1024 * 1024; // 4 MB in bytes
+    
+        try {
+          //   const isAppropriate = await checkInappropriateContent(path);
+          //     if (!isAppropriate) {
+          //       throw new Error("image-not-appropriate");
+          //       // alert('Inappropriate content detected. Please choose another image.');
+          //     // return;
+          // }
+    
+          if (!(path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png'))) {
+            // throw new Error("file-not-image");
+            alert("Please upload only images.");
+            return;
+          }
+    
+          let manipulatedPath = path;
+    
+          console.log("path", path)
+    
+          // If it's a PNG, convert to JPG.
+          if (path.endsWith('.png')) {
+            console.log("converting png")
+            const convertedImage = await ImageManipulator.manipulateAsync(path, [], {
+              format: ImageManipulator.SaveFormat.JPEG,
+            });
+            manipulatedPath = convertedImage.uri;
+          }
+    
+          const fileInfo = await FileSystem.getInfoAsync(manipulatedPath);
+    
+    
+          // console.log("image size",fileInfo.size);
+    
+          let uri;
+    
+          if (fileInfo.size < maxSizeInBytes) {
+    
+            uri = path;
+    
+          } else {
+    
+            const compression = maxSizeInBytes / fileInfo.size;
+    
+            // Compress the image again with the calculated compression level
+            const compressedImage = ImageManipulator.manipulateAsync(path, [], {
+              compress: compression,
+              // format: ImageManipulator.SaveFormat.PNG
+            });
+    
+            const compressedImageInfo = await FileSystem.getInfoAsync(
+              compressedImage.uri
+            );
+    
+            // console.log("compressed image size", compressedImageInfo.size)
+    
+    
+            // const imageResult = await compressImage(uri);
+            // const smallerThanMaxSize = await sizeIsLessThanMB(imageResult.uri, MAX_FILE_SIZE_MB);
+            if (compressedImageInfo.size > maxSizeInBytes) {
+              alert("Image is too large. Try another.");
+              return;
+            }
+            // imageBlob = await getImageBlob(imageResult.uri);
+            uri = (await compressedImage).uri
+          }
+    
+    
+          const response = await fetch(uri);
+          const blob = await response.blob();
+    
+          const fileNameFull = fileLocation + "/" + fileName
+          setModalVisible(true); // Show modal before starting upload
+          const url = await uploadFirebase(blob, fileNameFull);
+          setInput(url);
+          setIsImage(true);
+          
+        //   setURL(url);
+    
+        } catch (e) {
+          alert('Something went wrong. Please try again. Perhaps with a different image.');
+          console.error(e);
+          setInput(null);
+          setIsImage(false);
 
-
-    };
-
-    const getImageNameFromUrl = (imageUrl) => {
+        } finally {
+          setModalVisible(false); // Hide modal regardless of upload success or failure
+          setContentType("image");
+        }
+        // console.log("there was an error",e);
+        // }
+        // }
+    
+    
+      };
+    
+      const getImageNameFromUrl = (imageUrl) => {
         const urlParts = imageUrl.split("/");
         const getLast = urlParts[urlParts.length - 1];
         const removeTokens = getLast.split("?")[0]
         const fileName = removeTokens.replace(/%2F/g, "/")
         return fileName;
-    };
-
-
-    const removeImage = async () => {
+      };
+    
+    
+      const removeImage = () => {
         const imageName = getImageNameFromUrl(input)
-
+    
         const imageRef = ref(storage, imageName);
-
-
+    
+    
         // Delete the file
-        await deleteObject(imageRef)
-            .then(() => {
-                console.log("File deleted successfully.");
-                setInput(null);
-                setContentType("text");
-                setIsImage(false);
-            })
-            .catch((error) => {
-                console.error("Error deleting file: ", error);
-            });
-
-    };
+        deleteObject(imageRef)
+          .then(() => {
+            console.log("File deleted successfully.");
+            setInput(null);
+            setContentType("text");
+            setIsImage(false);
+          })
+          .catch((error) => {
+            alert("Failed to delete image")
+            console.error("Error deleting file: ", error);
+            Sentry.captureMessage(`Failed to delete image for in chat input`)
+            Sentry.captureException(error)
+          });
+    
+      };
 
     return (
         <View

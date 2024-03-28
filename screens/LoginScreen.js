@@ -46,9 +46,9 @@ const LoginScreen = () => {
     return (
         <SafeAreaView style={[styles.container]}>
             <ImageBackground
-                resizeMode='cover'
+                resizeMode='contain'
                 style={[styles.container]}
-                source={require("../images/bizdudes.jpg")}>
+                source={require("../images/wingCoverArt.png")}>
                 {/* <View style={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}> */}
                 <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss}
@@ -60,16 +60,17 @@ const LoginScreen = () => {
                         </View>
                         <View style={{ height: "40%", top: "10%", justifyContent: "space-evenly" }}>
                             <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Find Your Wingman.</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Meet Women Offline.</Text>
                             <Text style={{ fontWeight: "bold", fontSize: 18, fontFamily: Platform.OS === "android" ? "sans-serif-condensed": "Times New Roman", color: "#00308F" }}>Ditch Dating Apps.</Text>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
 
                 {isSignin ? (
-                    <View style={{ marginVertical: "10%", marginHorizontal: "20%", height: "40%" }}>
+                    <View style={{ marginVertical: "10%", marginHorizontal: "20%", height: "40%", backgroundColor:"white", borderRadius:20, shadowOffset: {width: 0, height: 3},shadowOpacity: 0.5, shadowRadius: 3.41, }}>
 
                         {isLogin ? (
-                            <View style={{ marginVertical: isKeyboardVisible ? "-5%" : "10%", alignItems: 'center', height: "100%", justifyContent: "space-evenly" }}>
+                            <View style={{ marginVertical: isKeyboardVisible ? "-7%" : "0%", alignItems: 'center', height: "100%", justifyContent: "space-evenly" }}>
                                 <KeyboardAvoidingView
                                     behavior={Platform.OS === "ios" ? "padding" : "height"}
                                     style={{ alignItems: "center", justifyContent: "space-evenly", height: "80%" }}
@@ -87,7 +88,7 @@ const LoginScreen = () => {
                                         onChangeText={setPassword}
                                         secureTextEntry
                                         placeholder={'*************'}
-                                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: 180, justifyContent: "center" }} />
+                                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: 180, justifyContent: "center",  }} />
                                     <TouchableOpacity style={styles.opacitycontainer} onPress={() => logInManually(email, password)}>
                                         <Text style={styles.textcontainer}>Log In</Text>
                                     </TouchableOpacity>
@@ -145,6 +146,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:"white"
     },
     opacitycontainer: {
         backgroundColor: "#00308F",
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
         // left: 5,
         height: 45,
         width: 45,
-        left: 13
+        left: 9
         // backgroundColor: "#00BFFF",
         // borderRadius: 50,
         // borderColor: "#00308F",

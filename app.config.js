@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.7.8",
+    version: "2.8.2",
     orientation: "portrait",
     icon: "./assets/icon_dkbluewing_whitebg.png",
     userInterfaceStyle: "light",
@@ -31,6 +31,7 @@ export default {
       }
     },
     android: {
+      versionCode: 2,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#FFFFFF"
@@ -74,6 +75,7 @@ export default {
       iosClientId: process.env.IOS_CLIENT_ID,
       expoClientId: process.env.EXPO_CLIENT_ID,
       projectName: process.env.PROJECT_NAME,
+      projectId: process.env.PROJECT_ID,
       sentryId: process.env.SENTRY_ID,
       chatGptKey: process.env.CHATGPT_KEY,
       emailJsService: process.env.EMAILJS_SERVICE,

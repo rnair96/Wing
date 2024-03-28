@@ -7,7 +7,7 @@ import Swiper from "react-native-deck-swiper";
 import { setDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import MessageModal from '../components/MessageModal';
-import RequestCapModal from '../components/RequestCapModal';
+// import RequestCapModal from '../components/RequestCapModal';
 import * as Sentry from "@sentry/react";
 import SurveyModal from '../components/SurveyModal';
 import { hasSixtyDaysPassed, hasMatch } from '../lib/secondSurveyCheck';

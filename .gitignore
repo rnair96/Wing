@@ -13,6 +13,7 @@ GoogleService-info.plist
 google-services.json
 keys/google-cloud-api.json
 .env
-
+secrets/
 # macOS
 .DS_Store
+secrets/mission-partner-app-b2bb64cb3030.json

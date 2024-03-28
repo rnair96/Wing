@@ -4320,11 +4320,6 @@ expo-notifications@~0.27.6:
     expo-constants "~15.4.0"
     fs-extra "^9.1.0"
 
-expo-permissions@~14.1.1:
-  version "14.1.2"
-  resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-14.1.2.tgz#59ccf152d5da44b4958fc45238595b1b4282a978"
-  integrity sha512-NcozPs0cPDe65/Kc7yhSbdGcdpEIeEK1VcUlhRmOrC3kEahwlIdmyLdfhtuuUggaB75Wlo7VOGMZrsNHTWOVHw==
-
 expo-random@~13.6.0:
   version "13.6.0"
   resolved "https://registry.yarnpkg.com/expo-random/-/expo-random-13.6.0.tgz#98a1c26922d58fa7f16891f02a3d9555549b2a9f"

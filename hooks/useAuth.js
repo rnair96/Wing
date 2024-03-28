@@ -99,17 +99,18 @@ export const AuthProvider = ({ children }) => {
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
         console.log("in progress")
-        Sentry.captureMessage(`Error authenticating login with google - in progress`, error.code)
+        Sentry.captureMessage(`Error authenticating login with google - in progress, ${error.code}`)
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
         console.log("services not available")
-        Sentry.captureMessage(`Error authenticating login with google- services not available`, error.code)
+        Sentry.captureMessage(`Error authenticating login with google- services not available, ${error.code}`)
       } else {
         // some other error happened
         console.log(error);
-        Sentry.captureMessage(`Error authenticating login with google`, error.code)
-
+        Sentry.captureMessage(`Error authenticating login with google, ${error.code}`)
+        // Ensure errors are logged to Sentry or your preferred logging service
       }
+      Sentry.captureException(error);
     }
   }
 
