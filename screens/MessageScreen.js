@@ -5,11 +5,12 @@ import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import * as Sentry from "@sentry/react";
 import ChatInput from '../components/ChatInput';
+import likeMessage from '../lib/likeMessage';
 
 const MessageScreen = () => {
 
@@ -20,6 +21,7 @@ const MessageScreen = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(profile);
+
   // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
 
   useEffect(() => {
@@ -151,6 +153,10 @@ const MessageScreen = () => {
               style={{}}
               inverted={-1}
               keyExtractor={(item) => item.id}
+              initialNumToRender={10}
+              maxToRenderPerBatch={10}
+              windowSize={5}
+              updateCellsBatchingPeriod={50}
               renderItem={({ item: message }) =>
                 message.userId === user.uid ? (
                   <SenderMessage key={message.id} message={message} />
@@ -163,7 +169,11 @@ const MessageScreen = () => {
                       <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
                         source={require("../images/account.jpeg")} />
                     )}
-                    <RecieverMessage key={message.id} message={message} />
+                    <TouchableOpacity onLongPress={() => {
+                      likeMessage(message, user.uid, doc(db, global.matches, matchedDetails.id, "messages", message.id))
+                    }}>
+                      <RecieverMessage key={message.id} message={message} />
+                    </TouchableOpacity>
 
                   </View>
                 )
@@ -195,7 +205,7 @@ const MessageScreen = () => {
             <Text style={{color:"#00BFFF", fontSize:15}}>Send</Text>
           </TouchableOpacity>
         </View> */}
-        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} fileLocation={matchedDetails.id}/>
+        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} fileLocation={matchedDetails.id} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   )

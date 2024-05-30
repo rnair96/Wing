@@ -2,13 +2,21 @@ import React, { Component, useEffect, useState } from 'react'
 import { Text, View, Image, Linking, TouchableOpacity } from 'react-native'
 import getTime from '../lib/getTime';
 import ImageExpanded from '../components/ImageExpanded';
+import useAuth from '../hooks/useAuth';
 
-const RecieverMessage = ({ message }) => {
+const RecieverMessage = React.memo(({ message }) => {
+  const {user} = useAuth();
   const [time, setTime] = useState("");
   const [loading, setLoading] = useState(true);
   const [isExpandedImageVisible, setIsExpandedImageVisible] = useState(false);
+  const [likes, setLikes] = useState(0);
+  const [yourLike, setYourLike] = useState(false)
 
   useEffect(() => {
+    if(message && message?.likes){
+      setLikes(message.likes.length);
+      setYourLike(message.likes.includes(user.uid));
+    }
 
     if (message && message?.timestamp && message.timestamp.seconds && message.timestamp.nanoseconds) {
       let milliseconds = message.timestamp.seconds * 1000 + Math.floor(message.timestamp.nanoseconds / 1000000);
@@ -33,12 +41,19 @@ const RecieverMessage = ({ message }) => {
   return (
     !loading && (
       <View style={{ alignItems: "center" }}>
+        {(!message?.status || (message?.status && message.status !== "blocked")) && likes > 0 && (
+          <View style={{ alignSelf: "flex-end", flexDirection: "row", alignItems: "center", backgroundColor: "grey", borderRadius: 20, padding: 7, width: "auto", zIndex: 1, top: 15, left: 25 }}>
+            <Text style={{ fontSize: 10, color: "white" }}>{yourLike && "You"} {yourLike && likes > 1 && "and "+(likes-1)} {!yourLike && ""+likes}</Text>
+            <Image source={require("../images/thumbs_up.png")} style={{ width: 20, height: 20, left: 3, bottom: 3 }} />
+          </View>
+        )}
         {message?.status && message.status === "blocked" ? (
           <View style={{ left: 10, borderBottomWidth: 0.5, borderTopWidth: 0.5, borderColor: "grey" }}>
             <Text style={{ color: "grey", padding: 10, fontSize: 13 }}> Message Removed By Moderator </Text>
           </View>
         ) : (
           <View style={{ left: 5, backgroundColor: "#00BFFF", borderBottomLeftRadius: 20, borderBottomRightRadius: 20, borderTopRightRadius: 20 }}>
+
             {message?.tagType && message.tagType === 'reply' && message.taggedName && (
               <Text style={{ color: "white", padding: 10, fontSize: 20, fontWeight: "bold" }}>Replied to {message.taggedName}:</Text>
             )}
@@ -71,6 +86,6 @@ const RecieverMessage = ({ message }) => {
     )
 
   )
-}
+})
 
 export default RecieverMessage

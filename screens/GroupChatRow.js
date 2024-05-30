@@ -64,6 +64,13 @@ const GroupChatRow = ({profile, matches, requests}) => {
             setRead(false)
         }
 
+
+        if(data && data?.likes && data?.likes.length > 0){
+            data.userId === user.uid? setUserMessaged("Your "): setUserMessaged("Their ")
+            setLastMessage(`Message Was Liked`)
+            setRead(true);
+        } 
+
         setLoadingMessage(false);
     }
 
@@ -92,7 +99,7 @@ const GroupChatRow = ({profile, matches, requests}) => {
         !loadingMessage && (
             <View style={{ padding: 10, width: "95%" }}>
                 <TouchableOpacity style={styles.container} onPress={() => navigator.navigate("GroupChat", {profile, matches, requests})}>
-                        <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "white", borderWidth: 1, borderColor: "#00BFFF"}} source={require("../images/bizdudes.jpg")} />
+                        <Image style={{ height: 60, width: 60, borderRadius: 50, backgroundColor: "white", borderWidth: 1, borderColor: "#00BFFF"}} source={require("../images/darkbluelogocorrect.png")} />
                     <View style={{ flexDirection: "row" }}>
                         <View style={{ padding: 10 }}>
                             <Text style={{ fontWeight: "bold", fontSize: 15, paddingLeft: 5, paddingBottom: 5 }}>Community</Text>

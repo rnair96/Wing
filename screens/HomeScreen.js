@@ -24,8 +24,8 @@ const HomeScreen = () => {
     const [loggedProfile, setLoggedProfile] = useState(null);
     const route = useRoute();
     const [islocationChanged, setIsLocationChanged] = useState(false);
-    const [isWaitlistModalVisible, setIsWaitlistModalVisible] = useState(false)
-    const [userNumber, setUserNumber] = useState(0)
+    // const [isWaitlistModalVisible, setIsWaitlistModalVisible] = useState(false)
+    // const [userNumber, setUserNumber] = useState(0)
 
 
 
@@ -114,46 +114,46 @@ const HomeScreen = () => {
         })();
     }, [loggedProfile]);
 
-    useEffect(() => {
-        if (loggedProfile) {
-            const fetchUserCount = async () => {
-                try {
-                    const usersRef = collection(db, global.users);
-                    const q = query(usersRef, where("location.state", "in", ["DC", "MD", "VA"]),
-                        where("completed_setup", "==", true));
+    // useEffect(() => {
+    //     if (loggedProfile) {
+    //         const fetchUserCount = async () => {
+    //             try {
+    //                 const usersRef = collection(db, global.users);
+    //                 const q = query(usersRef, where("location.state", "in", ["DC", "MD", "VA"]),
+    //                     where("completed_setup", "==", true));
 
-                    const querySnapshot = await getDocs(q);
-                    console.log("number of users", querySnapshot.docs.length);
+    //                 const querySnapshot = await getDocs(q);
+    //                 console.log("number of users", querySnapshot.docs.length);
 
 
-                    if (querySnapshot.docs.length < 100) {//change to 100
-                        setIsWaitlistModalVisible(true)
-                        setUserNumber(querySnapshot.docs.length);
-                    } else if (querySnapshot.docs.length == 100) {
-                        console.log("check if welcome challenge was set");
-                        const welcomeRef = doc(db, "userData", "welcome_challenge");
-                        const welcomeSnapshot = await getDoc(welcomeRef);
-                        if (welcomeSnapshot.exists() && welcomeSnapshot.data().trigger) {
-                            console.log("Welcome challenge already triggered");
-                        } else {
-                            console.log("trigger welcome challenge");
-                            try {
-                                setDoc(doc(db, "userData", "welcome_challenge"), { trigger: true })
-                            } catch (error) {
-                                Sentry.captureMessage("Error setting welcome document", error.code)
-                                console.error("Error setting welcome document: ", error);
-                            }
-                        }
+    //                 if (querySnapshot.docs.length < 0) {//change to 100
+    //                     setIsWaitlistModalVisible(true)
+    //                     setUserNumber(querySnapshot.docs.length);
+    //                 } else if (querySnapshot.docs.length == 100) {
+    //                     console.log("check if welcome challenge was set");
+    //                     const welcomeRef = doc(db, "userData", "welcome_challenge");
+    //                     const welcomeSnapshot = await getDoc(welcomeRef);
+    //                     if (welcomeSnapshot.exists() && welcomeSnapshot.data().trigger) {
+    //                         console.log("Welcome challenge already triggered");
+    //                     } else {
+    //                         console.log("trigger welcome challenge");
+    //                         try {
+    //                             setDoc(doc(db, "userData", "welcome_challenge"), { trigger: true })
+    //                         } catch (error) {
+    //                             Sentry.captureMessage("Error setting welcome document", error.code)
+    //                             console.error("Error setting welcome document: ", error);
+    //                         }
+    //                     }
 
-                    }
-                } catch (error) {
-                    console.error("Error fetching users count: ", error);
-                }
-            };
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Error fetching users count: ", error);
+    //             }
+    //         };
 
-            fetchUserCount();
-        }
-    }, [loggedProfile]);
+    //         fetchUserCount();
+    //     }
+    // }, [loggedProfile]);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>

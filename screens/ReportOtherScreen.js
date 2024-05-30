@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -28,8 +28,8 @@ const ReportOtherScreen = () => {
             flags: arrayUnion({
                 type: flag,
                 reported_by: user.uid,
-                status: "unresolved"
-            })
+            }),
+            flagged_status: "unresolved"
         }).then(async () => {
             if (other_user?.notifications && other_user.notifications.messages) {
                 sendPush(other_user.token, "You've Been Flagged", "Tap to Learn More", { type: "flagged" });
@@ -43,7 +43,7 @@ const ReportOtherScreen = () => {
                     navigation.navigate("ToggleChat");
                   })
             }else {
-                navigation.navigate("Home");
+                navigation.navigate("Home", { refresh: true });
             }
             alert("Your report has been submitted.");
         }).catch((error) => {
@@ -74,8 +74,8 @@ const ReportOtherScreen = () => {
                         multiline
                         numberOfLines={3}
                         onChangeText={setReport}
-                        placeholder={'Provide Reason for Report'}
-                        style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: "90%", height: "30%" }}
+                        placeholder={' Provide Reason for Report'}
+                        style={{ borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "white", width: "90%", height: "40%", paddingLeft:5}}
                     />
                     <TouchableOpacity
                         disabled={incompleteForm}

@@ -309,7 +309,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                     ) : (
                         <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
                             <Text style={{ fontWeight: "bold", fontSize: 20, margin:5}}>No Wings Around... </Text>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, margin:5}}>Reload For Skipped Wings Or Press Skip</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, margin:5}}>Press Skip To Reload Skipped Wings</Text>
                             <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
                             <Text style={{ fontWeight: "bold", fontSize: 15, margin:5}}>Or Wait For New Wings Later</Text>
                         </View>

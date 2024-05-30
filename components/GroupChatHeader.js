@@ -79,7 +79,7 @@ const GroupChatHeader = ({ profile }) => {
                 <Ionicons name="chevron-back-outline" size={34} color="#00308F" />
             </TouchableOpacity>
             <View style={{ paddingVertical: 2, flexDirection: "row", marginHorizontal: "25%", left: "4%" }}>
-                <Image style={{ height: 40, width: 40, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={require("../images/bizdudes.jpg")} />
+                <Image style={{ height: 40, width: 40, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={require("../images/darkbluelogocorrect.png")} />
                 <Text style={{ padding: 10, fontWeight: "bold", fontSize: 12 }}> Community </Text>
             </View>
             <TouchableOpacity onPress={() => setModalVisible(true)} style={{ padding: 2, flexDirection: "row" }}>

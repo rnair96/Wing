@@ -251,13 +251,23 @@ export const AuthProvider = ({ children }) => {
       await sendPasswordResetEmail(auth, email);
 
       alert('An email was sent to reset your password.');
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
-      console.error('Error resetting password:', error);
+      console.log("auth",auth)
+      console.error('Error resetting password:', error,'code', error.code);
+
+    // Handle specific error messages
+    if (error.code === 'auth/invalid-email') {
+      alert('Invalid email address.');
+    } else if (error.code === 'auth/user-not-found') {
+      alert('No user found with this email address.');
+    } else {
       alert('An error occurred. Please try again.');
-      setLoading(false);
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+}
 
   const updateUserPassword = async (currentPassword, newPassword) => {
     try {

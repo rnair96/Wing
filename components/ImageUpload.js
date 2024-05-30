@@ -80,7 +80,7 @@ const ImageUpload = ({ url, setURL, index, userId }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0,
+      quality: 0,//0.8 for compression android
     });
 
     if (result.canceled) {
@@ -114,6 +114,7 @@ const ImageUpload = ({ url, setURL, index, userId }) => {
       if (path.endsWith('.png')) {
         console.log("converting png")
         const convertedImage = await ImageManipulator.manipulateAsync(path, [], {
+          // compress:0.8,
           format: ImageManipulator.SaveFormat.JPEG,
         });
         manipulatedPath = convertedImage.uri;

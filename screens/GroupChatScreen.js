@@ -13,6 +13,7 @@ import ModeratorModal from '../components/ModeratorModal';
 import ChatInput from '../components/ChatInput';
 import ReplyModal from '../components/ReplyModal';
 import GroupChatHeader from '../components/GroupChatHeader';
+import likeMessage from '../lib/likeMessage';
 
 
 const GroupChatScreen = () => {
@@ -179,6 +180,10 @@ const GroupChatScreen = () => {
                             style={{}}
                             inverted={-1}
                             keyExtractor={(item) => item.id}
+                            initialNumToRender={10}
+                            maxToRenderPerBatch={10}
+                            windowSize={5}
+                            updateCellsBatchingPeriod={50}
                             renderItem={({ item: message }) =>
                                 message.userId === user.uid ? (
                                     <SenderMessage key={message.id} message={message} />
@@ -193,9 +198,14 @@ const GroupChatScreen = () => {
                                         </TouchableOpacity>
 
 
-                                        <TouchableOpacity style={{ paddingBottom: 20 }} onPress={() => {
-                                            performAction(message)
-                                        }}>
+                                        <TouchableOpacity style={{ paddingBottom: 20 }}
+                                            onPress={() => {
+                                                performAction(message)
+                                            }}
+                                            onLongPress={() => {
+                                                likeMessage(message, user.uid, doc(db, global.groupchat, message.id))
+                                            }}
+                                        >
                                             <RecieverMessage key={message.id} message={message} />
                                         </TouchableOpacity>
 

@@ -67,7 +67,7 @@ const LoginScreen = () => {
                 </TouchableWithoutFeedback>
 
                 {isSignin ? (
-                    <View style={{ marginVertical: "10%", marginHorizontal: "20%", height: "40%", backgroundColor:"white", borderRadius:20, shadowOffset: {width: 0, height: 3},shadowOpacity: 0.5, shadowRadius: 3.41, }}>
+                    <View style={{ marginVertical: "10%", marginHorizontal: "20%", height: "40%", backgroundColor:"white", borderRadius:20, shadowOffset: {width: 0, height: 3},shadowOpacity: 0.5, shadowRadius: 3.41, elevation:5}}>
 
                         {isLogin ? (
                             <View style={{ marginVertical: isKeyboardVisible ? "-7%" : "0%", alignItems: 'center', height: "100%", justifyContent: "space-evenly" }}>

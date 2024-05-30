@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.8.2",
+    version: "2.8.5",
     orientation: "portrait",
     icon: "./assets/icon_dkbluewing_whitebg.png",
     userInterfaceStyle: "light",
@@ -31,6 +31,7 @@ export default {
       }
     },
     android: {
+      versionCode:4,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#FFFFFF"
@@ -42,7 +43,8 @@ export default {
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ],
-      package: "com.wingcommunity.wing"
+      package: "com.wingcommunity.wing",
+      googleServicesFile:"./google-services.json",
     },
     web: {
       favicon: "./assets/favicon.png"

@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback
+  StyleSheet, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, Platform
 } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { useNavigation } from '@react-navigation/native';

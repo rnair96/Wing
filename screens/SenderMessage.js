@@ -3,12 +3,17 @@ import { Text, View, Image, TouchableOpacity, Linking } from 'react-native'
 import getTime from '../lib/getTime'
 import ImageExpanded from '../components/ImageExpanded';
 
-const SenderMessage = ({ message }) => {
+const SenderMessage = React.memo(({ message }) => {
   const [time, setTime] = useState("");
   const [loading, setLoading] = useState(true);
   const [isExpandedImageVisible, setIsExpandedImageVisible] = useState(false);
+  const [likes, setLikes] = useState(0)
+
 
   useEffect(() => {
+    if(message && message.likes){
+      setLikes(message.likes.length);
+    }
 
     if (message && message?.timestamp) {
       let milliseconds = message.timestamp.seconds * 1000 + Math.floor(message.timestamp.nanoseconds / 1000000);
@@ -33,6 +38,12 @@ const SenderMessage = ({ message }) => {
   return (
     !loading && (
       <View style={{ right: 5, maxWidth: 300, padding: 10, marginLeft: "auto", alignSelf: "flex-start" }}>
+        { (!message?.status || (message?.status && message.status !== "blocked")) && likes > 0 && (
+         <View style={{ flexDirection: "row", alignItems:"center", backgroundColor:"#00BFFF", borderRadius:20, padding:7, width:43, top:10, right:10, zIndex:1}}>
+            <Text style={{fontSize:10, color:"white"}}>{likes}</Text>
+            <Image source={require("../images/thumbs_up.png")} style={{ width: 20, height: 20, left:3, bottom:3}} />
+          </View>
+        )}
         <View style={{ alignItems: "center" }}>
           {message?.status && message.status === "blocked" ? (
             <View style={{ left: 10, borderBottomWidth: 0.5, borderTopWidth: 0.5, borderColor: "grey" }}>
@@ -71,14 +82,16 @@ const SenderMessage = ({ message }) => {
                   <Text style={{ color: "white", padding: 10, fontSize: 20 }}>{message.message}</Text>
                 </View>
               )} */}
+             
             </View>
           )}
           <Text style={{ fontSize: 12, color: "grey" }}>{time}</Text>
+          
         </View>
         <ImageExpanded isVisible={isExpandedImageVisible} setIsVisible={setIsExpandedImageVisible} image={message.message} />
       </View>
     )
   )
-}
+})
 
 export default SenderMessage

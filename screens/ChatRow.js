@@ -30,8 +30,11 @@ const ChatRow = ({ matchedDetails, profile }) => {
 
 
     const setVars = (data) => {
-
-        if (data && (!data?.type || data?.type==="text") && data?.message?.length > 15) {
+        if(data && data?.likes && data?.likes.length > 0 && data?.userId === user.uid){
+            setLastMessage("Your Message Was Liked")
+        } else if (data && data?.likes && data?.likes.length > 0 && data?.userId !== user.uid){
+            setLastMessage("Their Message Was Liked")
+        } else if (data && (!data?.type || data?.type==="text") && data?.message?.length > 15) {
             const message = data?.message?.slice(0, 15) + "..."
             setLastMessage(message);
         } else if (data && (!data?.type || data?.type==="text")) {
