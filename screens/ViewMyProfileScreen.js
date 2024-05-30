@@ -164,14 +164,18 @@ const ViewMyProfileScreen = ({ profile }) => {
                                             </View>
                                         )}
                                     </View>
-                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text>
-
+                                    {card.item?.mission &&
+                                        <View style={{ flexDirection: "row", padding: 10, alignItems:"center"}}>
+                                            <Image style={{ height: 25, width: 25, right: 10, alignItems: "center" }} source={require("../images/star.png")}></Image>
+                                            <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.mission}</Text>
+                                        </View>
+                                    }
                                 </View>
                             </View>
 
                             {card.item.badges &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                    <Text style={{  fontWeight: "bold", fontSize: 20, padding: 10, color: "#FFD700"}}>Top Wing Rank</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 20, padding: 10, color: "#FFD700" }}>Top Wing Rank</Text>
                                     <Image style={{ height: 100, width: 100, marginTop: 10, right: 5 }} source={require("../images/TopWingBadge.png")} />
                                     <Text style={{ padding: 10, color: "white" }}>Won From {card.item.badges[0].earned}</Text>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.badges[0].details}</Text>
@@ -194,15 +198,15 @@ const ViewMyProfileScreen = ({ profile }) => {
                                     <View style={{ flexDirection: "column", width: "80%", marginLeft: 15 }}>
 
                                         {card.item?.strength &&
-                                            <View style={{ flexDirection: "row", padding: 10 }}>
-                                                <Image style={{ height: 25, width: 20, right: 5, alignItems: "center" }} source={require("../images/bicep.png")}></Image>
-                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.strength}</Text>
+                                            <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                                <Image style={{ height: 20, width: 20, right: 5, alignItems: "center" }} source={require("../images/bicep.png")}></Image>
+                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white", left:10 }}>{card.item.strength}</Text>
                                             </View>
                                         }
                                         {card.item?.weakness &&
                                             <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
                                                 <Image style={{ height: 30, width: 20, right: 5, alignItems: "center" }} source={require("../images/cracked_shield.png")}></Image>
-                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.weakness}</Text>
+                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white", left: 10 }}>{card.item.weakness}</Text>
                                             </View>
                                         }
                                     </View>

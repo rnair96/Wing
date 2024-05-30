@@ -25,7 +25,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const gender = profile?.gender || "male";
   const activeStudent = profile?.university_student?.status === "active";
 
-  // const [mission, setMission] = useState(profile?.mission || null);
+  const [mission, setMission] = useState(profile?.mission || null);
   // const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
   // const [style, setStyle] = useState(profile?.style_tag || "None")
 
@@ -135,7 +135,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       images: [url1, url2, url3],
       school: school,
       hometown: hometown,
-      // mission: mission,
+      mission: mission,
       // style_tag: style,
       weakness: weakness,
       strength: strength,
@@ -412,7 +412,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
             <InterestsList selectedInterests={interests} setSelectedInterests={setInterests} />
 
-            {/* <Text style={styles.formTitle}>A Long-Term or Short-Term Goal</Text>
+            <Text style={styles.formTitle}>A Long-Term or Short-Term Goal</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>A Pursuit That Has Nothing To Do With Dating</Text>
             <TextInput
               value={mission}
@@ -422,7 +422,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               onChangeText={setMission}
               placeholder={'Write A Novel'}
               placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} /> */}
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
 
             {/* <Text style={styles.formTitle}>Bio</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>Share anything fun about you, i.e hobbies/passions</Text>

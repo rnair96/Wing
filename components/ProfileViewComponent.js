@@ -110,13 +110,12 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                                             </View>
                                         )}
                                     </View>
-                                    {/* {card.item?.bio ?
-                                        (
-                                            <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>{card.item.bio}</Text>
-                                        ) : (
-                                            <Text style={{ fontWeight: "bold", fontSize: 15, padding: 10, color: "white" }}>-- --</Text>
-
-                                        )} */}
+                                    {card.item?.mission &&
+                                        <View style={{ flexDirection: "row", padding: 10, alignItems:"center"}}>
+                                            <Image style={{ height: 25, width: 25, right: 5, alignItems: "center" }} source={require("../images/star.png")}></Image>
+                                            <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.mission}</Text>
+                                        </View>
+                                    }
                                 </View>
                             </View>
 
