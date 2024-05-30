@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { Entypo } from '@expo/vector-icons';
 import Swiper from "react-native-deck-swiper";
-import { setDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { setDoc, doc, serverTimestamp, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import MessageModal from '../components/MessageModal';
 // import RequestCapModal from '../components/RequestCapModal';
@@ -245,12 +245,12 @@ const SwipeScreen = ({ loggedProfile }) => {
         setPassAmount((passAmount + 1));
         console.log("pass number at", (passAmount + 1));
 
-        setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), { id: profiles[cardIndex].id })
-            .catch((error) => {
-                alert("Error passing user. Try again later.")
-                Sentry.captureMessage(`Error setting a pass for ${user.uid}, ${error.message}`)
-                return;
-            });
+        // setDoc(doc(db, global.users, user.uid, "passes", profiles[cardIndex].id), { id: profiles[cardIndex].id })
+        //     .catch((error) => {
+        //         alert("Error passing user. Try again later.")
+        //         Sentry.captureMessage(`Error setting a pass for ${user.uid}, ${error.message}`)
+        //         return;
+        //     });
 
     }
 
@@ -268,6 +268,7 @@ const SwipeScreen = ({ loggedProfile }) => {
     // const swipeTop = async (cardIndex) => {
 
     // }
+
 
     const swipeRight = async (cardIndex) => {
         if (!profiles[cardIndex]) { return; }
@@ -329,10 +330,10 @@ const SwipeScreen = ({ loggedProfile }) => {
 
                     ) : (
                         <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20, margin: 5 }}>No Wings Around... </Text>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, margin: 5 }}>Press Skip To Reload Skipped Wings</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20, margin: 5 }}>No More Wings... </Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, margin: 5 }}>Press Skip To Reload  Wings</Text>
                             <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
-                            <Text style={{ fontWeight: "bold", fontSize: 15, margin: 5 }}>Or Wait For New Wings Later</Text>
+                            {/* <Text style={{ fontWeight: "bold", fontSize: 15, margin: 5 }}>Or Wait For New Wings Later</Text> */}
                         </View>
                     )}
                 </View>
@@ -345,9 +346,6 @@ const SwipeScreen = ({ loggedProfile }) => {
                         verticalSwipe={false}
                         cardIndex={0}
                         horizontalSwipe={false}
-                        // goBackToPreviousCardOnSwipeLeft = {true}
-                        // disableRightSwipe={!swipeEnabled}
-                        // disableTopSwipe={!swipeEnabled}
                         onSwipedAll={() => {
                             setProfiles([])
                         }}
