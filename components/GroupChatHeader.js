@@ -125,6 +125,15 @@ const GroupChatHeader = ({ profile }) => {
                         <TouchableHighlight
                             style={styles.opacityStyle}
                             onPress={() => {
+                                setModalVisible(!modalVisible);
+                                navigator.navigate("Workshop");
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Dating Workshop</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            style={styles.opacityStyle}
+                            onPress={() => {
                                 editNotifications();
                             }}
                         >
@@ -212,7 +221,7 @@ const styles = StyleSheet.create({
 
     },
     modalView: {
-        height: "50%",
+        height: "65%",
         width: "70%",
         backgroundColor: 'white',
         borderRadius: 20,

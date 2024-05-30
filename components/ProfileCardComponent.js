@@ -17,6 +17,7 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                                                 <Text style={styles.text}>{card.mission}</Text> */}
                         <Text style={{ color: "white", margin: 5 }}>{profile.prompts[0].prompt}</Text>
                         <Text style={styles.text}>{profile.prompts[0].tagline}</Text>
+
                     </View>
                     <View style={{ justifyContent: "space-evenly", height: "70%", width: "100%", backgroundColor: "#002D62" }}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-evenly", alignItems: "center" }}>
@@ -24,7 +25,7 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                                 <Text style={{ fontWeight: "bold", fontSize: 20, color: "white", paddingBottom: 5 }}>{profile.displayName}</Text>
                                 <Text style={{ color: "white", fontSize: 15 }}>{profile.age}</Text>
                                 {profile?.university_student && profile.university_student.status === "active" ? (
-                                        <Text style={{ color: "white", fontSize: 15 }}>{profile.school}</Text>
+                                    <Text style={{ color: "white", fontSize: 15 }}>{profile.school}</Text>
                                     // <View style={{ flexDirection: "column" }}>
                                     //     <Text style={{ color: "white", fontSize: 13 }}>{profile.school}</Text>
                                     //     <Text style={{ color: "#00BFFF", fontWeight: "800", fontSize: 15 }}>WING-U</Text>
@@ -32,18 +33,21 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
                                 ) : (
                                     <Text style={{ color: "white", fontSize: 15 }}>{profile.job}</Text>
                                 )}
+                                {profile?.badges &&
+                                <Image style={{ height: 50, width: 50, marginTop:10, right:5 }} source={require("../images/TopWingBadge.png")} />
+                            }
                             </View>
                             <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: profile?.images[0] }} />
                         </View>
-                        <View style={{ flexDirection: "column", width:"80%", marginLeft:15 }}>
-                                <View style={{ flexDirection: "row", padding: 10, alignItems:"center" }}>
-                                    <Image style={{ height: 20, width: 20, alignItems:"center"}} source={require("../images/bicep.png")}></Image>
-                                    <Text style={styles.cardtext}>{profile.strength ? profile.strength : `-- --`}</Text>
-                                </View>
-                                <View style={{ flexDirection: "row", padding: 10, alignItems:"center" }}>
-                                    <Image style={{ height: 30, width: 20, alignItems:"center" }} source={require("../images/cracked_shield.png")}></Image>
-                                    <Text style={styles.cardtext}>{profile.weakness ? profile.weakness : `-- --`}</Text>
-                                </View>
+                        <View style={{ flexDirection: "column", width: "80%", marginLeft: 15 }}>
+                            <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                <Image style={{ height: 20, width: 20, alignItems: "center" }} source={require("../images/bicep.png")}></Image>
+                                <Text style={styles.cardtext}>{profile.strength ? profile.strength : `-- --`}</Text>
+                            </View>
+                            <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
+                                <Image style={{ height: 30, width: 20, alignItems: "center" }} source={require("../images/cracked_shield.png")}></Image>
+                                <Text style={styles.cardtext}>{profile.weakness ? profile.weakness : `-- --`}</Text>
+                            </View>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                             <Text style={{ borderWidth: 0.5, borderColor: "#00BFFF", borderRadius: 10, color: "#00BFFF", padding: 5 }}>{profile.interests[0]}</Text>
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30
     },
     cardtext: {
-        left:10,
+        left: 10,
         color: "white",
         fontSize: 15,
         fontWeight: "bold"

@@ -13,6 +13,7 @@ import SurveyModal from '../components/SurveyModal';
 import { hasSixtyDaysPassed, hasMatch } from '../lib/secondSurveyCheck';
 import ProfileCardComponent from '../components/ProfileCardComponent'
 import SkillProblemModal from '../components/SkillProblemModal';
+import SearchModal from '../components/SearchModal';
 
 
 
@@ -23,6 +24,9 @@ const SwipeScreen = ({ loggedProfile }) => {
     const [profiles, setProfiles] = useState([]);
     const [swipeAmount, setSwipeAmount] = useState(0);
     const [passAmount, setPassAmount] = useState(0);
+    const [isSearchModalVisible, setSearchModalVisible] = useState(false);
+    const [searchName, setSearchName] = useState(null);
+    const [searchEmail, setSearchEmail] = useState(null);
 
     // const [swipeEnabled, setSwipeEnabled] = useState(true);
 
@@ -174,7 +178,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                             setCurrentCard(data[0])
                             console.log("cards fetched")
                             setloadingFetch(false);
-                        } else{
+                        } else {
                             console.log("No data retrieived")
                         }
 
@@ -293,6 +297,23 @@ const SwipeScreen = ({ loggedProfile }) => {
             });
     }
 
+    const searchProfiles = (name, email, swiperRef) => {
+        const matchingProfiles = profiles.filter(profile =>
+            (name && profile.displayName === name) || (email && profile.email === email)
+        );
+
+        if (matchingProfiles.length > 0) {
+            setProfiles(matchingProfiles);
+            if (swiperRef.current) {
+                swiperRef.current.jumpToCardIndex(0); // Jump to the top of the filtered deck
+                setCurrentCard(matchingProfiles[0])
+            }
+        } else {
+            alert("No matching profiles found.")
+            console.log('No matching profiles found.');
+        }
+    }
+
     return (
         <View style={{ backgroundColor: "white", height: "87%" }}>
             {/* Cards */}
@@ -308,10 +329,10 @@ const SwipeScreen = ({ loggedProfile }) => {
 
                     ) : (
                         <View style={{ height: "100%", alignItems: "center", justifyContent: "space-evenly" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 20, margin:5}}>No Wings Around... </Text>
-                            <Text style={{ fontWeight: "bold", fontSize: 15, margin:5}}>Press Skip To Reload Skipped Wings</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 20, margin: 5 }}>No Wings Around... </Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, margin: 5 }}>Press Skip To Reload Skipped Wings</Text>
                             <Image style={{ height: 300, width: 300, borderRadius: 150 }} source={require("../images/island_plane.jpg")} />
-                            <Text style={{ fontWeight: "bold", fontSize: 15, margin:5}}>Or Wait For New Wings Later</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: 15, margin: 5 }}>Or Wait For New Wings Later</Text>
                         </View>
                     )}
                 </View>
@@ -324,6 +345,7 @@ const SwipeScreen = ({ loggedProfile }) => {
                         verticalSwipe={false}
                         cardIndex={0}
                         horizontalSwipe={false}
+                        // goBackToPreviousCardOnSwipeLeft = {true}
                         // disableRightSwipe={!swipeEnabled}
                         // disableTopSwipe={!swipeEnabled}
                         onSwipedAll={() => {
@@ -346,17 +368,17 @@ const SwipeScreen = ({ loggedProfile }) => {
                         renderCard={(card) => {
                             return (
                                 <View style={{ height: "100%" }}>
-                                {card && card?.id ?(
-                                    <View key={card.id} style={{ height: "100%" }}>
-                                    <ProfileCardComponent profile={card} canFlag={true} />
+                                    {card && card?.id ? (
+                                        <View key={card.id} style={{ height: "100%" }}>
+                                            <ProfileCardComponent profile={card} canFlag={true} />
+                                        </View>
+                                    ) : (
+                                        <View key={card.id} style={{ height: "100%" }}>
+                                            <ProfileCardComponent profile={null} canFlag={true} />
+                                        </View>
+                                    )}
                                 </View>
-                                ):(
-                                    <View key={card.id} style={{ height: "100%" }}>
-                                    <ProfileCardComponent profile={null} canFlag={true} />
-                                </View>
-                                )}
-                                </View>
-                                
+
                             )
                         }
                         }
@@ -366,18 +388,23 @@ const SwipeScreen = ({ loggedProfile }) => {
 
             <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                 <TouchableOpacity style={styles.swipeButtonCross} onPress={() => swipeRef && swipeRef?.current ? swipeRef.current.swipeLeft() : setReload(!reload)}>
-                    {/* <Entypo name="cross" size={24} color="red" /> */}
-                    <Text style={{color:"#9A2A2A", fontWeight:"bold"}}>Skip</Text>
+                    <Text style={{ color: "#9A2A2A", fontWeight: "bold" }}>Skip</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.swipeButtonSearch} onPress={() => swipeRef && swipeRef?.current ? setSearchModalVisible(true) : console.log("no action")}>
+                    <Entypo name="magnifying-glass" size={17} color="yellow" />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.swipeButtonHeart} onPress={() => swipeRef && swipeRef?.current ? messageSwipe(swipeRef) : console.log("no action")}>
                     <Entypo name="mail" size={17} color="green" />
                 </TouchableOpacity>
+
             </View>
             <MessageModal isMessageModalVisible={isMessageModalVisible} setMessageModalVisible={setMessageModalVisible} requestMessage={requestMessage} setRequestMessage={setRequestMessage} swipeRefMessage={swipeRefMessage} currentCard={currentCard} />
             {/* <RequestCapModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} /> */}
-            <SkillProblemModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} reload={reload} setReload={setReload}/>
-            <SurveyModal type={surveyType} isVisible={surveyVisible} setIsVisible={setSurveyVisible} otherInfo={surveyOtherInfo} reload={reload} setReload={setReload}/>
+            <SkillProblemModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} reload={reload} setReload={setReload} />
+            <SurveyModal type={surveyType} isVisible={surveyVisible} setIsVisible={setSurveyVisible} otherInfo={surveyOtherInfo} reload={reload} setReload={setReload} />
+            <SearchModal isSearchModalVisible={isSearchModalVisible} setSearchModalVisible={setSearchModalVisible} name={searchName} setName={setSearchName} email={searchEmail} setEmail={setSearchEmail} searchProfiles={searchProfiles} swipeRefSearch={swipeRef}/>
 
         </View>
     )
@@ -455,7 +482,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         // borderColor: "#FF5864",
-        backgroundColor:"#FF5864",
+        backgroundColor: "#FF5864",
         // borderWidth:1,
         // shadowColor: "#000",
         shadowOffset: {
@@ -474,6 +501,23 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#32de84",
+        // shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2.41,
+        elevation: 5
+    },
+    swipeButtonSearch: {
+        bottom: 5,
+        width: 40,
+        height: 40,
+        borderRadius: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#8B8000",
         // shadowColor: "#000",
         shadowOffset: {
             width: 0,

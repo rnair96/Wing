@@ -45,6 +45,7 @@ import GCProfileViewScreen from './screens/GCProfileViewScreen';
 import GroupsScreen from './screens/GroupsScreen';
 import SetUpGroupScreen from './screens/SetupGroupScreen';
 import GroupsAccountScreen from './screens/GroupsAccountScreen';
+import WorkshopScreen from './screens/WorkshopScreen';
 
 
 const Stack = createStackNavigator();
@@ -180,6 +181,7 @@ const StackNavigator = () => {
           <Stack.Screen name="Flagged" component={FlaggedScreen} />
           <Stack.Screen name="SetUpGroup" component={SetUpGroupScreen} />
           <Stack.Screen name="GroupAccount" component={GroupsAccountScreen} />
+          <Stack.Screen name="Workshop" component={WorkshopScreen} />
 
           {/* </Stack.Group> */}
           {/* <Stack.Group screenOptions={{ presentation: "modal" }}> */}

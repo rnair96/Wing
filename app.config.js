@@ -106,7 +106,7 @@ export default {
       welcomeImage2: process.env.WELCOME_IMAGE2,
       prodGroupChat: process.env.PROD_GROUPCHAT,
       devGroupChat: process.env.DEV_GROUPCHAT,
-
+      workshopSlidesLink: process.env.WORKSHOPSLIDES
     }
   }
 };

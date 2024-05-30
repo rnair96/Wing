@@ -40,6 +40,9 @@ const ViewMyProfileScreen = ({ profile }) => {
                                             ) : (
                                                 <Text style={{ color: "white", fontSize: 15 }}>{card.item.job}</Text>
                                             )}
+                                            {card.item?.badges &&
+                                                <Image style={{ height: 50, width: 50, marginTop: 10, right: 5 }} source={require("../images/TopWingBadge.png")} />
+                                            }
                                         </View>
                                         <Image style={{ height: 120, width: 120, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }} source={{ uri: card.item?.images[0] }} />
                                     </View>
@@ -165,6 +168,14 @@ const ViewMyProfileScreen = ({ profile }) => {
 
                                 </View>
                             </View>
+
+                            {card.item.badges &&
+                                <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
+                                    <Text style={{  fontWeight: "bold", fontSize: 20, padding: 10, color: "#FFD700"}}>Top Wing Rank</Text>
+                                    <Image style={{ height: 100, width: 100, marginTop: 10, right: 5 }} source={require("../images/TopWingBadge.png")} />
+                                    <Text style={{ padding: 10, color: "white" }}>Won From {card.item.badges[0].earned}</Text>
+                                    <Text style={{ fontWeight: "bold", fontSize: 15, padding: 20, color: "white" }}>{card.item.badges[0].details}</Text>
+                                </View>}
 
                             {card.item?.prompts && card.item.prompts.length > 1 && card.item.prompts[1] !== null && card.item.prompts[1]?.prompt && card.item.prompts[1]?.tagline &&
                                 <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, paddingTop: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>

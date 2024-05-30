@@ -10,7 +10,7 @@ import * as WebBrowser from 'expo-web-browser';
 import SwipeScreen from './SwipeScreen';
 import getLocation from '../lib/getLocation';
 import * as Sentry from "@sentry/react";
-import WaitlistModal from '../components/WaitlistModal';
+// import WaitlistModal from '../components/WaitlistModal';
 
 
 
@@ -180,7 +180,7 @@ const HomeScreen = () => {
             {/* End of Header */}
             {/* Cards */}
             <SwipeScreen loggedProfile={loggedProfile} />
-            <WaitlistModal isModalVisible={isWaitlistModalVisible} usersNumber={userNumber} />
+            {/* <WaitlistModal isModalVisible={isWaitlistModalVisible} usersNumber={userNumber} /> */}
         </SafeAreaView>
     )
 }
