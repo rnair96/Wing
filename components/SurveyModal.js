@@ -7,7 +7,7 @@ import * as Sentry from "@sentry/react";
 import QuestionComponent from '../components/QuestionComponent';
 
 
-const SurveyModal = ({ type, isVisible, setIsVisible, otherInfo }) => {
+const SurveyModal = ({ type, isVisible, setIsVisible, otherInfo, reload, setReload}) => {
     const { user } = useAuth();
 
     const [selectedAnswer1, setSelectedAnswer1] = useState(null);
@@ -38,7 +38,7 @@ const SurveyModal = ({ type, isVisible, setIsVisible, otherInfo }) => {
                 } :
                 {
                     ...otherInfo,
-                    "thirtydays":
+                    "sixtydays":
                     {
                         "Wing Going Out Rate": selectedAnswer1,
                         "Wing Approach Ease": selectedAnswer2,
@@ -56,6 +56,7 @@ const SurveyModal = ({ type, isVisible, setIsVisible, otherInfo }) => {
             surveyInfo: surveyObject
         }).then(() => {
             setIsVisible(!isVisible);
+            setReload(!reload);
         }).catch((error) => {
             alert("Error updating profile with survey. Try again later.")
             Sentry.captureMessage(`Error setting data in survey modal for ${user.uid}, ${error.message}`)
@@ -78,11 +79,13 @@ const SurveyModal = ({ type, isVisible, setIsVisible, otherInfo }) => {
                     <ScrollView contentContainerStyle={{ width: "90%", alignItems: "center" }}>
 
                         <Text style={{ fontSize: 17, fontWeight: "bold", textAlign: "center" }}>Real Quick! Please Select Answers For This 1-Minute Survey</Text>
+                        <Text style={{ paddingTop: 10, paddingBottom:20, color: "grey", textAlign: "center" }}>Your answers won't be shared with anyone else and will be used anonomously.</Text>
+
                         {type === "initial" ? (
                             <View>
                                 <QuestionComponent
                                     question="How often would you say you get dates on dating apps when you use them?"
-                                    answers={[(`Never or Don't Use Dating Apps`), (`Rarely, It's Hard To Just Get One Date`), (`Sometimes, It's Work But I Get Dates`), 'A Good Amount, Could Be Better Though', 'Often, No Complaints At All']}
+                                    answers={[(`Never or Don't Use Dating Apps`), (`Rarely`), (`Sometimes`), 'A Good Amount', 'Often']}
                                     setSelectedAnswer={setSelectedAnswer1}
                                 />
                                 <QuestionComponent
@@ -109,23 +112,23 @@ const SurveyModal = ({ type, isVisible, setIsVisible, otherInfo }) => {
                         )}
                         <QuestionComponent
                             question="How often do you experience feelings of being trapped or powerless with your dating life? "
-                            answers={['Never', 'Rarely, Once In A While', 'A Few Days Of The Month', 'A Few Days Of The Week', 'Everyday Or Nearly Everyday']}
+                            answers={['Never', 'Rarely', 'Sometimes', 'A Good Amouont', 'Often']}
                             setSelectedAnswer={setSelectedAnswer3}
                         />
 
                         <QuestionComponent
                             question="How often would you experience general feelings of loneliness?"
-                            answers={['Never', 'Rarely, Once In A While', 'A Few Days Of The Month', 'A Few Days Of The Week', 'Everyday Or Nearly Everyday']}
+                            answers={['Never', 'Rarely', 'Sometimes', 'A Good Amount', 'Often']}
                             setSelectedAnswer={setSelectedAnswer4}
                         />
                         <QuestionComponent
                             question="When the opportunity arises, how often would you say you approach and flirt with women in real life?"
-                            answers={['Never', (`Rarely But I've Done It`), 'Sometimes, Depends On The Situation', 'A Good Amount, Not Always', 'Often, Almost Always']}
+                            answers={['Never', (`Rarely`), 'Sometimes', 'A Good Amount', 'Often']}
                             setSelectedAnswer={setSelectedAnswer5}
                         />
                         <QuestionComponent
-                            question="How confident do you feel about approaching and flirting with women?"
-                            answers={[(`None And/Or I Don't Even Try`), 'Little to No Confidence But I Still Do It', 'Somewhat Confident, Depends On The Situation', 'Pretty Confident, I Try Not To Doubt Myself', 'Very Confident, I Give No Room For Doubt']}
+                            question="When you did approach a woman, how confident did you feel?"
+                            answers={[(`I've Never Approached`), 'Little to No Confidence', 'Somewhat Confident', 'Pretty Confident', 'Very Confident']}
                             setSelectedAnswer={setSelectedAnswer6}
                         />
 

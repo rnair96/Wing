@@ -1,6 +1,6 @@
-const chatText = `Hey, I'm Raj and I'm the Founder & CEO of Wing.
+const chatText = `Hey, I'm Raj and I'm the Creator of Wing.
 
-Fun fact, I was a former Dating Coach that helped men find partners they aligned with based on Mission & Values. 
+Fun fact, I was a former Dating Coach that helped men find partners they aligned with based on similiar Goals and Interests. 
 Sound familiar? 
 
 Here's the simple 3 steps to meet a Wing here:
@@ -8,8 +8,6 @@ Here's the simple 3 steps to meet a Wing here:
 1. Break the ice with a chat request. A joke or a compliment about something on their profile helps.
 2. Figure out if you’re a good fit and can help each other for your goals. 
 3. Decide a place and time to meet, then hit the town!
-
-Tip: If you’re struggling with deciding on a place, check out our latest promotions of establishments near you and try one out with your Wing.
 
 -----
 

@@ -4,7 +4,7 @@ export default {
   expo: {
     name: "Wing",
     slug: "mission_partner",
-    version: "2.6.3",
+    version: "2.8.9",
     orientation: "portrait",
     icon: "./assets/icon_dkbluewing_whitebg.png",
     userInterfaceStyle: "light",
@@ -12,7 +12,7 @@ export default {
     splash: {
       image: "./assets/splash_darkbluewing_whitebg.png",
       resizeMode: "contain",
-      backgroundColor:"#00BFFF"
+      backgroundColor:"#FFFFFF"
     },
     updates: {
       fallbackToCacheTimeout: 0
@@ -31,6 +31,7 @@ export default {
       }
     },
     android: {
+      versionCode:7,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#FFFFFF"
@@ -42,7 +43,8 @@ export default {
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ],
-      package: process.env.ANDROID_CLIENT_ID
+      package: "com.wingcommunity.wing",
+      googleServicesFile:"./google-services.json",
     },
     web: {
       favicon: "./assets/favicon.png"
@@ -55,7 +57,12 @@ export default {
         }
       ],
       "expo-build-properties",
-      "expo-updates",
+      [
+        "expo-updates",
+        {
+          "username": "rnair96"
+        }
+      ],
       "expo-apple-authentication"
     ],
     extra: {
@@ -69,6 +76,7 @@ export default {
       iosClientId: process.env.IOS_CLIENT_ID,
       expoClientId: process.env.EXPO_CLIENT_ID,
       projectName: process.env.PROJECT_NAME,
+      projectId: process.env.PROJECT_ID,
       sentryId: process.env.SENTRY_ID,
       chatGptKey: process.env.CHATGPT_KEY,
       emailJsService: process.env.EMAILJS_SERVICE,
@@ -95,8 +103,10 @@ export default {
       devDeleteUser: process.env.DEV_DELETEUSER,
       masterId: process.env.MASTER_ID,
       welcomeImage1: process.env.WELCOME_IMAGE1,
-      welcomeImage2: process.env.WELCOME_IMAGE2
-
+      welcomeImage2: process.env.WELCOME_IMAGE2,
+      prodGroupChat: process.env.PROD_GROUPCHAT,
+      devGroupChat: process.env.DEV_GROUPCHAT,
+      workshopSlidesLink: process.env.WORKSHOPSLIDES
     }
   }
 };

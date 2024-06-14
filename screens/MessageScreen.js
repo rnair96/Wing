@@ -1,14 +1,16 @@
 import { useRoute } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, TextInput, Button, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image } from 'react-native';
+import { SafeAreaView, View, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, Image, TouchableOpacity, Text, Platform } from 'react-native';
 import ChatHeader from '../components/ChatHeader';
 import useAuth from '../hooks/useAuth';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, updateDoc, doc, getDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
 import sendPush from '../lib/sendPush';
 import * as Sentry from "@sentry/react";
+import ChatInput from '../components/ChatInput';
+import likeMessage from '../lib/likeMessage';
 
 const MessageScreen = () => {
 
@@ -19,6 +21,7 @@ const MessageScreen = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(profile);
+
   // const matchedUser = getMatchedUserInfo(matchedDetails.users,user.uid);
 
   useEffect(() => {
@@ -89,7 +92,7 @@ const MessageScreen = () => {
     }
   }, [messages])
 
-  const sendMessage = () => {
+  const sendMessage = (type) => {
     const name = userProfile ? userProfile.displayName : user.displayName.split(" ")[0]
     const timestamp = serverTimestamp();
 
@@ -101,6 +104,7 @@ const MessageScreen = () => {
         displayName: name,
         message: input,
         read: false,
+        type: type
       })
 
       updateDoc(doc(db, global.matches, matchedDetails.id), {
@@ -147,8 +151,12 @@ const MessageScreen = () => {
             <FlatList
               data={messages}
               style={{}}
-              inverted={-1}
+              inverted={true}
               keyExtractor={(item) => item.id}
+              initialNumToRender={10}
+              maxToRenderPerBatch={10}
+              windowSize={5}
+              updateCellsBatchingPeriod={50}
               renderItem={({ item: message }) =>
                 message.userId === user.uid ? (
                   <SenderMessage key={message.id} message={message} />
@@ -161,7 +169,11 @@ const MessageScreen = () => {
                       <Image style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: "#00BFFF" }}
                         source={require("../images/account.jpeg")} />
                     )}
-                    <RecieverMessage key={message.id} message={message} />
+                    <TouchableOpacity onLongPress={() => {
+                      likeMessage(message, user.uid, doc(db, global.matches, matchedDetails.id, "messages", message.id))
+                    }}>
+                      <RecieverMessage key={message.id} message={message} />
+                    </TouchableOpacity>
 
                   </View>
                 )
@@ -177,7 +189,7 @@ const MessageScreen = () => {
     </View> */}
 
 
-        <View
+        {/* <View
           style={{ flexDirection: "row", borderColor: "grey", borderWidth: 2, borderRadius: 10, alignItems: "center", margin: 5 }}>
           <TextInput
             style={{ height: 50, width: "80%", fontSize: 15, padding: 10, paddingTop: 15 }}
@@ -189,8 +201,11 @@ const MessageScreen = () => {
             numberOfLines={5}
             value={input}
           />
-          <Button onPress={sendMessage} title="Send" color="#00BFFF" style={{ borderRadius: 20 }} />
-        </View>
+          <TouchableOpacity onPress={sendMessage} style={{marginLeft:20}}>
+            <Text style={{color:"#00BFFF", fontSize:15}}>Send</Text>
+          </TouchableOpacity>
+        </View> */}
+        <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} fileLocation={matchedDetails.id} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   )

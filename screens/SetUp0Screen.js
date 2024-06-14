@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Text, View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, StatusBar } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { useNavigation } from '@react-navigation/core';
 import getLocation from '../lib/getLocation';
@@ -8,6 +8,7 @@ import GenderPicker from '../components/GenderPicker';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import registerNotifications from '../lib/registerNotifications';
+import KickOutModal from '../components/KickOutModal';
 
 const SetUp0Screen = () => {
   const { user } = useAuth();
@@ -18,7 +19,8 @@ const SetUp0Screen = () => {
   const [birthdate, setBirthDate] = useState(null);
   const [token, setToken] = useState(null);
   const [notifications, setNotifications] = useState(true);
-  const [name, setName] = useState(user.displayName?.split(" ")[0]);
+  const [name, setName] = useState(user?.displayName?.split(" ")[0]);
+  const [isKOModalVisible, setIsKOModalVisible] = useState(false);
 
   const navigation = useNavigation();
 
@@ -43,9 +45,13 @@ const SetUp0Screen = () => {
   },[token])
 
 
-  const incompleteform = !gender || !age || !locationObject || !name;
+  const incompleteform = !gender || !(age && age >= 18 )|| !locationObject || !name;
 
   const createUserProfile = () => {
+    if(gender === "female"){
+      setIsKOModalVisible(true);
+      return;
+    }
     setDoc(doc(db, global.users, user.uid), {
       id: user.uid,
       displayName: name,
@@ -53,13 +59,14 @@ const SetUp0Screen = () => {
       age: age,
       birthdate: birthdate,
       last_year_celebrated: 2022,
+      founding_member: true,
       gender: gender,
       location: {
         permission: "Only Once",
         ...locationObject
       },      
       token: token,
-      notifications: {messages: notifications, events: notifications, emails: true},
+      notifications: {messages: notifications, announcements: notifications, groupchat: notifications, emails: true},
       flagged_status: "none",
       timestamp: serverTimestamp()
     }).then(() => {
@@ -81,13 +88,13 @@ const SetUp0Screen = () => {
         <TouchableWithoutFeedback
           onPress={Keyboard.dismiss()}
         >
-          <Text style={{ color: "#00308F", fontSize: 20, fontWeight: "bold", padding:20}}>Account Setup 1/3</Text>
+          <Text style={{ color: "#00308F", fontSize: 20, fontWeight: "bold", padding:20, paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0}}>Account Setup 1/3</Text>
 
         
         </TouchableWithoutFeedback>
         </SafeAreaView>
 
-          {(!user.displayName || user.displayName === "null" || user.displayName === "") && (
+          {(!user || !user?.displayName || user.displayName === "null" || user.displayName === "") && (
             <View>
               <Text style={styles.formTitle}>What's Your First Name?</Text>
               <TextInput
@@ -100,6 +107,10 @@ const SetUp0Screen = () => {
           <Text style={styles.formTitle}>Enter Your BirthDate</Text>
           <BirthdayInput setAge={setAge} birthdate={birthdate} setBirthDate={setBirthDate} />
           <Text style={{color:"grey", paddingBottom:20}}>Ensure format is correct, i.e: 11/20/2023</Text>
+          {age && age < 18 &&
+          <Text style={{color:"red", paddingBottom:20}}>Age For Use Must Be 18 Or Older</Text>
+          }
+          
 
 
           <Text style={styles.formTitle}>Select Gender</Text>
@@ -127,6 +138,7 @@ const SetUp0Screen = () => {
           </View>
         </View>
         {/* </View> */}
+        <KickOutModal isModalVisible={isKOModalVisible} setIsModalVisible={setIsKOModalVisible}/>
         </ScrollView>
     </KeyboardAvoidingView>
 

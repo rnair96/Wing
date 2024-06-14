@@ -9,7 +9,6 @@ import MenuScreen from './screens/MenuScreen';
 import useAuth from './hooks/useAuth';
 import MessageScreen from './screens/MessageScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
-import ProfileSwipeScreen from './screens/ProfileSwipeScreen';
 import MissionControlScreen from './screens/MissionControlScreen';
 import MatchingPreferences from './screens/MatchingPreferences';
 import SettingsScreen from './screens/SettingsScreen';
@@ -28,7 +27,7 @@ import FlaggedScreen from './screens/FlaggedScreen';
 import ReportOtherScreen from './screens/ReportOtherScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
-import ViewProfileScreen from './screens/ViewProfileScreen';
+import ViewProfileScreen from './screens/ViewMyProfileScreen';
 import ToggleProfileScreen from './screens/ToggleProfileScreen';
 import StudentSetupScreen from './screens/StudentSetupScreen';
 import SetUp3Screen from './screens/SetUp3Screen';
@@ -41,6 +40,12 @@ import RequestMessageScreen from './screens/RequestMessageScreen';
 import AnnouncementScreen from './screens/AnnouncementScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
 import * as Sentry from "@sentry/react";
+import GroupChatScreen from './screens/GroupChatScreen';
+import GCProfileViewScreen from './screens/GCProfileViewScreen';
+import GroupsScreen from './screens/GroupsScreen';
+import SetUpGroupScreen from './screens/SetupGroupScreen';
+import GroupsAccountScreen from './screens/GroupsAccountScreen';
+import WorkshopScreen from './screens/WorkshopScreen';
 
 
 const Stack = createStackNavigator();
@@ -75,8 +80,8 @@ const StackNavigator = () => {
 
           navigation.navigate("RequestMessage", { requestDetails, otherProfile, profile });
 
-        } else if (response.notification.request.content.data.type === "announcement") {
-          navigation.navigate("Announcements");
+        } else if (response.notification.request.content.data.type === "announcement" || response.notification.request.content.data.type === "groupchat") {
+          navigation.navigate("ToggleChat");//change to groupchat later
 
         } else {
           navigation.navigate("Home");
@@ -140,6 +145,7 @@ const StackNavigator = () => {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Message" component={MessageScreen} />
+          <Stack.Screen name="GroupChat" component={GroupChatScreen} />
           <Stack.Screen name="Menu" component={MenuScreen}
             options={{
               cardStyleInterpolator: slideFromTopInterpolator,
@@ -171,7 +177,12 @@ const StackNavigator = () => {
           <Stack.Screen name="RequestMessage" component={RequestMessageScreen} />
           <Stack.Screen name="Announcements" component={AnnouncementScreen} />
           <Stack.Screen name="Notifications" component={NotificationsScreen} />
+          <Stack.Screen name="Groups" component={GroupsScreen} />
           <Stack.Screen name="Flagged" component={FlaggedScreen} />
+          <Stack.Screen name="SetUpGroup" component={SetUpGroupScreen} />
+          <Stack.Screen name="GroupAccount" component={GroupsAccountScreen} />
+          <Stack.Screen name="Workshop" component={WorkshopScreen} />
+
           {/* </Stack.Group> */}
           {/* <Stack.Group screenOptions={{ presentation: "modal" }}> */}
           <Stack.Screen
@@ -179,18 +190,17 @@ const StackNavigator = () => {
             component={ProfileViewScreen}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              gestureDirection: 'vertical'
+            //   gestureDirection: 'vertical'
             }}
           />
           <Stack.Screen
-            name="ProfileSwipe"
-            component={ProfileSwipeScreen}
+            name="GCProfileView"
+            component={GCProfileViewScreen}
             options={{
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              gestureDirection: 'vertical',
+            //   gestureDirection: 'vertical'
             }}
           />
-          {/* <Stack.Screen name="ProfileSwipe" component={ProfileSwipeScreen} /> */}
           <Stack.Screen
             name="ReportOther"
             component={ReportOtherScreen}
@@ -198,9 +208,6 @@ const StackNavigator = () => {
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
             }}
           />
-          {/* <Stack.Screen name="ReportOther" component={ReportOtherScreen} /> */}
-
-          {/* <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} /> */}
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
@@ -208,18 +215,6 @@ const StackNavigator = () => {
               cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS
             }}
           />
-          {/* <Stack.Screen
-            name="TaglinePrompt"
-            component={TaglinePromptScreen}
-            options={{
-              cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-              gestureDirection: 'vertical'
-            }}
-          /> */}
-          {/* </Stack.Group> */}
-          {/* <Stack.Group screenOptions={{ presentation: "transparentModal" }}> */}
-          {/* <Stack.Screen name="Match" component={MatchScreen} /> */}
-          {/* </Stack.Group> */}
         </>
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />

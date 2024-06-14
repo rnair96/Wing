@@ -27,11 +27,11 @@ const TagPicker = ({tag, setTag, all_boolean}) => {
           itemStyle={{ fontSize: 13 }}
 
         >
-          <Picker.Item label="Let's Keep It Simple And Just Have Fun" value="None" />
-          <Picker.Item label="Need Some Sun. Let's Do Something Outside" value="Open to Outdoor Activities" />
-          <Picker.Item label="No Pain, No Gain. Let's Workout" value="Open to Workout" />
-          <Picker.Item label="No More Dreaming. Let's Build Something Cool" value="Open to Build Something Cool" />
-          <Picker.Item label="Gotta Feed the Spirit. Let's Do A Service" value="Open to Charitable Services" />
+          <Picker.Item label="No Clue. Let's Just Have Fun" value="None" />
+          <Picker.Item label="The Icebreaker: You have great energy and can approach a girl, guy, or group and make a fast friend" value="The Icebreaker" />
+          <Picker.Item label="The Conversationalist: You can have deep conversations and make powerful connections" value="The Conversationalist" />
+          <Picker.Item label="The Closer: The leader of a good time and know when and where to take things to the next level" value="The Closer" />
+          <Picker.Item label="The Comedian: You have the best jokes, tricks, and stories that keep a party engaged." value="The Comedian" />
 
         </Picker>
         )}

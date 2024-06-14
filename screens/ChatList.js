@@ -5,54 +5,54 @@ import { db } from '../firebase';
 import useAuth from "../hooks/useAuth";
 import ChatRow from './ChatRow';
 import * as Sentry from "@sentry/react";
+import GroupChatRow from './GroupChatRow';
 
 
-const ChatList = ({profile}) => {
-    const [ matches, setMatches ] = useState([]);
-    const { user } = useAuth();
+const ChatList = ({ profile, requests }) => {
+  const [matches, setMatches] = useState([]);
+  const { user } = useAuth();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     const unsub = onSnapshot(
       query(
-        collection(db, global.matches), 
+        collection(db, global.matches),
         where("userMatched", "array-contains", user.uid),
         orderBy("latest_message_timestamp", "desc")),
-        ( snapshot ) => 
-          setMatches(
-            snapshot.docs.map((doc)=>(
-          {
-            id: doc.id,
+      (snapshot) =>
+        setMatches(
+          snapshot.docs.map((doc) => (
+            {
+              id: doc.id,
               ...doc.data(),
-          }
-            ))
-    ),
-    (error) => {
-      console.log("there was an error in chatlist snapshot", error)
-      Sentry.captureMessage(`error getting chatlist snapshot for ${user.uid}, ${error.message}`)
+            }
+          ))
+        ),
+      (error) => {
+        console.log("there was an error in chatlist snapshot", error)
+        Sentry.captureMessage(`error getting chatlist snapshot for ${user.uid}, ${error.message}`)
 
-    }
+      }
     )
 
     return () => {
       unsub();
     };
-  },[user]);
+  }, [user]);
+
+  return (
+    <View style={{paddingBottom:100}}>
+      <GroupChatRow profile={profile} matches={matches} requests={requests}/>
+      {matches.length > 0 && (
+        <FlatList
+          data={matches}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => <ChatRow matchedDetails={item} profile={profile} />
+          } />
+      ) }
+    </View>
+  )
 
 
-    return matches.length > 0 ? (
-      <FlatList
-      data = {matches}
-      keyExtractor = {item => item.id}
-      renderItem = {({item}) => <ChatRow matchedDetails = {item} profile={profile}/>
-    }/>
-    ):
-    (
-      <View style ={{flexDirection:"row", marginVertical:"60%", justifyContent:"center"}}>
-        <Text style={{fontWeight:"bold" }}> No Matches At This Time </Text>
-      </View>
-    )
-    
 }
 
 export default ChatList

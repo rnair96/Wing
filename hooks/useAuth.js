@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import { GoogleAuthProvider, OAuthProvider, onAuthStateChanged, signInWithCredential, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, getIdToken, getCurrentUser } from "firebase/auth";
 import { auth } from '../firebase';
 import { getDoc, doc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db } from '../firebase';
 import Constants from 'expo-constants';
 import { ImageBackground } from 'react-native';
+import * as Sentry from "@sentry/react";
 
 
 const AuthContext = createContext({});
@@ -17,8 +18,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
 
-  const { androidClientId, iosClientId, expoClientId, projectName, prodUsers,
-    devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards, prodDeleteUser, devDeleteUser } = Constants.expoConfig.extra
+  const { androidClientId, iosClientId, expoClientId, prodUsers,
+    devUsers, prodMatches, devMatches, devAnnouncements, prodAnnouncements, devFetchCards, prodFetchCards, prodDeleteUser, devDeleteUser, devGroupChat, prodGroupChat } = Constants.expoConfig.extra
 
 
   if (__DEV__) {
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     global.announcements = devAnnouncements;
     global.fetchcards = devFetchCards;
     global.deleteuser = devDeleteUser;
+    global.groupchat = devGroupChat;
   } else {
     console.log('prod user signin, setting prod environment');
     global.users = prodUsers;
@@ -35,25 +37,21 @@ export const AuthProvider = ({ children }) => {
     global.announcements = prodAnnouncements;
     global.fetchcards = prodFetchCards;
     global.deleteuser = prodDeleteUser;
+    global.groupchat = prodGroupChat;
 
   }
 
-
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
+  GoogleSignin.configure({
+    webClientId: expoClientId,
     androidClientId: androidClientId,
     iosClientId: iosClientId,
-    expoClientId: expoClientId,
-    scopes: ["profile", "email"],
-    // redirectUri: makeRedirectUri({
-    //   scheme: 'com.googleusercontent.apps.597753804912-dspeqvn4dblne96m842pgfiu4a66kha2'
-    // }),
   });
 
 
   useEffect(() => {
     //checks the authentication state of user in firebase 
     onAuthStateChanged(auth, (authuser) => {
+
       if (authuser) {
         //logged in
         setUser(authuser);
@@ -66,61 +64,57 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
 
-  useEffect(() => {
-    if (!user && response?.type === 'success') {
-      getUserData(response.authentication.idToken, response.authentication.accessToken);
-    }
-    else if (response?.type === 'cancel') {
-      setLoading(false);
-      alert("Login incomplete. Please try again.");
-
-    }
-
-  }, [response]);
-
-
-  const getUserData = async (idToken, accessToken) => {
-    try {
-      const userData = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }).then((response) => response.json());
-      setUser(userData);
-
-      //signs in to firestore db
-      const credential = GoogleAuthProvider.credential(idToken, accessToken)
-      await signInWithCredential(auth, credential)
-        .then(() => {
-          setLoading(false);
-        });
-    } catch (e) {
-      console.log("There was an error");
-      setLoading(false);
-    }
-
-  }
-
-
   const signInWithGoogle = async () => {
+
     try {
+      setLoading(true);
 
-      //gets accesstokens for Google authenticaiton
-      await promptAsync({ showInRecents: true, projectNameForProxy: projectName })
-        .then(() => {
-          setLoading(true);
+      GoogleSignin.getCurrentUser()
+        .then((googleUser) => {
+          setUser(googleUser);
         })
+        .catch((error) => {
+          console.log("there was an error in authentication")
+          alert("There was an error. Please try again.")
+          console.error(error);
+          Sentry.captureMessage(`Error during login with google`, error.code)
 
-    } catch (e) {
-      console.log("error with login", e);
+        });
+
+      // Get the users ID token
+      const { idToken, accessToken } = await GoogleSignin.signIn();
+
+      // Create a Google credential with the token
+      const googleCredential = GoogleAuthProvider.credential(idToken, accessToken)
+
+
+      // Sign-in the user with the credential
+      await signInWithCredential(auth, googleCredential);
       setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        alert("Login incomplete. Please try again.");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log("in progress")
+        Sentry.captureMessage(`Error authenticating login with google - in progress, ${error.code}`)
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("services not available")
+        Sentry.captureMessage(`Error authenticating login with google- services not available, ${error.code}`)
+      } else {
+        // some other error happened
+        console.log(error);
+        Sentry.captureMessage(`Error authenticating login with google, ${error.code}`)
+        // Ensure errors are logged to Sentry or your preferred logging service
+      }
+      Sentry.captureException(error);
     }
   }
 
-  // const generateNonce = () => {
-  //   return uuidv4();
-  // };
-
+ 
   const signInWithApple = async () => {
 
     // Generate the nonce
@@ -218,7 +212,7 @@ export const AuthProvider = ({ children }) => {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        console.log("user logged in", user)
+        console.log("user logged in")
         setUser(user)
       })
       .catch((error) => {
@@ -228,9 +222,9 @@ export const AuthProvider = ({ children }) => {
 
         if (errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-email') {
           alert("Login was incorrect. Please try again.");
-        } else if(errorCode === 'auth/user-not-found' ){
+        } else if (errorCode === 'auth/user-not-found') {
           alert("Account was not found. Please create one.");
-        }else {
+        } else {
           alert(errorMessage);
         }
 
@@ -257,13 +251,23 @@ export const AuthProvider = ({ children }) => {
       await sendPasswordResetEmail(auth, email);
 
       alert('An email was sent to reset your password.');
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
-      console.error('Error resetting password:', error);
+      console.log("auth",auth)
+      console.error('Error resetting password:', error,'code', error.code);
+
+    // Handle specific error messages
+    if (error.code === 'auth/invalid-email') {
+      alert('Invalid email address.');
+    } else if (error.code === 'auth/user-not-found') {
+      alert('No user found with this email address.');
+    } else {
       alert('An error occurred. Please try again.');
-      setLoading(false);
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+}
 
   const updateUserPassword = async (currentPassword, newPassword) => {
     try {
@@ -294,8 +298,15 @@ export const AuthProvider = ({ children }) => {
   }
 
 
-  const logout = () => {
+  const logout = async () => {
     setLoading(true);
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error(error);
+    }
     setUser(null);
     signOut(auth).catch((error) => console.error(error))
     setLoading(false);
@@ -372,7 +383,7 @@ export const AuthProvider = ({ children }) => {
         // })
         .then(response => {
           if (!response.ok) {
-              throw new Error('Network response was not ok');
+            throw new Error('Network response was not ok');
           }
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -380,7 +391,7 @@ export const AuthProvider = ({ children }) => {
           } else {
             return response.text();
           }
-      })
+        })
         .then(data => {
           // Check if the parsed response is OK
           // if (data.error) {
@@ -388,20 +399,17 @@ export const AuthProvider = ({ children }) => {
           // }
           console.log("user deleted", data);
           setUser(null);
-          // deleteUserAuth();
-          // setLoading(false);//perhaps move it to the end of deleteUserAuth
-          setLoading(false);
         })
         .catch(error => {
           console.error("Error deleting user", error);
-          setLoading(false);
           alert("Unable to delete account. Try again later.")
           //add sentry capture
-          });
-          
+        });
+
 
 
     }
+    setLoading(false);
   }
 
 

@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
+import { View, ScrollView, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Button, Platform } from 'react-native';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import ImageUpload from '../components/ImageUpload';
 // import registerNotifications from '../lib/registerNotifications';
 import { useNavigation } from '@react-navigation/core';
-import TagPicker from '../components/TagPicker';
-import ValuesList from '../components/ValuesList';
+// import TagPicker from '../components/TagPicker';
+// import ValuesList from '../components/ValuesList';
 import ClassLevelPicker from '../components/ClassLevelPicker';
 import GradYearPicker from '../components/GradYearPicker';
-import { Entypo } from '@expo/vector-icons';
 import * as Sentry from "@sentry/react";
 import PromptModal from '../components/PromptModal';
 import PromptPicker from '../components/PromptPicker';
+import InterestsList from '../components/InterestsList';
+// import StyleSelecterModal from '../components/StyleSelecterModal';
 
 
 
@@ -25,7 +26,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const activeStudent = profile?.university_student?.status === "active";
 
   const [mission, setMission] = useState(profile?.mission || null);
-  const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
+  // const [activitytag, setActivityTag] = useState(profile?.activity_tag || "None");
+  // const [style, setStyle] = useState(profile?.style_tag || "None")
 
   const [prompt, setPrompt] = useState(profile?.prompts?.[0]?.prompt || null);
   const [tagline, setTagline] = useState(profile?.prompts?.[0]?.tagline || null);
@@ -38,7 +40,12 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [medal1, setMedal1] = useState(profile?.medals?.[0] || null);
   const [medal2, setMedal2] = useState(profile?.medals?.[1] || null);
   const [medal3, setMedal3] = useState(profile?.medals?.[2] || null);
-  const [bio, setBio] = useState(profile?.bio || null);
+
+  const [weakness, setWeakness] = useState(profile?.weakness || null);
+  const [strength, setStrength] = useState(profile?.strength || null);
+
+  // const [bio, setBio] = useState(profile?.bio || null);
+
   const [location, setLocation] = useState(profile?.location || null);
   const [hometown, setHometown] = useState(profile?.hometown || null);
   const [job, setJob] = useState(activeStudent ? null : profile?.job || null);
@@ -47,27 +54,32 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [class_level, setClassLevel] = useState(activeStudent ? profile?.university_student?.class_level || "Undergraduate" : "Undergraduate");
   const [grad_year, setGradYear] = useState(activeStudent ? profile?.university_student?.grad_year || "2027" : "2027");
   const [incompleteForm, setIncompleteForm] = useState(true);
-  const [url1, setUrl1] = useState(profile?.images?.[0] || null);
-  const [url2, setUrl2] = useState(profile?.images?.[1] || null);
-  const [url3, setUrl3] = useState(profile?.images?.[2] || null);
-  const [values, setValues] = useState(profile?.values || []);
+  const [url1, setUrl1] = useState(profile?.images?.[0] || undefined);
+  const [url2, setUrl2] = useState(profile?.images?.[1] || undefined);
+  const [url3, setUrl3] = useState(profile?.images?.[2] || undefined);
+  // const [values, setValues] = useState(profile?.values || []);
+  const [interests, setInterests] = useState(profile?.interests || []);
+
   const [isPromptVisible, setisPromptVisible] = useState(false);
   const [isPrompt1Visible, setisPrompt1Visible] = useState(false);
   const [isPrompt2Visible, setisPrompt2Visible] = useState(false);
-
-
+  const group = profile?.group ? profile.group : null;
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (profile && profile?.images && profile.images.length > 2) {
-      if (url1 !== profile.images[0] || url2 !== profile.images[1] || url3 !== profile.images[2]) {
-        console.log("change to false")
+    if (profile && profile?.images && profile.images.length > 0) {
+      if ((url1 !== profile.images[0]) || (url2 !== profile.images?.[1]) || (url3 && url3 !== profile.images?.[2])) {
+        console.log("new images uploaded, change to false")
         setIsEditSaved(false);
-      } else if (url1 === profile.images[0] && url2 === profile.images[1] && url3 === profile.images[2]) {
-        console.log("change to true");
+      } else if (url1 === profile.images[0] && url2 === profile.images?.[1] && url3 === profile.images?.[2]) {
+        console.log("no new changes,set to true");
         setIsEditSaved(true);
 
+      } else {
+        console.log("default to true")
+        console.log(url2)
+        setIsEditSaved(true)
       }
     }
 
@@ -79,21 +91,21 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
     let form;
 
     if (activeStudent) {
-      form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !school || !tagline
+      form = !url1 || !location || !interests || interests.length < 5 || !school || !tagline
     } else {
-      form = !url1 || !url2 || !url3 || !location || !values || values.length < 3 || !job || !tagline
+      form = !url1 || !location || !interests || interests.length < 5 || !job || !tagline
 
 
     }
 
     setIncompleteForm(form);
 
-  }, [activeStudent, url1, url2, url3, location, values, school, tagline, job])
+  }, [activeStudent, url1, url2, url3, location, interests, school, tagline, job])
 
 
   const updateUserProfile = () => {
 
-    let promptObject, promptObject1, promptObject2;
+    let promptObject, promptObject1, promptObject2, imagesArray = [url1];
 
     if (tagline) {
       promptObject = {
@@ -123,17 +135,38 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       promptObject2 = null;
     }
 
+    if (url2 || url3) {
+      console.log("are you here?")
+      if (url2 && url3) {
+        console.log("adding 2 & 3")
+        imagesArray = [url1, url2, url3]
+      }
+      else if (url3) {
+        imagesArray = [url1, url3]
+        console.log("adding 2")
+
+      } else {
+        console.log("adding 3")
+
+        imagesArray = [url1, url2]
+      }
+
+    }
+
     const updateObject = {
-      images: [url1, url2, url3],
+      images: imagesArray,
       school: school,
       hometown: hometown,
       mission: mission,
-      activity_tag: activitytag,
+      // style_tag: style,
+      weakness: weakness,
+      strength: strength,
       prompts: [promptObject, promptObject1, promptObject2],
       medals: [medal1, medal2, medal3],
-      values: values,
+      // values: values,
+      interests: interests,
       location: location,
-      bio: bio,
+      // bio: bio,
     }
 
     if (activeStudent) {
@@ -192,14 +225,17 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
               <View style={{ alignItems: "center" }}>
                 <Text style={styles.formTitle}>Gender</Text>
-
-                {/* {!profile?.gender ? (
-        <GenderPicker gender= {gender} setGender={setGender} both_boolean={false} />
-      ):( */}
                 <Text>{gender}</Text>
-                {/* )} */}
               </View>
             </View>
+
+            {group &&
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.formTitle}>Group</Text>
+                <Text>{group}</Text>
+                <Text style={{ color: "grey", padding: 10 }}>To Edit Group Go To Account in Settings</Text>
+              </View>
+            }
 
             <View style={{ flexDirection: "column", padding: 10 }}>
 
@@ -257,7 +293,8 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   </View>
 
                   <View style={{ margin: 20, padding: 10, justifyContent: "center", alignItems: "center" }}>
-                    <Text style={{ fontSize: 13, textAlign: "center", padding: 10, }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text>
+                    <Text style={{ color: "grey", padding: 10, textAlign: "center" }}>To show Professional options in profile, go to Account in Settings.</Text>
+                    {/* <Text style={{ fontSize: 13, textAlign: "center", padding: 10, }} numberOfLines={2}>{`(To show Professional options in profile, go to Account in Settings.)`}</Text> */}
                     <View style={{ width: "90%", backgroundColor: "#00BFFF", height: 2 }} />
                   </View>
 
@@ -296,15 +333,15 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                 </View>
               )}
 
-
             <View style={{ flexDirection: "row", paddingBottom: 10, paddingTop: 10 }}>
               <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
               <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
               <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
             </View>
 
-            <Text style={{ ...styles.formTitle, textAlign: "center" }}>Set a Tag for Activities You'd Be Open To Do With A Wing</Text>
-            <TagPicker tag={activitytag} setTag={setActivityTag} />
+            {/* <Text style={{ ...styles.formTitle, textAlign: "center" }}>Select The Wing Style That Best Suits Your Personality</Text>
+            <Text style={{ color: "grey" }}>This will help us find you complimentary Wings.</Text>
+            <StyleSelecterModal selectedStyle={style} setSelectedStyle={setStyle} /> */}
 
             <Text style={styles.formTitle}>Prompts</Text>
             <Text style={{ color: "grey" }}>Must have at least one.</Text>
@@ -315,9 +352,41 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
             </View>
 
 
+            <Text style={styles.formTitle}>Attributes</Text>
+            <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us at least one strength/skill you have a Wing might find useful.</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+              <Text>Skill: </Text>
+              <TextInput
+                value={strength}
+                multiline
+                numberOfLines={2}
+                maxLength={50}
+                onChangeText={setStrength}
+                placeholder={"I'm great at hosting parties"}
+                placeholderTextColor="#888888"
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "60%" }} />
+            </View>
+
+            {/* <Text style={styles.formTitle}>Problem</Text> */}
+            <Text style={{ paddingBottom: 10, color: "grey", width: "80%" }}>Tell us one problem a Wing can assist you on. {`(We all got one).`}</Text>
+            {/* <Text style={{ paddingBottom: 10, color: "grey" }}>{`(We all got one)`}</Text> */}
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
+              <Text>Problem: </Text>
+              <TextInput
+                value={weakness}
+                multiline
+                numberOfLines={3}
+                maxLength={50}
+                onChangeText={setWeakness}
+                placeholder={"I'm terrible at making jokes"}
+                placeholderTextColor="#888888"
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", width: "60%" }} />
+            </View>
+
 
 
             <Text style={styles.formTitle}>Accomplishments</Text>
+            <Text style={{ paddingBottom: 10, color: "grey" }}>List any accomplishments that you’re proud of.</Text>
             <View style={{ justifyContent: "flex-start", flexDirection: "column", margin: 10 }}>
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
                 <Text>1.</Text>
@@ -329,7 +398,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal1}
                   placeholder={"I completed a marathon."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "80%" }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -342,7 +411,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal2}
                   placeholder={"I won a hotdog eating contest"}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "80%" }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -355,16 +424,17 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal3}
                   placeholder={"I have a Youtube channel with 3k subscribers."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, }} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "80%" }} />
               </View>
             </View>
 
 
-            <Text style={styles.formTitle}>Values</Text>
-            <Text style={{ color: "grey", textAlign: "center" }}>Pick Three. This helps us find the Wings that will best match you.</Text>
-            <ValuesList selectedValues={values} setSelectedValues={setValues} />
+            <Text style={styles.formTitle}>Interests</Text>
+            <Text style={{ color: "grey", textAlign: "center" }}>Must have five selected. Can add your own as well.</Text>
+            {/* <ValuesList selectedValues={values} setSelectedValues={setValues} /> */}
+            <InterestsList selectedInterests={interests} setSelectedInterests={setInterests} />
 
-            <Text style={styles.formTitle}>A Life Mission or Short-Term Goal</Text>
+            <Text style={styles.formTitle}>A Long-Term or Short-Term Goal</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>A Pursuit That Has Nothing To Do With Dating</Text>
             <TextInput
               value={mission}
@@ -376,7 +446,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               placeholderTextColor="#888888"
               style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
 
-            <Text style={styles.formTitle}>Bio</Text>
+            {/* <Text style={styles.formTitle}>Bio</Text>
             <Text style={{ paddingBottom: 10, color: "grey" }}>Share anything fun about you, i.e hobbies/passions</Text>
             <TextInput
               value={bio}
@@ -386,7 +456,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
               onChangeText={setBio}
               placeholder={'I love kayaking and drinking beers by the river.'}
               placeholderTextColor="#888888"
-              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} />
+              style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0" }} /> */}
 
             < View style={{ height: 150 }}>
               <TouchableOpacity

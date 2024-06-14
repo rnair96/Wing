@@ -35,6 +35,8 @@ const FlagModal = ({ other_user, isVisible, setIsVisible, detailsId, type }) => 
         await deleteRequest(detailsId, user.uid).then(()=>{
           navigation.navigate("ToggleChat");
         })
+      } else if (type && type === "groupchat"){
+        navigation.navigate("ToggleChat");
       } else {
         navigation.navigate("Home", { refresh: true });
       }

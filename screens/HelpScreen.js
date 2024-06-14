@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import { Text, SafeAreaView, TouchableOpacity, TextInput, View, Modal, TouchableHighlight, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native';
+import { Text, SafeAreaView, TouchableOpacity, TextInput, View, Modal, TouchableHighlight, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Platform} from 'react-native';
 import emailjs from 'emailjs-com';
 import Header from '../Header';
 import Constants from 'expo-constants';

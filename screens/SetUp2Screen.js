@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, View } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, View, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
@@ -13,11 +13,11 @@ const SetUp2Screen = () => {
     const { user } = useAuth();
     const [job, setJob] = useState(null);
     const [url1, setUrl1] = useState(null);
-    const [url2, setUrl2] = useState(null);
-    const [url3, setUrl3] = useState(null);
+    // const [url2, setUrl2] = useState(null);
+    // const [url3, setUrl3] = useState(null);
 
 
-    const incompleteform = !job || !url1 || !url2 || !url3;
+    const incompleteform = !job || !url1;
 
 
     const navigation = useNavigation();
@@ -25,14 +25,13 @@ const SetUp2Screen = () => {
     const updateUserProfile = () => {
         updateDoc(doc(db, global.users, user.uid), {
             job: job,
-            images: [url1, url2, url3],
+            images: [url1],
             preferences: {
-                tag: "All",
                 distance: "Global"
-            },
+            }
         }).then(() => {
 
-            navigation.navigate("SetUp3")
+            navigation.navigate("SetUpGroup")
         }).catch((error) => {
             alert("Error updating profile. Try again later.")
             Sentry.captureMessage(`Error setting up data in screen 2 for ${user.uid}, ${error.message}`)
@@ -50,21 +49,21 @@ const SetUp2Screen = () => {
             <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly" }}>
 
                 <TouchableWithoutFeedback
-                    // onPress={Keyboard.dismiss()}
+                    onPress={()=> Keyboard.dismiss()}
                 >
                     <View>
-                        <Header style={{right:"25%"}} title={"Account Setup 2/3"} />
+                        <Header style={{marginHorizontal: "17%", right: "40%"}} title={"Account Setup 2/3"} />
                     </View>
                 </TouchableWithoutFeedback>
 
 
-                <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
+                <Text style={styles.formTitle}>Choose A Presentable Picture Of Yourself</Text>
                 {/* <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text> */}
 
                 <View style={{ flexDirection: "row", padding: 20 }}>
                     <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
-                    <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
-                    <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
+                    {/* <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
+                    <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} /> */}
                 </View>
 
 

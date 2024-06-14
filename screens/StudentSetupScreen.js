@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, TouchableOpacity, View, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, TextInput, Switch } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, TouchableOpacity, View, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, TextInput, Switch, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { updateDoc, doc } from 'firebase/firestore';
@@ -13,7 +13,6 @@ import * as Sentry from "@sentry/react";
 const StudentSetupScreen = () => {
     const { user } = useAuth();
     const [college, setCollege] = useState(null);
-    const [universityPreference, setUniversityPreference] = useState(true);
     const [url1, setUrl1] = useState(null);
     const [url2, setUrl2] = useState(null);
     const [url3, setUrl3] = useState(null);
@@ -29,14 +28,13 @@ const StudentSetupScreen = () => {
             },
             school: college,
             preferences: {
-                tag: "All",
-                university: universityPreference,
+                university: false,
                 distance: "Global"
             },
             images: [url1, url2, url3]
         }).then(() => {
 
-            navigation.navigate("SetUp3")
+            navigation.navigate("SetUpGroup")
         }).catch((error) => {
             alert("Error updating profile. Try again later.")
             Sentry.captureMessage(`Error setting up data in student setup screen for ${user.uid}, ${error.message}`)
@@ -57,7 +55,7 @@ const StudentSetupScreen = () => {
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "space-evenly", paddingBottom: 50 }}>
 
                         <SafeAreaView>
-                            <Header style={{ right: "40%" }} title={"Account Setup 2/3"} />
+                            <Header style={{marginHorizontal: "17%", right: "40%"}} title={"Account Setup 2/3"} />
                         </SafeAreaView>
 
                         <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
@@ -91,7 +89,7 @@ const StudentSetupScreen = () => {
                             <GradYearPicker selectedYear={grad_year} setSelectedYear={setGradYear} />
                         </View> */}
 
-                        <View style={{ padding: 20, alignItems: "center", marginBottom: 20 }}>
+                        {/* <View style={{ padding: 20, alignItems: "center", marginBottom: 20 }}>
                             <Text style={styles.formTitle}>Join Wing University?</Text>
                             <Text style={{ padding: 5, color:"grey", textAlign:"center" }}>{`A space to exclusively match with other University students.\n\nYou can change this setting later`}.</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
@@ -103,7 +101,7 @@ const StudentSetupScreen = () => {
                                     value={universityPreference}
                                 />
                             </View>
-                        </View>
+                        </View> */}
 
                         <TouchableOpacity
                             disabled={incompleteform}

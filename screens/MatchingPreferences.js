@@ -16,13 +16,11 @@ import * as Sentry from "@sentry/react";
 const MatchingPreferences = () => {
   // const [ ageMin, setAgeMin ] = useState(18);
   // const [ ageMax, setAgeMax ] = useState(100);
-  // const [tag, setTag] = useState("All");
   const [activeStudent, setActiveStudent] = useState(false);
   const [wingUni, setWingUni] = useState(true)
   const [distance, setDistance] = useState("Global");
-  // const [ matchRadius, setMatchRadius ] = useState(100);
-  // const [ gender, setGender ] = useState("both");
-  // const [ global, setGlobal ] = useState("true");
+  const [group, setGroup] = useState(null);
+  const [groupMatch, setGroupMatch] = useState(false);
 
 
   const { params } = useRoute();
@@ -32,16 +30,12 @@ const MatchingPreferences = () => {
 
 
   useEffect(() => {
-   
+
 
     if (profile && profile?.preferences) {
       // setAgeMax(profile.ageMax);
       // setAgeMin(profile.ageMin);
       // setGender(profile.genderPreference);
-
-      // if (profile.preferences?.tag) {
-      //   setTag(profile.preferences.tag);
-      // }
 
       if (profile?.university_student && profile.university_student.status === "active") {
         setActiveStudent(true);
@@ -51,6 +45,11 @@ const MatchingPreferences = () => {
       if (profile.preferences?.distance) {
         setDistance(profile.preferences.distance)
       }
+
+      if (profile?.group && profile.preferences?.group) {
+        setGroup(profile.group)
+        setGroupMatch(profile.preferences.group)
+      }
     }
 
   }, [profile])
@@ -59,46 +58,27 @@ const MatchingPreferences = () => {
 
 
   const updatePreferences = () => {
-    if (activeStudent) {
-      updateDoc(doc(db, global.users, profile.id), {
-        // ageMin: ageMin,
-        // ageMax: ageMax,
-        // matchRadius: matchRadius,
-        // genderPreference: gender,
-        // tagPreference: tag,
-        // universityPreference: wingUni
-        // globalMatchingBoolean: global
-        preferences: {
-          // tag: tag,
-          university: wingUni,
-          distance: distance
-        }
-      }).then(() => {
-        //must trigger a refresh upon entering home screen
-        navigation.navigate("Home", { refresh: true })
-      }).catch((error) => {
-        Sentry.captureMessage("error at updating student preferences for ",profile.id,", ", error.message)
-        alert("Error trying to update preferences. Try again later.")
-      });
-    } else {
-      updateDoc(doc(db, global.users, profile.id), {
-        // ageMin: ageMin,
-        // ageMax: ageMax,
-        // matchRadius: matchRadius,
-        // genderPreference: gender,
-        preferences: {
-          // tag: tag,
-          distance: distance
-        }
-        // globalMatchingBoolean: global
-      }).then(() => {
-        //must trigger a refresh upon entering home screen
-        navigation.navigate("Home", { refresh: true })
-      }).catch((error) => {
-        Sentry.captureMessage("error at updating professional preferences for ",profile.id,", ", error.message)
-        alert("Error trying to update preferences. Try again later.")
-      });
+    let prefObj = {
+      preferences: {
+        distance: distance
+      }
     }
+
+    if (activeStudent) {
+      prefObj.preferences.university = wingUni;
+    }
+
+    if (group) {
+      prefObj.preferences.group = groupMatch;
+    }
+
+    updateDoc(doc(db, global.users, profile.id), prefObj).then(() => {
+      //must trigger a refresh upon entering home screen
+      navigation.navigate("Home", { refresh: true })
+    }).catch((error) => {
+      Sentry.captureMessage("error at updating preferences for ", profile.id, ", ", error.message)
+      alert("Error trying to update preferences. Try again later.")
+    });
   }
 
 
@@ -144,11 +124,12 @@ const MatchingPreferences = () => {
         </View> */}
 
         <View style={{ alignItems: "center", padding: 10 }}>
-          <Text style={{ fontSize: 15, fontWeight: "bold", paddingBottom:20 }}>Distance</Text>
+          <Text style={{ fontSize: 15, fontWeight: "bold", paddingBottom: 20 }}>Distance</Text>
           <YNRadioButton selectedOption={distance} setSelectedOption={setDistance} />
         </View>
 
-        {activeStudent && (
+
+        {/* {activeStudent && (
           <View style={{ alignItems: "center", padding: 10 }}>
             <Text style={{ fontSize: 15, fontWeight: "bold", padding: 5 }}>Only See Users In Wing-U?</Text>
             <Text style={{ fontSize: 12, padding: 20 }}>{`(Exclusively match with university students)`}</Text>
@@ -162,12 +143,32 @@ const MatchingPreferences = () => {
               />
             </View>
           </View>
+        )} */}
+
+        {group && (
+          <View style={{ alignItems: "center", padding: 10 }}>
+            <Text style={{ fontSize: 15, fontWeight: "bold", padding: 5 }}>Priotize Users In {group}?</Text>
+            <Text style={{ fontSize: 12, padding: 20 }}>{`(Puts your group ahead of other users)`}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "center" }}>
+              <Text style={{ marginRight: 10, fontWeight: "bold", fontSize: 15, }}>{groupMatch ? "Yes" : "No"}</Text>
+              <Switch
+                trackColor={{ false: "red", true: "#00BFFF" }}
+                thumbColor={groupMatch ? "white" : "grey"}
+                onValueChange={groupMatch}
+                value={groupMatch}
+              />
+            </View>
+          </View>
         )}
+
+        {/* {groupMatch && wingUni && (
+          <Text style={{ fontSize: 12, padding: 20, color:"red" }}>May not see all users in your group while Wing-U is on. Consider switching it off for maximum reach.</Text>
+        )} */}
 
         <View style={{ height: 150 }}>
           <TouchableOpacity
             // disabled={incompleteform} incompleteform ? "grey" :
-            style={{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 4, elevation: 5, backgroundColor:"#00308F" }}
+            style={{ width: 200, height: 50, paddingTop: 15, top: 20, borderRadius: 10, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.5, shadowRadius: 4, elevation: 5, backgroundColor: "#00308F" }}
             onPress={updatePreferences}>
             <Text style={{ textAlign: "center", color: "white", fontSize: 15, fontWeight: "bold" }}>Update Preferences</Text>
           </TouchableOpacity>

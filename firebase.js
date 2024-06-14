@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { initializeAuth } from "firebase/auth";
 import {getReactNativePersistence} from 'firebase/auth/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Constants from 'expo-constants';
 
@@ -37,5 +37,8 @@ const auth = initializeAuth(app, {
 // console.log("auth",auth)
 const storage = getStorage(app);
 const db = getFirestore();
+// const db = initializeFirestore(app, {
+//   experimentalForceLongPolling:true
+// }) //for emulator
 
 export { auth, db, storage };

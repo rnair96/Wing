@@ -1,15 +1,17 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/core';
 import useAuth from '../hooks/useAuth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { onSnapshot, doc, updateDoc, } from "firebase/firestore";
+import { onSnapshot, doc, updateDoc, collection, getDocs, query, where, setDoc, getDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import * as WebBrowser from 'expo-web-browser';
 import SwipeScreen from './SwipeScreen';
 import getLocation from '../lib/getLocation';
 import * as Sentry from "@sentry/react";
+// import WaitlistModal from '../components/WaitlistModal';
+
 
 
 
@@ -22,6 +24,9 @@ const HomeScreen = () => {
     const [loggedProfile, setLoggedProfile] = useState(null);
     const route = useRoute();
     const [islocationChanged, setIsLocationChanged] = useState(false);
+    // const [isWaitlistModalVisible, setIsWaitlistModalVisible] = useState(false)
+    // const [userNumber, setUserNumber] = useState(0)
+
 
 
     useLayoutEffect(() => {
@@ -30,8 +35,10 @@ const HomeScreen = () => {
                 navigation.navigate("SetUp0");
             } else if (!snapshot.data().university_student && !snapshot.data().job || !snapshot.data().images) {
                 navigation.navigate("SetUp1");
-            } else if (!snapshot.data().prompts || !snapshot.data().values) {
+            } else if (!snapshot.data().prompts || !snapshot.data().interests || !snapshot.data().completed_setup) {
                 navigation.navigate("SetUp3", { id: user.uid });
+            } else if (!snapshot.data().completed_welcome) {
+                navigation.navigate("WelcomeScreen");
             }
 
             else {
@@ -45,9 +52,9 @@ const HomeScreen = () => {
         },
             (error) => {
                 console.log("there was an error in homescreen layout snapshot", error)
-                Sentry.captureMessage("error at getting user snapshot at homescreen ",user?.uid,", ", error.message)
+                Sentry.captureMessage("error at getting user snapshot at homescreen ", user?.uid, ", ", error.message)
 
-                
+
             }
         )
 
@@ -71,7 +78,7 @@ const HomeScreen = () => {
             },
                 (error) => {
                     console.log("there was an error in refreshing loggedprofile", error)
-                    Sentry.captureMessage("error at loggedprofile refresh for ",user.uid,", ", error.message)
+                    Sentry.captureMessage("error at loggedprofile refresh for ", user.uid, ", ", error.message)
                 }
             )
 
@@ -98,7 +105,7 @@ const HomeScreen = () => {
                         setIsLocationChanged(true);
                     }).catch((error) => {
                         console.log("could not refresh location");
-                        Sentry.captureMessage("error at location refresh for ",user.uid,", ", error.message)
+                        Sentry.captureMessage("error at location refresh for ", user.uid, ", ", error.message)
 
                     });
                 }
@@ -106,6 +113,47 @@ const HomeScreen = () => {
 
         })();
     }, [loggedProfile]);
+
+    // useEffect(() => {
+    //     if (loggedProfile) {
+    //         const fetchUserCount = async () => {
+    //             try {
+    //                 const usersRef = collection(db, global.users);
+    //                 const q = query(usersRef, where("location.state", "in", ["DC", "MD", "VA"]),
+    //                     where("completed_setup", "==", true));
+
+    //                 const querySnapshot = await getDocs(q);
+    //                 console.log("number of users", querySnapshot.docs.length);
+
+
+    //                 if (querySnapshot.docs.length < 0) {//change to 100
+    //                     setIsWaitlistModalVisible(true)
+    //                     setUserNumber(querySnapshot.docs.length);
+    //                 } else if (querySnapshot.docs.length == 100) {
+    //                     console.log("check if welcome challenge was set");
+    //                     const welcomeRef = doc(db, "userData", "welcome_challenge");
+    //                     const welcomeSnapshot = await getDoc(welcomeRef);
+    //                     if (welcomeSnapshot.exists() && welcomeSnapshot.data().trigger) {
+    //                         console.log("Welcome challenge already triggered");
+    //                     } else {
+    //                         console.log("trigger welcome challenge");
+    //                         try {
+    //                             setDoc(doc(db, "userData", "welcome_challenge"), { trigger: true })
+    //                         } catch (error) {
+    //                             Sentry.captureMessage("Error setting welcome document", error.code)
+    //                             console.error("Error setting welcome document: ", error);
+    //                         }
+    //                     }
+
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Error fetching users count: ", error);
+    //             }
+    //         };
+
+    //         fetchUserCount();
+    //     }
+    // }, [loggedProfile]);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -132,6 +180,7 @@ const HomeScreen = () => {
             {/* End of Header */}
             {/* Cards */}
             <SwipeScreen loggedProfile={loggedProfile} />
+            {/* <WaitlistModal isModalVisible={isWaitlistModalVisible} usersNumber={userNumber} /> */}
         </SafeAreaView>
     )
 }

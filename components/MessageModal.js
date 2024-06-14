@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Modal, TouchableHighlight, StyleSheet, TextInput, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Modal, TouchableHighlight, StyleSheet, TextInput, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, Platform } from 'react-native';
 
 
 const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMessage, setRequestMessage, swipeRefMessage, currentCard }) => {
@@ -45,7 +45,9 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                 {/* <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss()}
                 > */}
-                    <View style={{ height:"30%", bottom: isKeyboardVisible? "10%": 0, ...styles.modalView }}>
+                <TouchableWithoutFeedback
+                onPress={()=>Keyboard.dismiss()}>
+                    <View style={{ height:(Platform.OS==="android" && isKeyboardVisible)? "50%": "30%", bottom: isKeyboardVisible? "10%": 0, ...styles.modalView }}>
                         <Text style={{ padding: 5, fontWeight: "800", fontSize: 15 }}>Send {name} a Chat Request</Text>
                         <TextInput
                             value={requestMessage}
@@ -75,6 +77,7 @@ const MessageModal = ({ isMessageModalVisible, setMessageModalVisible, requestMe
                             <Text style={{color:"white"}}>Cancel</Text>
                         </TouchableHighlight>
                     </View>
+                    </TouchableWithoutFeedback>
                     {/* </View> */}
                 {/* </TouchableWithoutFeedback> */}
             </KeyboardAvoidingView>

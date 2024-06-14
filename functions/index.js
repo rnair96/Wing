@@ -91,28 +91,77 @@ const sendPushBatch = async (tokens, title, body, data) => {
     return null;
   }
 };
+
 function createCompareFunction(currentUser) {
-  const currentUserValues = currentUser.values;
-  const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
+  const currentUserInterests = currentUser.interests;
+  // const currentUserTag = currentUser.activity_tag ? currentUser.activity_tag : null;
+  const currentUserGroup = currentUser.group && currentUser.preferences && currentUser.preferences.group ? currentUser.group : null;
 
   return function compareUsers(user1, user2) {
-    // Count the matching values for user1
-    const matchingValuesUser1 = user1.values.filter((value) =>
-      currentUserValues.includes(value)).length;
+    if (currentUserGroup) {
+      const user1GroupMatch = user1.group && (user1.group === currentUserGroup) ? 1 : 0;
+      const user2GroupMatch = user2.group && (user2.group === currentUserGroup) ? 1 : 0;
 
-    // Count the matching values for user2
-    const matchingValuesUser2 = user2.values.filter((value) =>
-      currentUserValues.includes(value)).length;
+      // if ((user1GroupMatch === user2GroupMatch) && currentUserTag) {
+      //   const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
+      //   const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
 
-    if ((matchingValuesUser1 === matchingValuesUser2) && currentUserTag) {
-      const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
-      const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
+      //   if (user1ActivityMatch === user2ActivityMatch) {
+      //     const matchingInterestsUser1 = user1.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
 
-      return user2ActivityMatch - user1ActivityMatch;
+      //     // Count the matching values for user2
+      //     const matchingInterestsUser2 = user2.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
+
+      //     // Sort in descending order of matching values
+      //     return matchingInterestsUser2 - matchingInterestsUser1;
+      //   }
+
+      //   return user2ActivityMatch - user1ActivityMatch;
+      // } else
+      if (user1GroupMatch === user2GroupMatch) {
+        const matchingInterestsUser1 = user1.interests.filter((interest) =>
+          currentUserInterests.includes(interest)).length;
+
+        // Count the matching values for user2
+        const matchingInterestsUser2 = user2.interests.filter((interest) =>
+          currentUserInterests.includes(interest)).length;
+
+        // Sort in descending order of matching values
+        return matchingInterestsUser2 - matchingInterestsUser1;
+      }
+
+      return user2GroupMatch - user1GroupMatch;
+      // } else if (currentUserTag) {
+      //   const user1ActivityMatch = user1.activity_tag && (user1.activity_tag === currentUserTag) ? 1 : 0;
+      //   const user2ActivityMatch = user2.activity_tag && (user2.activity_tag === currentUserTag) ? 1 : 0;
+
+      //   if (user1ActivityMatch === user2ActivityMatch) {
+      //     const matchingInterestsUser1 = user1.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
+
+      //     // Count the matching values for user2
+      //     const matchingInterestsUser2 = user2.interests.filter((interest) =>
+      //       currentUserInterests.includes(interest)).length;
+
+      //     // Sort in descending order of matching values
+      //     return matchingInterestsUser2 - matchingInterestsUser1;
+      //   }
+
+      //   return user2ActivityMatch - user1ActivityMatch;
+    } else {
+      // Count the matching values for user1
+      const matchingInterestsUser1 = user1.interests.filter((interest) =>
+        currentUserInterests.includes(interest)).length;
+
+      // Count the matching values for user2
+      const matchingInterestsUser2 = user2.interests.filter((interest) =>
+        currentUserInterests.includes(interest)).length;
+
+      // Sort in descending order of matching values
+      return matchingInterestsUser2 - matchingInterestsUser1;
     }
-
-    // Sort in descending order of matching values
-    return matchingValuesUser2 - matchingValuesUser1;
   };
 }
 
@@ -133,318 +182,368 @@ function createCompareFunction(currentUser) {
 //     throw new Error("Invalid ID token");
 //   }
 // }
-const {google} = require("googleapis");
+const { google } = require("googleapis");
 const sheets = google.sheets("v4");
 
 exports.newUserSignup = functions.firestore
-    .document("users/{userId}")
-    .onCreate(async (snap, context) => {
+  .document("users/{userId}")
+  .onCreate(async (snap, context) => {
     // Retrieve the displayName and email from the document
-      const serviceAccount = functions.config().serviceaccount.key;
+    const serviceAccount = functions.config().serviceaccount.key;
 
 
-      const jwtClient = new google.auth.JWT(
-          serviceAccount.client_email, // sheets email
-          null,
-          serviceAccount.private_key,
-          ["https://www.googleapis.com/auth/spreadsheets"],
-      );
-      const userData = snap.data();
-      const displayName = userData.displayName || "";
-      const email = userData.email || "";
+    const jwtClient = new google.auth.JWT(
+      serviceAccount.client_email, // sheets email
+      null,
+      serviceAccount.private_key,
+      ["https://www.googleapis.com/auth/spreadsheets"],
+    );
+    const userData = snap.data();
+    const displayName = userData.displayName || "";
+    const email = userData.email || "";
 
-      try {
+    try {
       // Authenticate with the Google Sheets API
-        await jwtClient.authorize();
+      await jwtClient.authorize();
 
-        // Append data to the Google Sheet
-        const response = await sheets.spreadsheets.values.append({
-          auth: jwtClient,
-          spreadsheetId: functions.config().sheetid.key, // Replace with your actual spreadsheet ID
-          range: functions.config().sheetid.sheet, // Assumes you're appending to Sheet1
-          valueInputOption: "USER_ENTERED",
-          resource: {
-            values: [[displayName, email]], // Array of values to append
-          },
-        });
+      // Append data to the Google Sheet
+      const response = await sheets.spreadsheets.values.append({
+        auth: jwtClient,
+        spreadsheetId: functions.config().sheetid.key, // Replace with your actual spreadsheet ID
+        range: functions.config().sheetid.sheet, // Assumes you're appending to Sheet1
+        valueInputOption: "USER_ENTERED",
+        resource: {
+          values: [[displayName, email]], // Array of values to append
+        },
+      });
 
-        console.log("Added user to the sheet:", {displayName, email});
-        console.log("Append data:", response.data);
-      } catch (err) {
-        console.error("Error adding user to the sheet:", err);
-      }
-    });
+      console.log("Added user to the sheet:", { displayName, email });
+      console.log("Append data:", response.data);
+    } catch (err) {
+      console.error("Error adding user to the sheet:", err);
+    }
+  });
 
 const db = admin.firestore();
 
 exports.aggregateSurveyResponses = functions.firestore
-    .document("users/{userId}")
-    .onUpdate(async (change, context) => {
-      const newData = change.after.data();
-      const oldData = change.before.data();
-      let surveyDoc = "initialSurveyData";
-      let objectentries;
+  .document("users/{userId}")
+  .onUpdate(async (change, context) => {
+    const newData = change.after.data();
+    const oldData = change.before.data();
+    let surveyDoc = "initialSurveyData";
+    let objectentries;
 
 
-      if (newData.surveyInfo && newData.surveyInfo.initial && !oldData.surveyInfo) {
-        console.log("initial survey set checked");
-        objectentries = newData.surveyInfo.initial;
-      } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.thirtydays && !oldData.surveyInfo.thirtydays) {
-        console.log("thirty days survey set checked");
-        surveyDoc = "thirtydaysSurveyData";
-        objectentries = newData.surveyInfo.thirtydays;
-      } else {
-        return null;
-      }
+    if (newData.surveyInfo && newData.surveyInfo.initial && !oldData.surveyInfo) {
+      console.log("initial survey set checked");
+      objectentries = newData.surveyInfo.initial;
+    } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.sixtydays && !oldData.surveyInfo.sixtydays) {
+      console.log("sixty days survey set checked");
+      surveyDoc = "sixtydaysSurveyData";
+      objectentries = newData.surveyInfo.sixtydays;
+    } else {
+      return null;
+    }
 
-      // Aggregate data document reference
-      const aggregateDocRef = db.collection("userData").doc(surveyDoc);
+    // Aggregate data document reference
+    const aggregateDocRef = db.collection("userData").doc(surveyDoc);
 
-      // Transaction to ensure atomic update
-      return db.runTransaction(async (transaction) => {
-        const aggregateDoc = await transaction.get(aggregateDocRef);
-        const aggregateData = aggregateDoc.exists ? aggregateDoc.data() : {};
+    // Transaction to ensure atomic update
+    return db.runTransaction(async (transaction) => {
+      const aggregateDoc = await transaction.get(aggregateDocRef);
+      const aggregateData = aggregateDoc.exists ? aggregateDoc.data() : {};
 
-        // Iterate over each question in the surveyInfo
-        for (const [question, answer] of Object.entries(objectentries)) {
+      // Iterate over each question in the surveyInfo
+      for (const [question, answer] of Object.entries(objectentries)) {
         // Initialize question data structure if not present
-          if (!aggregateData[question]) {
-            aggregateData[question] = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0};
-          }
-
-          console.log("incrementing data for ", question );
-          // Increment the count for the given answer
-          aggregateData[question][answer]++;
+        if (!aggregateData[question]) {
+          aggregateData[question] = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 };
         }
 
-        // Update the aggregate data document
-        transaction.set(aggregateDocRef, aggregateData);
-      });
+        console.log("incrementing data for ", question);
+        // Increment the count for the given answer
+        aggregateData[question][answer]++;
+      }
+
+      // Update the aggregate data document
+      transaction.set(aggregateDocRef, aggregateData);
     });
+  });
+
+exports.aggregateSurveyResponsesDev = functions.firestore
+  .document("users_test/{userId}")
+  .onUpdate(async (change, context) => {
+    const newData = change.after.data();
+    const oldData = change.before.data();
+    let surveyDoc = "initialSurveyData";
+    let objectentries;
+
+
+    if (newData.surveyInfo && newData.surveyInfo.initial && !oldData.surveyInfo) {
+      console.log("initial survey set checked");
+      objectentries = newData.surveyInfo.initial;
+    } else if (newData.surveyInfo && oldData.surveyInfo && newData.surveyInfo.sixtydays && !oldData.surveyInfo.sixtydays) {
+      console.log("sixty days survey set checked");
+      surveyDoc = "sixtydaysSurveyData";
+      objectentries = newData.surveyInfo.sixtydays;
+    } else {
+      return null;
+    }
+
+    // Aggregate data document reference
+    const aggregateDocRef = db.collection("userData_test").doc(surveyDoc);
+
+    // Transaction to ensure atomic update
+    return db.runTransaction(async (transaction) => {
+      const aggregateDoc = await transaction.get(aggregateDocRef);
+      const aggregateData = aggregateDoc.exists ? aggregateDoc.data() : {};
+
+      // Iterate over each question in the surveyInfo
+      for (const [question, answer] of Object.entries(objectentries)) {
+        // Initialize question data structure if not present
+        if (!aggregateData[question]) {
+          aggregateData[question] = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 };
+        }
+
+        console.log("incrementing data for ", question);
+        // Increment the count for the given answer
+        aggregateData[question][answer]++;
+      }
+
+      // Update the aggregate data document
+      transaction.set(aggregateDocRef, aggregateData);
+    });
+  });
 
 
 exports.onSwipe = functions.firestore
-    .document("users/{userId}/swipes/{swipeId}")
-    .onCreate(async (snap, context) => {
-      console.log("swipe initiated");
+  .document("users/{userId}/swipes/{swipeId}")
+  .onCreate(async (snap, context) => {
+    console.log("swipe initiated");
 
 
-      // Get the ID of the user who was swiped on
-      const isResponse = snap.data().isResponse;
-      const masterUid = functions.config().wing.master_uid;
+    // Get the ID of the user who was swiped on
+    const isResponse = snap.data().isResponse;
+    const masterUid = functions.config().wing.master_uid;
 
-      // Get the ID of the user who was swiped on
-      const swipedUserId = snap.data().id;
+    // Get the ID of the user who was swiped on
+    const swipedUserId = snap.data().id;
 
-      console.log("master Uid", masterUid);
-      console.log("swiped user id", swipedUserId);
-      console.log("isResponse", isResponse);
+    console.log("master Uid", masterUid);
+    console.log("swiped user id", swipedUserId);
+    console.log("isResponse", isResponse);
 
-      // if responding to my chat request
-      if (isResponse && swipedUserId === masterUid) {
-        console.log("handling reply after matching with CEO");
+    // if responding to my chat request
+    if (isResponse && swipedUserId === masterUid) {
+      console.log("handling reply after matching with CEO");
 
-        // set reply
-        const masterName = functions.config().wing.master_name;
-        const matchId = snap.data().match_id;
+      // set reply
+      const masterName = functions.config().wing.master_name;
+      const matchId = snap.data().match_id;
 
-        const newTime = new Date(Date.now());
+      const newTime = new Date(Date.now());
 
-        const reply =
+      const reply =
         `Maverick in Top Gun 2 said it best, “If you think up there, you’re dead!”\n\n 1. Approach a girl you like within 3-seconds of seeing her. Don’t think. Do.\n\n 2. Have good posture, eye contact and a genuine smile. Body language communicates 90% more than words.\n\n 3. Get her interest. It could be as simple as cracking a joke about the bar you’re in to a thoughtful compliment about her outfit. \n\n 4. If she has a friend and your Wing is available, introduce him WELL. I.e: Cite one of his accomplishments on his profile.\n\n 5. Stay loyal to each other. The more you make your Wing look good in front of others, the better you’ll look by default.\n\n Bonus: Try to do this approach with EVERYONE. It becomes less forced when you’re just having a good time with everyone you meet, rather than just girls you like. It can even BRING girls to you. This is essentially “Charisma”. \n\nFeel free to share any questions, concerns, or thoughts in general you may have about the app, this community or even dating right here. I try to read and respond to ALL DMS. I may also drop a message in to see how you're doing and how we can make your experience here even better. \n\nSo keep your eye out for a surprise message from me and have fun Winging!`;
 
-        const replyDoc = {
-          timestamp: newTime,
-          userId: masterUid,
-          displayName: masterName,
-          message: reply,
-          read: false,
-        };
+      const replyDoc = {
+        timestamp: newTime,
+        userId: masterUid,
+        displayName: masterName,
+        message: reply,
+        read: false,
+      };
 
-        const replyRef = admin.firestore().collection("matches")
-            .doc(matchId).collection("messages");
+      const replyRef = admin.firestore().collection("matches")
+        .doc(matchId).collection("messages");
 
-        replyRef.add(replyDoc);
-        // add notification?
-        console.log("reply added");
-        return;
-      } else if (isResponse) {
-        console.log("The latest swipe is a response and not a request.");
-        return;
-      }
+      replyRef.add(replyDoc);
+      // add notification?
+      console.log("reply added");
+      return;
+    } else if (isResponse) {
+      console.log("The latest swipe is a response and not a request.");
+      return;
+    }
 
 
-      const message = snap.data().message;
-      const timestamp = snap.data().timeSwiped;
+    const message = snap.data().message;
+    const timestamp = snap.data().timeSwiped;
+    const swipedFrom = snap.data().swipedFrom;
 
-      // Get the ID of the user who did the swiping
-      const swiperId = context.params.userId;
+    // Get the ID of the user who did the swiping
+    const swiperId = context.params.userId;
 
-      // Add a document to the "requests" collection
-      // of the user who was swiped on
+    // Add a document to the "requests" collection
+    // of the user who was swiped on
 
-      const requestsRef = admin.firestore().collection("users")
-          .doc(swipedUserId).collection("requests").doc(swiperId);
+    const requestsRef = admin.firestore().collection("users")
+      .doc(swipedUserId).collection("requests").doc(swiperId);
 
-      const request =
+    const request =
     {
       id: swiperId,
       message: message,
       timestamp: timestamp,
+      swipedFrom: swipedFrom,
       read: false,
     };
 
-      const userSwipedDoc = admin.firestore().collection("users")
-          .doc(swipedUserId);
+    const userSwipedDoc = admin.firestore().collection("users")
+      .doc(swipedUserId);
 
-      const userSwipingDoc = admin.firestore().collection("users")
-          .doc(swiperId);
+    const userSwipingDoc = admin.firestore().collection("users")
+      .doc(swiperId);
 
-      const userSwipedSnapshot = await userSwipedDoc.get();
-      const userSwipingSnapshot = await userSwipingDoc.get();
+    const userSwipedSnapshot = await userSwipedDoc.get();
+    const userSwipingSnapshot = await userSwipingDoc.get();
 
-      if (!userSwipedSnapshot.exists || !userSwipingSnapshot.exists) {
-        console.log("Given user not found");
-        return;
-      }
+    if (!userSwipedSnapshot.exists || !userSwipingSnapshot.exists) {
+      console.log("Given user not found");
+      return;
+    }
 
-      const swipedUser = userSwipedSnapshot.data();
+    const swipedUser = userSwipedSnapshot.data();
 
-      const swipingUser = userSwipingSnapshot.data();
+    const swipingUser = userSwipingSnapshot.data();
 
-      // push notification to swiped user
-      if (swipedUser.notifications &&
+    // push notification to swiped user
+    if (swipedUser.notifications &&
       swipedUser.notifications.messages &&
       swipedUser.token && swipedUser.token !== "testing" &&
       swipedUser.token !== "not_granted") {
-        const messageDetails = {
-          "requestDetails": request,
-          "otherProfile": swipingUser,
+      const messageDetails = {
+        "requestDetails": request,
+        "otherProfile": swipingUser,
         // "profile": swipedUser,
-        };
+      };
 
-        console.log("sending push notification to swiped user", swipedUserId);
-        // console.log("sending message details", messageDetails);
-        console.log("sending request message from", swipingUser.displayName);
-        console.log("sending request message to token", swipedUser.token);
+      console.log("sending push notification to swiped user", swipedUserId);
+      // console.log("sending message details", messageDetails);
+      console.log("sending request message from", swipingUser.displayName);
+      console.log("sending request message to token", swipedUser.token);
 
 
-        sendPush(swipedUser.token, `New Request from ${swipingUser.displayName}`,
-            message, {type: "request", message: messageDetails});
-      }
-      console.log("setting request doc");
+      sendPush(swipedUser.token, `New Request from ${swipingUser.displayName}`,
+        message, { type: "request", message: messageDetails });
+    }
+    console.log("setting request doc");
 
-      return requestsRef.set(request);
-    });
+    return requestsRef.set(request);
+  });
 
 
 exports.onSwipeDev = functions.firestore
-    .document("users_test/{userId}/swipes/{swipeId}")
-    .onCreate(async (snap, context) => {
-      console.log("swipe dev initiated");
-      const isResponse = snap.data().isResponse;
+  .document("users_test/{userId}/swipes/{swipeId}")
+  .onCreate(async (snap, context) => {
+    console.log("swipe dev initiated");
+    const isResponse = snap.data().isResponse;
 
-      const masterUid = functions.config().wing.master_uid;
+    const masterUid = functions.config().wing.master_uid;
 
-      // Get the ID of the user who was swiped on
-      const swipedUserId = snap.data().id;
+    // Get the ID of the user who was swiped on
+    const swipedUserId = snap.data().id;
 
-      // if responding to my chat request
-      if (isResponse && swipedUserId === masterUid) {
-        console.log("handling reply after matching with CEO");
+    // if responding to my chat request
+    if (isResponse && swipedUserId === masterUid) {
+      console.log("handling reply after matching with CEO");
 
-        // set reply
-        const masterName = functions.config().wing.master_name;
-        const matchId = snap.data().match_id;
+      // set reply
+      const masterName = functions.config().wing.master_name;
+      const matchId = snap.data().match_id;
 
-        const newTime = new Date(Date.now());
+      const newTime = new Date(Date.now());
 
-        const reply =
+      const reply =
         `Maverick in Top Gun 2 said it best, “If you think up there, you’re dead!”\n\n 1. Approach a girl you like within 3-seconds of seeing her. Don’t think. Do.\n\n 2. Have good posture, eye contact and a genuine smile. Body language communicates 90% more than words.\n\n 3. Get her interest. It could be as simple as cracking a joke about the bar you’re in to a thoughtful compliment about her outfit. \n\n 4. If she has a friend and your Wing is available, introduce him WELL. I.e: Cite one of his accomplishments on his profile.\n\n 5. Stay loyal to each other. The more you make your Wing look good in front of others, the better you’ll look by default.\n\n Bonus: Try to do this approach with EVERYONE. It becomes less forced when you’re just having a good time with everyone you meet, rather than just girls you like. It can even BRING girls to you. This is essentially “Charisma”. \n\nFeel free to share any questions, concerns, or thoughts in general you may have about the app, this community or even dating right here. I try to read and respond to ALL DMS. I may also drop a message in to see how you're doing and how we can make your experience here even better. \n\nSo keep your eye out for a surprise message from me and have fun Winging!`;
 
-        const replyDoc = {
-          timestamp: newTime,
-          userId: masterUid,
-          displayName: masterName,
-          message: reply,
-          read: false,
-        };
+      const replyDoc = {
+        timestamp: newTime,
+        userId: masterUid,
+        displayName: masterName,
+        message: reply,
+        read: false,
+      };
 
-        const replyRef = admin.firestore().collection("matches_test")
-            .doc(matchId).collection("messages");
+      const replyRef = admin.firestore().collection("matches_test")
+        .doc(matchId).collection("messages");
 
-        replyRef.add(replyDoc);
-        // add notification?
-        console.log("reply added");
-        return;
-      } else if (isResponse) {
-        console.log("The latest swipe is a response and not a request.");
-        return;
-      }
+      replyRef.add(replyDoc);
+      // add notification?
+      console.log("reply added");
+      return;
+    } else if (isResponse) {
+      console.log("The latest swipe is a response and not a request.");
+      return;
+    }
 
 
-      const message = snap.data().message;
-      const timestamp = snap.data().timeSwiped;
+    const message = snap.data().message;
+    const timestamp = snap.data().timeSwiped;
+    const swipedFrom = snap.data().swipedFrom;
 
-      // Get the ID of the user who did the swiping
-      const swiperId = context.params.userId;
 
-      // Add a document to the "requests" collection
-      // of the user who was swiped on
+    // Get the ID of the user who did the swiping
+    const swiperId = context.params.userId;
 
-      const requestsRef = admin.firestore().collection("users_test")
-          .doc(swipedUserId).collection("requests").doc(swiperId);
+    // Add a document to the "requests" collection
+    // of the user who was swiped on
 
-      const request =
+    const requestsRef = admin.firestore().collection("users_test")
+      .doc(swipedUserId).collection("requests").doc(swiperId);
+
+    const request =
     {
       id: swiperId,
       message: message,
       timestamp: timestamp,
+      swipedFrom: swipedFrom,
       read: false,
     };
 
-      const userSwipedDoc = admin.firestore().collection("users_test")
-          .doc(swipedUserId);
+    const userSwipedDoc = admin.firestore().collection("users_test")
+      .doc(swipedUserId);
 
-      const userSwipingDoc = admin.firestore().collection("users_test")
-          .doc(swiperId);
+    const userSwipingDoc = admin.firestore().collection("users_test")
+      .doc(swiperId);
 
-      const userSwipedSnapshot = await userSwipedDoc.get();
-      const userSwipingSnapshot = await userSwipingDoc.get();
+    const userSwipedSnapshot = await userSwipedDoc.get();
+    const userSwipingSnapshot = await userSwipingDoc.get();
 
-      if (!userSwipedSnapshot.exists || !userSwipingSnapshot.exists) {
-        console.log("Given user not found");
-        return;
-      }
+    if (!userSwipedSnapshot.exists || !userSwipingSnapshot.exists) {
+      console.log("Given user not found");
+      return;
+    }
 
-      const swipedUser = userSwipedSnapshot.data();
+    const swipedUser = userSwipedSnapshot.data();
 
-      const swipingUser = userSwipingSnapshot.data();
+    const swipingUser = userSwipingSnapshot.data();
 
-      if (swipedUser.notifications &&
+    if (swipedUser.notifications &&
       swipedUser.notifications.messages &&
       swipedUser.token && swipedUser.token !== "testing" &&
       swipedUser.token !== "not_granted") {
       // add if user gave permission for request notifications
-        const messageDetails = {
-          "requestDetails": request,
-          "otherProfile": swipingUser,
+      const messageDetails = {
+        "requestDetails": request,
+        "otherProfile": swipingUser,
         // "profile": swipedUser,
-        };
+      };
 
-        console.log("sending push notification to swiped user", swipedUserId);
-        // console.log("sending message details", messageDetails);
-        console.log("sending request message from", swipingUser.displayName);
-        console.log("sending request message to token", swipedUser.token);
+      console.log("sending push notification to swiped user", swipedUserId);
+      // console.log("sending message details", messageDetails);
+      console.log("sending request message from", swipingUser.displayName);
+      console.log("sending request message to token", swipedUser.token);
 
 
-        sendPush(swipedUser.token, `New Request from ${swipingUser.displayName}`,
-            message, {type: "request", message: messageDetails});
-      }
-      console.log("setting request doc");
+      sendPush(swipedUser.token, `New Request from ${swipingUser.displayName}`,
+        message, { type: "request", message: messageDetails });
+    }
+    console.log("setting request doc");
 
-      return requestsRef.set(request);
-    });
+    return requestsRef.set(request);
+  });
 
 
 functionCall.get("/getFilteredUsers/:id", async (req, res) => {
@@ -472,45 +571,40 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
 
     const user = userSnapshot.data();
     // const userPreferences = user.tagPreference;
-    const userGender = user.gender;
     let matchingUsersQuery = admin.firestore().collection("users")
-        .where("gender", "==", userGender)
-        .limit(1000);
+      .where("completed_setup", "==", true)
+      .limit(500);
     // add limit to size
 
     // Filter by preferences
 
     // Filter by university student preference
-    if (user.university_student && user.preferences && user.preferences.university === true) {
-      console.log("filtering for university students");
-      matchingUsersQuery = matchingUsersQuery
-          .where("university_student.status", "==", "active");
-    }
-
-    // no longer needed
-    // Further filter by tag preference
-    // if (user.preferences && user.preferences.tag !== "All") {
-    //   console.log("filtering for users with mission tag", user.preferences.tag);
+    // if (user.university_student && user.preferences && user.preferences.university === true) {
+    //   console.log("filtering for university students");
     //   matchingUsersQuery = matchingUsersQuery
-    //     .where("mission_tag", "==", user.preferences.tag);
+    //       .where("university_student.status", "==", "active");
     // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
       console.log("filtering for users in local area", user.location.state);
       matchingUsersQuery = matchingUsersQuery
-          .where("location.state", "==", user.location.state);
+        .where("location.state", "==", user.location.state);
     }
 
     // Now filter these matched users against excludeIds
     const masterUid = functions.config().wing.master_uid;
+    const supportUid = functions.config().wing.support_uid;
 
-    const excludeIds = [userId, masterUid]; // Start by excluding the user and CEO themselves
 
-    const swipesSnapshot = await userRef.collection("swipes").get();
-    swipesSnapshot.forEach((doc) => {
-      excludeIds.push(doc.id);
-    });
+    const excludeIds = [userId, masterUid, supportUid]; // Start by excluding the user and CEO themselves
+
+    if (userId !== masterUid) {
+      const swipesSnapshot = await userRef.collection("swipes").get();
+      swipesSnapshot.forEach((doc) => {
+        excludeIds.push(doc.id);
+      });
+    }
 
     const passesSnapshot = await userRef.collection("passes").get();
     passesSnapshot.forEach((doc) => {
@@ -537,7 +631,7 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
     for (const idsChunk of chunkedExcludeIds) {
       console.log("filtering for each chunk");
       const chunkQuery = matchingUsersQuery
-          .where(admin.firestore.FieldPath.documentId(), "not-in", idsChunk);
+        .where(admin.firestore.FieldPath.documentId(), "not-in", idsChunk);
 
       const chunkSnapshot = await chunkQuery.get();
       chunkSnapshot.forEach((doc) => {
@@ -554,7 +648,7 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
 
     // For each unique ID,
     // check if it appears in every chunked query.
-    // If it does, it's a final user ID.
+    // If it does not, it's a final user ID.
     const finalUserIds = uniqueQueriedUserIds.filter((id) => {
       let appearanceCount = 0;
       chunkedExcludeIds.forEach((chunk) => {
@@ -572,10 +666,22 @@ functionCall.get("/getFilteredUsers/:id", async (req, res) => {
 
     const completeUsers = uniqueUsers.filter((user) => {
       return user.prompts && user.prompts.length > 0 &&
-        user.values && user.values.length === 3 &&
-        user.images && user.images.length === 3 &&
+        user.interests && user.interests.length === 5 &&
+        user.images && user.images.length > 0 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
+
+    if (completeUsers.length === 0 && passesSnapshot.size > 0) {
+      // delete collectiono
+      const batch = admin.firestore().batch();
+      passesSnapshot.docs.forEach((doc) => batch.delete(doc.ref));
+      await batch.commit();
+
+      console.log("No unpassed users left. Passed collection deleted. Reload fetch.");
+
+      res.status(204).end();
+      return;
+    }
 
     const compareUsers = createCompareFunction(user);
 
@@ -622,35 +728,28 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     }
 
     const user = userSnapshot.data();
+    // const masterUid = functions.config().wing.master_uid;
+
     // const userPreferences = user.tagPreference;
-    const userGender = user.gender;
     let matchingUsersQuery = admin.firestore().collection("users_test")
-        .where("gender", "==", userGender)
-        .limit(1000);
+      .where("completed_setup", "==", true)
+      .limit(500);
     // add limit to size
 
     // Filter by preferences
 
     // Filter by university student preference
-    if (user.university_student && user.preferences && user.preferences.university === true) {
-      console.log("filtering for university students");
-      matchingUsersQuery = matchingUsersQuery
-          .where("university_student.status", "==", "active");
-    }
-
-    // no longer needed
-    // Further filter by tag preference
-    // if (user.preferences && user.preferences.tag !== "All") {
-    //   console.log("filtering for users with mission tag", user.preferences.tag);
+    // if (user.university_student && user.preferences && user.preferences.university === true) {
+    //   console.log("filtering for university students");
     //   matchingUsersQuery = matchingUsersQuery
-    //     .where("mission_tag", "==", user.preferences.tag);
+    //       .where("university_student.status", "==", "active");
     // }
 
     // Further filter by distance preference
     if (user.preferences && user.preferences.distance !== "Global" && user.location && user.location.state) {
       console.log("filtering for users in local area", user.location.state);
       matchingUsersQuery = matchingUsersQuery
-          .where("location.state", "==", user.location.state);
+        .where("location.state", "==", user.location.state);
     }
 
     // Now filter these matched users against excludeIds
@@ -658,20 +757,22 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
 
     const excludeIds = [userId, masterUid]; // Start by excluding the user and CEO themselves
 
-    const swipesSnapshot = await userRef.collection("swipes").get();
-    swipesSnapshot.forEach((doc) => {
-      excludeIds.push(doc.id);
-    });
+    if (userId !== masterUid) {
+      const swipesSnapshot = await userRef.collection("swipes").get();
+      swipesSnapshot.forEach((doc) => {
+        excludeIds.push(doc.id);
+      });
+    }
 
     const passesSnapshot = await userRef.collection("passes").get();
     passesSnapshot.forEach((doc) => {
       excludeIds.push(doc.id);
     });
 
-    const requestsSnapshot = await userRef.collection("requests").get();
-    requestsSnapshot.forEach((doc) => {
-      excludeIds.push(doc.id);
-    });
+      const requestsSnapshot = await userRef.collection("requests").get();
+      requestsSnapshot.forEach((doc) => {
+        excludeIds.push(doc.id);
+      });
 
     // Fetch users excluding the ids in excludeIds
 
@@ -688,7 +789,7 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
     for (const idsChunk of chunkedExcludeIds) {
       console.log("filtering for each chunk");
       const chunkQuery = matchingUsersQuery
-          .where(admin.firestore.FieldPath.documentId(), "not-in", idsChunk);
+        .where(admin.firestore.FieldPath.documentId(), "not-in", idsChunk);
 
       const chunkSnapshot = await chunkQuery.get();
       chunkSnapshot.forEach((doc) => {
@@ -700,12 +801,13 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
       });
     }
 
+
     // Deduplicate all queried user IDs
     const uniqueQueriedUserIds = [...new Set(allQueriedUserIds)];
 
     // For each unique ID,
     // check if it appears in every chunked query.
-    // If it does, it's a final user ID.
+    // If it does not, it's a final user ID.
     const finalUserIds = uniqueQueriedUserIds.filter((id) => {
       let appearanceCount = 0;
       chunkedExcludeIds.forEach((chunk) => {
@@ -723,10 +825,22 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
 
     const completeUsers = uniqueUsers.filter((user) => {
       return user.prompts && user.prompts.length > 0 &&
-        user.values && user.values.length === 3 &&
-        user.images && user.images.length === 3 &&
+        user.interests && user.interests.length === 5 &&
+        user.images && user.images.length > 0 &&
         (!user.flagged_status || user.flagged_status === "none" || user.flagged_status === "resolved");
     });
+
+    if (completeUsers.length === 0 && passesSnapshot.size > 0) {
+      // delete collectiono
+      const batch = admin.firestore().batch();
+      passesSnapshot.docs.forEach((doc) => batch.delete(doc.ref));
+      await batch.commit();
+
+      console.log("No unpassed users left. Passed collection deleted. Reload fetch.");
+
+      res.status(204).end();
+      return;
+    }
 
     const compareUsers = createCompareFunction(user);
 
@@ -752,153 +866,220 @@ functionCall.get("/getFilteredDevUsers/:id", async (req, res) => {
 
 
 exports.sendAnnouncementNotification = functions.firestore
-    .document("announcements/{announcementId}")
-    .onCreate(async (snap, context) => {
-      const CHUNK_SIZE = 500;
-      const newData = snap.data();
-      const announcementDoc = {
-        id: snap.id,
-        read: false,
-        ...snap.data(),
-      };
+  .document("announcements/{announcementId}")
+  .onCreate(async (snap, context) => {
+    const CHUNK_SIZE = 500;
+    const newData = snap.data();
+    const groupchatDoc = {
+      ...snap.data(),
+    };
 
-      const announcementId = context.params.announcementId;
+    // add groupchatDoc to groupChat
+    const groupchatRef = admin.firestore().collection("groupChat_prod");
 
-      const tokens = [];
+    groupchatRef.add(groupchatDoc);
 
-      const usersSnapshot = await admin.firestore()
-          .collection("users").get();
+    // const announcementId = context.params.announcementId;
 
-      const users = usersSnapshot.docs;
+    const tokens = [];
 
-      console.log("splitting users into chunks");
+    const usersSnapshot = await admin.firestore()
+      .collection("users").get();// change back to users
 
-      // Split users into chunks
-      const userChunks = [];
-      for (let i = 0; i < users.length; i += CHUNK_SIZE) {
-        userChunks.push(users.slice(i, i + CHUNK_SIZE));
-      }
+    const users = usersSnapshot.docs;
 
-      console.log("cycling through each user chunk for announcements");
+    console.log("splitting users into chunks");
 
-      for (const userChunk of userChunks) {
-        const batch = admin.firestore().batch();
+    // Split users into chunks
+    const userChunks = [];
+    for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+      userChunks.push(users.slice(i, i + CHUNK_SIZE));
+    }
 
-        userChunk.forEach((doc) => {
-          const userID = doc.id;
-          const userData = doc.data();
+    console.log("cycling through each user chunk for announcements");
 
-          const announcementRef = admin.firestore().collection("users")
-              .doc(userID).collection("announcements").doc(announcementId);
+    for (const userChunk of userChunks) {
+      // const batch = admin.firestore().batch();
 
-          batch.set(announcementRef, announcementDoc);
+      userChunk.forEach((doc) => {
+        // const userID = doc.id;
+        const userData = doc.data();
 
-          if (userData.notifications &&
-          userData.notifications.events &&
+
+        if (userData.notifications &&
+          userData.notifications.announcements &&
           userData.token && userData.token !== "testing" &&
           userData.token !== "not_granted") {
-            tokens.push(userData.token);
-          }
-        });
+          tokens.push(userData.token);
+        }
+      });
+    }
 
-        try {
-          console.log("writing all the new announcements to users");
-          await batch.commit();
-        } catch (error) {
-          console.error("Error adding announcement to users:", error);
+    if (tokens.length > 0) {
+      try {
+        console.log("sending batch notifications to users");
+        return sendPushBatch(tokens, newData.title,
+          newData.message, { type: "announcement" });
+      } catch (error) {
+        console.error("Error sending notifications:", error);
         // Handle the error appropriately.
-        // Maybe retry or notify you about the failure.
-        }
+        return null;
       }
-
-      if (tokens.length > 0) {
-        try {
-          console.log("sending batch notifications to users");
-          return sendPushBatch(tokens, newData.title,
-              newData.message, {type: "announcement"});
-        } catch (error) {
-          console.error("Error sending notifications:", error);
-          // Handle the error appropriately.
-          return null;
-        }
-      }
-      return null;
-    });
+    }
+    return null;
+  });
 
 
 exports.sendAnnouncementNotificationDev = functions.firestore
-    .document("announcements_test/{announcementId}")
-    .onCreate(async (snap, context) => {
-      const CHUNK_SIZE = 500;
-      const newData = snap.data();
-      const announcementDoc = {
-        id: snap.id,
-        read: false,
-        ...snap.data(),
-      };
+  .document("announcements_test/{announcementId}")
+  .onCreate(async (snap, context) => {
+    const CHUNK_SIZE = 500;
+    const newData = snap.data();
+    const groupchatDoc = {
+      ...snap.data(),
+    };
 
-      const announcementId = context.params.announcementId;
+    // add groupchatDoc to groupChat
+    const groupchatRef = admin.firestore().collection("groupChat");
 
-      const tokens = [];
+    groupchatRef.add(groupchatDoc);
 
-      const usersSnapshot = await admin.firestore()
-          .collection("users_test").get();
+    // const announcementId = context.params.announcementId;
 
-      const users = usersSnapshot.docs;
+    const tokens = [];
 
-      console.log("splitting users into chunks");
+    const usersSnapshot = await admin.firestore()
+      .collection("users_test").get();
 
-      // Split users into chunks
-      const userChunks = [];
-      for (let i = 0; i < users.length; i += CHUNK_SIZE) {
-        userChunks.push(users.slice(i, i + CHUNK_SIZE));
-      }
+    const users = usersSnapshot.docs;
 
-      console.log("cycling through each user chunk for announcements");
+    console.log("splitting users into chunks");
 
-      for (const userChunk of userChunks) {
-        const batch = admin.firestore().batch();
+    // Split users into chunks
+    const userChunks = [];
+    for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+      userChunks.push(users.slice(i, i + CHUNK_SIZE));
+    }
 
-        userChunk.forEach((doc) => {
-          const userID = doc.id;
-          const userData = doc.data();
+    console.log("cycling through each user chunk for announcements");
 
-          const announcementRef = admin.firestore().collection("users_test")
-              .doc(userID).collection("announcements").doc(announcementId);
+    for (const userChunk of userChunks) {
+      // const batch = admin.firestore().batch();
 
-          batch.set(announcementRef, announcementDoc);
+      userChunk.forEach((doc) => {
+        // const userID = doc.id;
+        const userData = doc.data();
 
-          if (userData.notifications &&
-          userData.notifications.events &&
+        // const announcementRef = admin.firestore().collection("users_test")
+        //   .doc(userID).collection("announcements").doc(announcementId);
+
+        // batch.set(announcementRef, announcementDoc);
+
+        if (userData.notifications &&
+          userData.notifications.announcements &&
           userData.token && userData.token !== "testing" &&
           userData.token !== "not_granted") {
-            tokens.push(userData.token);
-          }
-        });
+          tokens.push(userData.token);
+        }
+      });
 
-        try {
-          console.log("writing all the new announcements to users");
-          await batch.commit();
-        } catch (error) {
-          console.error("Error adding announcement to users:", error);
+      // try {
+      //   console.log("writing all the new announcements to users");
+      //   await batch.commit();
+      // } catch (error) {
+      //   console.error("Error adding announcement to users:", error);
+      //   // Handle the error appropriately.
+      //   // Maybe retry or notify you about the failure.
+      // }
+    }
+
+    if (tokens.length > 0) {
+      try {
+        console.log("sending batch notifications to users");
+        return sendPushBatch(tokens, newData.title,
+          newData.message, { type: "announcement" });
+      } catch (error) {
+        console.error("Error sending notifications:", error);
         // Handle the error appropriately.
-        // Maybe retry or notify you about the failure.
-        }
+        return null;
       }
+    }
+    return null;
+  });
 
-      if (tokens.length > 0) {
-        try {
-          console.log("sending batch notifications to users");
-          return sendPushBatch(tokens, newData.title,
-              newData.message, {type: "announcement"});
-        } catch (error) {
-          console.error("Error sending notifications:", error);
-          // Handle the error appropriately.
-          return null;
-        }
-      }
-      return null;
-    });
+// exports.sendWelcomeChallenge = functions.firestore
+//     .document("userData/welcome_challenge")
+//     .onCreate(async (snap, context) => {
+//     // check if welcome challenge already sent
+//       console.log("checking if welcome challenge was already sent on server side");
+//       const welcomeChallengeRef = db.collection("userData").doc("welcome_challenge");
+//       const welcomeChallengeSnap = await welcomeChallengeRef.get();
+
+//       if (welcomeChallengeSnap.exists && welcomeChallengeSnap.data().sent) {
+//         console.log("Welcome challenge already sent.");
+//         return; // Stop execution if challenge has already been sent
+//       }
+
+//       // // Query to count users in DC, MD, or VA
+
+//       console.log("sending welcome challenge");
+//       const batch = admin.firestore().batch();
+//       const masterUid = functions.config().wing.master_uid;
+//       const masterName = functions.config().wing.master_name;
+
+//       const timestamp1 = new Date(Date.now() + (0 * 1000));
+
+//       const timestamp2 = new Date(Date.now() + (1 * 1000));
+
+//       // const timestamp3 = new Date(Date.now() + (2 * 1000));
+
+
+//       const announcement1 = {
+//         displayName: masterName,
+//         photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
+//         type: "text",
+//         userId: masterUid,
+//         title: "Welcome New Wings!",
+//         message: "Welcome new Wings!\n\n You are officially part of the 100 founding members of this community which you will have free access to for LIFE.\n\n As some of you know, DC is notoriously known for being one of the loneliest areas of the US, especially for men. So our goal is to change that by having our community make this the BEST area for men and women to meet up and have fun!\n\n With that said, let's kick things off with our Welcome Challenge!\n\n Here’s the Challenge:\n\n 1. Match with a Wingman who can best help you.\n\n 2. Set a plan to go out and meet women somewhere. (Can be for tonight, tomorrow, or next week, it doesn’t matter)\n\n That’s it!",
+//         timestamp: timestamp1,
+//       };
+
+//       const announcement2 = {
+//         displayName: masterName,
+//         photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
+//         type: "text",
+//         userId: masterUid,
+//         title: "Tips To Get Started",
+//         message: "Here’s some tips to make finding a Wing easy:\n\n Tip 1: Set your skills and problems (attributes) in your profile. This will help Wings know how to best Wingman you and how you will best Wingman them.\n\n Tip 2: Introduce yourself on the group chat. Share a fun fact or what a fun night looks like for you and your Wing. Be creative!\n\n Tip 3: Check out my chat request where I drop a tip on how to send a chat request to a Wing.\n\n Other than that, have fun Winging!",
+//         timestamp: timestamp2,
+//       };
+
+//       // const announcement3 = {
+//       //   displayName: masterName,
+//       //   photoURL: "https://firebasestorage.googleapis.com/v0/b/mission-partner-app.appspot.com/o/images%2Fiz2hFvurTzWF1ZnLyc4cpZD80Gd2%2F0%2FEA5D7EBA-B6A4-491F-9AFC-A62D1762685F.jpg?alt=media&token=848995a6-abc5-4340-a20b-af07ab141aec&_gl=1*vcnhxo*_ga*MjEyOTMxMTI1Mi4xNjkwMDUyNTY4*_ga_CW55HF8NVT*MTY5Nzg0NjM1My4xNjIuMS4xNjk3ODQ2MzcwLjQzLjAuMA..",
+//       //   type: "text",
+//       //   userId: masterUid,
+//       //   title: "Taking Over DC",
+//       //   message: "DC is notoriously known to be one of the loneliest areas in the US, with men at the forefront of this epidemic.\n\n Our mission is to change that story, get men AND women enjoying meeting each other more, take over DC and make our network the most fun men’s networking app available!\n\n That starts with having a blast with your Wing this weekend! So LET’S GET IT!",
+//       //   timestamp: timestamp3,
+//       // };
+
+
+//       // Add the announcement to the "announcements" collection
+//       const docRef1 = admin.firestore().collection("announcements").doc();
+//       const docRef2 = admin.firestore().collection("announcements").doc();
+//       // const docRef3 = admin.firestore().collection("announcements").doc();
+
+//       batch.set(docRef1, announcement1);
+//       batch.set(docRef2, announcement2);
+//       // batch.set(docRef3, announcement3);
+
+//       batch.update(welcomeChallengeRef, {sent: true});
+
+//       await batch.commit();
+//       console.log("Announcements sent");
+//     // }
+//     });
 
 
 functionCall.delete("/deleteUserDev/:id", async (req, res) => {
@@ -917,7 +1098,7 @@ functionCall.delete("/deleteUserDev/:id", async (req, res) => {
 
   try {
     console.log("deleting collections");
-    const collectionsToDelete = ["requests", "swipes", "passes", "announcements"];
+    const collectionsToDelete = ["requests", "swipes", "passes"];
     for (const collection of collectionsToDelete) {
       const snapshot = await userDocRef.collection(collection).get();
       if (!snapshot.empty) {
@@ -956,9 +1137,9 @@ functionCall.delete("/deleteUserDev/:id", async (req, res) => {
     });
 
     await admin.auth().deleteUser(userId)
-        .then(() => {
-          console.log("Successfully deleted user auth");
-        });
+      .then(() => {
+        console.log("Successfully deleted user auth");
+      });
 
     res.status(200).send("OK");
   } catch (error) {
@@ -983,7 +1164,7 @@ functionCall.delete("/deleteUser/:id", async (req, res) => {
 
   try {
     console.log("deleting collections");
-    const collectionsToDelete = ["requests", "swipes", "passes", "announcements"];
+    const collectionsToDelete = ["requests", "swipes", "passes"];
     for (const collection of collectionsToDelete) {
       const snapshot = await userDocRef.collection(collection).get();
       if (!snapshot.empty) {
@@ -1023,9 +1204,9 @@ functionCall.delete("/deleteUser/:id", async (req, res) => {
     });
 
     await admin.auth().deleteUser(userId)
-        .then(() => {
-          console.log("Successfully deleted user auth");
-        });
+      .then(() => {
+        console.log("Successfully deleted user auth");
+      });
 
     res.status(200).send("OK");
   } catch (error) {

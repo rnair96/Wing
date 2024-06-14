@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import StackNavigator from './StackNavigator';
 import { AuthProvider } from './hooks/useAuth';
@@ -16,6 +16,7 @@ export default function App() {
     enableInExpoDevelopment: false,
     debug: false, // If using `expo start`, turn this off.
   });
+
 
 
   return (

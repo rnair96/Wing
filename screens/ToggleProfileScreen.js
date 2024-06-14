@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Modal, TouchableHighlight } from 'react-native';
-import ViewProfileScreen from './ViewProfileScreen';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ViewMyProfileScreen from './ViewMyProfileScreen';
 import { Ionicons } from '@expo/vector-icons';
 import EditProfileScreen from './EditProfileScreen';
 import { useNavigation, useRoute } from '@react-navigation/core';
@@ -37,7 +36,7 @@ const ToggleProfileScreen = () => {
           <Ionicons name="chevron-forward-outline" size={30} color="#00308F"/>
         </TouchableOpacity>
       </SafeAreaView>
-      {showEdit ? <EditProfileScreen profile={profile} setIsEditSaved={setIsEditSaved}/> : <ViewProfileScreen profile={profile} />}
+      {showEdit ? <EditProfileScreen profile={profile} setIsEditSaved={setIsEditSaved}/> : <ViewMyProfileScreen profile={profile} />}
       <Modal
         animationType="fade"
         transparent={true}
@@ -48,7 +47,7 @@ const ToggleProfileScreen = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ padding: 5, fontWeight: "bold", fontSize: 15, textAlign:"center" }}>Make sure to fill all image slots and to save changes to profile before exiting.</Text>
+            <Text style={{ padding: 5, fontWeight: "bold", fontSize: 15, textAlign:"center" }}>Make sure to save changes to profile before exiting.</Text>
             <TouchableHighlight
               style={{ width: "90%", height:"20%", backgroundColor: "#00308F", borderRadius:10, justifyContent:"center", alignItems:"center" }}
               onPress={() => {
@@ -73,7 +72,8 @@ const styles = StyleSheet.create({
   toggleIcons: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginBottom: 40,
+    marginBottom: 30,
+    marginTop:30,
   },
   selectedIcon: {
     color: 'blue',

@@ -4,7 +4,7 @@ import { Ionicons} from '@expo/vector-icons';
 import ChatScreen from './ChatScreen'
 import { useNavigation, useRoute} from '@react-navigation/core';
 import RequestsScreen from './RequestsScreen';
-import { onSnapshot, collection, query, orderBy } from 'firebase/firestore';
+import { onSnapshot, collection, query, orderBy, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useAuth from '../hooks/useAuth';
@@ -21,6 +21,8 @@ const ToggleChatScreen = () => {
   const {user} = useAuth();
   
   const profile = params;
+
+  const [userProfile, setUserProfile] = useState(profile);
 
   const [ requests, setRequests] = useState([])
 
@@ -49,11 +51,45 @@ const ToggleChatScreen = () => {
     };
   },[]);
 
+  useEffect(() => {
+    let isCancelled = false; // cancel flag
+
+    if (!profile) {
+      console.log("fetching user data...")
+      const fetchUserData = async () => {
+        try {
+          const userSnap = await getDoc(doc(db, global.users, user.uid));
+          setUserProfile({
+            id: user.uid,
+            ...userSnap.data()
+          })
+        } catch (error) {
+          if (!isCancelled) {
+            console.log("incomplete fetch data:", error);
+            Sentry.captureMessage(`Cancelled fetching user data in message screen of ${user.uid}, ${error.message}`)
+
+          }
+          console.log("error fetching userdata")
+          Sentry.captureMessage(`error fetching user data in message screen of ${user.uid}, ${error.message}`)
+
+        }
+
+
+      }
+
+      fetchUserData();
+
+      return () => {
+        isCancelled = true;
+      };
+    }
+  }, [profile, db])
+
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.toggleIcons}>
-      <TouchableOpacity style={{paddingTop:5}} onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={{paddingTop:5}} onPress={() =>  navigation.navigate("Home", { refresh: true })}>
             <Ionicons name="chevron-back-outline" size={30} color="#00308F"/>
             </TouchableOpacity>
         <View style={{flexDirection: 'row', width:"50%", justifyContent:'space-between',right:"20%", borderBottomWidth:1, borderColor:"#E0E0E0", marginLeft:"35%" }}>
@@ -73,7 +109,7 @@ const ToggleChatScreen = () => {
         </TouchableOpacity>
         </View>
       </SafeAreaView>
-      {showMatches ? <ChatScreen profile={profile}/> : <RequestsScreen profile={profile} requests={requests}/>}
+      {showMatches ? <ChatScreen profile={userProfile} requests={requests}/> : <RequestsScreen profile={userProfile} requests={requests}/>}
     </View>
   );
 }
@@ -88,7 +124,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginBottom: 40,
-    marginTop:20
+    marginTop:30
   },
   selectedIcon: {
     color: 'blue',

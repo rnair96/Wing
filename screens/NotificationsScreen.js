@@ -14,7 +14,8 @@ const NotificationsScreen = () => {
     const { user } = useAuth();
     const navigation = useNavigation();
     const [messageNotifications, setMessageNotifications] = useState(false);
-    const [eventNotifications, setEventNotifications] = useState(false);
+    const [announcementNotifications, setAnnouncementNotifications] = useState(false);
+    const [groupChatNotifications, setGroupChatNotifications] = useState(false);
     const [emailNotifications, setEmailNotifications] = useState(false);
     const [locationPermission, setLocationPermission] = useState("Only Once");
 
@@ -32,8 +33,12 @@ const NotificationsScreen = () => {
                 setMessageNotifications(profile.notifications.messages);
             }
 
-            if (profile?.notifications && profile.notifications?.events!==undefined && profile.notifications?.events!==null) {
-                setEventNotifications(profile.notifications.events);
+            if (profile?.notifications && profile.notifications?.announcements!==undefined && profile.notifications?.announcements!==null) {
+                setAnnouncementNotifications(profile.notifications.announcements);
+            }
+
+            if (profile?.notifications && profile.notifications?.groupchat!==undefined && profile.notifications?.groupchat!==null) {
+                setGroupChatNotifications(profile.notifications.groupchat);
             }
 
             if (profile?.notifications && profile.notifications?.emails!==undefined && profile.notifications?.emails!==null) {
@@ -50,14 +55,14 @@ const NotificationsScreen = () => {
 
     const saveNotifications = async () => {
         let token = profile.token;
-        if ((profile.token === "testing" || profile.token === "not_granted") && (messageNotifications || eventNotifications)) {
+        if ((profile.token === "testing" || profile.token === "not_granted") && (messageNotifications || announcementNotifications)) {
             token = await registerNotifications();
         }
 
         console.log("token",token)
 
         updateDoc(doc(db, global.users, user.uid), {
-            notifications: { "messages": messageNotifications, "events": eventNotifications, "emails": emailNotifications},
+            notifications: { "messages": messageNotifications, "announcements": announcementNotifications, "groupchat": groupChatNotifications ,"emails": emailNotifications},
             token: token,
             location: {
                 permission: locationPermission,
@@ -106,14 +111,26 @@ const NotificationsScreen = () => {
                     </View>
                 </View>
                 <View style={{ flexDirection: "column", justifyContent: "space-evenly"}}>
-                    <Text style={{ textAlign: "center", fontSize: 15,  padding:10}}>Push Notifications for Community News, Promotional Offers & Events</Text>
+                    <Text style={{ textAlign: "center", fontSize: 15,  padding:10}}>Push Notifications for Community News, Challenges & Events</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent:"center" }}>
-                        <Text style={{ marginRight: 10, fontWeight: "bold", fontSize: 15, }}>{eventNotifications ? "On" : "Off"}</Text>
+                        <Text style={{ marginRight: 10, fontWeight: "bold", fontSize: 15, }}>{announcementNotifications ? "On" : "Off"}</Text>
                         <Switch
                             trackColor={{ false: "red", true: "#00BFFF" }}
-                            thumbColor={eventNotifications ? "white" : "grey"}
-                            onValueChange={setEventNotifications}
-                            value={eventNotifications}
+                            thumbColor={announcementNotifications ? "white" : "grey"}
+                            onValueChange={setAnnouncementNotifications}
+                            value={announcementNotifications}
+                        />
+                    </View>
+                </View>
+                <View style={{ flexDirection: "column", justifyContent: "space-evenly"}}>
+                    <Text style={{ textAlign: "center", fontSize: 15,  padding:10}}>Push Notifications for Replies/Tags in Community Group Chat</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent:"center" }}>
+                        <Text style={{ marginRight: 10, fontWeight: "bold", fontSize: 15, }}>{groupChatNotifications ? "On" : "Off"}</Text>
+                        <Switch
+                            trackColor={{ false: "red", true: "#00BFFF" }}
+                            thumbColor={groupChatNotifications ? "white" : "grey"}
+                            onValueChange={setGroupChatNotifications}
+                            value={groupChatNotifications}
                         />
                     </View>
                 </View>
