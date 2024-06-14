@@ -10,7 +10,7 @@ export const ProfileCardComponent = ({ profile, canFlag }) => {
 
     return (
         <View style={styles.cardcontainer}>
-            {profile && profile?.prompts && profile?.prompts.length > 0 && profile?.interests && profile?.interests.length > 4 && profile?.images && profile?.images.length > 2 && profile?.location ? (
+            {profile && profile?.prompts && profile?.prompts.length > 0 && profile?.interests && profile?.interests.length > 4 && profile?.images && profile?.images.length > 0 && profile?.location ? (
                 <TouchableOpacity style={{ justifyContent: "space-evenly", height: "100%", width: "100%" }} onPress={() => navigation.navigate("ProfileView", { profile: profile, canFlag: canFlag })}>
                     <View style={{ alignItems: "center", padding: 20 }}>
                         {/* <Text style={{ color: "white", margin: 10 }}>Mission: </Text>

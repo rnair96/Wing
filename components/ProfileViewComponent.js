@@ -11,7 +11,7 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
 
     return (
         <View>
-            {(card?.prompts && card.prompts.length > 0 && card?.images && card?.images.length > 2 && card?.interests && card?.interests.length > 4 && card?.location && !(card?.flagged_status && card?.flagged_status === "unresolved")) ? (
+            {(card?.prompts && card.prompts.length > 0 && card?.images && card?.images.length > 0 && card?.interests && card?.interests.length > 4 && card?.location && !(card?.flagged_status && card?.flagged_status === "unresolved")) ? (
                 <FlatList
                     data={[card]}
                     keyExtractor={(card) => card.id}
@@ -134,7 +134,8 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
                                 </View>}
 
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
+                                {card.item.images.length > 1 &&
+                                <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />}
                                 <View style={{ flexDirection: "row", padding: 10 }}>
                                     {card.item?.strength || card.item?.weakness ?
                                         (<Text style={{ padding: 10, color: "white" }}>Attributes & Interests</Text>) :
@@ -178,7 +179,8 @@ export const ProfileViewComponent = ({ profile, setFlag, flagged_type }) => {
 
 
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                <Image style={styles.imagecontainer} source={{ uri: card.item.images[2] }} />
+                            {card.item.images.length > 2 &&
+                                <Image style={styles.imagecontainer} source={{ uri: card.item.images[2] }} />}
                                 <View style={{ margin: 10, alignItems: "center", paddingBottom: 10 }}>
                                     <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
                                     {card.item?.medals && card.item.medals.length > 0 ? (

@@ -13,11 +13,11 @@ const SetUp2Screen = () => {
     const { user } = useAuth();
     const [job, setJob] = useState(null);
     const [url1, setUrl1] = useState(null);
-    const [url2, setUrl2] = useState(null);
-    const [url3, setUrl3] = useState(null);
+    // const [url2, setUrl2] = useState(null);
+    // const [url3, setUrl3] = useState(null);
 
 
-    const incompleteform = !job || !url1 || !url2 || !url3;
+    const incompleteform = !job || !url1;
 
 
     const navigation = useNavigation();
@@ -25,7 +25,7 @@ const SetUp2Screen = () => {
     const updateUserProfile = () => {
         updateDoc(doc(db, global.users, user.uid), {
             job: job,
-            images: [url1, url2, url3],
+            images: [url1],
             preferences: {
                 distance: "Global"
             }
@@ -57,13 +57,13 @@ const SetUp2Screen = () => {
                 </TouchableWithoutFeedback>
 
 
-                <Text style={styles.formTitle}>Choose 3 Presentable Pictures Of Yourself</Text>
+                <Text style={styles.formTitle}>Choose A Presentable Picture Of Yourself</Text>
                 {/* <Text style={{fontSize:10, fontWeight: "bold", padding:5}}>Extra points, if they demonstrate your personality/interests!</Text> */}
 
                 <View style={{ flexDirection: "row", padding: 20 }}>
                     <ImageUpload url={url1} setURL={setUrl1} index={0} userId={user.uid} />
-                    <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
-                    <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} />
+                    {/* <ImageUpload url={url2} setURL={setUrl2} index={1} userId={user.uid} />
+                    <ImageUpload url={url3} setURL={setUrl3} index={2} userId={user.uid} /> */}
                 </View>
 
 

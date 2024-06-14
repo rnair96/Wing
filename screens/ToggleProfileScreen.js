@@ -47,7 +47,7 @@ const ToggleProfileScreen = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ padding: 5, fontWeight: "bold", fontSize: 15, textAlign:"center" }}>Make sure to fill all image slots and to save changes to profile before exiting.</Text>
+            <Text style={{ padding: 5, fontWeight: "bold", fontSize: 15, textAlign:"center" }}>Make sure to save changes to profile before exiting.</Text>
             <TouchableHighlight
               style={{ width: "90%", height:"20%", backgroundColor: "#00308F", borderRadius:10, justifyContent:"center", alignItems:"center" }}
               onPress={() => {

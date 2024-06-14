@@ -54,9 +54,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const [class_level, setClassLevel] = useState(activeStudent ? profile?.university_student?.class_level || "Undergraduate" : "Undergraduate");
   const [grad_year, setGradYear] = useState(activeStudent ? profile?.university_student?.grad_year || "2027" : "2027");
   const [incompleteForm, setIncompleteForm] = useState(true);
-  const [url1, setUrl1] = useState(profile?.images?.[0] || null);
-  const [url2, setUrl2] = useState(profile?.images?.[1] || null);
-  const [url3, setUrl3] = useState(profile?.images?.[2] || null);
+  const [url1, setUrl1] = useState(profile?.images?.[0] || undefined);
+  const [url2, setUrl2] = useState(profile?.images?.[1] || undefined);
+  const [url3, setUrl3] = useState(profile?.images?.[2] || undefined);
   // const [values, setValues] = useState(profile?.values || []);
   const [interests, setInterests] = useState(profile?.interests || []);
 
@@ -68,14 +68,18 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (profile && profile?.images && profile.images.length > 2) {
-      if (url1 !== profile.images[0] || url2 !== profile.images[1] || url3 !== profile.images[2]) {
-        console.log("change to false")
+    if (profile && profile?.images && profile.images.length > 0) {
+      if ((url1 !== profile.images[0]) || (url2 !== profile.images?.[1]) || (url3 && url3 !== profile.images?.[2])) {
+        console.log("new images uploaded, change to false")
         setIsEditSaved(false);
-      } else if (url1 === profile.images[0] && url2 === profile.images[1] && url3 === profile.images[2]) {
-        console.log("change to true");
+      } else if (url1 === profile.images[0] && url2 === profile.images?.[1] && url3 === profile.images?.[2]) {
+        console.log("no new changes,set to true");
         setIsEditSaved(true);
 
+      } else {
+        console.log("default to true")
+        console.log(url2)
+        setIsEditSaved(true)
       }
     }
 
@@ -87,9 +91,9 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
     let form;
 
     if (activeStudent) {
-      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 5 || !school || !tagline
+      form = !url1 || !location || !interests || interests.length < 5 || !school || !tagline
     } else {
-      form = !url1 || !url2 || !url3 || !location || !interests || interests.length < 5 || !job || !tagline
+      form = !url1 || !location || !interests || interests.length < 5 || !job || !tagline
 
 
     }
@@ -101,7 +105,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
 
   const updateUserProfile = () => {
 
-    let promptObject, promptObject1, promptObject2;
+    let promptObject, promptObject1, promptObject2, imagesArray = [url1];
 
     if (tagline) {
       promptObject = {
@@ -131,8 +135,26 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
       promptObject2 = null;
     }
 
+    if (url2 || url3) {
+      console.log("are you here?")
+      if (url2 && url3) {
+        console.log("adding 2 & 3")
+        imagesArray = [url1, url2, url3]
+      }
+      else if (url3) {
+        imagesArray = [url1, url3]
+        console.log("adding 2")
+
+      } else {
+        console.log("adding 3")
+
+        imagesArray = [url1, url2]
+      }
+
+    }
+
     const updateObject = {
-      images: [url1, url2, url3],
+      images: imagesArray,
       school: school,
       hometown: hometown,
       mission: mission,
@@ -342,7 +364,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                 onChangeText={setStrength}
                 placeholder={"I'm great at hosting parties"}
                 placeholderTextColor="#888888"
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"60%"}} />
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "60%" }} />
             </View>
 
             {/* <Text style={styles.formTitle}>Problem</Text> */}
@@ -358,7 +380,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                 onChangeText={setWeakness}
                 placeholder={"I'm terrible at making jokes"}
                 placeholderTextColor="#888888"
-                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", width:"60%"}} />
+                style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", width: "60%" }} />
             </View>
 
 
@@ -376,7 +398,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal1}
                   placeholder={"I completed a marathon."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"80%"}} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "80%" }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -389,7 +411,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal2}
                   placeholder={"I won a hotdog eating contest"}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"80%"}} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "80%" }} />
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, marginBottom: 10 }}>
@@ -402,7 +424,7 @@ const EditProfileScreen = ({ profile, setIsEditSaved }) => {
                   onChangeText={setMedal3}
                   placeholder={"I have a Youtube channel with 3k subscribers."}
                   placeholderTextColor="#888888"
-                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width:"80%"}} />
+                  style={{ padding: 10, borderWidth: 2, borderColor: "grey", borderRadius: 15, backgroundColor: "#E0E0E0", margin: 10, width: "80%" }} />
               </View>
             </View>
 

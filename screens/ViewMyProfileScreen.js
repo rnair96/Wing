@@ -165,7 +165,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                                         )}
                                     </View>
                                     {card.item?.mission &&
-                                        <View style={{ flexDirection: "row", padding: 10, alignItems:"center"}}>
+                                        <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
                                             <Image style={{ height: 25, width: 25, right: 10, alignItems: "center" }} source={require("../images/star.png")}></Image>
                                             <Text style={{ fontWeight: "bold", fontSize: 15, color: "white" }}>{card.item.mission}</Text>
                                         </View>
@@ -188,7 +188,8 @@ const ViewMyProfileScreen = ({ profile }) => {
                                 </View>}
 
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", paddingBottom: 10, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />
+                                {card.item.images.length > 1 &&
+                                    <Image style={styles.imagecontainer} source={{ uri: card.item.images[1] }} />}
                                 <View style={{ flexDirection: "row", padding: 10 }}>
                                     {card.item?.strength || card.item?.weakness ?
                                         (<Text style={{ padding: 10, color: "white" }}>Attributes & Interests</Text>) :
@@ -200,7 +201,7 @@ const ViewMyProfileScreen = ({ profile }) => {
                                         {card.item?.strength &&
                                             <View style={{ flexDirection: "row", padding: 10, alignItems: "center" }}>
                                                 <Image style={{ height: 20, width: 20, right: 5, alignItems: "center" }} source={require("../images/bicep.png")}></Image>
-                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white", left:10 }}>{card.item.strength}</Text>
+                                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "white", left: 10 }}>{card.item.strength}</Text>
                                             </View>
                                         }
                                         {card.item?.weakness &&
@@ -230,7 +231,8 @@ const ViewMyProfileScreen = ({ profile }) => {
                             }
 
                             <View style={{ backgroundColor: "#00308F", margin: 10, borderRadius: 20, alignItems: "center", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2.41, elevation: 5 }}>
-                                <Image style={styles.imagecontainer} source={{ uri: card.item.images[2] }} />
+                                {card.item.images.length > 2 &&
+                                    <Image style={styles.imagecontainer} source={{ uri: card.item.images[2] }} />}
                                 <View style={{ margin: 10, alignItems: "center", paddingBottom: 10 }}>
                                     <Text style={{ padding: 10, color: "white" }}>Accomplishments</Text>
                                     {card.item?.medals && card.item.medals.length > 0 ? (

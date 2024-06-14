@@ -151,7 +151,7 @@ const MessageScreen = () => {
             <FlatList
               data={messages}
               style={{}}
-              inverted={-1}
+              inverted={true}
               keyExtractor={(item) => item.id}
               initialNumToRender={10}
               maxToRenderPerBatch={10}
